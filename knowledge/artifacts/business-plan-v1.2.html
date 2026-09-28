@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MICEGO 서비스 사업 기획안 — 경영진 승인 및 실행계획</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0F1E3D; --ink-80:#1F3266; --ink-60:#4A5D8C;
+  --teal:#0B8F86; --teal-bright:#12A89D; --teal-soft:#E3F4F2;
+  --amber:#FFC24B; --amber-soft:#FFF3D6;
+  --coral:#F25151; --coral-soft:#FFE4E4;
+  --white:#FFFFFF; --bg:#FAFBFD; --bg-warm:#F5F7FA; --line:#E4E8F0; --line-dim:#EEF1F6;
+  --gray:#6B7794; --gray-light:#A0AAC2;
+  --font-display:'Archivo','Pretendard','Noto Sans KR',sans-serif;
+  --font-sans:'Pretendard','Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',monospace;
+  --r-sm:4px; --r-md:8px; --r-lg:12px;
+  --sh:0 1px 2px rgba(15,30,61,.04),0 4px 12px rgba(15,30,61,.05);
+  --page:var(--white); --card:var(--white);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E8ECF5; --ink-80:#C9D1E4; --ink-60:#9AA7C7;
+    --teal:#2FC4B8; --teal-soft:#0F2A2A; --amber:#FFC24B; --amber-soft:#3A2E10;
+    --coral:#FF7B7B; --coral-soft:#3A1A1A;
+    --white:#0B1220; --bg:#0F172A; --bg-warm:#111B31; --line:#26324D; --line-dim:#1D2840;
+    --gray:#9AA7C7; --gray-light:#6B7794; --page:#0B1220; --card:#111B31;
+    --sh:0 1px 2px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E8ECF5; --ink-80:#C9D1E4; --ink-60:#9AA7C7;
+  --teal:#2FC4B8; --teal-soft:#0F2A2A; --amber:#FFC24B; --amber-soft:#3A2E10;
+  --coral:#FF7B7B; --coral-soft:#3A1A1A;
+  --white:#0B1220; --bg:#0F172A; --bg-warm:#111B31; --line:#26324D; --line-dim:#1D2840;
+  --gray:#9AA7C7; --gray-light:#6B7794; --page:#0B1220; --card:#111B31;
+  --sh:0 1px 2px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{font-family:var(--font-sans);color:var(--ink);background:var(--page);line-height:1.65;-webkit-font-smoothing:antialiased;font-size:15px}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:820px;margin:0 auto;padding:0 20px 80px}
+/* cover */
+.cover{padding:56px 0 40px;border-bottom:1px solid var(--line)}
+.wordmark{font-family:var(--font-display);font-weight:800;font-size:15px;letter-spacing:.12em;color:var(--teal)}
+.wordmark span{color:var(--ink);letter-spacing:.02em;font-weight:600;margin-left:10px;font-size:12px;font-family:var(--font-mono)}
+.cover h1{font-family:var(--font-display);font-size:clamp(28px,5vw,40px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:20px 0 14px}
+.cover .lead{font-size:16px;color:var(--ink-60);max-width:640px}
+.meta{display:flex;flex-wrap:wrap;gap:18px 28px;margin-top:22px;font-family:var(--font-mono);font-size:12px;color:var(--gray)}
+.meta b{color:var(--ink);font-weight:600;display:block;margin-bottom:2px;font-size:11px;letter-spacing:.06em}
+/* toc */
+.toc{background:var(--bg-warm);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px;margin:28px 0 8px}
+.toc ol{list-style:none;columns:2;column-gap:24px}
+.toc li{break-inside:avoid;padding:4px 0;font-size:13.5px}
+.toc li a{display:flex;gap:8px}
+.toc li a code{font-family:var(--font-mono);color:var(--teal);font-size:11.5px;min-width:24px;padding-top:2px}
+@media(max-width:560px){.toc ol{columns:1}}
+/* sections */
+section{padding:44px 0 8px;border-bottom:1px solid var(--line-dim)}
+.num{display:inline-block;font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--teal);background:var(--teal-soft);padding:3px 8px;border-radius:var(--r-sm);letter-spacing:.04em}
+h2{font-family:var(--font-display);font-size:26px;font-weight:700;letter-spacing:-.025em;margin:12px 0 8px;line-height:1.25}
+h3{font-family:var(--font-display);font-size:17px;font-weight:700;letter-spacing:-.01em;margin:26px 0 8px}
+p{margin:0 0 12px}
+.sub{color:var(--ink-60);font-size:15px;margin-bottom:18px}
+ul,ol{padding-left:20px;margin:0 0 14px}
+li{margin:4px 0}
+strong{font-weight:700}
+.ac{color:var(--teal);font-weight:700}
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0 18px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:14px;box-shadow:var(--sh)}
+.tile .k{font-family:var(--font-mono);font-size:11px;color:var(--gray);letter-spacing:.06em}
+.tile .v{font-family:var(--font-display);font-size:24px;font-weight:800;letter-spacing:-.02em;margin:4px 0 2px;line-height:1.1}
+.tile .v small{font-size:13px;font-weight:600;color:var(--ink-60);margin-left:3px}
+.tile .d{font-size:12.5px;color:var(--ink-60)}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px;box-shadow:var(--sh)}
+.card h4{font-family:var(--font-display);font-size:14.5px;font-weight:700;margin-bottom:6px}
+.card p{font-size:13.5px;color:var(--ink-60);margin:0}
+.card .tag{font-family:var(--font-mono);font-size:10.5px;color:var(--teal);letter-spacing:.06em;margin-bottom:6px}
+/* callout */
+.callout{border-left:3px solid var(--teal);background:var(--teal-soft);padding:14px 16px;border-radius:0 var(--r-md) var(--r-md) 0;margin:16px 0;font-size:14px}
+.callout.amber{border-color:var(--amber);background:var(--amber-soft)}
+.callout.coral{border-color:var(--coral);background:var(--coral-soft)}
+.callout b{display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;margin-bottom:4px}
+/* table */
+.tw{overflow-x:auto;margin:12px 0 18px;border:1px solid var(--line);border-radius:var(--r-md)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
+th{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--gray);text-align:left;padding:10px 12px;background:var(--bg-warm);border-bottom:1px solid var(--line);font-weight:600;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line-dim);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;font-family:var(--font-mono);white-space:nowrap}
+td.hl{font-weight:700}
+.badge{display:inline-block;font-family:var(--font-mono);font-size:10.5px;padding:2px 7px;border-radius:var(--r-sm);letter-spacing:.04em;font-weight:600}
+.b-t{background:var(--teal-soft);color:var(--teal)}
+.b-a{background:var(--amber-soft);color:#8A5A00}
+.b-c{background:var(--coral-soft);color:var(--coral)}
+.b-g{background:var(--line-dim);color:var(--gray)}
+/* bars */
+.bars{margin:14px 0 18px}
+.bar{display:grid;grid-template-columns:110px 1fr 70px;align-items:center;gap:10px;margin:8px 0;font-size:13px}
+.bar .lb{font-family:var(--font-mono);font-size:11.5px;color:var(--gray)}
+.bar .tr{height:14px;background:var(--line-dim);border-radius:3px;overflow:hidden}
+.bar .fl{height:100%;background:var(--teal);border-radius:3px}
+.bar .fl.a{background:var(--amber)}
+.bar .fl.c{background:var(--coral)}
+.bar .vl{font-family:var(--font-mono);font-size:12px;text-align:right}
+/* timeline */
+.tl{position:relative;padding-left:22px;margin:14px 0 18px}
+.tl::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl .ph{position:relative;margin-bottom:18px}
+.tl .ph::before{content:'';position:absolute;left:-21px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--teal);border:2px solid var(--page)}
+.tl .ph h4{font-family:var(--font-display);font-size:15px;font-weight:700}
+.tl .ph .w{font-family:var(--font-mono);font-size:11px;color:var(--gray);letter-spacing:.04em}
+.tl .ph ul{margin:6px 0 0;font-size:13.5px}
+pre.mermaid{background:var(--bg-warm);border:1px solid var(--line);border-radius:var(--r-md);padding:12px;overflow-x:auto;margin:12px 0 18px}
+.foot{margin-top:40px;font-family:var(--font-mono);font-size:11px;color:var(--gray);line-height:1.7}
+.checklist li{list-style:none;position:relative;padding-left:26px;margin:8px 0}
+.checklist li::before{content:'';position:absolute;left:0;top:4px;width:16px;height:16px;border:2px solid var(--teal);border-radius:var(--r-sm)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="cover">
+  <div class="wordmark">MICEGO <span>SERVICE BUSINESS PLAN · v1.0</span></div>
+  <h1>MICEGO 서비스 사업 기획안<br>경영진 승인 요청 및 12개월 실행계획</h1>
+  <p class="lead">한국 MICE 오거나이저(여행사·랜드사·기업)의 해외 단체 견적 요청을 해외 호텔이 직접 입찰하는 역경매 방식으로 연결하는 서비스. 이 문서는 사업 개시에 필요한 <strong>결정 사항 승인</strong>과 <strong>실행 로드맵</strong>을 함께 담는다.</p>
+  <div class="meta">
+    <div><b>작성일</b>2026-09-25</div>
+    <div><b>독자</b>내부 경영진 · 실행팀</div>
+    <div><b>주관</b>MatchGo(매치고) 단독 주도 · 서비스명 MICEGO</div>
+    <div><b>수익모델 기본안</b>호텔 성사 커미션</div>
+  </div>
+  <nav class="toc">
+    <ol>
+      <li><a href="#s00"><code>00</code>요약 및 승인 요청</a></li>
+      <li><a href="#s01"><code>01</code>문제 정의</a></li>
+      <li><a href="#s02"><code>02</code>서비스 개요와 준비 현황</a></li>
+      <li><a href="#s03"><code>03</code>시장</a></li>
+      <li><a href="#s04"><code>04</code>경쟁과 차별화</a></li>
+      <li><a href="#s05"><code>05</code>수익 모델</a></li>
+      <li><a href="#s06"><code>06</code>운영 모델</a></li>
+      <li><a href="#s07"><code>07</code>수요·공급 확보 전략</a></li>
+      <li><a href="#s08"><code>08</code>재무 계획</a></li>
+      <li><a href="#s09"><code>09</code>실행 로드맵</a></li>
+      <li><a href="#s10"><code>10</code>KPI</a></li>
+      <li><a href="#s11"><code>11</code>리스크와 미해결 사항</a></li>
+      <li><a href="#s12"><code>12</code>결정 요청 체크리스트</a></li>
+    </ol>
+  </nav>
+</header>
+
+<!-- 00 -->
+<section id="s00">
+  <div class="num">00_SUMMARY</div>
+  <h2>요약 및 승인 요청</h2>
+  <p class="sub">한 페이지로 읽는 결론. 상세 근거는 이후 섹션에 있다.</p>
+  <p><strong>무엇을 하는가.</strong> 오거나이저가 확정 일정·인원·객실·연회장 조건을 한 번만 입력하면, MICEGO가 회사명과 예산을 가린 채 해외 호텔들에 요청을 보내고, 호텔이 제출한 견적을 비교표로 정리해 돌려준다. 오거나이저는 무료, 수익은 성사 건에 대한 호텔 커미션에서 나온다.</p>
+  <p><strong>왜 지금인가.</strong> 오거나이저 랜딩·호텔 파트너 등록 랜딩·RFP 운영 SOP·호텔 비딩 데모·양 모드 웹사이트까지 고객 접점 자산은 이미 만들어졌다. 남은 것은 <span class="ac">돈이 돌게 하는 세 가지</span> — 커미션 계약 구조, 실제 접수·상태 관리 백엔드(어드민 포털), 전담 운영 인력 — 이며, 이 세 가지가 이번 승인 대상이다.</p>
+  <div class="tiles">
+    <div class="tile"><div class="k">TARGET · 12M</div><div class="v">36<small>건 성사</small></div><div class="d">기본 시나리오 기준</div></div>
+    <div class="tile"><div class="k">REVENUE · 12M</div><div class="v">1.9<small>억원</small></div><div class="d">커미션 8% 가정</div></div>
+    <div class="tile"><div class="k">INVEST · 12M</div><div class="v">2.3<small>억원</small></div><div class="d">인력·개발·마케팅 합계</div></div>
+    <div class="tile"><div class="k">BREAK-EVEN</div><div class="v">M14<small>~18</small></div><div class="d">월 성사 4건 이상 유지 시</div></div>
+  </div>
+  <div class="callout amber"><b>승인 요청 사항 (4건)</b>
+    ① 수익모델을 <strong>호텔 성사 커미션(기본 8%, 협의 범위 5~10%)</strong>으로 확정하고 호텔 파트너 약관에 반영 &nbsp;② 어드민 포털·백엔드 구축 예산 승인 &nbsp;③ 운영 담당 1명(전담) + 세일즈 0.5명 배정 &nbsp;④ 12개월 예산 총 2.3억원 한도 승인. 상세는 <a href="#s12" class="ac">12장</a>.
+  </div>
+  <div class="callout coral"><b>먼저 읽어야 할 경고</b>
+    이 문서의 재무 수치는 전부 <strong>가정 기반</strong>이다. 한국 아웃바운드 MICE 단체 시장의 공식 통계가 없어, 평균 거래 규모·전환율은 내부 경험치와 업계 통념으로 잡았다. 1~2분기 실데이터가 쌓이는 즉시 재추정해야 하며, 승인은 "숫자가 맞다"가 아니라 "이 가정으로 6개월 검증을 시작한다"에 대한 승인으로 해석해야 한다.
+  </div>
+</section>
+
+<!-- 01 -->
+<section id="s01">
+  <div class="num">01_PROBLEM</div>
+  <h2>문제 정의</h2>
+  <p class="sub">양쪽 모두 비효율을 안고 있는데, 그 비효율을 해결하는 사람에게 돈을 내는 구조는 아직 없다.</p>
+  <div class="cards">
+    <div class="card"><div class="tag">ORGANIZER · 여행사/랜드사/기업</div><h4>호텔마다 따로 문의, 답은 늦고 형식은 제각각</h4><p>해외 단체 견적 하나를 받으려면 현지 랜드사나 호텔 세일즈에 개별 메일을 돌리고, 통화·조식·연회장 조건이 다 다른 답변을 손으로 정리해야 한다. 담당자 한 명의 인맥에 결과가 좌우된다.</p></div>
+    <div class="card"><div class="tag">ORGANIZER · 정보 비대칭</div><h4>회사명을 밝히는 순간 가격 협상력이 사라진다</h4><p>대기업 인센티브라는 사실이 알려지면 호텔은 가격을 올려 부른다. 반대로 소규모 요청은 아예 답을 못 받는다.</p></div>
+    <div class="card"><div class="tag">HOTEL · 해외 호텔 세일즈</div><h4>한국 단체 수요에 접근할 통로가 없다</h4><p>한국 시장을 보고 싶어도 한국 여행사 네트워크가 없으면 리드 자체가 안 들어온다. 들어오는 문의도 일정 미확정·정보 부족인 경우가 많아 대응 리소스가 낭비된다.</p></div>
+    <div class="card"><div class="tag">MARKET · 구조</div><h4>"중개"는 있으나 "경쟁 입찰"은 없다</h4><p>기존 랜드사는 자기 계약 호텔 위주로 제안한다. 여러 호텔이 같은 조건에 동시에 견적을 내고 오거나이저가 고르는 구조는 국내 아웃바운드 MICE 시장에 사실상 없다.</p></div>
+  </div>
+</section>
+
+<!-- 02 -->
+<section id="s02">
+  <div class="num">02_SERVICE</div>
+  <h2>서비스 개요와 준비 현황</h2>
+  <p class="sub">MICEGO는 "요청 1건 → 호텔 N곳 동시 견적 → 비교표 1장"을 파는 서비스다.</p>
+  <h3>확정된 6대 운영 정책 (고객에게 공개됨)</h3>
+  <div class="tw"><table>
+    <tr><th>#</th><th>정책</th><th>사업적 의미</th></tr>
+    <tr><td class="n">1</td><td>오거나이저 수수료 없음</td><td>수요 확보의 진입장벽 제거. 수익은 공급자 측에서만 발생.</td></tr>
+    <tr><td class="n">2</td><td>해외 호텔만, 국가·도시 제한 없음</td><td>국내 MICE와 정면 경쟁 회피. 커버리지는 파트너 확보 속도에 좌우.</td></tr>
+    <tr><td class="n">3</td><td>접수 후 영업일 3일 이내 회신</td><td>SLA가 곧 상품. 운영 인력 없이는 지킬 수 없음(→ 인력 승인 근거).</td></tr>
+    <tr><td class="n">4</td><td>회사명·예산 호텔에 비공개</td><td>오거나이저 협상력 보호 = 핵심 차별점. 익명화는 운영 표준 절차.</td></tr>
+    <tr><td class="n">5</td><td>최소 행사 규모 제한 없음</td><td>소형 건은 커미션이 작아 손익에 부담. KPI에서 건당 규모를 함께 추적.</td></tr>
+    <tr><td class="n">6</td><td>확정 일정만 접수(미확정은 반려)</td><td>호텔 신뢰 확보 장치. 리드 품질이 곧 파트너 유지율.</td></tr>
+  </table></div>
+  <h3>이미 만들어진 자산</h3>
+  <div class="tw"><table>
+    <tr><th>자산</th><th>상태</th><th>남은 과제</th></tr>
+    <tr><td>오거나이저 랜딩(한국어) · RFP 접수 폼</td><td><span class="badge b-t">완료</span></td><td>백엔드 미연결(mailto 임시), Naboo 벤치마킹 반영안 미적용</td></tr>
+    <tr><td>호텔 파트너 등록 랜딩(영어)</td><td><span class="badge b-t">완료</span></td><td>백엔드 미연결, 가입 수 집계 수기</td></tr>
+    <tr><td>RFP 운영 SOP(8단계·RACI·예외처리·지표)</td><td><span class="badge b-t">완료</span></td><td>영업일·회신 정의 운영팀 컨펌</td></tr>
+    <tr><td>호텔 비딩 알림 이메일 + 비딩 폼(영어, 통화 선택)</td><td><span class="badge b-t">데모</span></td><td>토큰 링크 기반 실서비스화</td></tr>
+    <tr><td>MICEGO 웹사이트(여행사 모드 KO / 호텔 모드 EN)</td><td><span class="badge b-t">완료</span></td><td>도메인·배포·브랜드 메일함</td></tr>
+    <tr><td>운영자 어드민 포털(상태전이·백엔드)</td><td><span class="badge b-a">결정됨·미구축</span></td><td>기술 스택 선정 → 구축(본 승인 대상)</td></tr>
+    <tr><td>호텔 파트너 약관·커미션 계약서</td><td><span class="badge b-c">미착수</span></td><td>본 승인 후 법무 검토 착수</td></tr>
+  </table></div>
+</section>
+
+<!-- 03 -->
+<section id="s03">
+  <div class="num">03_MARKET</div>
+  <h2>시장</h2>
+  <p class="sub">거시 지표는 크지만, 우리가 실제로 잡을 수 있는 시장은 "한국발 해외 단체 숙박·연회"로 좁혀야 한다.</p>
+  <p>아시아태평양 MICE 시장은 2025년 약 2,128억 달러에서 2031년 3,522억 달러로 연평균 8.75% 성장이 전망되며, 서비스별로는 숙박이 약 32%로 가장 큰 비중을 차지하고 동남아시아가 가장 빠르게 성장하는 지역으로 꼽힌다(Mordor Intelligence, 아시아태평양 MICE 관광 시장 보고서). MICEGO의 1차 타겟 지역이 동남아 리조트 도시라는 점에서 방향은 맞다.</p>
+  <div class="callout"><b>SAM · 가정 기반 추정</b>
+    한국 아웃바운드 MICE 단체의 공식 집계는 없다. 아래는 검증 대상 가정이다: 한국발 해외 인센티브·기업행사 단체 연 <strong>약 3,000~5,000건</strong>, 건당 숙박+연회 지출 <strong>평균 6,000만원</strong> → 연 <strong>1,800~3,000억원</strong>이 호텔로 흘러가는 금액. 이 중 1%만 MICEGO를 거쳐도 거래액 18~30억원, 커미션 8% 기준 1.5~2.4억원. 1차년도 목표(36건, 거래액 약 24억원)는 이 시장의 <strong>1% 미만</strong>이다.
+  </div>
+  <h3>세그먼트별 특성</h3>
+  <div class="tw"><table>
+    <tr><th>세그먼트</th><th>요청 특성</th><th>MICEGO 가치</th><th>주의</th></tr>
+    <tr><td>여행사(인센티브 담당)</td><td>다건·반복, 견적 속도 중시</td><td>담당자 1명이 처리량을 3~5배로</td><td>자체 랜드사 관계와 충돌 가능</td></tr>
+    <tr><td>랜드사</td><td>특정 지역 전문, 호텔 인맥 보유</td><td>비전문 지역 요청 대응</td><td>사실상 잠재 경쟁자. 파트너화 전략 필요(7장)</td></tr>
+    <tr><td>기업(총무·HR)</td><td>연 1~3건, 대형, 절차 중시</td><td>익명 견적 + 비교표로 내부 품의 용이</td><td>실제 예약·결제는 여행사를 끼는 경우 다수</td></tr>
+  </table></div>
+</section>
+
+<!-- 04 -->
+<section id="s04">
+  <div class="num">04_COMPETITION</div>
+  <h2>경쟁과 차별화</h2>
+  <div class="tw"><table>
+    <tr><th>대안</th><th>방식</th><th>MICEGO 대비</th></tr>
+    <tr><td>현지 랜드사 / 여행사 직접 문의</td><td>인맥 기반 1:1 견적</td><td>비교 불가, 익명성 없음, 속도 편차 큼</td></tr>
+    <tr><td>글로벌 MICE 플랫폼(Naboo 등 유럽·미주 중심)</td><td>플랫폼 입찰, 디포짓·결제 내재화</td><td>한국어·한국 수요 없음. 단, 결제 내재화·사회적 증거 등은 벤치마킹 대상(이미 검토 보고서 있음)</td></tr>
+    <tr><td>OTA/도매(B2B 객실 도매)</td><td>객실 단가 위주</td><td>연회장·F&amp;B·일정 협상이 안 됨. 단체 요건 처리 불가</td></tr>
+    <tr><td>호텔 직접 RFP 이메일</td><td>호텔 세일즈에 직접</td><td>한국어 대응·통화·조건 정리 부담이 오거나이저에게</td></tr>
+  </table></div>
+  <h3>차별화 핵심 3가지</h3>
+  <ul>
+    <li><strong>익명 역경매</strong> — 회사명·예산을 가린 동일 조건으로 여러 호텔이 동시에 견적. 협상력이 오거나이저에게 남는다.</li>
+    <li><strong>리드 품질 보증</strong> — 확정 일정·인원·객실·연회장 조건이 없으면 접수 자체를 거절. 호텔이 "답할 가치가 있는 요청"만 받는다.</li>
+    <li><strong>MatchGo 네트워크</strong> — MatchGo가 캠페인으로 확보한 호텔·리조트 브랜드 관계와 세일즈 접점이 초기 호텔 파트너 확보의 지렛대가 된다. MICEGO는 MatchGo가 주도하는 별도 서비스 브랜드로 운영한다.</li>
+  </ul>
+</section>
+
+<!-- 05 -->
+<section id="s05">
+  <div class="num">05_REVENUE</div>
+  <h2>수익 모델</h2>
+  <p class="sub">기본안은 호텔 성사 커미션. 추가 모델은 기본안이 검증된 뒤 순차 도입한다.</p>
+  <h3>기본안 — 호텔 성사 커미션</h3>
+  <div class="tw"><table>
+    <tr><th>항목</th><th>내용</th></tr>
+    <tr><td>과금 대상</td><td>MICEGO 경유 요청이 예약 확정된 호텔</td></tr>
+    <tr><td>과금 기준</td><td>확정된 객실 매출 + 연회장 대관·F&amp;B 매출(세금·봉사료 제외 순매출)</td></tr>
+    <tr><td>요율(가정)</td><td><strong>기본 8%</strong>, 파트너 등급·거래 규모에 따라 5~10% 협의. 업계 관행(단체 커미션 10% 전후)보다 낮게 시작해 파트너 확보를 우선</td></tr>
+    <tr><td>정산 시점</td><td>체크아웃 후 15일 이내 호텔이 MICEGO에 정산(인보이스 기반). 노쇼·감축 인원은 실투숙 기준</td></tr>
+    <tr><td>계약 형태</td><td>호텔 파트너 약관(온라인 동의) + 대형 체인은 개별 커미션 계약서</td></tr>
+  </table></div>
+  <div class="callout coral"><b>이 모델의 구조적 약점 — 우회(디스인터미디에이션)</b>
+    오거나이저와 호텔이 견적 이후 직접 계약하면 커미션 회수가 어렵다. 대응: ① 견적 단계까지 호텔 담당자 연락처를 오거나이저에게 공개하지 않고 MICEGO가 확정 통보를 중개, ② 약관에 "MICEGO 경유 요청 발생 후 12개월 내 동일 오거나이저 예약은 커미션 대상" 조항, ③ 호텔 파트너에게는 커미션을 낮게, 대신 리드 품질과 반복 요청으로 보상. 이 조항의 법적 실효성은 법무 검토 필요(11장).
+  </div>
+  <h3>추가 수익모델 아이디어 (도입 순서 제안)</h3>
+  <div class="cards">
+    <div class="card"><div class="tag">A · 6개월 후</div><h4>호텔 프리미엄 노출(Featured Bid)</h4><p>동일 조건 비교표에서 상단 배치·상세 소개 카드. 월 정액 또는 건당. 오거나이저 신뢰를 해치지 않도록 "제휴 표시"를 명확히 하고 순위 조작은 하지 않는다.</p></div>
+    <div class="card"><div class="tag">B · 6개월 후</div><h4>부대 서비스 연계 수수료</h4><p>확정 건에 DMC(현지 교통·행사 운영), 항공 단체석, 여행자보험, 인플루언서 콘텐츠(MatchGo 연계)를 붙여 각 공급자로부터 소개 수수료를 받는다. 오거나이저는 여전히 무료.</p></div>
+    <div class="card"><div class="tag">C · 12개월 후</div><h4>오거나이저 프로 플랜</h4><p>여행사 대상 월 구독: 요청 우선 처리, 비교표 브랜딩 내보내기(자사 로고로 고객 제출), 과거 견적 아카이브, 담당자 다계정. "오거나이저 무료" 정책과 충돌하지 않도록 기본 기능은 계속 무료.</p></div>
+    <div class="card"><div class="tag">D · 12개월 후</div><h4>결제 중개·디포짓 관리</h4><p>Naboo 방식. 오거나이저 디포짓을 MICEGO가 에스크로로 받아 호텔에 전달하면 커미션 회수가 구조적으로 보장되고 우회 리스크가 사라진다. 자금 보관 규제·여행업 등록 이슈 검토가 선행돼야 한다.</p></div>
+    <div class="card"><div class="tag">E · 데이터 누적 후</div><h4>시장 데이터 리포트</h4><p>지역·시즌별 단체 객실 단가, 연회장 가격 벤치마크를 호텔 세일즈·관광청 대상으로 판매. 개별 거래는 익명 집계.</p></div>
+  </div>
+</section>
+
+<!-- 06 -->
+<section id="s06">
+  <div class="num">06_OPERATIONS</div>
+  <h2>운영 모델</h2>
+  <p class="sub">SOP 8단계는 이미 문서화돼 있다. 이 장은 "누가, 어떤 도구로" 그것을 돌리는지에 집중한다.</p>
+  <pre class="mermaid">
+flowchart LR
+  A[접수] --> B{검증}
+  B -- 반려 --> R[반려 회신]
+  B -- 통과 --> C[익명화 · 코드명 부여]
+  C --> D[매칭 호텔 선정 · 토큰 링크 발송]
+  D --> E[비딩 수집 · SLA 추적]
+  E --> F[통화 정리 · 비교표 작성]
+  F --> G[오거나이저 전달]
+  G --> H[확정 중개 · 커미션 정산]
+  </pre>
+  <h3>운영 도구 — 어드민 포털</h3>
+  <p>Notion·시트 수동 운영은 채택하지 않았고, 백엔드를 갖춘 운영자 어드민 포털을 신규 구축하기로 확정됐다. 호텔은 로그인 없이 이메일의 토큰 링크로 비딩 폼을 제출한다. 포털의 최소 범위는 다음과 같다.</p>
+  <div class="tw"><table>
+    <tr><th>모듈</th><th>기능</th><th>우선순위</th></tr>
+    <tr><td>RFP 인박스</td><td>오거나이저·호텔 폼 접수 저장(mailto 대체), 상태 필드, SLA 타이머</td><td><span class="badge b-c">P0</span></td></tr>
+    <tr><td>익명 브리프 생성</td><td>회사명·예산·연락처 자동 마스킹, 코드명 발급</td><td><span class="badge b-c">P0</span></td></tr>
+    <tr><td>호텔 발송·토큰</td><td>파트너 DB 필터(지역·규모·연회장), 1회용 토큰 링크 메일 발송</td><td><span class="badge b-c">P0</span></td></tr>
+    <tr><td>비딩 수집·비교표</td><td>통화별 병기, 수동 환율 입력, 비교표 PDF/링크 내보내기</td><td><span class="badge b-a">P1</span></td></tr>
+    <tr><td>정산</td><td>확정 건 등록, 커미션 인보이스 생성, 수금 상태</td><td><span class="badge b-a">P1</span></td></tr>
+    <tr><td>파트너 CRM</td><td>가입 집계(KPI), 응답률, 등급</td><td><span class="badge b-g">P2</span></td></tr>
+  </table></div>
+  <h3>인력</h3>
+  <div class="tw"><table>
+    <tr><th>역할</th><th>FTE</th><th>담당</th></tr>
+    <tr><td>운영 매니저(RFP 처리·SLA·비교표)</td><td class="n">1.0</td><td>신규 채용 또는 전담 배치. 영어 이메일 협상 가능자</td></tr>
+    <tr><td>호텔 파트너 세일즈(영어)</td><td class="n">0.5</td><td>MatchGo 브랜드 세일즈 담당 겸임 검토</td></tr>
+    <tr><td>오거나이저 세일즈(여행사 영업)</td><td class="n">0.3</td><td>대표 직접 + MatchGo 세일즈 겸임</td></tr>
+    <tr><td>개발(포털)</td><td class="n">외주/계약</td><td>P0 3개월, 이후 유지보수</td></tr>
+  </table></div>
+</section>
+
+<!-- 07 -->
+<section id="s07">
+  <div class="num">07_GTM</div>
+  <h2>수요·공급 확보 전략</h2>
+  <p class="sub">역경매는 공급(호텔)이 먼저 있어야 수요(오거나이저)가 만족한다. 순서가 중요하다.</p>
+  <h3>공급 — 호텔 파트너 (선행, 0~3개월)</h3>
+  <ul>
+    <li><strong>1차 30개 호텔</strong>: 다낭·나트랑·푸꾸옥·발리·방콕 — MatchGo 캠페인을 진행했거나 접촉 이력이 있는 호텔·리조트 중 연회장 보유 호텔부터 개별 접촉. 파트너 등록 랜딩 + 실제 샘플 브리프(MG-2608-007)로 설득.</li>
+    <li><strong>체인 세일즈 오피스</strong>: 한국 시장 담당 리저널 세일즈(서울 주재 GSA 포함)를 통해 체인 단위 파트너 등록.</li>
+    <li><strong>파트너 유지 장치</strong>: 응답률·성사율을 분기별로 공유하고, 리드 품질(정책 6)을 지킨다는 약속을 데이터로 증명.</li>
+  </ul>
+  <h3>수요 — 오거나이저 (병행, 1~6개월)</h3>
+  <ul>
+    <li><strong>여행사 인센티브 팀 20곳</strong> 직접 영업. 첫 요청은 대표가 직접 비교표를 만들어 전달(화이트글러브).</li>
+    <li><strong>랜드사는 경쟁자가 아니라 파트너로</strong>: 자기 전문 지역 외 요청을 MICEGO로 넘기면 소개 수수료(추가 모델 B 변형)를 주는 구조를 테스트.</li>
+    <li><strong>기업 총무·HR</strong>: MatchGo 브랜드 고객사 중 인센티브 여행 실적이 있는 기업에 우선 소개. 콘텐츠(익명 사례·비교표 샘플)로 검색 유입.</li>
+    <li>Naboo 벤치마킹 반영안(오거나이저 수수료 문구 명확화, "담당자 확인 후 전달" 신뢰 메시지)을 랜딩에 적용.</li>
+  </ul>
+</section>
+
+<!-- 08 -->
+<section id="s08">
+  <div class="num">08_FINANCE</div>
+  <h2>재무 계획 (12개월)</h2>
+  <p class="sub">단위: 백만원. 모든 수치는 가정. 실데이터 확보 후 분기마다 갱신한다.</p>
+  <h3>단위 경제 (건당)</h3>
+  <div class="tw"><table>
+    <tr><th>가정 항목</th><th class="n">값</th><th>근거</th></tr>
+    <tr><td>평균 인원</td><td class="n">120명</td><td>인센티브 단체 중간값 가정</td></tr>
+    <tr><td>평균 박수 · 객실</td><td class="n">3박 · 70실</td><td>트윈 위주 2인 1실</td></tr>
+    <tr><td>객실 매출</td><td class="n">USD 31,500</td><td>USD 150/박 × 70실 × 3박</td></tr>
+    <tr><td>연회·F&amp;B 매출</td><td class="n">USD 15,000</td><td>갈라디너 1회 + 회의 반일</td></tr>
+    <tr><td>건당 거래액</td><td class="n hl">USD 46,500 ≈ ₩65M</td><td>환율 1,400원 가정</td></tr>
+    <tr><td>커미션 8%</td><td class="n hl">≈ ₩5.2M</td><td>건당 MICEGO 매출</td></tr>
+  </table></div>
+  <h3>퍼널 가정 (기본 시나리오)</h3>
+  <div class="bars">
+    <div class="bar"><div class="lb">접수 RFP</div><div class="tr"><div class="fl" style="width:100%"></div></div><div class="vl">240건</div></div>
+    <div class="bar"><div class="lb">검증 통과</div><div class="tr"><div class="fl" style="width:70%"></div></div><div class="vl">168건</div></div>
+    <div class="bar"><div class="lb">견적 확보</div><div class="tr"><div class="fl" style="width:55%"></div></div><div class="vl">132건</div></div>
+    <div class="bar"><div class="lb">성사</div><div class="tr"><div class="fl a" style="width:15%"></div></div><div class="vl">36건</div></div>
+  </div>
+  <h3>시나리오</h3>
+  <div class="tw"><table>
+    <tr><th>항목</th><th class="n">보수</th><th class="n">기본</th><th class="n">공격</th></tr>
+    <tr><td>12개월 성사 건수</td><td class="n">18</td><td class="n hl">36</td><td class="n">60</td></tr>
+    <tr><td>거래액(GMV)</td><td class="n">1,170</td><td class="n">2,340</td><td class="n">3,900</td></tr>
+    <tr><td>커미션 매출(8%)</td><td class="n">94</td><td class="n hl">187</td><td class="n">312</td></tr>
+    <tr><td>인건비(1.8 FTE)</td><td class="n">110</td><td class="n">110</td><td class="n">130</td></tr>
+    <tr><td>포털 개발·운영</td><td class="n">60</td><td class="n">60</td><td class="n">60</td></tr>
+    <tr><td>마케팅·영업(출장 포함)</td><td class="n">40</td><td class="n">50</td><td class="n">70</td></tr>
+    <tr><td>기타(법무·도구·환차)</td><td class="n">10</td><td class="n">10</td><td class="n">10</td></tr>
+    <tr><td><strong>12개월 손익</strong></td><td class="n" style="color:var(--coral)">-126</td><td class="n hl" style="color:var(--coral)">-43</td><td class="n" style="color:var(--teal)">+42</td></tr>
+  </table></div>
+  <p>성사 1건이 늘 때마다 약 520만원이 더해지고, 고정비는 월 약 1,900만원이므로 <strong>월 4건이 고정비 커버 최소선</strong>이다. 1차년도는 투자 단계로 보고, 6개월차에 퍼널 실측치로 계속 여부를 판단하는 게이트를 둔다(9장).</p>
+</section>
+
+<!-- 09 -->
+<section id="s09">
+  <div class="num">09_ROADMAP</div>
+  <h2>실행 로드맵</h2>
+  <div class="tl">
+    <div class="ph"><div class="w">M0–M1 · 기반</div><h4>계약·도구·채용</h4><ul><li>호텔 파트너 약관·커미션 조항 법무 검토 완료</li><li>포털 기술 스택 확정, P0 개발 착수</li><li>운영 매니저 채용/배치, 브랜드 메일함·도메인 개설(mailto 임시 채널 종료)</li><li>영업일·회신 정의(B-3/B-4) 운영 기준 확정</li></ul></div>
+    <div class="ph"><div class="w">M2–M3 · 공급 선행</div><h4>호텔 파트너 30곳 · 포털 P0 오픈</h4><ul><li>MatchGo 호텔 네트워크·체인 세일즈 통해 30개 호텔 등록</li><li>포털 P0(접수·익명화·토큰 발송) 오픈, 랜딩 폼 백엔드 연결</li><li>Naboo 반영안 랜딩 적용</li></ul></div>
+    <div class="ph"><div class="w">M3–M6 · 수요 검증</div><h4>여행사 20곳 · 첫 성사 10건</h4><ul><li>화이트글러브로 첫 요청 처리, 비교표 품질 표준화</li><li>포털 P1(비교표·정산) 오픈</li><li><strong>M6 게이트</strong>: 접수 60건+, 성사 8건+, 호텔 응답률 50%+ 중 2개 이상 충족 시 계속</li></ul></div>
+    <div class="ph"><div class="w">M7–M12 · 확장</div><h4>파트너 100곳 · 추가 수익모델 A/B</h4><ul><li>지역 확장(코타키나발루·괌·일본 리조트), 파트너 100곳</li><li>Featured Bid·부대 서비스 연계 수수료 파일럿</li><li>M12: 2차년도 계획, 결제 중개(D) 규제 검토 착수</li></ul></div>
+  </div>
+</section>
+
+<!-- 10 -->
+<section id="s10">
+  <div class="num">10_KPI</div>
+  <h2>KPI</h2>
+  <div class="tw"><table>
+    <tr><th>구분</th><th>지표</th><th class="n">M6 목표</th><th class="n">M12 목표</th></tr>
+    <tr><td>수요</td><td>월 접수 RFP 수 / 검증 통과율</td><td class="n">15건 · 65%</td><td class="n">30건 · 70%</td></tr>
+    <tr><td>공급</td><td>등록 호텔 수 / 요청당 응답 호텔 수</td><td class="n">30 · 3곳</td><td class="n">100 · 4곳</td></tr>
+    <tr><td>품질</td><td>SLA(3영업일) 준수율 / 평균 회신 소요일</td><td class="n">90% · 2.5일</td><td class="n">95% · 2.0일</td></tr>
+    <tr><td>전환</td><td>견적→성사 전환율</td><td class="n">20%</td><td class="n">27%</td></tr>
+    <tr><td>재무</td><td>건당 GMV / 커미션 수금율</td><td class="n">₩50M · —</td><td class="n">₩65M · 95%</td></tr>
+    <tr><td>유지</td><td>오거나이저 재요청률 / 호텔 파트너 이탈률</td><td class="n">30% · —</td><td class="n">50% · &lt;10%</td></tr>
+  </table></div>
+</section>
+
+<!-- 11 -->
+<section id="s11">
+  <div class="num">11_RISKS</div>
+  <h2>리스크와 미해결 사항</h2>
+  <p class="sub">기존에 기록된 B-1~B-7 외에, 기획안 작성 과정에서 새로 드러난 항목(N-1~N-5)을 함께 정리한다.</p>
+  <div class="tw"><table>
+    <tr><th>ID</th><th>리스크</th><th>영향</th><th>대응 / 결정 필요</th></tr>
+    <tr><td><span class="badge b-c">N-1</span></td><td>법적 지위 — 해외 호텔 단체 예약을 중개·확정하는 행위가 국외여행업(관광진흥법) 등록 대상인지, 향후 결제 중개 시 자금 보관 규제에 걸리는지 미확인</td><td>사업 구조 자체</td><td>M0 법무 자문. 결과에 따라 "견적 중개까지만"과 "예약 확정·결제까지"의 범위가 갈린다</td></tr>
+    <tr><td><span class="badge b-c">N-2</span></td><td>커미션 우회(오거나이저–호텔 직거래)</td><td>매출 누수</td><td>5장 대응책 + 약관 조항 법적 실효성 검토. 장기적으로 결제 중개(D)가 근본 해법</td></tr>
+    <tr><td><span class="badge b-a">N-3</span></td><td>MatchGo 단독 수행에 따른 초기 호텔 네트워크 한계 — 인플루언서 캠페인 관계가 곧 MICE 세일즈 관계는 아니며, 연회장·단체 담당(그룹 세일즈)은 별도 접점</td><td>공급 확보 속도</td><td>체인 리저널 세일즈·한국 GSA 경로를 M1부터 병행, 파트너 30곳 목표 미달 시 M3에 지역 축소</td></tr>
+    <tr><td><span class="badge b-a">N-4</span></td><td>랜드사 세그먼트의 채널 충돌 — 타겟이자 경쟁자</td><td>수요 확보</td><td>소개 수수료 파트너 구조를 M3~M6에 테스트, 결과로 세그먼트 우선순위 재조정</td></tr>
+    <tr><td><span class="badge b-a">N-5</span></td><td>소형 요청(정책 5) 처리 비용 &gt; 커미션</td><td>손익</td><td>정책은 유지하되 소형 건은 운영 자동화 비율을 높이고, 건당 규모를 KPI로 추적. 필요 시 정책 5 재검토</td></tr>
+    <tr><td><span class="badge b-c">B-1</span></td><td>폼 백엔드 부재(mailto 임시) — 접수 유실·SLA 불이행 위험</td><td>운영</td><td>포털 P0로 해결(M2)</td></tr>
+    <tr><td><span class="badge b-a">B-3/4</span></td><td>영업일 기산·"회신" 정의 운영팀 미컨펌</td><td>SLA</td><td>M0 확정</td></tr>
+    <tr><td><span class="badge b-a">B-5</span></td><td>Naboo 반영안 랜딩 미적용</td><td>전환율</td><td>M2 적용</td></tr>
+    <tr><td><span class="badge b-a">B-6</span></td><td>다통화 견적 비교 기준 미정</td><td>비교표 품질</td><td>1차: 통화별 병기 + 기준일 환율 수동 입력(포털 P1). 실시간 API는 2차년도</td></tr>
+    <tr><td><span class="badge b-g">B-7</span></td><td>호텔 가입 수 집계 수기</td><td>KPI</td><td>포털 P2 CRM으로 해결</td></tr>
+  </table></div>
+</section>
+
+<!-- 12 -->
+<section id="s12">
+  <div class="num">12_DECISIONS</div>
+  <h2>결정 요청 체크리스트</h2>
+  <p class="sub">경영진이 이 문서에서 결정해야 할 항목. 각 항목은 미결 시 로드맵의 어느 단계가 멈추는지를 함께 표시했다.</p>
+  <ul class="checklist">
+    <li><strong>수익모델 확정</strong> — 호텔 성사 커미션 기본 8%(협의 5~10%), 정산 체크아웃 후 15일 이내. <span class="badge b-g">미결 시 M0 약관 작성 불가</span></li>
+    <li><strong>포털·백엔드 예산</strong> — 12개월 6,000만원(P0~P1 개발 + 운영). 기술 스택은 개발 담당 추천안 채택. <span class="badge b-g">미결 시 M2 오픈 불가</span></li>
+    <li><strong>인력</strong> — 운영 매니저 1.0 FTE 신규/전담, 호텔 세일즈 0.5 FTE 겸임. <span class="badge b-g">미결 시 SLA 3일 정책 유지 불가</span></li>
+    <li><strong>12개월 예산 한도</strong> — 총 2.3억원(기본 시나리오), M6 게이트 통과 시 하반기분 집행. <span class="badge b-g">미결 시 M3 이후 정지</span></li>
+    <li><strong>계약 주체</strong> — 호텔 약관·커미션 인보이스는 MatchGo 운영 법인 명의로 발행. 사업 주도·매출 귀속·인력 배치 모두 MatchGo 단독. <span class="badge b-g">M0 법무 검토 전제</span></li>
+    <li><strong>법무 자문 착수 승인</strong> — 여행업 등록 여부, 커미션 조항 실효성, 향후 결제 중개 규제(N-1, N-2). <span class="badge b-g">M0</span></li>
+    <li><strong>M6 게이트 기준 동의</strong> — 접수 60건+ / 성사 8건+ / 호텔 응답률 50%+ 중 2개 이상. 미달 시 범위 축소 또는 중단을 사전에 합의.</li>
+  </ul>
+  <div class="callout"><b>다음 산출물</b>
+    승인 즉시 착수: ① 호텔 파트너 약관·커미션 조항 초안 ② 어드민 포털 기술 스택 추천안과 P0 요구사항 명세 ③ 호텔 파트너 1차 30곳 타겟 리스트 ④ Naboo 반영안 랜딩 적용.
+  </div>
+</section>
+
+<div class="foot">MICEGO 서비스 사업 기획안 v1.0 · 2026-09-25 · 내부 검토용 · 재무 수치는 전부 가정이며 실데이터 확보 후 분기별 갱신 대상.<br>시장 규모 인용: Mordor Intelligence, Asia-Pacific MICE Tourism Market (2025–2031 전망).</div>
+</div>
+
+<!--claude-mermaid-runtime-begin:3477-->
+<style>.mermaid-diagram{margin-block:4px}.mermaid-diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}</style>
+<script src="/_runtime/mermaid-11.16.1.min.js"></script>
+<script>(function(){
+var CFG={"palettes":{"light":{"surface":"#f4efe4","text":"#42392e","line":"#8a7f6d","border":"#7a6c52","bg":"#fffdf8"},"dark":{"surface":"#262b34","text":"#f2f3f5","line":"#a8adb8","border":"#9aa4b8","bg":"#1f232b"}}};
+if(typeof mermaid==='undefined')return;
+var pres=Array.prototype.slice.call(document.querySelectorAll('pre.mermaid')).filter(function(p){if(p.hasAttribute('data-claude-mermaid-claimed'))return false;p.setAttribute('data-claude-mermaid-claimed','1');return true;});
+if(!pres.length)return;
+var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+var root=document.documentElement;
+var items=pres.map(function(pre){
+var mount=document.createElement('div');mount.className='mermaid-diagram';
+return {pre:pre,mount:mount,src:pre.textContent||''};
+});
+var seq=0;
+var renderGen=0;
+var lastKey='';
+function pageBg(fallback){
+var els=[document.body,document.documentElement];
+for(var i=0;i<els.length;i++){
+var c=els[i]&&getComputedStyle(els[i]).backgroundColor;
+if(c&&c!=='transparent'&&c!=='rgba(0, 0, 0, 0)')return c;
+}
+return fallback;
+}
+function render(){
+var theme=root.getAttribute('data-theme');
+var dark=theme==='dark'||(!!(mq&&mq.matches)&&theme!=='light');
+var pal=dark?CFG.palettes.dark:CFG.palettes.light;
+var bg=pageBg(pal.bg);
+var key=(dark?'d':'l')+'|'+bg;
+if(key===lastKey)return;
+lastKey=key;
+var gen=++renderGen;
+var font=getComputedStyle(document.body).fontFamily||'sans-serif';
+var nat={useMaxWidth:false};
+mermaid.initialize({
+startOnLoad:false,securityLevel:'strict',theme:'base',
+flowchart:nat,sequence:nat,er:nat,state:nat,class:nat,pie:nat,
+gantt:nat,journey:nat,timeline:nat,gitGraph:nat,mindmap:nat,xyChart:nat,
+quadrantChart:nat,sankey:nat,c4:nat,requirement:nat,block:nat,
+packet:nat,kanban:nat,architecture:nat,radar:nat,
+themeVariables:{background:bg,mainBkg:pal.surface,primaryColor:pal.surface,
+primaryTextColor:pal.text,lineColor:pal.line,primaryBorderColor:pal.border,
+nodeBorder:pal.border,clusterBorder:pal.border,edgeLabelBackground:bg,
+clusterBkg:'rgba(127,127,127,0.07)',titleColor:pal.text,
+darkMode:dark,rowOdd:bg,rowEven:'rgba(127,127,127,0.07)',
+attributeBackgroundColorOdd:bg,attributeBackgroundColorEven:'rgba(127,127,127,0.07)',
+fontSize:'16px',fontFamily:font},
+themeCSS:'.node rect, .node circle, .node polygon, .node path, .cluster rect { stroke-width: 2px; }'
+});
+items.forEach(function(it){
+var id='claude-mermaid-'+seq++;
+mermaid.render(id,it.src).then(function(r){
+if(gen!==renderGen)return;
+var prev=it.pre.previousElementSibling;
+if(prev&&prev.className==='mermaid-diagram'&&prev!==it.mount)return;
+it.mount.innerHTML=r.svg;
+if(!it.mount.parentNode)it.pre.parentNode.insertBefore(it.mount,it.pre);
+it.pre.style.display='none';
+},function(){
+var scratch=document.getElementById(id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+scratch=document.getElementById('d'+id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+if(gen!==renderGen)return;
+if(it.mount.parentNode)it.mount.parentNode.removeChild(it.mount);
+it.pre.style.display='';
+});
+});
+}
+render();
+if(mq&&mq.addEventListener)mq.addEventListener('change',render);
+if(typeof MutationObserver!=='undefined')new MutationObserver(render).observe(root,{attributes:true,attributeFilter:['data-theme']});
+})();</script>
+<!--claude-mermaid-runtime-end-->
+</body>
+</html>

@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>MICEGO 지역 운영 파트너 모델 기획안</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0F1E3D; --ink-80:#1F3266; --ink-60:#4A5D8C;
+  --teal:#0B8F86; --teal-bright:#12A89D; --teal-soft:#E3F4F2;
+  --amber:#FFC24B; --amber-soft:#FFF3D6;
+  --coral:#F25151; --coral-soft:#FFE4E4;
+  --white:#FFFFFF; --bg:#FAFBFD; --bg-warm:#F5F7FA; --line:#E4E8F0; --line-dim:#EEF1F6;
+  --gray:#6B7794; --gray-light:#A0AAC2;
+  --font-display:'Archivo','Pretendard','Noto Sans KR',sans-serif;
+  --font-sans:'Pretendard','Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',monospace;
+  --r-sm:4px; --r-md:8px; --r-lg:12px;
+  --sh:0 1px 2px rgba(15,30,61,.04),0 4px 12px rgba(15,30,61,.05);
+  --page:var(--white); --card:var(--white);
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ink:#E8ECF5; --ink-80:#C9D1E4; --ink-60:#9AA7C7;
+    --teal:#2FC4B8; --teal-soft:#0F2A2A; --amber:#FFC24B; --amber-soft:#3A2E10;
+    --coral:#FF7B7B; --coral-soft:#3A1A1A;
+    --white:#0B1220; --bg:#0F172A; --bg-warm:#111B31; --line:#26324D; --line-dim:#1D2840;
+    --gray:#9AA7C7; --gray-light:#6B7794; --page:#0B1220; --card:#111B31;
+    --sh:0 1px 2px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --ink:#E8ECF5; --ink-80:#C9D1E4; --ink-60:#9AA7C7;
+  --teal:#2FC4B8; --teal-soft:#0F2A2A; --amber:#FFC24B; --amber-soft:#3A2E10;
+  --coral:#FF7B7B; --coral-soft:#3A1A1A;
+  --white:#0B1220; --bg:#0F172A; --bg-warm:#111B31; --line:#26324D; --line-dim:#1D2840;
+  --gray:#9AA7C7; --gray-light:#6B7794; --page:#0B1220; --card:#111B31;
+  --sh:0 1px 2px rgba(0,0,0,.3),0 4px 12px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:env(safe-area-inset-top,0px)}
+body{font-family:var(--font-sans);color:var(--ink);background:var(--page);line-height:1.65;-webkit-font-smoothing:antialiased;font-size:15px}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:820px;margin:0 auto;padding:0 20px 80px}
+/* cover */
+.cover{padding:56px 0 40px;border-bottom:1px solid var(--line)}
+.wordmark{font-family:var(--font-display);font-weight:800;font-size:15px;letter-spacing:.12em;color:var(--teal)}
+.wordmark span{color:var(--ink);letter-spacing:.02em;font-weight:600;margin-left:10px;font-size:12px;font-family:var(--font-mono)}
+.cover h1{font-family:var(--font-display);font-size:clamp(28px,5vw,40px);font-weight:800;letter-spacing:-.03em;line-height:1.15;margin:20px 0 14px}
+.cover .lead{font-size:16px;color:var(--ink-60);max-width:640px}
+.meta{display:flex;flex-wrap:wrap;gap:18px 28px;margin-top:22px;font-family:var(--font-mono);font-size:12px;color:var(--gray)}
+.meta b{color:var(--ink);font-weight:600;display:block;margin-bottom:2px;font-size:11px;letter-spacing:.06em}
+/* toc */
+.toc{background:var(--bg-warm);border:1px solid var(--line);border-radius:var(--r-lg);padding:18px 20px;margin:28px 0 8px}
+.toc ol{list-style:none;columns:2;column-gap:24px}
+.toc li{break-inside:avoid;padding:4px 0;font-size:13.5px}
+.toc li a{display:flex;gap:8px}
+.toc li a code{font-family:var(--font-mono);color:var(--teal);font-size:11.5px;min-width:24px;padding-top:2px}
+@media(max-width:560px){.toc ol{columns:1}}
+/* sections */
+section{padding:44px 0 8px;border-bottom:1px solid var(--line-dim)}
+.num{display:inline-block;font-family:var(--font-mono);font-size:12px;font-weight:600;color:var(--teal);background:var(--teal-soft);padding:3px 8px;border-radius:var(--r-sm);letter-spacing:.04em}
+h2{font-family:var(--font-display);font-size:26px;font-weight:700;letter-spacing:-.025em;margin:12px 0 8px;line-height:1.25}
+h3{font-family:var(--font-display);font-size:17px;font-weight:700;letter-spacing:-.01em;margin:26px 0 8px}
+p{margin:0 0 12px}
+.sub{color:var(--ink-60);font-size:15px;margin-bottom:18px}
+ul,ol{padding-left:20px;margin:0 0 14px}
+li{margin:4px 0}
+strong{font-weight:700}
+.ac{color:var(--teal);font-weight:700}
+/* tiles */
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0 18px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:var(--r-md);padding:14px;box-shadow:var(--sh)}
+.tile .k{font-family:var(--font-mono);font-size:11px;color:var(--gray);letter-spacing:.06em}
+.tile .v{font-family:var(--font-display);font-size:24px;font-weight:800;letter-spacing:-.02em;margin:4px 0 2px;line-height:1.1}
+.tile .v small{font-size:13px;font-weight:600;color:var(--ink-60);margin-left:3px}
+.tile .d{font-size:12.5px;color:var(--ink-60)}
+/* cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:14px 0 18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r-lg);padding:16px 18px;box-shadow:var(--sh)}
+.card h4{font-family:var(--font-display);font-size:14.5px;font-weight:700;margin-bottom:6px}
+.card p{font-size:13.5px;color:var(--ink-60);margin:0}
+.card .tag{font-family:var(--font-mono);font-size:10.5px;color:var(--teal);letter-spacing:.06em;margin-bottom:6px}
+/* callout */
+.callout{border-left:3px solid var(--teal);background:var(--teal-soft);padding:14px 16px;border-radius:0 var(--r-md) var(--r-md) 0;margin:16px 0;font-size:14px}
+.callout.amber{border-color:var(--amber);background:var(--amber-soft)}
+.callout.coral{border-color:var(--coral);background:var(--coral-soft)}
+.callout b{display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em;margin-bottom:4px}
+/* table */
+.tw{overflow-x:auto;margin:12px 0 18px;border:1px solid var(--line);border-radius:var(--r-md)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
+th{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--gray);text-align:left;padding:10px 12px;background:var(--bg-warm);border-bottom:1px solid var(--line);font-weight:600;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid var(--line-dim);vertical-align:top}
+tr:last-child td{border-bottom:0}
+td.n,th.n{text-align:right;font-family:var(--font-mono);white-space:nowrap}
+td.hl{font-weight:700}
+.badge{display:inline-block;font-family:var(--font-mono);font-size:10.5px;padding:2px 7px;border-radius:var(--r-sm);letter-spacing:.04em;font-weight:600}
+.b-t{background:var(--teal-soft);color:var(--teal)}
+.b-a{background:var(--amber-soft);color:#8A5A00}
+.b-c{background:var(--coral-soft);color:var(--coral)}
+.b-g{background:var(--line-dim);color:var(--gray)}
+/* bars */
+.bars{margin:14px 0 18px}
+.bar{display:grid;grid-template-columns:110px 1fr 70px;align-items:center;gap:10px;margin:8px 0;font-size:13px}
+.bar .lb{font-family:var(--font-mono);font-size:11.5px;color:var(--gray)}
+.bar .tr{height:14px;background:var(--line-dim);border-radius:3px;overflow:hidden}
+.bar .fl{height:100%;background:var(--teal);border-radius:3px}
+.bar .fl.a{background:var(--amber)}
+.bar .fl.c{background:var(--coral)}
+.bar .vl{font-family:var(--font-mono);font-size:12px;text-align:right}
+/* timeline */
+.tl{position:relative;padding-left:22px;margin:14px 0 18px}
+.tl::before{content:'';position:absolute;left:6px;top:6px;bottom:6px;width:2px;background:var(--line)}
+.tl .ph{position:relative;margin-bottom:18px}
+.tl .ph::before{content:'';position:absolute;left:-21px;top:6px;width:12px;height:12px;border-radius:50%;background:var(--teal);border:2px solid var(--page)}
+.tl .ph h4{font-family:var(--font-display);font-size:15px;font-weight:700}
+.tl .ph .w{font-family:var(--font-mono);font-size:11px;color:var(--gray);letter-spacing:.04em}
+.tl .ph ul{margin:6px 0 0;font-size:13.5px}
+pre.mermaid{background:var(--bg-warm);border:1px solid var(--line);border-radius:var(--r-md);padding:12px;overflow-x:auto;margin:12px 0 18px}
+.foot{margin-top:40px;font-family:var(--font-mono);font-size:11px;color:var(--gray);line-height:1.7}
+.checklist li{list-style:none;position:relative;padding-left:26px;margin:8px 0}
+.checklist li::before{content:'';position:absolute;left:0;top:4px;width:16px;height:16px;border:2px solid var(--teal);border-radius:var(--r-sm)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="cover">
+  <div class="wordmark">MICEGO <span>REGIONAL PARTNER MODEL · v1.0</span></div>
+  <h1>지역 운영 파트너 모델 기획안<br>파트너 활용으로 공급 셋업 속도를 올리는 방법</h1>
+  <p class="lead">각 지역에 이미 사업 기반을 가진 파트너사에 호텔 소싱부터 협상·확정·정산까지 지역 운영 전체를 위임하고, 호텔 커미션을 파트너 70 : MICEGO 30으로 나누는 구조. 서비스 사업 기획안(v1.1)의 <strong>공급 확보 전략(7장)과 재무(8장)를 대체·보완</strong>하는 하위 기획안이다.</p>
+  <div class="meta">
+    <div><b>작성일</b>2026-09-25</div>
+    <div><b>독자</b>내부 경영진 · 실행팀</div>
+    <div><b>주관</b>MatchGo(매치고) 단독 주도 · 서비스명 MICEGO</div>
+    <div><b>상위 문서</b>MICEGO 서비스 사업 기획안 v1.1</div>
+  </div>
+  <nav class="toc">
+    <ol>
+      <li><a href="#s00"><code>00</code>요약 및 승인 요청</a></li>
+      <li><a href="#s01"><code>01</code>왜 파트너 모델인가</a></li>
+      <li><a href="#s02"><code>02</code>모델 정의와 역할 분담</a></li>
+      <li><a href="#s03"><code>03</code>파트너 프로필과 선정 기준</a></li>
+      <li><a href="#s04"><code>04</code>수익 배분과 정산</a></li>
+      <li><a href="#s05"><code>05</code>계약 핵심 조항</a></li>
+      <li><a href="#s06"><code>06</code>운영과 통제 장치</a></li>
+      <li><a href="#s07"><code>07</code>지역별 롤아웃</a></li>
+      <li><a href="#s08"><code>08</code>재무 영향</a></li>
+      <li><a href="#s09"><code>09</code>리스크</a></li>
+      <li><a href="#s10"><code>10</code>로드맵과 KPI</a></li>
+      <li><a href="#s11"><code>11</code>결정 요청 체크리스트</a></li>
+    </ol>
+  </nav>
+</header>
+
+<section id="s00">
+  <div class="num">00_SUMMARY</div>
+  <h2>요약 및 승인 요청</h2>
+  <p><strong>무엇이 바뀌는가.</strong> 직접 호텔을 하나씩 영업해 등록시키던 계획을, 지역별로 이미 호텔 관계·현지 인력·정산 체계를 갖춘 파트너사 1곳과 계약해 그 지역 공급을 통째로 여는 방식으로 바꾼다. MICEGO는 한국 수요(오거나이저 RFP)와 플랫폼·브랜드·품질 기준을 제공하고, 파트너는 현지에서 호텔을 모으고 견적을 받고 확정·수금까지 한다.</p>
+  <p><strong>얻는 것과 내주는 것.</strong> 얻는 것은 속도다 — 지역당 파트너 계약 1건이면 호텔 20~50곳이 한 번에 열린다. 내주는 것은 마진이다 — 건당 MICEGO 몫이 커미션 8% 중 30%, 즉 거래액의 2.4%(건당 약 156만원)로 줄어든다. 따라서 이 모델은 <span class="ac">거래 건수를 직접 운영 대비 2배 이상 만들어야 성립</span>한다.</p>
+  <div class="tiles">
+    <div class="tile"><div class="k">REGIONS · 12M</div><div class="v">6<small>지역</small></div><div class="d">파트너 6사 계약</div></div>
+    <div class="tile"><div class="k">HOTELS · 12M</div><div class="v">150<small>+</small></div><div class="d">직접 소싱안 100곳 대비</div></div>
+    <div class="tile"><div class="k">MICEGO 몫 / 건</div><div class="v">₩1.56<small>M</small></div><div class="d">GMV 65M × 8% × 30%</div></div>
+    <div class="tile"><div class="k">BREAK-EVEN</div><div class="v">월 10<small>건</small></div><div class="d">고정비 월 약 1,500만원</div></div>
+  </div>
+  <div class="callout amber"><b>승인 요청 사항 (4건)</b>
+    ① 지역 운영 파트너 모델 채택(파트너 범위 = 소싱·협상·확정·정산 전체) &nbsp;② 배분 비율 파트너 70 : MICEGO 30, 정산 흐름 A(파트너 수금 → MICEGO 몫 송금) &nbsp;③ 1차 3개 지역(베트남 중부, 발리, 방콕) 파트너 계약 착수 &nbsp;④ 파트너 계약서·포털 파트너 계정 개발 예산. 상세는 <a href="#s11" class="ac">11장</a>.
+  </div>
+</section>
+
+<section id="s01">
+  <div class="num">01_WHY</div>
+  <h2>왜 파트너 모델인가</h2>
+  <p class="sub">직접 소싱안의 병목은 "호텔 안의 담당자를 찾는 시간"이었다.</p>
+  <div class="tw"><table>
+    <tr><th>항목</th><th>직접 소싱(기존 7장)</th><th>지역 운영 파트너</th></tr>
+    <tr><td>호텔 30곳 확보 소요</td><td>3개월, 세일즈 0.5 FTE + 출장</td><td>파트너 계약 후 2~4주(파트너 기존 관계 활용)</td></tr>
+    <tr><td>호텔 내 접점</td><td>MatchGo 마케팅 담당 → 그룹 세일즈로 소개받아야 함</td><td>파트너가 이미 그룹 세일즈·연회 담당과 거래 중</td></tr>
+    <tr><td>현지 협상·통화·정산</td><td>MICEGO가 원격으로, 다통화 문제 미해결</td><td>현지 통화로 파트너가 처리, MICEGO는 원화/달러 정산만</td></tr>
+    <tr><td>건당 MICEGO 매출</td><td class="hl">₩5.2M (8% 전액)</td><td class="hl">₩1.56M (8%의 30%)</td></tr>
+    <tr><td>고정비</td><td>월 약 1,900만원</td><td>월 약 1,500만원(호텔 세일즈 인력·출장 감소)</td></tr>
+    <tr><td>지역 확장 한계</td><td>인력 수에 비례</td><td>파트너 수에 비례(병렬 확장 가능)</td></tr>
+    <tr><td>통제권</td><td>전부 MICEGO</td><td>익명성·SLA·품질을 계약과 포털로 통제해야 함</td></tr>
+  </table></div>
+  <p>정리하면 <strong>마진을 3분의 1로 줄이는 대신 확장 속도와 현지 실행력을 사고, 통제권 일부를 계약으로 되찾아 오는 모델</strong>이다. 직접 소싱안(N-3 리스크: 인플루언서 관계 ≠ MICE 세일즈 관계)이 안고 있던 공급 속도 문제가 이 모델의 출발점이다.</p>
+</section>
+
+<section id="s02">
+  <div class="num">02_MODEL</div>
+  <h2>모델 정의와 역할 분담</h2>
+  <p class="sub">파트너는 "MICEGO 지역 운영 파트너(Regional Operating Partner)"로 부르고, 지역 단위로 1사만 둔다.</p>
+  <pre class="mermaid">
+flowchart LR
+  O[오거나이저] -->|RFP 접수| M[MICEGO<br/>검증 · 익명화 · 코드명]
+  M -->|익명 브리프 배정| P[지역 파트너]
+  P -->|견적 요청| H[호텔 N곳]
+  H -->|견적| P
+  P -->|비교표 초안 업로드| M
+  M -->|검수 후 전달| O
+  O -->|선택| M --> P
+  P -->|확정 · 계약 · 수금| H
+  P -->|MICEGO 몫 30% 송금| M
+  </pre>
+  <div class="tw"><table>
+    <tr><th>단계</th><th>MICEGO</th><th>지역 파트너</th></tr>
+    <tr><td>수요 확보</td><td class="hl">오거나이저 영업·접수·검증·반려</td><td>—</td></tr>
+    <tr><td>익명화</td><td class="hl">회사명·예산·연락처 마스킹, 코드명 발급</td><td>코드명만 받음. 오거나이저 신원은 확정 전까지 모름</td></tr>
+    <tr><td>호텔 소싱·등록</td><td>파트너 등록 기준·포털 제공</td><td class="hl">지역 내 호텔 발굴, 등록, 관계 유지</td></tr>
+    <tr><td>견적 요청·협상</td><td>마감일·요건 기준 설정</td><td class="hl">호텔 견적 수집, 현지 통화 협상, 조건 조율</td></tr>
+    <tr><td>비교표</td><td class="hl">포맷 표준, 검수, 오거나이저 전달</td><td>포털에 견적 입력, 비교표 초안</td></tr>
+    <tr><td>확정·계약</td><td>오거나이저 선택 전달, 신원 공개 승인</td><td class="hl">호텔 컨펌, 예약 계약, 디포짓·잔금 안내</td></tr>
+    <tr><td>정산</td><td>인보이스 검증, 30% 수령</td><td class="hl">호텔로부터 커미션 수금, 월 정산 후 송금</td></tr>
+    <tr><td>사후·분쟁</td><td>오거나이저 측 대응, 최종 중재</td><td>호텔 측 대응</td></tr>
+  </table></div>
+  <div class="callout"><b>원칙 — 익명성은 MICEGO가 쥔다</b>
+    파트너에게 넘어가는 것은 코드명 브리프뿐이다. 오거나이저 신원은 오거나이저가 호텔을 선택한 뒤 MICEGO가 공개를 승인해야 파트너와 호텔에 전달된다. 파트너가 오거나이저를 알 수 있는 시점을 뒤로 미루는 것이 우회(파트너·호텔의 직거래)를 막는 첫 번째 장치다.
+  </div>
+</section>
+
+<section id="s03">
+  <div class="num">03_PARTNER</div>
+  <h2>파트너 프로필과 선정 기준</h2>
+  <div class="cards">
+    <div class="card"><div class="tag">TYPE A · 1순위</div><h4>현지 DMC / 한국계 랜드사 현지법인</h4><p>단체 호텔 블록·연회 협상 경험, 현지 법인·계좌 보유. 한국 담당자가 있으면 소통 비용이 낮다. 단, 오거나이저 쪽 랜드사와 경쟁 관계일 수 있어 우회 금지 조항이 핵심.</p></div>
+    <div class="card"><div class="tag">TYPE B · 2순위</div><h4>현지 MICE·이벤트 에이전시</h4><p>호텔 연회·행사 운영에 강하고 여행사 경쟁 관계가 약함. 객실 블록 협상 경험은 상대적으로 약할 수 있음.</p></div>
+    <div class="card"><div class="tag">TYPE C · 보완</div><h4>호텔 GSA / 리저널 세일즈 대행</h4><p>여러 호텔을 대표해 한국 시장 세일즈. 소싱은 빠르나 "확정·정산 전체"를 맡기기엔 운영 조직이 없는 경우가 많아 A·B와 결합.</p></div>
+  </div>
+  <h3>선정 기준 (필수 → 가점)</h3>
+  <div class="tw"><table>
+    <tr><th>구분</th><th>기준</th><th>확인 방법</th></tr>
+    <tr><td>필수</td><td>해당 지역에서 3년 이상 단체 호텔 계약 실적, 현지 법인·사업자·계좌</td><td>사업자등록, 최근 2년 단체 실적 3건 레퍼런스</td></tr>
+    <tr><td>필수</td><td>영어 또는 한국어 실무 소통 담당자 1명 이상 전담</td><td>인터뷰</td></tr>
+    <tr><td>필수</td><td>MICEGO 익명성·우회 금지·데이터 소유 조항 수용</td><td>계약 협상 단계에서 거부 시 탈락</td></tr>
+    <tr><td>가점</td><td>지역 내 연회장 보유 호텔 20곳 이상과 거래 관계</td><td>호텔 리스트 제출</td></tr>
+    <tr><td>가점</td><td>한국 여행사와의 기존 거래가 <em>적을수록</em> 가점(채널 충돌 낮음)</td><td>고객 구성 확인</td></tr>
+    <tr><td>가점</td><td>월 정산·송금 체계(은행 해외송금 경험)</td><td>인터뷰·샘플 인보이스</td></tr>
+  </table></div>
+</section>
+
+<section id="s04">
+  <div class="num">04_REVENUE_SHARE</div>
+  <h2>수익 배분과 정산</h2>
+  <h3>배분 구조</h3>
+  <div class="tw"><table>
+    <tr><th>항목</th><th>내용</th></tr>
+    <tr><td>과금 원천</td><td>호텔 성사 커미션(기본 8%, 객실+연회 순매출 기준) — 상위 기획안과 동일</td></tr>
+    <tr><td>기본 배분</td><td class="hl">파트너 70% : MICEGO 30%</td></tr>
+    <tr><td>MICEGO 몫 하한(제안)</td><td>건당 최소 USD 500. 소형 건에서 MICEGO 몫이 접수·검증·검수 비용 아래로 떨어지는 것을 막는다</td></tr>
+    <tr><td>성과 구간(제안)</td><td>파트너가 분기 성사 15건 이상 달성 시 해당 분기 75:25로 상향. 공급 활성화 인센티브</td></tr>
+    <tr><td>정산 흐름</td><td class="hl">A안 — 파트너가 호텔로부터 커미션 수금(체크아웃 후 30일) → 월 마감 후 15일 내 MICEGO 몫 송금</td></tr>
+    <tr><td>정산 통화</td><td>USD 고정. 파트너가 현지 통화로 받았더라도 MICEGO 몫은 정산일 기준 환율로 USD 환산 송금</td></tr>
+    <tr><td>미수 처리</td><td>호텔 미지급 시 파트너가 1차 추심. 90일 초과 미수는 MICEGO에 보고, 해당 건 MICEGO 몫은 수금 시 지급(파트너 대납 의무 없음)</td></tr>
+  </table></div>
+  <h3>건당 배분 예시 (기본 거래 규모)</h3>
+  <div class="tw"><table>
+    <tr><th>항목</th><th class="n">금액</th><th>비고</th></tr>
+    <tr><td>거래액(객실+연회)</td><td class="n">USD 46,500</td><td>≈ ₩65M</td></tr>
+    <tr><td>호텔 커미션 8%</td><td class="n">USD 3,720</td><td>파트너가 수금</td></tr>
+    <tr><td>파트너 70%</td><td class="n">USD 2,604</td><td>현지 운영·협상·수금 대가</td></tr>
+    <tr><td>MICEGO 30%</td><td class="n hl">USD 1,116</td><td>≈ ₩1.56M · 수요·플랫폼·검수 대가</td></tr>
+  </table></div>
+  <div class="callout amber"><b>30%가 낮은 이유와 감수 조건</b>
+    플랫폼 몫으로 30%는 낮은 편이다(마켓플레이스 통상 40~50%). 이를 감수하는 근거는 ① 파트너가 확정·정산·수금까지 지므로 MICEGO의 운영 인력과 미수 리스크가 크게 줄고, ② 초기 공급 속도가 곧 오거나이저 만족(견적 호텔 수)으로 이어지기 때문이다. 대신 <strong>건당 하한(USD 500)</strong>과 <strong>데이터·호텔 DB 소유권(5장)</strong>으로 MICEGO의 장기 가치를 지킨다. 2차년도 재협상 시 MICEGO 몫 35~40%로 올리는 옵션을 계약에 넣는다.
+  </div>
+</section>
+
+<section id="s05">
+  <div class="num">05_CONTRACT</div>
+  <h2>계약 핵심 조항</h2>
+  <div class="tw"><table>
+    <tr><th>조항</th><th>내용</th><th>목적</th></tr>
+    <tr><td>지역 독점</td><td>지역당 1사, <strong>조건부 독점</strong>: 분기 KPI(응답률 60%·성사 5건) 2회 연속 미달 시 비독점 전환 또는 해지</td><td>파트너 동기 부여 + 저성과 락인 방지</td></tr>
+    <tr><td>기간</td><td>1년, 상호 통지 없으면 자동 갱신. 갱신 시 배분 비율 재협상 조항</td><td>2차년도 마진 회복 여지</td></tr>
+    <tr><td>익명성 준수</td><td>코드명 단계에서 오거나이저 추정·접촉 금지. 위반 시 즉시 해지 + 해당 건 파트너 몫 몰수</td><td>정책 4 보호</td></tr>
+    <tr><td>우회 금지</td><td>MICEGO 경유 오거나이저·호텔 조합에 대해 계약 종료 후 12개월간 직거래 금지, 위반 시 커미션 전액 + 위약금</td><td>디스인터미디에이션 차단</td></tr>
+    <tr><td>데이터 소유</td><td>RFP·견적·호텔 파트너 DB는 MICEGO 소유, 포털에 기록. 파트너는 계약 기간 중 사용권만</td><td>계약 종료 시 호텔 관계 이전 가능</td></tr>
+    <tr><td>호텔 등록 주체</td><td>호텔은 MICEGO 파트너 약관에 직접 동의(파트너를 통해 등록하더라도 계약 상대는 MICEGO)</td><td>파트너 교체 시 공급 유지</td></tr>
+    <tr><td>SLA 위임</td><td>요청별 마감일 준수, 비교표 초안 마감 24시간 전 업로드. 미준수 3회 시 경고</td><td>정책 3 유지</td></tr>
+    <tr><td>정산·감사</td><td>월 정산서 제출, MICEGO 연 1회 거래 기록 감사권, 호텔 컨펌 레터 사본 첨부 의무</td><td>A안 수금 투명성</td></tr>
+    <tr><td>브랜드</td><td>호텔 대상 커뮤니케이션은 "MICEGO Regional Partner" 명의, MICEGO 브랜드 가이드 준수</td><td>브랜드 일관성</td></tr>
+  </table></div>
+</section>
+
+<section id="s06">
+  <div class="num">06_OPERATIONS</div>
+  <h2>운영과 통제 장치</h2>
+  <h3>포털 파트너 계정 (신규 개발 범위)</h3>
+  <div class="tw"><table>
+    <tr><th>기능</th><th>권한</th><th>우선순위</th></tr>
+    <tr><td>배정된 익명 브리프 열람·상태 갱신</td><td>자기 지역 건만</td><td><span class="badge b-c">P0</span></td></tr>
+    <tr><td>호텔 등록·관리(지역 내)</td><td>등록·수정, 삭제 불가</td><td><span class="badge b-c">P0</span></td></tr>
+    <tr><td>견적 입력·비교표 초안</td><td>통화 선택, 기준 환율 표시</td><td><span class="badge b-c">P0</span></td></tr>
+    <tr><td>확정 등록·정산서 업로드</td><td>호텔 컨펌 첨부 필수</td><td><span class="badge b-a">P1</span></td></tr>
+    <tr><td>파트너 KPI 대시보드</td><td>응답률·성사·정산 상태</td><td><span class="badge b-a">P1</span></td></tr>
+  </table></div>
+  <h3>품질 검수 — MICEGO가 놓지 않는 3가지</h3>
+  <ul>
+    <li><strong>비교표 검수</strong>: 파트너 초안을 MICEGO가 조건 일치·누락·통화 재확인 후 오거나이저에게 전달. 파트너 → 오거나이저 직접 전달은 없다.</li>
+    <li><strong>신원 공개 승인</strong>: 오거나이저 선택 후에만 MICEGO가 파트너·호텔에 신원을 넘긴다.</li>
+    <li><strong>오거나이저 관계</strong>: 접수·반려·사후 만족도는 MICEGO가 직접. 파트너는 오거나이저와 접촉하지 않는다.</li>
+  </ul>
+  <p>MICEGO 측 인력은 운영 매니저 0.5 FTE(검증·검수·정산 확인) + 파트너 매니저 0.5 FTE(파트너 발굴·계약·KPI 관리)로, 직접 소싱안 대비 호텔 세일즈 인력이 빠진다.</p>
+</section>
+
+<section id="s07">
+  <div class="num">07_ROLLOUT</div>
+  <h2>지역별 롤아웃</h2>
+  <div class="tw"><table>
+    <tr><th>순서</th><th>지역</th><th>파트너 유형</th><th>목표 호텔</th><th>시점</th></tr>
+    <tr><td>1차</td><td>베트남 중부(다낭·호이안) + 나트랑</td><td>DMC / 한국계 랜드사 현지법인</td><td class="n">40</td><td>M1–M3</td></tr>
+    <tr><td>1차</td><td>발리</td><td>현지 MICE 에이전시</td><td class="n">30</td><td>M1–M3</td></tr>
+    <tr><td>1차</td><td>방콕·파타야</td><td>DMC</td><td class="n">30</td><td>M2–M4</td></tr>
+    <tr><td>2차</td><td>푸꾸옥</td><td>1차 베트남 파트너 확장 또는 별도</td><td class="n">15</td><td>M5–M7</td></tr>
+    <tr><td>2차</td><td>코타키나발루</td><td>DMC</td><td class="n">15</td><td>M6–M8</td></tr>
+    <tr><td>2차</td><td>괌 / 일본 리조트(오키나와)</td><td>GSA 결합형</td><td class="n">20</td><td>M8–M12</td></tr>
+  </table></div>
+  <p>파트너 발굴 채널: 한국 여행사 아웃바운드 담당이 쓰는 현지 랜드사 리스트, 관광청 공식 DMC 디렉토리, 호텔 체인의 한국 시장 GSA 소개, MatchGo 캠페인을 진행한 현지 호텔의 세일즈 담당 추천. 지역당 후보 3사 이상을 두고 선정 기준(3장)으로 평가한다.</p>
+</section>
+
+<section id="s08">
+  <div class="num">08_FINANCE</div>
+  <h2>재무 영향 (12개월, 백만원, 전부 가정)</h2>
+  <p class="sub">상위 기획안 8장의 직접 소싱 기본안과 나란히 비교한다.</p>
+  <div class="tw"><table>
+    <tr><th>항목</th><th class="n">직접 소싱 · 기본</th><th class="n">파트너 · 보수</th><th class="n">파트너 · 기본</th><th class="n">파트너 · 공격</th></tr>
+    <tr><td>성사 건수</td><td class="n">36</td><td class="n">40</td><td class="n hl">72</td><td class="n">120</td></tr>
+    <tr><td>GMV</td><td class="n">2,340</td><td class="n">2,600</td><td class="n">4,680</td><td class="n">7,800</td></tr>
+    <tr><td>호텔 커미션 8%</td><td class="n">187</td><td class="n">208</td><td class="n">374</td><td class="n">624</td></tr>
+    <tr><td>MICEGO 몫</td><td class="n">187 (100%)</td><td class="n">62</td><td class="n hl">112</td><td class="n">187</td></tr>
+    <tr><td>인건비</td><td class="n">110</td><td class="n">70</td><td class="n">70</td><td class="n">85</td></tr>
+    <tr><td>포털(파트너 계정 포함)</td><td class="n">60</td><td class="n">70</td><td class="n">70</td><td class="n">70</td></tr>
+    <tr><td>파트너 발굴·출장·마케팅</td><td class="n">50</td><td class="n">30</td><td class="n">35</td><td class="n">45</td></tr>
+    <tr><td>기타(법무·송금 수수료·환차)</td><td class="n">10</td><td class="n">15</td><td class="n">15</td><td class="n">20</td></tr>
+    <tr><td><strong>12개월 손익</strong></td><td class="n" style="color:var(--coral)">-43</td><td class="n" style="color:var(--coral)">-123</td><td class="n hl" style="color:var(--coral)">-78</td><td class="n" style="color:var(--coral)">-33</td></tr>
+  </table></div>
+  <div class="bars">
+    <div class="bar"><div class="lb">직접 · 기본</div><div class="tr"><div class="fl a" style="width:100%"></div></div><div class="vl">187</div></div>
+    <div class="bar"><div class="lb">파트너 · 기본</div><div class="tr"><div class="fl" style="width:60%"></div></div><div class="vl">112</div></div>
+    <div class="bar"><div class="lb">파트너 · 공격</div><div class="tr"><div class="fl" style="width:100%"></div></div><div class="vl">187</div></div>
+  </div>
+  <div class="callout coral"><b>솔직한 결론 — 1차년도 손익은 파트너 모델이 더 나쁘다</b>
+    같은 건수라면 MICEGO 매출이 30%로 줄기 때문에, 1차년도 손익은 직접 소싱안(-43)보다 파트너 기본안(-78)이 나쁘다. 파트너 모델이 직접 소싱을 이기는 건 <strong>성사 건수가 직접안의 3.3배(약 120건) 이상</strong>일 때이고, 이는 12개월 안에는 도달하기 어렵다. 이 모델의 진짜 근거는 1차년도 손익이 아니라 ① 12개월 안에 6개 지역·150개 호텔이 열린다는 <strong>공급 속도</strong>, ② 2차년도에 건수 150+와 배분 재협상(35~40%)이 겹치면 흑자로 넘어가는 <strong>확장 곡선</strong>, ③ 호텔 세일즈 채용·출장·미수 리스크를 지지 않는 <strong>실행 리스크 축소</strong>다. 승인은 이 세 가지를 사는 결정이다.
+  </div>
+  <h3>2차년도 전망 (기본 경로)</h3>
+  <p>파트너 8사·호텔 250곳, 성사 160건, MICEGO 몫 35% 재협상 시: 커미션 832 → MICEGO 몫 291, 비용 약 210 → <strong>+81</strong>. 월 약 10건 성사가 손익분기점이며, 8개 지역에서 지역당 월 1~2건이면 도달한다.</p>
+</section>
+
+<section id="s09">
+  <div class="num">09_RISKS</div>
+  <h2>리스크</h2>
+  <div class="tw"><table>
+    <tr><th>ID</th><th>리스크</th><th>대응</th></tr>
+    <tr><td><span class="badge b-c">P-1</span></td><td>파트너 우회 — 파트너가 오거나이저를 알게 된 뒤 다음 건부터 직거래. 특히 파트너가 랜드사라면 오거나이저와 이미 아는 사이일 수 있음</td><td>신원 공개 시점 지연(확정 후), 12개월 우회 금지·위약금, 오거나이저 관계는 MICEGO 전담, 한국 여행사 거래가 적은 파트너 우선</td></tr>
+    <tr><td><span class="badge b-c">P-2</span></td><td>수금·송금 리스크(A안) — 파트너가 받고 안 보내거나 늦게 보냄, 과소 신고</td><td>월 정산서 + 호텔 컨펌 레터 첨부 의무, 연 1회 감사권, 2회 지연 시 정산 흐름 B(MICEGO 직접 청구)로 전환하는 조항</td></tr>
+    <tr><td><span class="badge b-c">P-3</span></td><td>익명성 누설 — 파트너·호텔이 코드명으로 오거나이저 추정</td><td>브리프에 인원·일정·지역만, 산업·행사명은 마스킹. 위반 시 해지·몰수</td></tr>
+    <tr><td><span class="badge b-a">P-4</span></td><td>지역 락인 — 호텔 관계가 파트너에 귀속돼 파트너 교체 시 공급이 사라짐</td><td>호텔은 MICEGO 약관에 직접 동의, 호텔 DB는 MICEGO 소유, 조건부 독점</td></tr>
+    <tr><td><span class="badge b-a">P-5</span></td><td>품질 편차 — 파트너마다 비교표 밀도·응답 속도가 다름</td><td>포털 표준 입력 폼, MICEGO 검수 게이트, 분기 KPI 공개 랭킹</td></tr>
+    <tr><td><span class="badge b-a">P-6</span></td><td>세무 — 파트너 국가별 커미션 과세·원천징수, MICEGO 몫 해외 수취 시 부가세·법인세 처리</td><td>국가별(베트남·인도네시아·태국) 세무 자문 M0, 계약서에 세금 부담 주체 명시</td></tr>
+    <tr><td><span class="badge b-a">P-7</span></td><td>법적 지위(상위 N-1) — 파트너가 확정·계약까지 하면 MICEGO는 "중개"에 가까워져 유리할 수 있으나 확인 필요</td><td>N-1 법무 자문에 파트너 구조 포함</td></tr>
+    <tr><td><span class="badge b-g">P-8</span></td><td>마진 구조 고착 — 70:30이 관행이 되면 2차년도 재협상이 어려움</td><td>계약에 갱신 시 재협상·성과 구간 명시, 하한 USD 500</td></tr>
+  </table></div>
+</section>
+
+<section id="s10">
+  <div class="num">10_ROADMAP_KPI</div>
+  <h2>로드맵과 KPI</h2>
+  <div class="tl">
+    <div class="ph"><div class="w">M0–M1</div><h4>계약 골격·후보 발굴</h4><ul><li>파트너 계약서 표준안(5장 조항) 법무 검토, 국가별 세무 자문</li><li>1차 3개 지역 후보 파트너 각 3사 리스트업·인터뷰</li><li>포털 파트너 계정 P0 개발 착수</li></ul></div>
+    <div class="ph"><div class="w">M2–M4</div><h4>1차 3개 지역 가동</h4><ul><li>파트너 3사 계약, 호텔 100곳 등록</li><li>파트너 계정 P0 오픈, 첫 RFP 배정·비교표 검수 사이클 확립</li><li>M4 체크: 지역별 응답률·비교표 품질</li></ul></div>
+    <div class="ph"><div class="w">M5–M8</div><h4>2차 지역 + 정산 사이클 검증</h4><ul><li>푸꾸옥·코타키나발루 파트너 계약</li><li>첫 월 정산·송금 실행, 정산서·컨펌 레터 프로세스 검증</li><li><strong>M6 게이트</strong>: 성사 12건+, 파트너 응답률 60%+, 정산 지연 0건 중 2개 충족 시 계속</li></ul></div>
+    <div class="ph"><div class="w">M9–M12</div><h4>6개 지역 완성·재협상 준비</h4><ul><li>괌·일본 리조트 파트너, 호텔 150곳</li><li>파트너별 KPI 랭킹 공개, 저성과 지역 비독점 전환 검토</li><li>2차년도 배분 비율 재협상안 준비</li></ul></div>
+  </div>
+  <div class="tw"><table>
+    <tr><th>KPI</th><th class="n">M6</th><th class="n">M12</th></tr>
+    <tr><td>계약 파트너 수 / 등록 호텔 수</td><td class="n">3 · 100</td><td class="n">6 · 150+</td></tr>
+    <tr><td>요청당 파트너 응답 호텔 수 / 파트너 응답률</td><td class="n">4곳 · 60%</td><td class="n">5곳 · 70%</td></tr>
+    <tr><td>비교표 초안 마감 준수율 / 검수 반려율</td><td class="n">85% · 20%</td><td class="n">95% · 10%</td></tr>
+    <tr><td>성사 건수(누적) / 지역당 월 성사</td><td class="n">12 · 1건</td><td class="n">72 · 2건</td></tr>
+    <tr><td>정산 지연 건수 / MICEGO 몫 수취율</td><td class="n">0 · 100%</td><td class="n">≤1 · 98%</td></tr>
+    <tr><td>익명성 위반 / 우회 의심 건</td><td class="n">0</td><td class="n">0</td></tr>
+  </table></div>
+</section>
+
+<section id="s11">
+  <div class="num">11_DECISIONS</div>
+  <h2>결정 요청 체크리스트</h2>
+  <ul class="checklist">
+    <li><strong>모델 채택</strong> — 지역 운영 파트너(소싱·협상·확정·정산 전체 위임), 지역당 1사 조건부 독점.</li>
+    <li><strong>배분·정산</strong> — 파트너 70 : MICEGO 30, 정산 흐름 A(파트너 수금 후 월 마감 15일 내 USD 송금), MICEGO 몫 하한 USD 500, 분기 15건 이상 시 75:25 인센티브, 갱신 시 재협상 조항.</li>
+    <li><strong>1차 지역</strong> — 베트남 중부+나트랑, 발리, 방콕·파타야 3개 지역 파트너 계약 착수(M1).</li>
+    <li><strong>예산</strong> — 12개월 파트너 모델 기준 총 1.9억원(인건비 70·포털 70·발굴 35·기타 15). 상위 기획안 2.3억원에서 4,000만원 절감, 단 1차년도 손익은 -78로 더 나쁨을 인지한 승인.</li>
+    <li><strong>법무·세무 착수</strong> — 파트너 계약서 표준안, 우회 금지·위약금 실효성, 베트남·인도네시아·태국 커미션 과세 및 해외 수취 처리(M0).</li>
+    <li><strong>포털 범위 확장</strong> — 파트너 계정 P0(브리프 열람·호텔 등록·견적 입력) 추가 개발 승인.</li>
+    <li><strong>M6 게이트 동의</strong> — 성사 12건+ / 파트너 응답률 60%+ / 정산 지연 0건 중 2개 이상. 미달 시 저성과 지역은 직접 소싱으로 전환.</li>
+  </ul>
+  <div class="callout"><b>상위 기획안 반영</b>
+    승인 시 서비스 사업 기획안 v1.1의 7장(공급 확보)·8장(재무)·9장(로드맵)을 이 문서 기준으로 v1.2 갱신한다. 승인 즉시 착수 산출물: ① 파트너 계약서 표준안 ② 1차 3개 지역 후보 파트너 롱리스트 ③ 포털 파트너 계정 P0 요구사항.
+  </div>
+</section>
+
+<div class="foot">MICEGO 지역 운영 파트너 모델 기획안 v1.0 · 2026-09-25 · 내부 검토용 · 재무 수치는 전부 가정이며 실데이터 확보 후 분기별 갱신 대상.</div>
+</div>
+
+<!--claude-mermaid-runtime-begin:3477-->
+<style>.mermaid-diagram{margin-block:4px}.mermaid-diagram svg{display:block;margin:0 auto;max-width:100%;height:auto}</style>
+<script src="/_runtime/mermaid-11.16.1.min.js"></script>
+<script>(function(){
+var CFG={"palettes":{"light":{"surface":"#f4efe4","text":"#42392e","line":"#8a7f6d","border":"#7a6c52","bg":"#fffdf8"},"dark":{"surface":"#262b34","text":"#f2f3f5","line":"#a8adb8","border":"#9aa4b8","bg":"#1f232b"}}};
+if(typeof mermaid==='undefined')return;
+var pres=Array.prototype.slice.call(document.querySelectorAll('pre.mermaid')).filter(function(p){if(p.hasAttribute('data-claude-mermaid-claimed'))return false;p.setAttribute('data-claude-mermaid-claimed','1');return true;});
+if(!pres.length)return;
+var mq=window.matchMedia?window.matchMedia('(prefers-color-scheme: dark)'):null;
+var root=document.documentElement;
+var items=pres.map(function(pre){
+var mount=document.createElement('div');mount.className='mermaid-diagram';
+return {pre:pre,mount:mount,src:pre.textContent||''};
+});
+var seq=0;
+var renderGen=0;
+var lastKey='';
+function pageBg(fallback){
+var els=[document.body,document.documentElement];
+for(var i=0;i<els.length;i++){
+var c=els[i]&&getComputedStyle(els[i]).backgroundColor;
+if(c&&c!=='transparent'&&c!=='rgba(0, 0, 0, 0)')return c;
+}
+return fallback;
+}
+function render(){
+var theme=root.getAttribute('data-theme');
+var dark=theme==='dark'||(!!(mq&&mq.matches)&&theme!=='light');
+var pal=dark?CFG.palettes.dark:CFG.palettes.light;
+var bg=pageBg(pal.bg);
+var key=(dark?'d':'l')+'|'+bg;
+if(key===lastKey)return;
+lastKey=key;
+var gen=++renderGen;
+var font=getComputedStyle(document.body).fontFamily||'sans-serif';
+var nat={useMaxWidth:false};
+mermaid.initialize({
+startOnLoad:false,securityLevel:'strict',theme:'base',
+flowchart:nat,sequence:nat,er:nat,state:nat,class:nat,pie:nat,
+gantt:nat,journey:nat,timeline:nat,gitGraph:nat,mindmap:nat,xyChart:nat,
+quadrantChart:nat,sankey:nat,c4:nat,requirement:nat,block:nat,
+packet:nat,kanban:nat,architecture:nat,radar:nat,
+themeVariables:{background:bg,mainBkg:pal.surface,primaryColor:pal.surface,
+primaryTextColor:pal.text,lineColor:pal.line,primaryBorderColor:pal.border,
+nodeBorder:pal.border,clusterBorder:pal.border,edgeLabelBackground:bg,
+clusterBkg:'rgba(127,127,127,0.07)',titleColor:pal.text,
+darkMode:dark,rowOdd:bg,rowEven:'rgba(127,127,127,0.07)',
+attributeBackgroundColorOdd:bg,attributeBackgroundColorEven:'rgba(127,127,127,0.07)',
+fontSize:'16px',fontFamily:font},
+themeCSS:'.node rect, .node circle, .node polygon, .node path, .cluster rect { stroke-width: 2px; }'
+});
+items.forEach(function(it){
+var id='claude-mermaid-'+seq++;
+mermaid.render(id,it.src).then(function(r){
+if(gen!==renderGen)return;
+var prev=it.pre.previousElementSibling;
+if(prev&&prev.className==='mermaid-diagram'&&prev!==it.mount)return;
+it.mount.innerHTML=r.svg;
+if(!it.mount.parentNode)it.pre.parentNode.insertBefore(it.mount,it.pre);
+it.pre.style.display='none';
+},function(){
+var scratch=document.getElementById(id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+scratch=document.getElementById('d'+id);
+if(scratch)scratch.parentNode.removeChild(scratch);
+if(gen!==renderGen)return;
+if(it.mount.parentNode)it.mount.parentNode.removeChild(it.mount);
+it.pre.style.display='';
+});
+});
+}
+render();
+if(mq&&mq.addEventListener)mq.addEventListener('change',render);
+if(typeof MutationObserver!=='undefined')new MutationObserver(render).observe(root,{attributes:true,attributeFilter:['data-theme']});
+})();</script>
+<!--claude-mermaid-runtime-end-->
+</body>
+</html>

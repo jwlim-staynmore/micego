@@ -1,0 +1,21 @@
+{
+  "v": 3,
+  "createdOnFiles": {"v": 1, "at": "2026-09-25T09:00:00Z"},
+  "title": "MICEGO 사이트 목업",
+  "launch": {"view": "canvas"},
+  "pages": [],
+  "boards": {
+    "Main.dc.html": {"x": 0, "y": 0, "w": 390, "h": 900, "title": "모바일 · 홈 (모드 선택)"},
+    "MobileKo.dc.html": {"x": 470, "y": 0, "w": 390, "h": 1240, "title": "모바일 · 여행사 모드 (한글)"},
+    "MobileEn.dc.html": {"x": 940, "y": 0, "w": 390, "h": 1240, "title": "모바일 · 호텔 모드 (영문)"},
+    "DeskHub.dc.html": {"x": 1470, "y": 0, "w": 1280, "h": 760, "title": "데스크톱 · 홈 (모드 선택)"},
+    "DeskKo.dc.html": {"x": 1470, "y": 840, "w": 1280, "h": 900, "title": "데스크톱 · 여행사 모드 (한글)"},
+    "DeskEn.dc.html": {"x": 1470, "y": 1820, "w": 1280, "h": 900, "title": "데스크톱 · 호텔 모드 (영문)"}
+  },
+  "order": ["Main.dc.html", "MobileKo.dc.html", "MobileEn.dc.html", "DeskHub.dc.html", "DeskKo.dc.html", "DeskEn.dc.html"],
+  "notes": {
+    "t1": {"x": 0, "y": -260, "text": "MICEGO 모바일 · 홈 → 여행사(한글) / 호텔(영문)", "kind": "title1", "maxW": 1330},
+    "t2": {"x": 1470, "y": -260, "text": "MICEGO 데스크톱", "kind": "title1", "maxW": 1280}
+  },
+  "designSystems": []
+}
