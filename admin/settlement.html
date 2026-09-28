@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>정산 상세 | MICEGO 운영 콘솔</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="app"></div>
+<noscript><p class="nojs">이 화면은 JavaScript가 있어야 표시됩니다. 브라우저 설정에서 JavaScript를 켜 주세요.</p></noscript>
+<script src="../assets/config.js"></script>
+<script src="../assets/mg.js"></script>
+<script src="../assets/feedback.js" defer></script>
+<script src="data-adapter.js"></script>
+<script src="admin.js"></script>
+<script src="partner.js"></script>
+<script>
+(function(){
+
+var A=MICEGO,esc=A.esc,P=MICEGO_PTR;
+A.boot('settlements','정산 상세',function(main){
+  var ref=new URLSearchParams(location.search).get('ref')||'',s;
+  function ts(v){return v==null?null:(typeof v==='number'?v:Date.parse(v));}
+  function dt(v){var m=ts(v);return m?A.fmtDT(m):'—';}
+  function d(v){var m=ts(v);return m?A.fmtD(m):'—';}
+  function header(){
+    var flags=(s.flags||[]).map(function(f){return '<span class="badge amber">'+esc(f==='hotel_unreviewed'?'호텔 사후검토 필요':f)+'</span>';}).join(' ');
+    return '<p class="crumb"><a href="settlements.html">← 정산</a></p><div class="dh"><h1 class="mono">'+esc(s.ref)+'</h1>'+P.stChip(s.status)+flags+'<div class="dh-act"><a class="btn" href="rfp.html?id='+esc(s.rfpId)+'">요청 '+esc(s.rfpId)+'</a><a class="btn" href="settlements.html">목록으로</a></div></div>';
+  }
+  function side(){
+    var acts=P.settlementActions(s);
+    var btns=acts.map(function(a){return '<button type="button" class="btn '+(a[2]||'')+'" data-st="'+a[0]+'">'+esc(a[1])+'</button>';}).join('');
+    var hint={pending_commission:'파트너(또는 본사 직접 건은 운영자)가 호텔 계약 금액과 커미션을 입력합니다.',commission_submitted:'본사가 커미션 금액·근거를 검토하고 승인합니다. 입력한 사람은 승인할 수 없습니다.',commission_confirmed:'행사 종료 후 호텔에서 커미션을 수금하고 기록합니다.',collected:'MICEGO 몫을 송금 통화로 환산해 보내고 환율·송금일·참조번호를 기록합니다.',remitted:'본사가 입금을 확인하면 완료됩니다.',completed:'정산이 끝났습니다.',disputed:'분쟁 중입니다. 본사가 해소 내용을 기록하면 이전 상태로 돌아갑니다.',voided:'무효 처리된 정산입니다.'}[s.status]||'';
+    var gate=s.status==='commission_submitted'&&(s.flags||[]).indexOf('hotel_unreviewed')>=0?'<p class="ghint">선정 호텔의 본사 사후 검토가 끝나야 커미션을 승인할 수 있습니다. <a href="partner.html?id='+esc(s.hotelCode||'')+'">호텔 상세 →</a></p>':'';
+    return '<section class="card" aria-labelledby="h-st"><h2 id="h-st">처리</h2><p class="hint">'+esc(hint)+'</p>'+(btns?'<div class="tbtns">'+btns+'</div>':'<p class="muted small">지금 내가 할 수 있는 처리가 없습니다.</p>')+gate+'</section>';
+  }
+  function baseCard(){
+    return '<section class="card" aria-labelledby="h-b"><h2 id="h-b">건 정보</h2><dl class="kv"><dt>요청</dt><dd><a class="mono" href="rfp.html?id='+esc(s.rfpId)+'">'+esc(s.rfpId)+'</a> · '+esc(s.destination||'')+' · '+esc(s.eventType||'')+'</dd><dt>선정 호텔</dt><dd>'+(s.hotelCode?'<a href="partner.html?id='+esc(s.hotelCode)+'">'+esc(s.hotel||'')+'</a>':esc(s.hotel||'—'))+'</dd><dt>지역 파트너</dt><dd>'+(s.partner?esc(s.partner.name||s.partner.code)+' · 몫 '+(s.partnerSharePct!=null?s.partnerSharePct+'%':'—'):'본사 직접 (파트너 몫 없음)')+'</dd><dt>성사</dt><dd>'+dt(s.wonAt)+'</dd><dt>행사 종료</dt><dd>'+d(s.eventEnd)+'</dd><dt>수금 기한</dt><dd>'+d(s.collectDue)+'</dd><dt>송금 기한</dt><dd>'+d(s.remitDue)+'</dd></dl></section>';
+  }
+  function moneyCard(){
+    var c=s.hotelCurrency;
+    return '<section class="card" aria-labelledby="h-m"><h2 id="h-m">금액 · '+esc(c||'')+'</h2><dl class="kv"><dt>계약 금액</dt><dd>'+P.fmtMoney(s.contractAmount,c)+'</dd><dt>커미션</dt><dd>'+P.fmtMoney(s.commissionAmount,c)+(s.commissionBasis==='rate'?' <span class="small muted">요율 '+s.commissionRatePct+'%</span>':s.commissionBasis==='fixed'?' <span class="small muted">정액</span>':'')+(s.commissionRejectReason?'<div class="small warn-cell">반려 사유: '+esc(s.commissionRejectReason)+'</div>':'')+'</dd><dt>파트너 몫</dt><dd>'+P.fmtMoney(s.partnerShareAmount,c)+'</dd><dt>MICEGO 몫</dt><dd><b>'+P.fmtMoney(s.micegoShareAmount,c)+'</b></dd>'+
+      '<dt>수금</dt><dd>'+(s.collectedAt?dt(s.collectedAt)+' · '+P.fmtMoney(s.collectedAmount,c):'<span class="muted">미기록</span>')+'</dd>'+
+      '<dt>송금</dt><dd>'+(s.remittedAt?dt(s.remittedAt)+' · '+P.fmtMoney(s.remitActual,s.remitCurrency)+' <span class="small muted">환율 '+esc(String(s.fxRate||''))+(s.fxRateSource?' ('+esc(s.fxRateSource)+')':'')+' · 예상 '+P.fmtMoney(s.remitExpected,s.remitCurrency)+(s.remitReference?' · 참조 '+esc(s.remitReference):'')+'</span>':'<span class="muted">미기록</span>')+'</dd>'+
+      '<dt>입금 확인</dt><dd>'+(s.receivedAt?dt(s.receivedAt)+' · '+P.fmtMoney(s.receivedAmount,s.remitCurrency):'<span class="muted">—</span>')+'</dd>'+
+      (s.disputeReason?'<dt>분쟁</dt><dd class="warn-cell">'+esc(s.disputeReason)+(s.disputeResolution?'<div class="okline">해소: '+esc(s.disputeResolution)+'</div>':'')+'</dd>':'')+(s.voidReason?'<dt>무효 사유</dt><dd>'+esc(s.voidReason)+'</dd>':'')+'</dl></section>';
+  }
+  function attachCard(){
+    var list=s.attachments||[];
+    return '<section class="card" aria-labelledby="h-at"><h2 id="h-at">증빙</h2>'+(list.length?'<ul style="padding-left:18px">'+list.map(function(a){return '<li>'+(a.url?'<a href="'+esc(a.url)+'" target="_blank" rel="noopener">'+esc(a.label||a.url)+'</a>':esc(a.label||''))+' <span class="small muted">'+esc(a.kind||'')+' · '+dt(a.at)+'</span></li>';}).join('')+'</ul>':'<p class="muted small">증빙 링크가 없습니다. 계약서·인보이스·송금 영수증은 링크(드라이브 등)로 남깁니다.</p>')+
+      (['completed','voided'].indexOf(s.status)<0?'<div class="memo-add"><button type="button" class="btn" id="addAtt">증빙 링크 추가</button></div>':'')+'</section>';
+  }
+  function histCard(){
+    var rows=(s.events||[]).slice().sort(function(a,b){return ts(a.t)-ts(b.t);}).map(function(h){
+      return '<tr><td class="mono" style="white-space:nowrap">'+dt(h.t)+'</td><td>'+esc(h.actor||'')+(h.actorRole?' <span class="small muted">'+esc(h.actorRole)+'</span>':'')+'</td><td style="white-space:nowrap">'+esc(h.action)+(h.to?' → '+esc(P.ST[h.to]||h.to):'')+'</td><td>'+esc(h.note||'')+'</td></tr>';
+    }).join('');
+    return '<section class="card" aria-labelledby="h-hi"><h2 id="h-hi">이력</h2><div class="tbl-wrap"><table><thead><tr><th>시각</th><th>주체</th><th>처리</th><th>메모</th></tr></thead><tbody>'+(rows||'<tr><td colspan="4" class="muted">이력이 없습니다.</td></tr>')+'</tbody></table></div></section>';
+  }
+  function render(){
+    s=(A.data().settlements||[]).filter(function(x){return x.ref===ref;})[0];
+    if(!s){document.title='정산을 찾을 수 없음 | MICEGO 운영 콘솔';main.innerHTML='<div class="empty card"><h1>해당 정산을 찾을 수 없습니다</h1><p>"'+esc(ref)+'"에 해당하는 정산이 없습니다.</p><a class="btn primary" href="settlements.html">정산 목록으로</a></div>';return;}
+    document.title=s.ref+' | MICEGO 운영 콘솔';
+    main.innerHTML=header()+'<div class="detail" style="margin-top:16px"><aside class="dside" id="dside" aria-label="처리">'+side()+'</aside><div class="dmain stack">'+baseCard()+moneyCard()+attachCard()+histCard()+'</div></div>';
+  }
+  A.onChange=function(){render();};
+  main.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b||!s)return;
+    if(b.hasAttribute('data-st')){P.runSettlement(s,b.getAttribute('data-st'),render);return;}
+    if(b.id==='addAtt'){
+      A.dialog({title:'증빙 링크 추가',ok:'추가',body:'<label class="lbl" for="at-k">종류</label><select id="at-k" class="inp"><option value="contract">계약서</option><option value="invoice">인보이스</option><option value="collection">수금 증빙</option><option value="remittance">송금 영수증</option><option value="other">기타</option></select><label class="lbl" for="at-l">설명</label><input id="at-l" class="inp" placeholder="예: 호텔 컨펌 레터 10/12"><label class="lbl" for="at-u">링크</label><input id="at-u" class="inp" type="url" placeholder="https://">',
+        collect:function(dd){var u=dd.querySelector('#at-u').value.trim();if(!/^https?:\/\//.test(u))return '링크를 확인해 주세요';return {kind:dd.querySelector('#at-k').value,label:dd.querySelector('#at-l').value.trim(),url:u};}}).then(function(v){
+        if(!v)return;
+        A.persist('settlement_action',{p_ref:s.ref,p_action:'add_attachment',p:v,p_note:null},function(){s.attachments=(s.attachments||[]).concat([{kind:v.kind,label:v.label,url:v.url,at:A.NOW}]);}).then(function(ok){if(ok){render();A.toast('증빙을 추가했습니다','ok');}});
+      });
+    }
+  });
+  render();
+});
+
+})();
+</script>
+</body>
+</html>

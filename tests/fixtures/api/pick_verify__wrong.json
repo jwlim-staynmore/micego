@@ -1,0 +1,9 @@
+{
+  "status": 400,
+  "body": {
+    "error": {
+      "code": "OTP_WRONG",
+      "remaining": 4
+    }
+  }
+}

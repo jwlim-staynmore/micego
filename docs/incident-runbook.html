@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>MICEGO 장애 대응 runbook</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{--teal:#0B8F86;--teal-soft:#E3F5F2;--amber:#FFC24B;--amber-soft:#FFF3D6;--navy:#0F1E3D;--bg:#F6F8FB;--line:#E4E8F0;--gray:#6B7794;--error:#EF4444;--card:#fff;
+--sans:'Pretendard Variable',Pretendard,-apple-system,'Segoe UI','Noto Sans CJK KR','Noto Sans KR','Malgun Gothic',sans-serif;
+--disp:'Archivo','Pretendard Variable',Pretendard,'Noto Sans CJK KR',sans-serif;
+--mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,'Noto Sans Mono CJK KR','Noto Sans CJK KR',monospace}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--navy);font-family:var(--sans);font-size:15px;line-height:1.7;word-break:keep-all;overflow-wrap:break-word}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 56px}
+header.top{padding:40px 0 20px}
+.brand{font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:.02em;color:var(--navy)}
+.brand b{color:var(--teal)}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.25;margin:10px 0 6px;letter-spacing:-.02em}
+.ver{font-family:var(--mono);font-size:13px;color:var(--gray);margin:0 0 14px}
+.note{background:var(--amber-soft);border-left:4px solid var(--amber);padding:12px 14px;border-radius:0 8px 8px 0;font-size:14px;margin:0}
+nav.toc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:18px 0 8px}
+nav.toc b{font-size:13px;color:var(--gray);letter-spacing:.04em}
+nav.toc ol{margin:8px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:2px 16px;counter-reset:t}
+nav.toc li{counter-increment:t}
+nav.toc a{display:block;padding:5px 0;color:var(--navy);text-decoration:none;font-size:14px}
+nav.toc a::before{content:counter(t)".";font-family:var(--mono);color:var(--teal);margin-right:6px}
+nav.toc a:hover{color:var(--teal);text-decoration:underline}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin-top:18px;scroll-margin-top:12px}
+h2{font-size:20px;margin:0 0 4px;letter-spacing:-.01em}
+h2 .n{font-family:var(--mono);color:var(--teal);font-size:15px;margin-right:8px}
+p.lead{color:var(--gray);margin:0 0 14px;font-size:14px}
+h3{font-size:15px;margin:20px 0 6px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;margin:10px 0}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:13.5px;line-height:1.55}
+th,td{padding:9px 11px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:#EEF2F8;font-size:12.5px;color:var(--navy);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.nw{white-space:nowrap}
+code,.slug{font-family:var(--mono);font-size:12px;background:#EEF2F8;border-radius:5px;padding:1px 6px;white-space:nowrap}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:99px;white-space:nowrap;border:1px solid transparent}
+.op{background:var(--teal-soft);color:#076B64;border-color:#B5E3DD}
+.sys{background:var(--amber-soft);color:#8A5A00;border-color:#F3D48F}
+.org{background:#EEF0F5;color:#4A5570;border-color:#D5DAE5}
+.hot{background:#FDECEC;color:#B42323;border-color:#F6C4C4}
+.arrow{font-family:var(--mono);color:var(--gray)}
+.diagram{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px}
+.diagram svg{display:block;width:100%;min-width:720px;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin:12px 0 0;font-size:13px;color:var(--gray)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{display:inline-block;width:26px;height:0;border-top:3px solid}
+.legend i.dash{border-top-style:dashed}
+.small{font-size:13px;color:var(--gray)}
+.callout{background:var(--teal-soft);border-radius:8px;padding:11px 14px;font-size:14px;margin:12px 0 0}
+ul.tight{margin:6px 0;padding-left:20px}
+ul.tight li{margin:2px 0}
+footer{margin-top:22px;padding:18px 4px;color:var(--gray);font-size:13px;border-top:1px solid var(--line)}
+@media (max-width:520px){section{padding:18px 14px}body{font-size:14.5px}.kv2{grid-template-columns:1fr;gap:2px 0}.kv2 dt{margin-top:8px}}
+@media print{
+@page{size:A4;margin:12mm}
+html,body{background:#fff}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+nav.toc{display:none}
+.wrap{max-width:none;padding:0}
+section{border-radius:0;box-shadow:none;padding:12px 0;border-left:0;border-right:0;margin-top:10px}
+.tw,.diagram{overflow:visible;border-radius:0}
+table{min-width:0;font-size:10.5px}
+th,td{padding:5px 6px}
+tr,thead{break-inside:avoid;page-break-inside:avoid}
+thead{display:table-header-group}
+h2,h3{break-after:avoid}
+.diagram svg{min-width:0;width:100%}
+.diagram,.callout,.note{break-inside:avoid}
+body{font-size:11.5px}
+}
+/* -- additions for docs/launch-checklist.html, docs/incident-runbook.html, docs/operator-onboarding.html -- */
+.stop{background:#FDECEC;border-left:4px solid var(--error);padding:14px 16px;border-radius:0 8px 8px 0;font-size:14px;margin:14px 0 0}
+.stop b{color:#B42323}
+.warnbox{background:var(--amber-soft);border-left:4px solid var(--amber);padding:12px 14px;border-radius:0 8px 8px 0;font-size:14px;margin:12px 0 0}
+.kv2{margin:10px 0 0;display:grid;grid-template-columns:132px minmax(0,1fr);gap:7px 14px}
+.kv2 dt{font-weight:700;font-size:12.5px;color:var(--gray);align-self:start;padding-top:1px;white-space:nowrap}
+.kv2 dd{margin:0;font-size:13.5px;min-width:0}
+.kv2 code,ol.steps code,.callout code,.warnbox code,.stop code,.donot code,.note code{white-space:normal;word-break:break-all;overflow-wrap:anywhere}
+.card-inc{border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-top:14px;background:#FBFCFE}
+.card-inc h3{margin:0 0 2px;font-size:16px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.card-inc h3 .num{font-family:var(--mono);color:var(--gray);font-size:12.5px;font-weight:500}
+dl.gloss{margin:8px 0 0}
+dl.gloss dt{font-weight:700;margin-top:11px;font-size:14px;color:var(--navy)}
+dl.gloss dd{margin:2px 0 0 0;font-size:13.5px;color:#39435E}
+ol.steps{margin:8px 0 0;padding-left:22px}
+ol.steps li{margin:6px 0}
+ol.steps b{color:var(--navy)}
+.donot{background:#FDECEC;border-radius:10px;padding:14px 16px;margin:8px 0 0;border:1px solid #F6C4C4}
+.donot li{margin:6px 0}
+.donot b{color:#B42323}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<div class="brand">MICE<b>GO</b></div>
+<h1>MICEGO 장애 대응 runbook</h1>
+<p class="ver">v1.0 · 2026-09-27 · 상태전이표 v1.7 · 배포 런북(supabase/README.md) 기준</p>
+<p class="note">Edge Function 이름·크론 주기·알림 ID는 <code>supabase/README.md</code>와 <code>docs/state-transitions.html</code> §7을 그대로 씁니다. 이 리포지토리에 없는 벤더 운영 정보(발신 대행사 장애 공지 채널 등)는 <span class="tag hot">확인 필요</span>로 표시했습니다.</p>
+
+</header>
+<nav class="toc" aria-label="목차">
+<b>목차</b>
+<ol>
+<li><a href="#sev">심각도 정의</a></li>
+<li><a href="#first15">최초 대응 15분</a></li>
+<li><a href="#scenarios">시나리오별 대응</a></li>
+<li><a href="#escalation">에스컬레이션</a></li>
+<li><a href="#postmortem">사후 기록 템플릿</a></li>
+</ol>
+</nav>
+<section id="sev">
+<h2><span class="n">1</span>심각도 정의</h2>
+<p class="lead">심각도는 발생 직후 최초 대응자가 판단합니다. 애매하면 한 단계 높여서 대응하고, 진행하며 낮춥니다.</p>
+<div class="tw"><table><thead><tr><th>등급</th><th>정의</th><th>예</th><th>목표 대응 시간</th></tr></thead><tbody>
+<tr><td class="nw"><span class="tag hot">S1</span></td><td>핵심 흐름(요청 제출·초대·견적 제출·제안 선택)이 전면 불가하거나 개인정보가 노출됨</td><td>견적 요청 제출이 전부 실패, 오거나이저 정보가 다른 회원에게 보임</td><td class="nw">즉시 착수 · 15분 안에 완화 조치</td></tr>
+<tr><td class="nw"><span class="tag sys">S2</span></td><td>일부 기능이나 특정 요청·특정 채널에서만 지연·오류가 생김</td><td>특정 통신사에서만 인증번호 문자 지연, 알림톡만 실패하고 이메일은 정상</td><td class="nw">1영업시간 안에 착수</td></tr>
+<tr><td class="nw"><span class="tag org">S3</span></td><td>기능은 정상이지만 표시·문구 오류, 사소한 UI 문제</td><td>비교표 통화 표시 오타, 대시보드 카드 정렬 오류</td><td class="nw">다음 배포 주기에 반영</td></tr>
+</tbody></table></div>
+<p class="small">기준: <b>핵심 흐름</b>은 상태전이표 §3 전이표의 0~12번 전이와 §4 초대 상태, §5-2·5-3의 인증·공유 링크 경로를 말합니다. 이 경로가 막히면 등급을 낮추지 않습니다.</p>
+</section>
+<section id="first15">
+<h2><span class="n">2</span>최초 대응 15분 절차</h2>
+<p class="lead">발견자가 누구든 아래 순서로 진행합니다. 순서를 지키는 이유는 &quot;완화&quot;가 &quot;원인 조사&quot;보다 먼저이기 때문입니다 — 원인을 다 알아야 멈출 수 있는 건 아닙니다.</p>
+<ol class="steps">
+<li><b>확인 (0~5분)</b> — 증상을 재현하거나 로그로 확증합니다. <code>admin/dashboard.html</code> 발송 실패 카드, 브라우저 콘솔, <code>supabase functions logs &lt;함수명&gt;</code>, DB의 <code>notification_deliveries</code>·<code>feedback</code> 테이블 중 관련된 곳을 봅니다. 이 시점에 <a href="#sev">심각도</a>를 잠정 판정합니다.</li>
+<li><b>공지 (5~8분)</b> — S1·S2는 <a href="#escalation">에스컬레이션 표</a>에 따라 대표·개발 담당에게 바로 알립니다. 오거나이저·호텔에게 영향이 있다고 판단되면(비딩중 요청이 여러 건 걸려 있는 등) 선제 안내 여부를 이 시점에 정합니다.</li>
+<li><b>완화 (8~15분)</b> — 근본 원인을 다 몰라도 피해를 멈추는 조치부터 합니다. 예: <code>NOTIFY_MODE=log</code>로 되돌리기(오발송), 특정 RPC·Edge Function 프런트 진입점을 안내 문구로 막기, 문제 있는 초대·요청 1건만 콘솔에서 수동 취소. 시나리오별 &quot;완화&quot; 칸을 참고합니다.</li>
+<li><b>기록 시작</b> — 발견 시각, 증상, 완화 조치를 <a href="#postmortem">사후 기록 템플릿</a>에 바로 적기 시작합니다. 나중에 재구성하지 않습니다.</li>
+</ol>
+<div class="warnbox">완화와 근본 조치를 헷갈리지 않습니다. <code>NOTIFY_MODE=log</code>로 되돌리는 것은 완화(발송을 멈춤)이지, 원인(왜 오발송이 났는지)을 고친 것이 아닙니다. 완화 후에도 근본 조치 칸의 작업이 남아 있습니다.</div>
+</section>
+<section id="scenarios"><h2><span class="n">3</span>시나리오별 대응</h2><p class="lead">발생 빈도·영향 순서가 아니라 사용자 흐름(오거나이저→호텔→인증→운영자→플랫폼) 순서로 정리했습니다.</p><div class="card-inc">
+<h3><span class="num">#1</span> 견적 요청 제출 실패 <span class="tag hot">S1</span></h3>
+<dl class="kv2">
+<dt>증상</dt><dd><code>ko/index.html</code>의 견적 요청 폼(#register)을 제출해도 접수 완료 화면이 안 뜨거나 REF·추적 링크가 안 나옵니다.</dd>
+<dt>확인</dt><dd>브라우저 콘솔에서 <code>submit_rfp</code> 호출 응답 확인 → <code>supabase functions logs submit_rfp</code> → PostgREST/DB 연결 오류인지, 검증 실패(<code>GUARD_*</code> 형태 오류 코드)인지 구분합니다.</dd>
+<dt>완화</dt><dd>DB·Function 오류로 전면 실패라면 즉시 폼 위에 &quot;접수 지연 안내 + 대체 연락처(운영 이메일)&quot; 배너를 띄웁니다. 검증 로직 문제로 특정 입력값만 실패한다면 그 항목을 임시로 선택 처리(필수→선택)합니다.</dd>
+<dt>근본 조치</dt><dd>Edge Function 배포 상태·환경변수(<code>SUPABASE_DB_URL</code> 등) 점검 후 재배포. 검증 로직 버그는 원인 커밋을 되돌리거나 패치 후 <code>tests/sql/*.sql</code> 재실행으로 회귀 확인.</dd>
+<dt>사용자 안내(한)</dt><dd>&quot;일시적으로 견적 요청 접수가 지연되고 있습니다. 급하신 경우 &lt;운영 이메일&gt;로 요청 내용을 보내 주시면 순서대로 처리해 드리겠습니다.&quot;</dd>
+<dt>User notice (EN)</dt><dd>&quot;We're experiencing a temporary delay accepting new requests. If urgent, please email &lt;ops email&gt; with your request details and we'll process it manually.&quot;</dd>
+</dl>
+
+</div>
+<div class="card-inc">
+<h3><span class="num">#2</span> 추적 링크가 안 열림 <span class="tag sys">S2</span></h3>
+<dl class="kv2">
+<dt>증상</dt><dd>오거나이저가 받은 <code>ko/track.html?t=…</code> 링크를 열면 <code>invalid</code>(링크 오류) 화면이 뜨거나 백지입니다.</dd>
+<dt>확인</dt><dd>토큰 형식·만료 여부 확인(<code>get_track</code> 응답 코드) → 요청이 실제로 존재하는지 <code>admin/rfp.html?id=…</code>로 대조 → 공유 링크(<code>?s=</code>)라면 <code>revoked</code>/<code>expired</code> 상태인지 확인합니다.</dd>
+<dt>완화</dt><dd>토큰 자체가 잘못된 경우 콘솔에서 요청번호로 찾아 링크를 다시 발급해 오거나이저에게 개별 전달합니다. 대량으로 발생하면 <code>get_track</code> Edge Function 로그부터 봅니다.</dd>
+<dt>근본 조치</dt><dd>만료·폐기 로직(공유 링크 30일, 종료 후 만료)이 의도보다 일찍 도는지 <code>system_tick</code> 크론 로직 점검. 토큰 발급 로직 버그면 <code>create_share_link</code>/발급 경로 점검.</dd>
+<dt>사용자 안내(한)</dt><dd>&quot;안내해 드린 링크에 문제가 있어 새 링크를 다시 보내 드렸습니다. 불편을 드려 죄송합니다.&quot;</dd>
+<dt>User notice (EN)</dt><dd>&quot;There was an issue with your tracking link — we've just sent you a new one. Sorry for the inconvenience.&quot;</dd>
+</dl>
+
+</div>
+<div class="card-inc">
+<h3><span class="num">#3</span> 호텔 견적 제출 실패 <span class="tag hot">S1</span></h3>
+<dl class="kv2">
+<dt>증상</dt><dd>초대받은 호텔이 <code>en/bid.html?t=…</code>에서 견적을 제출해도 반영이 안 되거나 오류가 뜹니다.</dd>
+<dt>확인</dt><dd><code>supabase functions logs submit_quote</code> 확인 → 마감이 이미 지난 초대인지(가드 조건) → 통화·금액 입력값 검증 실패인지 구분합니다.</dd>
+<dt>완화</dt><dd>마감이 임박한 다수 호텔에 영향이 있다면 운영자가 <code>OPS_HTL_QUOTE_CHECK</code> 문안으로 이메일 견적 접수를 병행 안내하고 콘솔에서 수기로 입력합니다.</dd>
+<dt>근본 조치</dt><dd>검증 매트릭스(README §5의 <code>submit_rfp</code> 검증 매트릭스와 동일 계열) 재확인, 마감 계산(초대별 <code>deadline</code>) 로직 점검.</dd>
+<dt>사용자 안내(한)</dt><dd>&quot;견적 제출 화면에 일시적인 오류가 있습니다. 첨부하신 내용을 이 메일로 회신해 주시면 저희가 직접 등록해 드리겠습니다.&quot;</dd>
+<dt>User notice (EN)</dt><dd>&quot;There's a temporary issue with the quote submission form. Please reply to this email with your proposal and we'll enter it on your behalf.&quot;</dd>
+</dl>
+
+</div>
+<div class="card-inc">
+<h3><span class="num">#4</span> 인증번호 문자 미수신 <span class="tag hot">S1</span></h3>
+<dl class="kv2">
+<dt>증상</dt><dd><code>ORG_PICK_OTP</code>(제안 선택) 또는 <code>ACC_SMS_OTP</code>(회원 인증)가 안 옴 — 제안 선택 자체가 막히는 경우라 우선순위가 높습니다.</dd>
+<dt>확인</dt><dd>Solapi(CoolSMS) 대시보드에서 발송 상태·잔액·발신번호 상태 확인 → <code>SMS_VENDOR</code>·<code>SOLAPI_API_KEY/SECRET</code>·<code>SMS_SENDER</code> 시크릿 값 확인 → 특정 통신사만인지 전체인지 구분합니다.</dd>
+<dt>완화</dt><dd>전체 장애면 <code>ALIGO_*</code> 폴백 벤더가 설정돼 있으면 그쪽으로 즉시 전환(<code>SMS_VENDOR=aligo</code>). 폴백이 없으면(README: 설정 안 하면 자동 스킵) 운영자가 전화로 본인 확인 후 콘솔에서 대신 선택 처리 — 이때 인증 기록이 없다는 사실이 요청 상세에 남는다는 점을 상태전이표 §3(전이 #10 콜아웃)대로 처리합니다.</dd>
+<dt>근본 조치</dt><dd>Solapi 장애면 벤더 상태 페이지 확인(<span class="tag hot">확인 필요</span> — 상태 페이지 URL은 계약 시 확보) 후 복구 대기 또는 폴백 벤더 정식 전환. 발신번호 문제면 사전등록 상태부터 재확인.</dd>
+<dt>사용자 안내(한)</dt><dd>&quot;인증 문자 발송이 지연되고 있어 확인 뒤 저희가 직접 연결해 드리겠습니다. 잠시만 기다려 주세요.&quot;</dd>
+<dt>User notice (EN)</dt><dd>&quot;SMS verification is delayed on our side — we'll confirm your selection manually and follow up shortly.&quot;</dd>
+</dl>
+
+</div>
+<div class="card-inc">
+<h3><span class="num">#5</span> 이메일 미발송 <span class="tag hot">S1</span></h3>
+<dl class="kv2">
+<dt>증상</dt><dd>특정 알림(예: <code>ORG_DELIVERED</code>)이 전혀 안 감. 오거나이저·호텔 양쪽 다 이메일을 못 받았다는 문의가 들어옵니다.</dd>
+<dt>확인</dt><dd><code>settings.html#notify</code> 발송 로그에서 해당 건이 <code>failed</code>인지 아예 큐에 없는지 확인 → <code>RESEND_API_KEY</code> 유효성, 발신 도메인 SPF/DKIM 인증 상태 확인 → <b><code>NOTIFY_MODE</code>가 아직 <code>log</code>로 남아있지 않은지</b> 가장 먼저 확인합니다(가장 흔한 원인).</dd>
+<dt>완화</dt><dd><code>NOTIFY_MODE=log</code>가 원인이면 <a href="launch-checklist.html#notify-mode">전환 절차</a>대로 <code>live</code>로 전환. Resend 키 문제면 새 키 발급 후 즉시 교체. 발송 자체가 안 되는 동안은 <code>failed</code> 건을 목록화해 운영자가 수동 발송합니다.</dd>
+<dt>근본 조치</dt><dd>발신 도메인 인증 만료·변경 여부 점검, Resend 대시보드에서 발송 거부(bounce) 사유 확인.</dd>
+<dt>사용자 안내(한)</dt><dd>&quot;안내 메일 발송이 지연되어 이 내용을 대신 안내드립니다: …&quot;</dd>
+<dt>User notice (EN)</dt><dd>&quot;Our automated email is delayed — here is the update directly: …&quot;</dd>
+</dl>
+
+</div>
+<div class="card-inc">
+<h3><span class="num">#6</span> 알림톡 대체발송(LMS) 폭주 <span class="tag sys">S2</span></h3>
+<dl class="kv2">
+<dt>증상</dt><dd>오거나이저 알림이 알림톡 대신 LMS 문자로 대량 전환되어 나갑니다(비용·수신 경험 저하).</dd>
+<dt>확인</dt><dd><code>settings.html#notify</code> 발송 로그에서 알림톡 실패율 확인 → Solapi 콘솔에서 카카오톡 채널·템플릿 상태(정지·심사 반려 여부) 확인.</dd>
+<dt>완화</dt><dd>템플릿이 반려·정지된 경우 임시로 해당 알림만 이메일 중심으로 안내하고, LMS 대체발송 자체는 막지 않습니다(사용자에게 정보가 안 가는 것보다 낫습니다).</dd>
+<dt>근본 조치</dt><dd>카카오 비즈니스 콘솔에서 채널·템플릿 재승인 절차 진행. 반복되면 발송 대행사와 원인 확인.</dd>
+<dt>사용자 안내(한)</dt><dd>(알림톡→LMS 대체는 사용자에게 별도 안내가 필요한 장애가 아니며, 정보는 정상 도달합니다.)</dd>
+<dt>User notice (EN)</dt><dd>(No separate user notice needed — content still arrives via LMS fallback.)</dd>
+</dl>
+
+</div>
+<div class="card-inc">
+<h3><span class="num">#7</span> 운영 콘솔 로그인 불가 <span class="tag hot">S1</span></h3>
+<dl class="kv2">
+<dt>증상</dt><dd>운영자가 <code>admin/index.html</code>에서 로그인해도 <code>dashboard.html</code>로 못 들어갑니다.</dd>
+<dt>확인</dt><dd>리다이렉트된 <code>?e=</code> 코드로 원인을 구분합니다 — <code>e=role</code>(권한 없음, <code>app_metadata.role ≠ operator</code>) · <code>e=config</code>(Supabase 설정 오류) · <code>e=snapshot</code>(<code>admin_snapshot()</code> RPC 실패, 보통 세션 만료). 세션 만료는 Supabase 기본 액세스 토큰 수명(<span class="tag hot">확인 필요</span> — 통상 1시간, 프로젝트 설정에 따라 다름) 경과가 흔한 원인입니다.</dd>
+<dt>완화</dt><dd><code>e=role</code>이면 해당 계정에 <code>app_metadata.role=operator</code>를 즉시 부여(Supabase 대시보드, README §2). <code>e=snapshot</code>이면 재로그인 안내. <code>e=config</code>면 <code>assets/config.js</code>의 <code>supabase.url/anonKey</code> 값을 확인합니다.</dd>
+<dt>근본 조치</dt><dd>권한 부여 절차를 온보딩 체크리스트에 포함(운영자 온보딩 문서 참고), 세션 만료가 잦으면 재로그인 안내 문구를 <code>e=snapshot</code> 에러 메시지에 보강.</dd>
+<dt>사용자 안내(한)</dt><dd>(내부 화면 장애이므로 사용자 대상 공지는 없음. 콘솔 접근 불가로 응대가 늦어질 수 있는 경우에만 개별 안내.)</dd>
+<dt>User notice (EN)</dt><dd>(Internal console issue — no external user notice unless response times are affected.)</dd>
+</dl>
+
+</div>
+<div class="card-inc">
+<h3><span class="num">#8</span> SLA 시계 오류 <span class="tag sys">S2</span></h3>
+<dl class="kv2">
+<dt>증상</dt><dd>대시보드의 SLA 임박 배지가 실제 영업일 기준과 어긋납니다(공휴일인데 임박 표시가 안 뜨거나, 평일인데 과도하게 임박으로 표시).</dd>
+<dt>확인</dt><dd><code>kr_holiday</code> 테이블에 해당 연도 공휴일이 입력돼 있는지 확인(<code>settings.html#holidays</code> 또는 DB 조회). 비어 있으면 주말만 빼고 계산되어 기한이 짧게 잡힙니다(상태전이표 §8).</dd>
+<dt>완화</dt><dd>누락된 공휴일을 즉시 입력합니다. 이미 짧게 계산되어 SLA 위반으로 잘못 표시된 건이 있으면 개별 확인 후 담당자에게 오표시였음을 안내합니다.</dd>
+<dt>근본 조치</dt><dd>내년도 공휴일을 미리 입력하는 절차를 <a href="launch-checklist.html#d7">오픈 체크리스트 D-7</a>과 연간 루틴에 고정.</dd>
+<dt>사용자 안내(한)</dt><dd>(내부 지표 오류 — 오거나이저에게 실제 처리 지연이 없었다면 공지하지 않음.)</dd>
+<dt>User notice (EN)</dt><dd>(Internal metric issue — no external notice unless it caused an actual processing delay.)</dd>
+</dl>
+
+</div>
+<div class="card-inc">
+<h3><span class="num">#9</span> 크론 정지 <span class="tag hot">S1</span></h3>
+<dl class="kv2">
+<dt>증상</dt><dd>상태 전이가 자동으로 안 넘어가거나(비딩중→취합중 정체), 알림이 전혀 안 나가거나, 피드백 메일 재시도가 안 됩니다.</dd>
+<dt>확인</dt><dd>Supabase 대시보드 <code>Database → Extensions</code>에서 <code>pg_cron</code>·<code>pg_net</code> 활성 여부 확인 → <code>select * from cron.job</code>로 6개 작업(알림 발송·<code>mg-system-tick</code>·<code>mgfb-mail-retry</code>·레이트리밋 정리·데모 정리·익명화)이 등록돼 있는지 확인 → <code>cron.job_run_details</code>에서 최근 실행 여부 확인.</dd>
+<dt>완화</dt><dd>꺼진 확장을 다시 켜거나, 등록이 빠진 작업이 있으면 해당 마이그레이션(<code>0007_cron.sql</code>, <code>0009_feedback_cron.sql</code>)을 재적용합니다. 급하면 <code>mg-system-tick</code>이 하던 마감 전이를 콘솔에서 수동으로 처리합니다.</dd>
+<dt>근본 조치</dt><dd>확장이 왜 꺼졌는지(플랜 변경, 수동 조작) 원인 확인 후 재발 방지. 크론 헬스체크를 대시보드 카드로 추가하는 것을 검토(현재는 설정 화면의 &quot;마지막 실행&quot; 예시 값뿐).</dd>
+<dt>사용자 안내(한)</dt><dd>(내부 자동화 장애 — 실제 처리 지연이 사용자에게 보이는 시점에만 개별 안내.)</dd>
+<dt>User notice (EN)</dt><dd>(Internal automation issue — notify affected users individually only if they experience an actual delay.)</dd>
+</dl>
+
+</div>
+<div class="card-inc">
+<h3><span class="num">#10</span> 피드백 스팸 폭주 <span class="tag sys">S2</span></h3>
+<dl class="kv2">
+<dt>증상</dt><dd><code>admin/feedback.html</code>에 의미 없는 대량 접수가 쌓입니다.</dd>
+<dt>확인</dt><dd>접수 Origin 분포 확인(<code>FEEDBACK_ALLOWED_ORIGINS</code> 밖에서 오는지) → 레이트리밋 히트 확인(IP당 10분 5건·하루 30건·전체 하루 500건, <code>feedback_rate_hit</code>) → 허니팟 필드가 채워진 요청 비율 확인.</dd>
+<dt>완화</dt><dd>현재 시스템은 Origin 허용 목록 + 허니팟 + 레이트리밋만 있고 <b>CAPTCHA/Turnstile은 구현돼 있지 않습니다</b>. 급증 시 <code>FEEDBACK_ALLOWED_ORIGINS</code>를 임시로 더 좁히거나, <code>FEEDBACK_DAILY_CAP</code>·전체 하루 상한을 임시로 낮춰 대응합니다.</dd>
+<dt>근본 조치</dt><dd><span class="tag hot">확인 필요(열린 이슈)</span> — 반복된다면 Turnstile 같은 챌린지 도입을 검토합니다. 접수 자체(<code>FB_OPS_ALERT</code>)는 상한 초과분을 자동으로 제외하므로(README §8.1) 운영팀 메일함이 폭주하지는 않습니다.</dd>
+<dt>사용자 안내(한)</dt><dd>(스팸은 정상 이용자에게 보이는 장애가 아니므로 사용자 공지 없음.)</dd>
+<dt>User notice (EN)</dt><dd>(Spam is not user-facing — no external notice needed.)</dd>
+</dl>
+
+</div>
+<div class="card-inc">
+<h3><span class="num">#11</span> 토큰 링크 유출 의심 <span class="tag hot">S1</span></h3>
+<dl class="kv2">
+<dt>증상</dt><dd>추적 링크(<code>ko/track.html?t=</code>)나 초대 링크(<code>en/bid.html?t=</code>)가 의도치 않은 곳에 공유된 정황이 있습니다.</dd>
+<dt>확인</dt><dd>해당 요청의 접속 이력(가능하면 접근 로그)과 콘솔 &quot;공유 링크&quot; 발급 이력을 확인해 실제 유출인지, 정상적인 공유 링크(<code>?s=</code>) 사용인지 구분합니다.</dd>
+<dt>완화</dt><dd>해당 요청·초대의 토큰을 폐기하고 새 토큰으로 재발급합니다(공유 링크는 회원이 &quot;링크 끄기&quot;로, 추적·초대 토큰은 운영자가 콘솔에서 재발급). 새 링크는 원래 수신자에게만 개별 전달합니다.</dd>
+<dt>근본 조치</dt><dd>유출 경로(메일 포워딩, 캡처 공유 등) 파악 후 재발 방지 안내. 반복되면 링크 만료 주기 단축을 검토.</dd>
+<dt>사용자 안내(한)</dt><dd>&quot;보안을 위해 요청 확인 링크를 새로 발급해 드렸습니다. 이전 링크는 더 이상 사용할 수 없습니다.&quot;</dd>
+<dt>User notice (EN)</dt><dd>&quot;For security, we've issued a new link for your request. The previous link no longer works.&quot;</dd>
+</dl>
+
+</div>
+<div class="card-inc">
+<h3><span class="num">#12</span> 데이터가 잘못된 상태로 전이됨 <span class="tag hot">S1</span></h3>
+<dl class="kv2">
+<dt>증상</dt><dd>운영자 실수로 잘못된 상태 버튼을 누르거나 잘못된 호텔을 선정 처리했습니다.</dd>
+<dt>확인</dt><dd><code>admin/rfp.html?id=…</code> 이력(history) 탭에서 전이 시각·주체·사유를 확인합니다.</dd>
+<dt>완화</dt><dd><b>상태전이표의 전이표(§3)에 없는 역방향 전이는 콘솔에 버튼 자체가 없습니다.</b> 종료 상태(반려됨·성사·미성사·취소)에서 나가는 전이도 없습니다 — 즉 대부분의 실수는 &quot;되돌리기&quot;가 아니라 뒤이은 상태에서 사유를 남기고 다시 처리하는 방식으로 수습합니다(예: 잘못 성사 처리했다면 선정 호텔·오거나이저 양쪽에 사정을 설명하고 이관·환불 등 사람이 개입).</dd>
+<dt>근본 조치</dt><dd><b>상태를 SQL로 직접 바꾸는 것은 하지 않습니다</b>(상태전이표 §3 마지막 문장) — 이력과 알림이 빠지고 원본 사실관계가 사라집니다. 재발 방지를 위해 콘솔의 확인 창(confirm) 문구를 강화하는 방향으로 근본 조치를 잡습니다.</dd>
+<dt>사용자 안내(한)</dt><dd>&quot;저희 측 처리 오류로 안내가 잘못 나갔습니다. 바로 잡아 드리겠습니다 — 담당자가 곧 연락드리겠습니다.&quot;</dd>
+<dt>User notice (EN)</dt><dd>&quot;We made a processing error on our end and are correcting it now — a team member will reach out shortly.&quot;</dd>
+</dl>
+
+</div>
+<div class="card-inc">
+<h3><span class="num">#13</span> Supabase 장애(플랫폼 전체) <span class="tag hot">S1</span></h3>
+<dl class="kv2">
+<dt>증상</dt><dd>Supabase 자체 장애로 DB·Auth·Edge Function이 전부 응답하지 않습니다.</dd>
+<dt>확인</dt><dd>Supabase 상태 페이지(status.supabase.com)를 확인합니다. 콘솔·공개 페이지 모두 API 오류가 동시다발적으로 뜨는지 확인합니다.</dd>
+<dt>완화</dt><dd><b>mailto 폴백은 자동으로 살아나지 않습니다</b> — 현재 프런트엔드는 접수·파트너 신청·견적 제출이 이미 RPC로 교체된 것을 전제로 하며, mailto는 그 이전(사이트맵 §2의 배포 전 임시방편) 코드일 때만 쓰던 경로입니다. 즉 Supabase 장애 중에는 자동 대체 경로가 없고, 안내 배너로 &quot;잠시 후 다시 시도&quot;를 노출하고 운영 메일함으로 유도하는 것을 운영자가 수동으로 켜야 합니다.</dd>
+<dt>근본 조치</dt><dd>장애 복구 후 밀린 큐(알림·피드백 재시도)가 정상 처리되는지 확인. 향후 정적 mailto 폴백을 완전히 없앨지, 최후 수단으로 남겨둘지는 <a href="sitemap.html">사이트맵</a> 항목 f(RPC 교체)와 함께 결정이 필요합니다.</dd>
+<dt>사용자 안내(한)</dt><dd>&quot;외부 서비스 장애로 일시적으로 서비스 이용이 어렵습니다. 급하신 요청은 &lt;운영 이메일&gt;로 보내 주시면 복구 즉시 처리해 드리겠습니다.&quot;</dd>
+<dt>User notice (EN)</dt><dd>&quot;We're experiencing a third-party outage affecting the service. For urgent requests, please email &lt;ops email&gt; and we'll process it as soon as we're back.&quot;</dd>
+</dl>
+
+</div></section>
+<section id="escalation">
+<h2><span class="n">4</span>에스컬레이션</h2>
+<div class="tw"><table><thead><tr><th>등급</th><th>1차 연락</th><th>2차 연락(15분 무응답 시)</th><th>외부 벤더 연락이 필요한 경우</th></tr></thead><tbody>
+<tr><td class="nw"><span class="tag hot">S1</span></td><td>당일 대응 운영자 + 개발 담당</td><td>대표</td><td>Supabase(플랫폼 장애) · Solapi(SMS/알림톡 장애) · Resend(이메일 장애) — <span class="tag hot">확인 필요</span>(각 벤더 지원 창구·SLA는 계약 문서 확인)</td></tr>
+<tr><td class="nw"><span class="tag sys">S2</span></td><td>당일 대응 운영자</td><td>개발 담당</td><td>해당 채널 벤더에 지연 문의(급하지 않으면 정규 지원 창구)</td></tr>
+<tr><td class="nw"><span class="tag org">S3</span></td><td>당일 대응 운영자</td><td>(없음, 다음 배포에 반영)</td><td>해당 없음</td></tr>
+</tbody></table></div>
+<p class="small">&quot;당일 대응 운영자&quot;는 <code>admin/settings.html#ops</code>의 운영자 계정 목록 중 그날 근무자입니다. 운영자가 1명뿐인 현재 구조에서는 S1 발생 시 대표에게 바로 공유하는 것을 기본으로 합니다.</p>
+</section>
+<section id="postmortem">
+<h2><span class="n">5</span>사후 기록 템플릿</h2>
+<p class="lead">S1·S2는 종료 후 아래 항목을 채워 남깁니다. 형식보다 &quot;다음에 같은 일이 생기면 더 빨리 알아차릴 방법&quot;을 적는 것이 목적입니다.</p>
+<div class="tw"><table><thead><tr><th>항목</th><th>내용</th></tr></thead><tbody>
+<tr><td class="nw"><b>발생 시각·발견 경로</b></td><td>언제, 무엇을 보고 알았는지(사용자 신고 / 대시보드 / 로그)</td></tr>
+<tr><td class="nw"><b>심각도</b></td><td>S1/S2/S3, 대응 중 변경됐다면 그 이유</td></tr>
+<tr><td class="nw"><b>영향 범위</b></td><td>영향받은 요청·회원·호텔 수(가능한 범위에서), 영향받은 시간</td></tr>
+<tr><td class="nw"><b>타임라인</b></td><td>확인 → 공지 → 완화 → 복구 각 시각</td></tr>
+<tr><td class="nw"><b>완화 조치</b></td><td>실제로 무엇을 껐다/켰다/되돌렸는지</td></tr>
+<tr><td class="nw"><b>근본 원인</b></td><td>알아낸 만큼만. 모르면 &quot;조사 중&quot;으로 남기고 후속 기한을 적음</td></tr>
+<tr><td class="nw"><b>재발 방지</b></td><td>코드 변경, 체크리스트 추가, 벤더 계약 변경 등 — 담당자와 기한 포함</td></tr>
+<tr><td class="nw"><b>사용자 커뮤니케이션</b></td><td>실제로 보낸 문구와 대상, 후속 사과·보상이 필요했는지</td></tr>
+</tbody></table></div>
+<div class="callout">이 기록은 <code>admin/rfp.html</code> 이력 메모나 <code>admin/feedback-detail.html</code> 메모와는 별도입니다 — 개별 건 이력이 아니라 &quot;이번 장애 전체&quot;에 대한 기록이므로, 운영 문서(프로젝트 문서함)에 별도로 남깁니다.</div>
+</section>
+<footer>
+<b>연관 문서</b> · <a href="state-transitions.html">상태전이표 v1.7</a> · <a href="launch-checklist.html">오픈 당일 체크리스트</a> · <a href="operator-onboarding.html">운영자 온보딩</a> · <a href="notification-library.html">알림 라이브러리</a> · supabase/README.md
+</footer>
+</div>
+</body>
+</html>

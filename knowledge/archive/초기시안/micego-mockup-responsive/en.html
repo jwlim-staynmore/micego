@@ -1,0 +1,94 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MICEGO Partner · Hotel mode</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=Noto+Sans+KR:wght@400;500;700&display=swap"><style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#0F1E3D;--ink80:#1F3266;--ink60:#4A5D8C;--teal:#0B8F86;--teald:#076E67;--tealb:#16B5A8;--tsoft:#E3F5F2;--amber:#FFC24B;--line:#E4E8F0;--gray:#6B7794;--bg:#F6F8FB}
+html{scroll-behavior:smooth}
+body{font-family:'Noto Sans KR',Archivo,sans-serif;color:var(--ink);background:#fff;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.en{font-family:Archivo,'Noto Sans KR',sans-serif}
+.wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.96);border-bottom:1px solid var(--line)}
+header .wrap{height:56px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;align-items:center;gap:8px;font-family:Archivo,sans-serif;font-weight:800;font-size:19px;letter-spacing:-.02em}
+.brand b{color:var(--teald)}
+.tag{font:700 10px/1 monospace;letter-spacing:.08em;color:var(--teald);background:var(--tsoft);padding:4px 7px;border-radius:5px}
+.nav{display:none;gap:28px;font-size:14px;color:var(--gray)}
+.right{display:flex;align-items:center;gap:8px}
+.sw{display:flex;border:1.5px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
+.sw a{min-height:40px;min-width:44px;padding:0 12px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12.5px;color:var(--gray)}
+.sw a.on{background:var(--ink);color:#fff}
+.hcta{display:none;min-height:44px;padding:0 18px;border-radius:8px;background:var(--ink);color:#fff;font-weight:700;font-size:13.5px;align-items:center}
+.menu{position:relative}
+.menu summary{list-style:none;width:40px;height:40px;border:1.5px solid var(--line);border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;cursor:pointer}
+.menu summary::-webkit-details-marker{display:none}
+.menu summary i{width:16px;height:2px;background:var(--ink)}
+.menu div{position:absolute;right:0;top:48px;width:220px;background:#fff;border:1px solid var(--line);border-radius:12px;box-shadow:0 8px 20px rgba(15,30,61,.1);padding:6px 16px}
+.menu div a{display:flex;align-items:center;min-height:44px;border-bottom:1px solid var(--line);font-weight:600;font-size:14px}
+.menu div a:last-child{border:0}
+.hero{background:linear-gradient(180deg,var(--tsoft) 0,#fff 320px);padding:32px 0 8px}
+.hero .wrap{display:grid;gap:28px}
+.chip{display:inline-block;align-self:flex-start;padding:5px 10px;border-radius:6px;background:var(--tsoft);color:var(--teald);font:600 11px/1.2 monospace;letter-spacing:.06em}
+h1{font-size:clamp(28px,5.5vw,52px);line-height:1.22;letter-spacing:-.03em;font-weight:800;word-break:keep-all}
+h1 em{font-style:normal;background:linear-gradient(transparent 62%,rgba(255,194,75,.6) 62%)}
+.lead{font-size:clamp(15px,1.6vw,17px);line-height:1.7;color:var(--gray);word-break:keep-all}
+.stack{display:flex;flex-direction:column;gap:16px}
+.btns{display:flex;flex-direction:column;gap:10px}
+.btn{min-height:52px;padding:0 26px;border-radius:8px;background:var(--ink);color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center}
+.btn.g{background:#fff;color:var(--ink);border:1.5px solid var(--line)}
+.small{font-size:12.5px;color:var(--gray)}
+.card{border:1px solid var(--line);border-radius:16px;padding:20px;background:#fff;box-shadow:0 8px 20px rgba(15,30,61,.08)}
+.lab{font:700 11px/1 monospace;letter-spacing:.08em;color:var(--teald);margin-bottom:12px}
+.row{display:flex;justify-content:space-between;gap:12px;padding:9px 11px;background:var(--bg);border-radius:8px;font-size:13.5px;margin-bottom:8px}
+.row span{color:var(--gray)}
+.offer{padding:10px 11px;border-radius:8px;background:var(--tsoft);font-size:13px;font-weight:600;color:var(--teald);margin-top:8px}
+.sec{padding:36px 0 0}
+.grid3{display:grid;gap:12px}
+.tile{border:1px solid var(--line);border-radius:14px;padding:18px}
+.tile b{display:block;font-size:17px;font-weight:800;color:var(--teald)}
+.tile p{font-size:13.5px;line-height:1.7;color:var(--gray);margin-top:6px;word-break:keep-all}
+.reg{margin-top:40px;background:var(--ink);color:#fff;padding:36px 0 120px}
+.reg h2{font-size:clamp(22px,3vw,34px);line-height:1.3;word-break:keep-all}
+.form{display:grid;gap:10px;margin-top:18px}
+.fld{height:46px;border-radius:8px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);display:flex;align-items:center;padding:0 12px;font-size:13.5px;color:rgba(255,255,255,.65)}
+.sticky{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 16px;box-shadow:0 -4px 16px rgba(15,30,61,.06);z-index:40}
+.sticky a{background:var(--teal)}
+footer{background:var(--ink);color:rgba(255,255,255,.7);padding:28px 0 96px;font-size:13px}
+footer .wrap{display:flex;flex-direction:column;gap:8px}
+.cards2{display:grid;gap:14px;margin-top:20px}
+.mc{display:flex;flex-direction:column;gap:10px;border:1.5px solid var(--line);border-radius:20px;padding:24px;background:#fff;box-shadow:0 4px 12px rgba(15,30,61,.06)}
+.mc h2{font-size:clamp(20px,2.4vw,28px);line-height:1.3;word-break:keep-all}
+.mc p{font-size:14.5px;line-height:1.7;color:var(--gray)}
+.mc ul{list-style:none;font-size:14px;line-height:1.9;color:var(--ink80)}
+.mc ul li::before{content:'· '}
+.mc .go{font-weight:700;font-size:15px;color:var(--teald);min-height:44px;display:flex;align-items:center;margin-top:auto}
+.mc.dk{background:var(--ink);border-color:var(--ink);color:#fff}
+.mc.dk p,.mc.dk ul{color:rgba(255,255,255,.72)}
+.mc.dk .chip{background:rgba(255,255,255,.1);color:var(--amber)}
+.mc.dk .go{color:var(--amber)}
+.center{text-align:center;align-items:center}
+@media(min-width:768px){
+ .wrap{padding:0 32px}
+ header .wrap{height:72px}
+ .brand{font-size:21px}
+ .btns{flex-direction:row}
+ .btn{min-height:56px}
+ .grid3{grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+ .cards2{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px}
+ .mc{padding:34px}
+ .sticky{display:none}
+ footer{padding-bottom:32px}
+ .reg{padding-bottom:56px}
+ .form{grid-template-columns:repeat(3,minmax(0,1fr))}
+ .hcta{display:flex}
+ .sw a{min-height:44px;padding:0 16px;font-size:13px}
+ .hero{padding:64px 0 16px}
+ .sec{padding:52px 0 0}
+}
+@media(min-width:1024px){
+ .nav{display:flex}
+ .menu{display:none}
+ .hero .wrap.two{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:56px;align-items:center}
+}
+@media(max-width:479px){.tag{display:none}}</style></head><body><header><div class="wrap"><a class="brand" href="index.html"><svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0F1E3D"/><rect x="6.5" y="9" width="14" height="2.6" rx="1.3" fill="#fff"/><rect x="6.5" y="14.7" width="11" height="2.6" rx="1.3" fill="#16B5A8"/><rect x="6.5" y="20.4" width="8" height="2.6" rx="1.3" fill="#FFC24B"/><circle cx="24.5" cy="16" r="2.6" fill="#fff"/></svg><span>MICE<b>GO</b></span><span class="tag">PARTNER</span></a><nav class="nav en"><a href="#">Why partner</a><a href="#">How it works</a><a href="#">Sample request</a><a href="#">Partner terms</a><a href="#">FAQ</a></nav><div class="right"><nav class="sw"><a href="ko.html" class="">여행사</a><a href="en.html" class="en on">Hotels</a></nav><a class="hcta en" href="#register">Register</a><details class="menu"><summary aria-label="menu"><i></i><i></i><i></i></summary><div><a href="#">Why partner</a><a href="#">How it works</a><a href="#">Sample request</a><a href="#">Partner terms</a><a href="#">FAQ</a><a href="index.html">모드 선택 · Choose mode</a></div></details></div></div></header><main class="en"><section class="hero"><div class="wrap two"><div class="stack"><span class="chip">FOR HOTELS &amp; RESORTS · PARTNER NETWORK</span><h1 style="line-height:1.15">Group enquiries from Korean MICE organizers, <em>sent to your inbox</em>.</h1><p class="lead">You decide which requests to quote on. Joining the partner network carries no listing fee.</p><div class="btns"><a class="btn" href="#register">Register your property</a><a class="btn g" href="#sample">See a sample request</a></div><div class="small">About 1 minute · 7 fields · No listing fee to join</div></div>
+<div class="card" id="sample"><div class="lab">INCOMING REQUEST</div><div class="row"><span>Ref</span><b style="font-family:monospace">MG-2608-007</b></div><div class="row"><span>Destination</span><b>Da Nang, Vietnam</b></div><div class="row"><span>Attendees</span><b>150–199</b></div><div class="row"><span>Organizer</span><b style="color:#A0AAC2">▓▓▓▓▓▓ withheld</b></div><div class="row"><span>Dates</span><b>Mon – Thu, 3 nights</b></div><div class="small" style="text-align:center;margin-top:10px">Illustration of the brief format you receive.</div></div></div></section>
+<section class="sec"><div class="wrap"><div class="lab">04 · PARTNER TERMS</div><div class="grid3"><div class="tile"><b>No listing fee</b><p>Joining the partner network and receiving requests carries no listing fee.</p></div><div class="tile"><b>You choose</b><p>Quote only on the requests that fit your property.</p></div><div class="tile"><b>Confirmed dates only</b><p>Every request states its deadline.</p></div></div></div></section></main>
+<section class="reg en" id="register"><div class="wrap"><div class="lab" style="color:var(--tealb)">05 · REGISTER</div><h2>Register your property</h2><div class="form"><div class="fld">Hotel / resort name</div><div class="fld">City, country</div><div class="fld">Largest group capacity</div></div></div></section><footer><div class="wrap"><div>© 2026 MICEGO · <a href="mailto:mysteri1984@gmail.com">mysteri1984@gmail.com</a></div><div><a href="index.html">Choose mode</a> · <a href="ko.html">여행사 (한국어) →</a></div></div></footer><div class="sticky en"><a class="btn" href="#register">Register your property</a></div></body></html>

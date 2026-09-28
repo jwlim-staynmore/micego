@@ -1,0 +1,13 @@
+{
+  "status": 200,
+  "body": {
+    "rows": [],
+    "link_candidates": [
+      {
+        "ref": "MG-TEST-020",
+        "region": "Bangkok, TH",
+        "created_at": "2026-09-01"
+      }
+    ]
+  }
+}

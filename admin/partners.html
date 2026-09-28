@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>호텔 파트너 | MICEGO 운영 콘솔</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="app"></div>
+<noscript><p class="nojs">이 화면은 JavaScript가 있어야 표시됩니다. 브라우저 설정에서 JavaScript를 켜 주세요.</p></noscript>
+<script src="../assets/config.js"></script>
+<script src="../assets/mg.js"></script>
+<script src="../assets/feedback.js" defer></script>
+<script src="data-adapter.js"></script>
+<script src="admin.js"></script>
+<script src="partner.js"></script>
+<script>
+(function(){
+var A=MICEGO,esc=A.esc;
+A.boot('partners','호텔 파트너',function(main){
+  var q=new URLSearchParams(location.search);
+  var qf=q.get('filter'); if(!A.PFILTERS[qf])qf=null;
+  var st={quick:qf,seg:qf?'all':'queue',dest:'',q:''};
+  var SEG=[['queue','심사 대기'],['approved','승인'],['suspended','중지'],['rejected','거절'],['all','전체']];
+  function inSeg(p,k){return k==='all'||(k==='queue'?(p.status==='pending'||p.status==='reviewing'):p.status===k);}
+  function base(p){
+    if(st.dest&&p.dest!==st.dest)return false;
+    if(st.q){var t=(p.name+' '+p.dest+' '+p.hotelLocation+' '+p.email+' '+p.contactName).toLowerCase();if(t.indexOf(st.q.toLowerCase())<0)return false;}
+    if(st.quick&&!A.PFILTERS[st.quick].fn(p))return false;
+    return true;
+  }
+  function stats(p){var s=A.partnerStats(p.id);return s.n?'초대 '+s.n+' · 제출 '+s.pSub+'% · 거절 '+s.pDec+'% · 마감 '+s.pExp+'%':'<span class="muted">초대 없음</span>';}
+  function due(p){
+    var r=A.partnerReview(p);if(!r)return '<span class="muted">—</span>';
+    return '<span class="badge '+(r.level==='ok'?'':r.level)+'">'+r.text+'</span><div class="small muted">'+A.fmtDT(r.due)+'</div>';
+  }
+  function mail(p){
+    var c=A.partnerChecks(p),w=!c.match?' <span class="badge amber" title="이메일 도메인이 호텔 도메인과 다릅니다">⚠ 도메인 불일치</span>':'';
+    return esc(p.contactName)+'<div class="em small muted">'+esc(p.email)+'</div>'+w;
+  }
+  function flag(p){return A.partnerFlag(p).length?' <span class="badge red">중지 검토</span>':'';}
+  function table(list){
+    var rows=list.map(function(p){
+      return '<tr data-id="'+p.id+'"><td><a class="hn" href="partner.html?id='+p.id+'">'+esc(p.name)+'</a><div class="small muted mono">'+p.id+'</div>'+flag(p)+' '+MICEGO_PTR.hotelBadges(p)+'</td><td>'+esc(p.hotelLocation)+'</td><td class="num">'+A.num(p.cap)+'명</td><td>'+(p.ballroom?'있음':'없음')+'</td><td>'+mail(p)+'</td><td>'+A.pchip(p.status)+'</td><td>'+due(p)+'</td><td class="small">'+stats(p)+'</td></tr>';
+    }).join('');
+    return '<div class="tbl-wrap ptable"><table><thead><tr><th>호텔</th><th>소재지</th><th class="num">수용 규모</th><th>연회장</th><th>담당자 · 이메일</th><th>상태</th><th>심사 기한</th><th>응답 통계</th></tr></thead><tbody>'+(rows||'<tr><td colspan="8" class="muted">조건에 맞는 파트너가 없습니다.</td></tr>')+'</tbody></table></div>';
+  }
+  function cards(list){
+    if(!list.length)return '<div class="pcards"><p class="muted">조건에 맞는 파트너가 없습니다.</p></div>';
+    return '<div class="pcards">'+list.map(function(p){
+      var r=A.partnerReview(p),lv=r&&r.level!=='ok'?' '+r.level:'';
+      return '<a class="pcard'+lv+'" href="partner.html?id='+p.id+'" data-id="'+p.id+'"><div class="pc-t"><span class="pc-n">'+esc(p.name)+'</span>'+A.pchip(p.status)+'</div><div class="pc-m">'+esc(p.hotelLocation)+' · 수용 '+A.num(p.cap)+'명 · 연회장 '+(p.ballroom?'있음':'없음')+'</div><div class="pc-m">'+esc(p.contactName)+' · '+esc(p.email)+'</div><div class="pc-b">'+(r?due(p).split('<div')[0]:'')+(A.partnerChecks(p).match?'':'<span class="badge amber">⚠ 도메인 불일치</span>')+flag(p)+MICEGO_PTR.hotelBadges(p)+'</div><div class="pc-m">'+stats(p)+'</div></a>';
+    }).join('')+'</div>';
+  }
+  function draw(){
+    var pool=A.data().partners.filter(base);
+    var list=pool.filter(function(p){return inSeg(p,st.seg);});
+    document.getElementById('res').innerHTML=table(list)+cards(list);
+    document.getElementById('segs').innerHTML=SEG.map(function(s){return '<button type="button" data-s="'+s[0]+'" aria-pressed="'+(st.seg===s[0])+'">'+s[1]+' <b>'+pool.filter(function(p){return inSeg(p,s[0]);}).length+'</b></button>';}).join('');
+    var af=document.getElementById('af');
+    af.innerHTML=st.quick?'<span class="active-filter">필터: '+esc(A.PFILTERS[st.quick].label)+' <button type="button" id="clrq" aria-label="필터 해제">×</button></span>':'';
+    var c=document.getElementById('clrq'); if(c)c.onclick=function(){st.quick=null;history.replaceState(null,'','partners.html');draw();};
+    document.getElementById('cnt').textContent=list.length+'곳';
+  }
+  var dests=[];A.data().partners.forEach(function(p){if(dests.indexOf(p.dest)<0)dests.push(p.dest);});
+  main.innerHTML='<div class="page-h"><h1>호텔 파트너</h1><span class="muted small" id="cnt"></span>'+(A.isPartner()?'<div class="sp"><button type="button" class="btn primary" id="regHotel">호텔 등록</button></div>':'')+'</div>'+
+    '<div class="segs" id="segs" role="group" aria-label="상태 구분"></div>'+
+    '<div class="filters"><div class="f"><label for="fd">목적지</label><select class="inp" id="fd"><option value="">전체</option>'+dests.map(function(d){return '<option>'+esc(d)+'</option>';}).join('')+'</select></div><div class="f"><label for="fq">검색 (호텔 · 담당자 · 이메일)</label><input class="inp" id="fq" type="search" placeholder="Sanur, 발리"></div></div><div id="af"></div><div id="res"></div>';
+  document.getElementById('fd').onchange=function(){st.dest=this.value;draw();};
+  document.getElementById('fq').oninput=function(){st.q=this.value.trim();draw();};
+  document.getElementById('segs').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;st.seg=b.getAttribute('data-s');draw();});
+  var rh=document.getElementById('regHotel');if(rh)rh.onclick=function(){MICEGO_PTR.registerHotel(draw);};
+  draw();
+});
+})();
+</script>
+</body>
+</html>

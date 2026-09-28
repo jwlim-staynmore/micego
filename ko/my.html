@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<script src="../assets/config.js"></script><script src="../assets/mg.js"></script><script src="../assets/feedback.js" defer></script>
+<script>document.documentElement.className+=' js-anim';</script>
+<script>(function(){var h=document.documentElement,q=new URLSearchParams(location.search),s=q.get('state')||'list';var C=window.MG_CONFIG||{},api=!!(C.supabase&&C.supabase.url),preview=(C.demo!==false)&&q.has('state');if(api&&!preview){s='loading';}else if(["list", "empty", "linked", "link_pending", "need_login", "loading"].indexOf(s)<0){s='list';}h.setAttribute('data-state',s);h.setAttribute('data-mode',(api&&!preview)?'api':'demo');})();</script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>내 견적 요청 | MICEGO 마이스고</title>
+<meta name="description" content="회원 전용 내 견적 요청 목록입니다.">
+<meta name="robots" content="noindex,nofollow">
+<meta name="referrer" content="no-referrer">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" href="../favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>/* ===== Reset ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:88px}
+body{overflow-x:hidden;font-family:var(--font-sans);color:var(--ink);background:var(--white);line-height:1.5;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:none}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em}
+
+/* ===== Tokens ===== */
+:root{
+  --ink:#0F1E3D;
+  --ink-80:#1F3266;
+  --ink-60:#4A5D8C;
+  --teal:#0B8F86;
+  --teal-deep:#076E67;
+  --teal-bright:#16B5A8;
+  --teal-soft:#E3F5F2;
+  --amber:#FFC24B;
+  --amber-soft:#FFF3D6;
+  --white:#FFFFFF;
+  --bg:#F6F8FB;
+  --bg-warm:#EEF2F6;
+  --line:#E4E8F0;
+  --line-dim:#EEF1F6;
+  --gray:#6B7794;
+  --gray-light:#A0AAC2;
+  --success:#22C55E;
+  --warn:#F59E0B;
+  --error:#EF4444;
+  --amber-deep:#8A5A00;
+
+  --font-display:'Archivo','Pretendard',-apple-system,sans-serif;
+  --font-sans:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',monospace;
+
+  --sh-card:0 1px 2px rgba(15,30,61,.04), 0 4px 12px rgba(15,30,61,.05);
+  --sh-card-hover:0 4px 8px rgba(15,30,61,.06), 0 12px 24px rgba(15,30,61,.08);
+  --sh-elevated:0 8px 20px rgba(15,30,61,.06), 0 24px 48px rgba(15,30,61,.10);
+}
+
+/* ===== Layout utils ===== */
+.container{max-width:1200px;margin:0 auto;padding:0 32px}
+.section{padding:112px 0}
+.section-num{display:block;font:600 12px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--teal-deep);margin-bottom:14px}
+.section-num.on-dark{color:var(--teal-bright)}
+h2{font-family:var(--font-display);font-size:clamp(26px,3.4vw,40px);line-height:1.25;letter-spacing:-.03em}
+.lead{font-size:17px;line-height:1.7;color:var(--gray);max-width:640px;margin-top:14px}
+.section-head{margin-bottom:48px}
+
+.hl{position:relative;display:inline-block;z-index:0}
+.hl::after{content:'';position:absolute;left:-2px;right:-2px;bottom:.06em;height:.34em;background:var(--amber);opacity:.55;border-radius:2px;z-index:-1}
+
+/* ===== Buttons ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:8px;font-weight:700;font-size:14.5px;padding:13px 24px;transition:all .15s ease;white-space:nowrap;min-height:44px}
+.btn-lg{font-size:15.5px;padding:16px 28px}
+.btn-sm{font-size:13.5px;padding:9px 16px}
+.btn-block{width:100%}
+.btn-primary{background:var(--ink);color:var(--white)}
+.btn-primary:hover{background:var(--teal);transform:translateY(-1px);box-shadow:0 6px 16px rgba(11,143,134,.28)}
+.btn-accent{background:var(--teal);color:var(--white)}
+.btn-accent:hover{background:var(--teal-deep);transform:translateY(-1px)}
+.btn-ghost{background:var(--white);color:var(--ink);border:1.5px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink);background:var(--bg)}
+.btn-ghost.on-dark{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.3)}
+.btn-ghost.on-dark:hover{border-color:var(--white);background:rgba(255,255,255,.08)}
+.btn-arrow::after{content:'→';transition:transform .15s ease}
+.btn-arrow:hover::after{transform:translateX(3px)}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+
+/* ===== Card / Chip / Callout ===== */
+.card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:32px;box-shadow:var(--sh-card);transition:border-color .15s ease,box-shadow .15s ease,transform .15s ease}
+@media (hover:hover){.card:hover{border-color:var(--teal);box-shadow:var(--sh-card-hover);transform:translateY(-2px)}}
+.chip{display:inline-flex;align-items:center;padding:5px 11px;border-radius:6px;background:var(--teal-soft);color:var(--teal-deep);font:600 12px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase}
+.callout{background:var(--teal-soft);border:1px solid rgba(11,143,134,.16);border-radius:12px;padding:20px 22px}
+.callout-label{display:block;font:800 11px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--teal-deep);margin-bottom:8px}
+.callout p{font-size:14.5px;line-height:1.7;color:var(--ink-80)}
+
+/* ===== Reveal animation =====
+   기본값은 항상 "보임"이다. 자바스크립트가 실제로 실행된 경우에만(<html class="js-anim">)
+   opacity:0 진입 애니메이션을 적용한다. 파일 미리보기(iOS Quick Look 등)처럼 스크립트가
+   동작하지 않는 환경에서는 .js-anim 클래스가 붙지 않으므로 모든 콘텐츠가 즉시 보인다. */
+.reveal{opacity:1}
+.js-anim .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.js-anim .reveal.is-visible{opacity:1;transform:translateY(0)}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .reveal{opacity:1!important;transform:none!important}
+}
+html:not(.js-anim) .reveal{opacity:1!important;transform:none!important}
+
+/* ===== Skip link ===== */
+.skip-link{position:absolute;left:-9999px;top:0;background:var(--ink);color:#fff;padding:12px 20px;border-radius:0 0 8px 0;z-index:200}
+.skip-link:focus{left:0}
+
+/* ===== Header ===== */
+.site-header{position:fixed;top:0;left:0;right:0;height:72px;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .2s ease,border-color .2s ease}
+.site-header.is-scrolled{background:rgba(255,255,255,.86);backdrop-filter:blur(14px) saturate(150%);border-bottom:1px solid var(--line)}
+.site-header .container{height:100%;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:28px;height:28px;border-radius:9px;flex:0 0 auto}
+.brand-word{font-family:var(--font-display);font-weight:800;font-size:21px;letter-spacing:-.02em;white-space:nowrap}
+.brand-word .go{color:var(--teal-deep)}
+.header-nav{display:flex;align-items:center;gap:32px}
+.header-nav a{font-size:14px;color:var(--gray);transition:color .15s ease}
+.header-nav a:hover{color:var(--ink)}
+.header-right{display:flex;align-items:center;gap:16px}
+
+
+.site-footer{background:var(--ink);padding:56px 0 32px;color:rgba(255,255,255,.7)}
+.footer-top{display:grid;grid-template-columns:1fr auto;gap:32px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.12)}
+.footer-brand{display:flex;align-items:center;gap:10px}
+.footer-brand .brand-word{color:var(--white)}
+.footer-brand .brand-word .go{color:var(--amber)}
+.footer-desc{font-size:13px;color:rgba(255,255,255,.55);margin-top:10px}
+.footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+.footer-contact{font-size:14px;color:var(--white)}
+.footer-links{display:flex;gap:18px;font-size:13px;color:rgba(255,255,255,.6)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;flex-wrap:wrap;gap:10px}
+.footer-notice{font-size:12px;color:rgba(255,255,255,.5);max-width:640px}
+.footer-copyright{font:400 11px/1 var(--font-mono);color:rgba(255,255,255,.4)}
+body.has-fixed-header{padding-top:72px}
+.site-header a,.site-footer a{text-decoration:none}
+@media (max-width:768px){body.has-fixed-header{padding-top:56px}.container{padding:0 20px}.site-header{height:56px}.site-header .container{height:56px}.brand-mark{width:26px;height:26px}.brand-word{font-size:19px}.footer-top{grid-template-columns:1fr}.footer-bottom{flex-direction:column;align-items:flex-start}}
+
+/* ===== App: components ===== */
+[hidden]{display:none!important}
+.app-main{padding:36px 0 96px;background:var(--bg);min-height:60vh}
+.app-wrap{max-width:1040px;margin:0 auto;padding:0 32px}
+.app-wrap.narrow{max-width:760px}
+.app-main h1{font-family:var(--font-display);font-size:clamp(24px,3.2vw,34px);line-height:1.25;letter-spacing:-.02em;word-break:keep-all}
+.app-main h2{font-family:var(--font-display);font-size:clamp(18px,2vw,22px);line-height:1.35;letter-spacing:-.01em;margin-bottom:12px;word-break:keep-all}
+.app-main h3{font-size:15.5px;font-weight:700;line-height:1.4;margin-bottom:6px}
+.app-lead{font-size:15.5px;line-height:1.75;color:var(--ink-60);margin-top:10px;max-width:680px;word-break:keep-all}
+.app-sec{margin-top:36px}
+.app-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.header-nav a[aria-current]{color:var(--ink);font-weight:700}
+.nav-menu-panel a[aria-current]{color:var(--teal-deep)}
+.demo-strip{background:var(--amber-soft);color:var(--amber-deep);text-align:center;font:600 11px/1.5 var(--font-mono);letter-spacing:.04em;text-transform:uppercase;padding:6px 16px}
+.mg-loading{max-width:1040px;margin:24px auto;padding:16px 20px;border:1px solid var(--line);border-radius:12px;background:var(--white);color:var(--ink-60);font-size:14.5px;text-align:center}
+.req-bar{background:var(--white);border-bottom:1px solid var(--line)}
+.req-bar-inner{max-width:1040px;margin:0 auto;padding:12px 32px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px 12px}
+.req-bar-right{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.ref-code{font:600 12.5px/1.3 var(--font-mono);color:var(--gray)}
+.rp-note{flex-basis:100%;margin:8px 0 0;padding:8px 12px;border-radius:8px;background:var(--teal-soft);color:var(--teal-deep);font-size:13px;line-height:1.55}.rp-note a{text-decoration:underline}
+.badge{display:inline-flex;align-items:center;font:700 11px/1 var(--font-mono);letter-spacing:.05em;text-transform:uppercase;padding:6px 10px;border-radius:6px;white-space:nowrap}
+.badge-open{background:var(--teal-soft);color:var(--teal-deep)}.badge-wait{background:var(--amber-soft);color:var(--amber-deep)}.badge-done{background:var(--ink);color:var(--white)}.badge-closed{background:var(--line);color:var(--gray)}
+.meta-row{display:flex;flex-wrap:wrap;gap:14px 28px;margin-top:20px;padding-top:18px;border-top:1px solid var(--line)}
+.meta-item .lbl,.lv .lbl{display:block;font:600 10.5px/1.3 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--gray);margin-bottom:5px}
+.meta-item .val,.lv .val{font-size:14px;font-weight:600;color:var(--ink);word-break:keep-all}
+.panel{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:28px;margin-top:20px}
+.panel-num{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:6px;background:var(--ink);color:var(--white);font:700 11px/1 var(--font-mono);margin-right:8px;vertical-align:2px}
+.lv-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}
+.subhead{font:700 11px/1.3 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-60);margin:24px 0 12px}
+.subhead:first-child{margin-top:0}
+table.data{width:100%;border-collapse:collapse;font-size:14px}
+table.data th{text-align:left;font:600 10.5px/1.3 var(--font-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--gray);padding:0 0 8px;border-bottom:1px solid var(--line)}
+table.data td{padding:10px 0;border-bottom:1px solid var(--line)}
+table.data tr:last-child td{border-bottom:none;font-weight:700;color:var(--teal-deep)}
+table.data td.num{font-family:var(--font-mono)}
+.notes-quote{border-left:3px solid var(--line);padding:12px 16px;font-size:14px;color:var(--ink-60);background:var(--bg);border-radius:0 8px 8px 0}
+.anon-note,.link-note{font-size:13.5px;line-height:1.7;border-radius:10px;padding:14px 16px;margin-top:16px;word-break:keep-all}
+.anon-note{background:var(--teal-soft);color:#0B4B45}.link-note{background:var(--bg-warm);color:var(--ink-80)}
+.anon-note b,.link-note b{color:var(--ink)}
+.status-panel{display:flex;gap:16px;align-items:flex-start;background:var(--white);border:1px solid var(--line);border-left:4px solid var(--teal);border-radius:14px;padding:24px;margin-top:20px}
+.status-panel.is-wait{border-left-color:var(--amber)}.status-panel.is-muted{border-left-color:var(--gray-light)}
+.status-icon{flex:0 0 auto;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--teal-soft);color:var(--teal-deep);font:700 17px/1 var(--font-mono)}
+.is-wait .status-icon{background:var(--amber-soft);color:var(--amber-deep)}.is-muted .status-icon{background:var(--line);color:var(--gray)}
+.status-body{min-width:0}
+.status-body p{font-size:14.5px;line-height:1.75;color:var(--ink-80);word-break:keep-all}
+.status-body p+p{margin-top:6px}
+.steps{list-style:none;counter-reset:st;margin-top:14px;display:grid;gap:8px}
+.steps li{position:relative;padding-left:32px;font-size:14px;line-height:1.65;color:var(--ink-80);word-break:keep-all}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:0;top:0;width:22px;height:22px;border-radius:50%;background:var(--bg-warm);font:700 11px/22px var(--font-mono);text-align:center;color:var(--ink-60)}
+.steps li.is-done::before{content:'✓';background:var(--teal-soft);color:var(--teal-deep)}
+.steps li.is-now{font-weight:700;color:var(--ink)}
+.next-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.next-step{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:16px}
+.next-step .n{display:block;font:700 11px/1.3 var(--font-mono);color:var(--teal-deep);margin-bottom:6px}
+.next-step p{font-size:13px;line-height:1.6;color:var(--ink-60)}
+.field{margin-bottom:16px;min-width:0}
+.field>label,.field .lbl-t{display:block;font-weight:700;font-size:13.5px;color:var(--ink);margin-bottom:6px}
+.field .req{color:var(--error)}.field .opt{color:var(--gray);font-weight:400}
+.field .hint{font-size:12.5px;line-height:1.6;color:var(--gray);margin-top:5px}
+.field input[type=text],.field input[type=number],.field input[type=email],.field input[type=tel],.field input[type=date],.field select,.field textarea{width:100%;min-height:48px;padding:12px 14px;border:1.5px solid var(--line);border-radius:8px;font-size:16px;background:var(--white);color:var(--ink)}
+.field textarea{resize:vertical;line-height:1.6}
+.field select{appearance:none;padding-right:36px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7794' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--teal);outline:none}
+.field.error input,.field.error select,.field.error textarea,.field.error .radio-chip{border-color:var(--error)}
+.field-msg{display:none;font-size:12.5px;color:var(--error);margin-top:6px}
+.field.error .field-msg{display:block}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.fset{border:none;margin:0 0 20px;padding:0;min-width:0}
+.prefix-wrap{position:relative}
+.prefix-wrap .prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font:700 12px/1 var(--font-mono);color:var(--gray);pointer-events:none}
+.field input.with-prefix{padding-left:58px}
+.radio-row{display:flex;flex-wrap:wrap;gap:8px}
+.radio-chip{position:relative;display:flex;align-items:center;justify-content:center;min-height:44px;flex:1 1 180px;border:1.5px solid var(--line);border-radius:8px;padding:10px 14px;font-size:14px;font-weight:600;color:var(--gray);background:var(--white);cursor:pointer;text-align:center}
+.radio-chip.sm{flex:0 1 auto;min-width:88px}
+.radio-chip input{position:absolute;opacity:0;pointer-events:none}
+.radio-chip.is-checked,.radio-chip:has(input:checked){background:var(--teal-soft);border-color:var(--teal);color:var(--teal-deep)}
+.radio-chip:has(input:focus-visible){outline:2px solid var(--teal);outline-offset:2px}
+.check-row{display:flex;align-items:flex-start;gap:10px}
+.check-row input{width:20px;height:20px;margin-top:2px;accent-color:var(--teal);flex:0 0 auto}
+.check-row label{font-size:13.5px;line-height:1.65;color:var(--ink-80)}
+.check-row a,.app-main .tlink{color:var(--teal-deep);text-decoration:underline}
+.cur-note{font-size:13px;line-height:1.65;color:var(--ink-60);background:var(--bg);border-radius:8px;padding:12px 14px;margin-bottom:20px}
+.submit-row{display:flex;justify-content:flex-end;align-items:center;flex-wrap:wrap;gap:12px 16px;border-top:1px solid var(--line);padding-top:16px;margin-top:8px}
+.submit-note{flex:1 1 240px;font-size:12.5px;line-height:1.65;color:var(--gray)}
+.send-panel{background:var(--white);border:1.5px solid var(--teal);border-radius:14px;padding:24px;margin-top:20px}
+.send-panel .steps{margin-bottom:16px}
+.send-subject{display:block;margin-top:12px;font:500 12.5px/1.5 var(--font-mono);color:var(--ink-60);overflow-wrap:anywhere}
+.copy-box{display:block;width:100%;min-height:180px;margin-top:14px;padding:12px;border:1px solid var(--line);border-radius:8px;background:var(--bg);font:500 12.5px/1.6 var(--font-mono);color:var(--ink);resize:vertical}
+.toast{position:fixed;left:50%;bottom:24px;z-index:300;max-width:calc(100vw - 32px);transform:translate(-50%,16px);opacity:0;pointer-events:none;background:var(--ink);color:var(--white);font-size:14px;font-weight:600;padding:12px 18px;border-radius:10px;box-shadow:var(--sh-elevated);transition:opacity .2s,transform .2s}
+.toast.is-on{opacity:1;transform:translate(-50%,0)}
+.fx-note{font-size:13px;line-height:1.7;color:var(--ink-60);background:var(--white);border:1px dashed var(--line);border-radius:10px;padding:12px 14px;word-break:keep-all}
+.cmp-tools{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px;margin:20px 0 12px}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:10px;background:var(--white);overflow:hidden}
+.seg button{min-height:44px;padding:0 14px;font-size:13.5px;font-weight:600;color:var(--gray)}
+.seg button[aria-pressed=true]{background:var(--ink);color:var(--white)}
+.view-seg{display:none}
+.cmp-scroll{overflow-x:auto;background:var(--white);border:1px solid var(--line);border-radius:14px}
+.cmp-table{width:100%;min-width:720px;table-layout:fixed;border-collapse:separate;border-spacing:0;font-size:14px}
+.cmp-table col.c-label{width:168px}
+.cmp-table th,.cmp-table td{padding:12px 14px;text-align:left;vertical-align:top;line-height:1.55;border-bottom:1px solid var(--line-dim);word-break:keep-all;overflow-wrap:anywhere}
+.cmp-table thead th{position:sticky;top:0;z-index:2;background:var(--white);border-bottom:2px solid var(--ink);font:800 16px/1.3 var(--font-display)}
+.cmp-table th[scope=row],.cmp-table thead th:first-child{position:sticky;left:0;z-index:1;background:var(--bg);font:600 13px/1.5 var(--font-sans);color:var(--ink-60)}
+.cmp-table thead th:first-child{z-index:3}
+.cmp-table tr.grp th{background:var(--bg-warm);padding:9px 14px;font:700 11px/1.2 var(--font-mono);letter-spacing:.06em;color:var(--ink-60)}
+.grp-lbl{position:sticky;left:14px;display:inline-block}
+.cmp-table tr.total td{background:var(--teal-soft)}
+.money{display:block;font:600 14.5px/1.4 var(--font-mono);color:var(--ink);white-space:nowrap}
+.cmp-table tr.total .money{font-size:16px;color:var(--teal-deep)}
+.tax-tag{display:inline-block;margin-top:4px;padding:4px 6px;border-radius:4px;background:var(--amber-soft);color:var(--amber-deep);font:600 11px/1.2 var(--font-sans)}
+.small-note{display:block;margin-top:4px;font-size:12px;line-height:1.5;color:var(--gray)}
+.memo{font-size:13.5px;line-height:1.7;color:var(--ink-80);background:var(--amber-soft);border-radius:8px;padding:10px 12px}
+.memo-lbl{display:block;margin-bottom:5px;font:700 10.5px/1.2 var(--font-mono);letter-spacing:.06em;color:var(--amber-deep)}
+.p-arrival{display:block;margin-top:4px;font:500 11.5px/1.3 var(--font-mono);color:var(--gray)}
+.p-name{display:block;margin-top:4px;font:600 13px/1.4 var(--font-sans);color:var(--teal-deep)}
+.pick-tag{display:inline-block;margin-left:6px;padding:4px 6px;border-radius:4px;background:var(--teal);color:var(--white);font:700 10.5px/1 var(--font-sans);vertical-align:3px}
+.cmp-foot{margin-top:12px;font-size:12.5px;line-height:1.7;color:var(--gray);word-break:keep-all}
+.pcards{display:none;gap:14px}
+.pcard{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:18px;min-width:0}
+.pcard-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:4px 8px;padding-bottom:10px;border-bottom:1px solid var(--line)}
+.pcard-head h3{font:800 18px/1.3 var(--font-display);margin:0}
+.pcard-total{margin:14px 0;padding:12px;border-radius:10px;background:var(--teal-soft)}
+.pcard-total .lbl{display:block;font:700 10.5px/1.2 var(--font-mono);color:var(--teal-deep);margin-bottom:4px}
+.pcard-grp{margin:14px 0 8px;font:700 10.5px/1.2 var(--font-mono);letter-spacing:.06em;color:var(--ink-60)}
+.pcard-dl{display:grid;grid-template-columns:96px minmax(0,1fr);gap:8px 12px;font-size:13.5px;line-height:1.55}
+.pcard-dl dt{color:var(--ink-60);font-weight:600}
+.pcard-dl dd{margin:0;min-width:0;overflow-wrap:anywhere}
+.timeline{list-style:none;display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:14px}
+.timeline li{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:20px}
+.tl-n{display:inline-block;margin-bottom:10px;padding:5px 8px;border-radius:5px;background:var(--teal-soft);color:var(--teal-deep);font:700 12px/1 var(--font-mono)}
+.timeline p,.cond span,.app-sec>p{font-size:14.5px;line-height:1.75;color:var(--ink-60);word-break:keep-all}
+.cond-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.cond{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:18px}
+.cond b{display:block;margin-bottom:4px;font:800 17px/1.3 var(--font-display);color:var(--teal-deep)}
+.faq-jump{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.faq-jump a{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border:1.5px solid var(--line);border-radius:999px;background:var(--white);font-size:13.5px;font-weight:600;color:var(--ink-60)}
+.faq-group{margin-top:36px;scroll-margin-top:88px}
+.faq-list{border-top:1px solid var(--line)}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 4px;min-height:44px;text-align:left;font-weight:700;font-size:15.5px;line-height:1.5;word-break:keep-all}
+.faq-icon{flex:0 0 auto;width:20px;height:20px;position:relative}
+.faq-icon::before,.faq-icon::after{content:'';position:absolute;background:var(--ink);top:50%;left:50%;transform:translate(-50%,-50%)}
+.faq-icon::before{width:14px;height:1.6px}.faq-icon::after{width:1.6px;height:14px;transition:transform .2s ease}
+.faq-q[aria-expanded=true] .faq-icon::after{transform:translate(-50%,-50%) rotate(90deg) scaleY(0)}
+.js-anim .faq-panel{overflow:hidden;max-height:0;transition:max-height .24s ease}
+.faq-panel p{font-size:14.5px;line-height:1.8;color:var(--ink-60);padding:0 4px 20px;word-break:keep-all}
+.faq-panel a{color:var(--teal-deep);text-decoration:underline}
+.prog{list-style:none;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:8px;margin-top:22px}
+.prog li{min-width:0;padding-top:10px;border-top:3px solid var(--line);font:600 13px/1.4 var(--font-sans);color:var(--gray);word-break:keep-all}
+.prog .n{display:block;margin-bottom:2px;font:700 10.5px/1.2 var(--font-mono);letter-spacing:.04em}
+.prog .d{display:block;margin-top:2px;font:500 11px/1.35 var(--font-mono);color:var(--gray);overflow-wrap:anywhere}
+.prog li.is-done{border-top-color:var(--teal);color:var(--ink-60)}
+.prog li.is-now{border-top-color:var(--amber);color:var(--ink);font-weight:700}
+.prog li.is-end{border-top-color:var(--ink);color:var(--ink);font-weight:700}
+.st-chip{display:inline-flex;align-items:center;gap:6px;margin:2px 0 10px;padding:6px 10px;border-radius:999px;background:var(--bg-warm);font:700 12.5px/1.2 var(--font-sans);color:var(--ink-80)}
+.st-chip .k{font:700 10.5px/1 var(--font-mono);letter-spacing:.06em;color:var(--gray)}
+.pick-list{list-style:none;display:grid;gap:10px;margin-top:16px}
+.pick-row{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 16px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--white)}
+.pick-row b{font:800 16px/1.3 var(--font-display);color:var(--ink)}
+.pick-btns{display:flex;flex-wrap:wrap;gap:8px}
+.pick-btns .btn{min-height:44px}
+[data-states]{display:none}
+html[data-state="already"] [data-states~="already"],html[data-state="bidding"] [data-states~="bidding"],html[data-state="blocked"] [data-states~="blocked"],html[data-state="cancelled"] [data-states~="cancelled"],html[data-state="collecting"] [data-states~="collecting"],html[data-state="confirm"] [data-states~="confirm"],html[data-state="cooldown"] [data-states~="cooldown"],html[data-state="declined"] [data-states~="declined"],html[data-state="default"] [data-states~="default"],html[data-state="delivered"] [data-states~="delivered"],html[data-state="done"] [data-states~="done"],html[data-state="email_capped"] [data-states~="email_capped"],html[data-state="email_expired"] [data-states~="email_expired"],html[data-state="email_sent"] [data-states~="email_sent"],html[data-state="email_step"] [data-states~="email_step"],html[data-state="email_wrong"] [data-states~="email_wrong"],html[data-state="empty"] [data-states~="empty"],html[data-state="error"] [data-states~="error"],html[data-state="expired"] [data-states~="expired"],html[data-state="form"] [data-states~="form"],html[data-state="invalid"] [data-states~="invalid"],html[data-state="link_pending"] [data-states~="link_pending"],html[data-state="linked"] [data-states~="linked"],html[data-state="list"] [data-states~="list"],html[data-state="loading"] [data-states~="loading"],html[data-state="locked"] [data-states~="locked"],html[data-state="lost"] [data-states~="lost"],html[data-state="need_login"] [data-states~="need_login"],html[data-state="not_selected"] [data-states~="not_selected"],html[data-state="open"] [data-states~="open"],html[data-state="pending"] [data-states~="pending"],html[data-state="phone_capped"] [data-states~="phone_capped"],html[data-state="phone_entry"] [data-states~="phone_entry"],html[data-state="phone_locked"] [data-states~="phone_locked"],html[data-state="phone_sent"] [data-states~="phone_sent"],html[data-state="phone_step"] [data-states~="phone_step"],html[data-state="phone_taken"] [data-states~="phone_taken"],html[data-state="phone_wrong"] [data-states~="phone_wrong"],html[data-state="pw_done"] [data-states~="pw_done"],html[data-state="reauth"] [data-states~="reauth"],html[data-state="rebid"] [data-states~="rebid"],html[data-state="received"] [data-states~="received"],html[data-state="rejected"] [data-states~="rejected"],html[data-state="request"] [data-states~="request"],html[data-state="saved"] [data-states~="saved"],html[data-state="selected"] [data-states~="selected"],html[data-state="sent"] [data-states~="sent"],html[data-state="submitted"] [data-states~="submitted"],html[data-state="suspended"] [data-states~="suspended"],html[data-state="verifying"] [data-states~="verifying"],html[data-state="won"] [data-states~="won"]{display:revert}
+@media (min-width:1024px){.cmp-scroll{overflow:visible}.cmp-table thead th{top:72px}}
+@media (max-width:900px){.timeline{grid-template-columns:1fr 1fr}.next-steps{grid-template-columns:1fr}}
+@media (max-width:767px){.view-seg{display:inline-flex}.cmp[data-view="cards"] .cmp-scroll{display:none}.cmp[data-view="cards"] .pcards{display:grid}}
+@media (max-width:768px){.app-wrap{padding:0 20px}.req-bar-inner{padding:10px 20px}.app-main{padding-top:28px}}
+@media (max-width:720px){.field-grid,.lv-grid{grid-template-columns:1fr}}
+@media (max-width:560px){.timeline{grid-template-columns:1fr}.prog{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:14px}.pick-btns{width:100%}.pick-btns .btn{flex:1 1 auto;justify-content:center}}
+@media (max-width:480px){.app-wrap{padding:0 16px}.req-bar-inner{padding:10px 16px}.panel,.send-panel{padding:20px 16px}.status-panel{padding:18px 16px;gap:12px}.cmp-table col.c-label{width:112px}}
+/* ===== /App ===== */
+.acc-back{display:inline-flex;align-items:center;min-height:44px;margin-bottom:4px;font-size:14px;font-weight:600;color:var(--teal-deep)}
+.acc-back[hidden]{display:none}
+.share-banner{background:var(--amber-soft);color:var(--amber-deep);border-radius:10px;padding:14px 16px;font-size:14px;line-height:1.7;margin-bottom:18px;word-break:keep-all}
+.share-banner b{color:var(--ink)}
+.share-ui .share-expl{font-size:13.5px;line-height:1.7;color:var(--ink-60);margin-bottom:12px;word-break:keep-all}
+.share-ui .lbl-t{display:block;font-weight:700;font-size:13.5px;margin-bottom:6px}
+.share-line{display:flex;gap:8px}
+.share-url{flex:1 1 auto;min-width:0;min-height:48px;padding:0 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);font:500 13px/1.4 var(--font-mono);color:var(--ink)}
+.share-ui .hint{font-size:12.5px;line-height:1.6;color:var(--gray);margin-top:8px}
+.pick-step{margin-top:16px}
+.pick-step .anon-note{margin-top:0}
+.otp-sent{font-size:14.5px;line-height:1.7;color:var(--ink-80);margin:16px 0 12px;word-break:keep-all}
+.otp-field{margin:14px 0 6px}
+.otp-msg:empty{min-height:0;margin:0}
+.code-input,.field input[type=text].code-input{width:100%;max-width:280px;min-height:56px;padding:10px 14px;border:1.5px solid var(--line);border-radius:8px;font:600 26px/1.2 var(--font-mono);letter-spacing:.35em;text-align:center;color:var(--ink);background:var(--white)}
+.code-input:focus{border-color:var(--teal);outline:none}
+.code-input:disabled{background:var(--bg);color:var(--gray)}
+.otp-meta{display:flex;flex-wrap:wrap;align-items:center;gap:0 14px;font-size:13.5px;color:var(--ink-60);margin-top:4px}
+.otp-timer{font:700 14px/1 var(--font-mono);color:var(--ink)}
+.linkbtn{min-height:44px;padding:0 4px;font:600 13.5px/1 var(--font-sans);color:var(--teal-deep);text-decoration:underline}
+.linkbtn:disabled{color:var(--gray);text-decoration:none;cursor:default}
+.otp-msg{min-height:1.7em;margin-top:6px;font-size:13px;line-height:1.6;color:var(--ink-60)}
+.otp-msg.is-err{color:#B42318}
+
+.acc-switch{background:var(--white);border-bottom:1px solid var(--line)}
+.acc-switch-in{max-width:1040px;margin:0 auto;padding:0 32px}
+.state-switch summary{display:flex;align-items:center;min-height:44px;cursor:pointer;list-style:none;font:600 12px/1 var(--font-mono);letter-spacing:.04em;color:var(--ink-60)}
+.state-switch summary::-webkit-details-marker{display:none}
+.state-switch summary::after{content:'+';margin-left:8px;font-size:14px}
+.state-switch[open] summary::after{content:'−'}
+.state-switch nav{display:flex;flex-wrap:wrap;gap:6px 8px;padding:0 0 12px}
+.state-switch a{display:inline-flex;align-items:center;min-height:44px;padding:0 14px;border:1.5px solid var(--line);border-radius:999px;font:600 12px/1 var(--font-mono);color:var(--ink-60)}
+.state-switch a[aria-current]{background:var(--ink);border-color:var(--ink);color:var(--white)}
+.demo-strip code{text-transform:none;font:inherit}
+.app-wrap.acc{max-width:600px}
+.app-main .acc-lead{font-size:15px;line-height:1.75;color:var(--ink-60);margin-top:8px;word-break:keep-all}
+.app-main .acc-lead a,.acc-links a,.app-main .alink{color:var(--teal-deep);text-decoration:underline}
+.acc-links{display:flex;flex-wrap:wrap;gap:0 18px;margin-top:6px}
+.acc-links a{display:inline-flex;align-items:center;min-height:44px;font-size:14px;font-weight:600}
+.app-main .btn{min-height:44px}
+.acc h2[tabindex]:focus,.acc h3[tabindex]:focus{outline:none}
+.acc-steps{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:22px 0 0}
+.acc-steps li{min-width:0;padding-top:10px;border-top:3px solid var(--line);font:600 13px/1.4 var(--font-sans);color:var(--gray);word-break:keep-all}
+.acc-steps .n{display:block;margin-bottom:2px;font:700 10.5px/1.2 var(--font-mono);letter-spacing:.04em}
+html[data-state="form"] .acc-steps li:nth-child(1),html[data-state^="email"] .acc-steps li:nth-child(2),html[data-state^="phone"] .acc-steps li:nth-child(3){border-top-color:var(--amber);color:var(--ink);font-weight:700}
+html[data-state^="email"] .acc-steps li:nth-child(1),html[data-state^="phone"] .acc-steps li:nth-child(-n+2),html[data-state="done"] .acc-steps li{border-top-color:var(--teal);color:var(--ink-60)}
+.pw-wrap{position:relative}
+.field .pw-wrap input.pw-in{width:100%;min-height:48px;padding:12px 64px 12px 14px;border:1.5px solid var(--line);border-radius:8px;font-size:16px;background:var(--white);color:var(--ink)}
+.field .pw-wrap input.pw-in:focus{border-color:var(--teal);outline:none}
+.field.error .pw-wrap input.pw-in{border-color:var(--error)}
+.pw-toggle{position:absolute;right:0;top:0;min-width:56px;height:48px;padding:0 12px;font:600 13px/1 var(--font-sans);color:var(--teal-deep)}
+.rule-list{list-style:none;display:grid;gap:2px;margin-top:8px}
+.rule-list li{position:relative;padding-left:24px;font-size:12.5px;line-height:1.7;color:var(--gray);word-break:keep-all}
+.rule-list li::before{content:'○';position:absolute;left:2px;top:0;font-size:12px}
+.rule-list li.is-ok{color:var(--teal-deep)}
+.rule-list li.is-ok::before{content:'✓';font-weight:700}
+.consent-box{border:1px solid var(--line);border-radius:12px;background:var(--white);padding:4px 16px;margin-bottom:8px}
+.consent-row{padding:4px 0;border-bottom:1px solid var(--line-dim)}
+.consent-row:last-child{border-bottom:none}
+.consent-row .check-row{align-items:center;min-height:44px}
+.consent-row .check-row label{flex:1 1 auto;min-height:44px;display:flex;align-items:center;flex-wrap:wrap;gap:0 6px;cursor:pointer;word-break:keep-all}
+.consent-row.all .check-row label{font-weight:800;font-size:14.5px;color:var(--ink)}
+.consent-row .sub{padding:0 0 10px 30px}
+.ctag{font:700 11px/1 var(--font-mono);color:var(--teal-deep);margin-right:2px}
+.ctag.opt{color:var(--gray)}
+.consent-more summary{display:inline-flex;align-items:center;min-height:44px;cursor:pointer;font-size:13px;font-weight:600;color:var(--teal-deep);text-decoration:underline}
+.consent-more table{width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.55;margin:0 0 10px;table-layout:fixed}
+.consent-more th{text-align:left;font:700 10.5px/1.3 var(--font-mono);color:var(--gray);padding:0 6px 6px 0;border-bottom:1px solid var(--line)}
+.consent-more td{vertical-align:top;padding:8px 6px 8px 0;border-bottom:1px solid var(--line-dim);word-break:keep-all;overflow-wrap:anywhere;color:var(--ink-80)}
+.consent-more tr:last-child td{border-bottom:none}
+.radio-chip:has(input:disabled){opacity:.5;cursor:not-allowed}
+.demo-hint{font-size:12.5px;line-height:1.6;color:var(--amber-deep);background:var(--amber-soft);border-radius:8px;padding:8px 12px;margin-top:12px}
+.otp-help{font-size:13px;line-height:1.7;color:var(--gray);margin-top:12px;word-break:keep-all}
+.step-ok{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:var(--teal-deep);margin:8px 0 4px}
+.acc-banner{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;border-radius:12px;padding:14px 16px;margin-top:20px;font-size:14px;line-height:1.7;word-break:keep-all}
+.acc-banner .txt{flex:1 1 240px;min-width:0}
+.acc-banner.ok{background:var(--teal-soft);color:#0B4B45}
+.acc-banner.info{background:var(--amber-soft);color:var(--amber-deep)}
+.acc-banner.err{background:#FEF2F2;color:#B42318}
+.acc-banner b{color:var(--ink)}
+.field-alert{font-size:13.5px;line-height:1.7;color:#B42318;background:#FEF2F2;border-radius:8px;padding:10px 12px;margin-bottom:16px;word-break:keep-all}
+.pw-inline{margin-bottom:8px}
+.page-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 16px}
+.page-head .app-actions{margin-top:0}
+.seg-tabs{margin-top:22px}
+.rfp-list{list-style:none;display:grid;gap:12px;margin-top:14px}
+.rfp{background:var(--white);border:1px solid var(--line);border-radius:14px;padding:16px;min-width:0}
+.rfp.is-hot{border-color:var(--amber);box-shadow:0 0 0 3px var(--amber-soft)}
+.rfp-main{display:grid;gap:10px;min-width:0}
+.rfp-cell{min-width:0;font-size:14px;line-height:1.6;color:var(--ink-80);word-break:keep-all}
+.rfp-cell .lbl{display:block;font:600 10.5px/1.3 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--gray);margin-bottom:2px}
+.rfp-cell .ref{font:600 12.5px/1.3 var(--font-mono);color:var(--gray)}
+.rfp-cell .ttl{display:block;font:800 16px/1.4 var(--font-display);color:var(--ink);word-break:keep-all}
+.rfp-tag{display:inline-block;margin-top:6px;padding:4px 8px;border-radius:5px;background:var(--bg-warm);color:var(--ink-60);font:600 11.5px/1.3 var(--font-sans)}
+.rfp-hot{display:inline-block;margin-top:6px;padding:4px 8px;border-radius:5px;background:var(--amber);color:var(--ink);font:700 11.5px/1.3 var(--font-sans)}
+.rfp-act{display:flex;flex-wrap:wrap;gap:8px;min-width:0}
+.rfp-share{margin-top:14px;padding-top:14px;border-top:1px dashed var(--line)}
+.rfp-head{display:none}
+.empty-panel{text-align:center;padding:36px 20px}
+.empty-panel p{font-size:14.5px;line-height:1.75;color:var(--ink-60);word-break:keep-all;max-width:440px;margin:8px auto 0}
+.empty-panel .app-actions{justify-content:center}
+.acc-sec h2{font-size:17px;margin-bottom:6px}
+.acc-sec .sub{font-size:13.5px;line-height:1.7;color:var(--gray);word-break:keep-all;margin-bottom:14px}
+.kv{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 16px}
+.kv .v{font:600 15px/1.5 var(--font-sans);color:var(--ink);overflow-wrap:anywhere;min-width:0}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 0;border-bottom:1px solid var(--line-dim)}
+.toggle-row:last-of-type{border-bottom:none}
+.toggle-row .t{min-width:0;font-size:14px;line-height:1.6;color:var(--ink-80)}
+.toggle-row .t small{display:block;font-size:12px;color:var(--gray)}
+.toggle-row input{width:24px;height:24px;accent-color:var(--teal);flex:0 0 auto}
+.toggle-row label.tap{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:44px;cursor:pointer}
+.always-on{font:600 12px/1 var(--font-mono);color:var(--teal-deep);background:var(--teal-soft);padding:6px 8px;border-radius:6px;white-space:nowrap}
+.dev-list{list-style:none;display:grid;gap:8px}
+.dev-list li{display:flex;flex-wrap:wrap;justify-content:space-between;gap:4px 12px;padding:10px 12px;border:1px solid var(--line);border-radius:10px;font-size:13.5px;line-height:1.6;color:var(--ink-80)}
+.dev-list .cur{font:700 11px/1.6 var(--font-mono);color:var(--teal-deep)}
+.danger-link{display:inline-flex;align-items:center;min-height:44px;font-size:14px;font-weight:600;color:#B42318;text-decoration:underline}
+.btn-danger{background:#B42318;color:var(--white)}
+.btn-danger:hover{background:#912018}
+.info-box{border-radius:12px;padding:16px 18px;margin-top:16px;font-size:14px;line-height:1.75;color:var(--ink-80);word-break:keep-all}
+.info-box.warm{background:var(--bg-warm)}
+.info-box.warn{background:#FEF2F2;color:#7A271A}
+.info-box h3{font-size:14.5px;margin-bottom:6px}
+.info-box ul{list-style:disc;padding-left:20px}
+.blocked-list{list-style:none;display:grid;gap:8px;margin-top:14px}
+.blocked-list li{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--white)}
+.blocked-list b{font:600 13px/1.4 var(--font-mono);color:var(--ink)}
+.terms-doc h2{font:800 17px/1.5 var(--font-sans);margin:32px 0 8px;scroll-margin-top:88px}
+.terms-doc p,.terms-doc li{font-size:15px;line-height:1.85;color:var(--ink-80);word-break:keep-all}
+.terms-doc ul,.terms-doc ol{padding-left:20px;margin-top:6px}
+.terms-doc ul{list-style:disc}.terms-doc ol{list-style:decimal}
+.draft-note{background:var(--amber-soft);color:var(--amber-deep);border-radius:10px;padding:12px 14px;font-size:14px;line-height:1.7;margin-top:16px;font-weight:600}
+@media (min-width:768px){
+ .rfp{padding:14px 18px}
+ .rfp-head,.rfp-main{display:grid;grid-template-columns:132px minmax(0,1.5fr) minmax(0,1.3fr) 150px minmax(0,1.3fr) 170px;gap:14px;align-items:start}
+ .rfp-head{padding:0 18px;font:600 10.5px/1.3 var(--font-mono);letter-spacing:.06em;color:var(--gray);text-transform:uppercase}
+ .rfp-cell .lbl{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0)}
+ .rfp-act{justify-content:flex-end}
+}
+@media (max-width:1023px) and (min-width:768px){
+ .rfp-head,.rfp-main{grid-template-columns:108px minmax(0,1.3fr) minmax(0,1.2fr) 130px minmax(0,1.2fr)}
+ .rfp-act{grid-column:1/-1;justify-content:flex-start}
+ .rfp-head .h-act{display:none}
+}
+@media (max-width:768px){.acc-switch-in{padding:0 20px}}
+@media (max-width:480px){.acc-switch-in{padding:0 16px}.consent-row .sub{padding-left:0}.acc-banner{padding:12px 14px}.code-input,.field input[type=text].code-input{max-width:100%}}
+
+html:not([data-state]) [data-states~="list"]{display:revert}
+html:not(.js-anim) .share-ui{display:none}
+/* ===== Shared: header additions ===== */
+.site-header.is-solid,html:not(.js-anim) .site-header{background:rgba(255,255,255,.96);border-bottom:1px solid var(--line)}
+.header-right{display:flex;align-items:center;gap:12px}
+.mode-switch{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;background:var(--white);overflow:hidden;flex:0 0 auto}
+.mode-switch a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:0 14px;font:700 13px/1 var(--font-sans);color:var(--gray);white-space:nowrap}
+.mode-switch a[lang=en]{font-family:var(--font-display)}
+.mode-switch a:hover{color:var(--ink);background:var(--bg)}
+.mode-switch a[aria-current],.mode-switch a.is-current{background:var(--ink);color:var(--white)}
+.hdr-cta{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:8px;background:var(--ink);color:var(--white);font:700 13.5px/1 var(--font-sans);white-space:nowrap}
+.hdr-cta:hover{background:var(--teal)}
+.hdr-login{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:0 8px;font:600 13.5px/1 var(--font-sans);color:var(--ink-60);white-space:nowrap}
+.hdr-login:hover{color:var(--ink)}
+.hdr-login.is-member{color:var(--teal-deep)}
+.nav-menu{display:none}
+.nav-menu summary{list-style:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:1.5px solid var(--line);border-radius:8px;background:var(--white);cursor:pointer}
+.nav-menu summary::-webkit-details-marker{display:none}
+.nav-bars,.nav-bars::before,.nav-bars::after{display:block;width:18px;height:2px;border-radius:1px;background:var(--ink);position:relative;transition:transform .15s}
+.nav-bars::before,.nav-bars::after{content:'';position:absolute;left:0}
+.nav-bars::before{top:-6px}.nav-bars::after{top:6px}
+.nav-menu[open] .nav-bars{background:transparent}
+.nav-menu[open] .nav-bars::before{top:0;transform:rotate(45deg)}
+.nav-menu[open] .nav-bars::after{top:0;transform:rotate(-45deg)}
+.nav-menu-panel{position:absolute;top:100%;left:0;right:0;display:flex;flex-direction:column;background:var(--white);border-bottom:1px solid var(--line);box-shadow:var(--sh-elevated);padding:8px 20px 16px;max-height:calc(100vh - 72px);overflow-y:auto}
+.nav-menu-panel a{display:flex;align-items:center;min-height:48px;border-bottom:1px solid var(--line-dim);font-size:15px;font-weight:600;color:var(--ink)}
+.nav-menu-panel a.nav-menu-cta{justify-content:center;margin-top:12px;border:none;border-radius:8px;background:var(--teal);color:var(--white)}
+.nav-menu-panel a.nav-menu-hub{justify-content:center;border:none;font-size:13px;color:var(--gray)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.footer-links{flex-wrap:wrap;row-gap:10px}
+.footer-modes{display:flex;flex-wrap:wrap;gap:10px 18px;font-size:13px}
+.footer-modes a{color:var(--white)}
+@media (max-width:1200px){.header-nav{gap:24px}}
+@media (max-width:1024px){.header-nav{display:none}.nav-menu{display:block}}
+@media (max-width:768px){.hdr-cta{display:none}.header-right{gap:8px}.nav-menu-panel{padding:8px 16px 16px}.has-mobile-cta .site-footer{padding-bottom:calc(96px + env(safe-area-inset-bottom))}.footer-right{align-items:flex-start}}
+@media (max-width:480px){.brand-tag{display:none}.mode-switch a{padding:0 10px;font-size:12.5px}.hdr-login{padding:0 4px;font-size:12.5px}}
+@media (max-width:400px){.mode-switch a{padding:0 8px}.header-right{gap:4px}.brand-word{font-size:18px}}
+/* ===== /Shared ===== */
+</style>
+</head>
+<body class="has-fixed-header">
+<a class="skip-link" href="#main">본문으로 건너뛰기</a>
+<header class="site-header is-solid" id="siteHeader">
+  <div class="container">
+    <a class="brand" href="index.html" aria-label="MICEGO">
+      <svg class="brand-mark" viewBox="0 0 32 32" role="img" aria-hidden="true">
+        <rect width="32" height="32" rx="9" fill="#0F1E3D"/>
+        <rect x="6.5" y="9" width="14" height="2.6" rx="1.3" fill="#FFFFFF"/>
+        <rect x="6.5" y="14.7" width="11" height="2.6" rx="1.3" fill="#16B5A8"/>
+        <rect x="6.5" y="20.4" width="8" height="2.6" rx="1.3" fill="#FFC24B"/>
+        <circle cx="24.5" cy="16" r="2.6" fill="#FFFFFF"/>
+      </svg>
+      <span class="brand-word">MICE<span class="go">GO</span></span>
+    </a>
+    <div class="header-right">
+      <nav class="mode-switch" aria-label="모드 선택 / Choose mode">
+        <a href="index.html" lang="ko" aria-current="page">여행사</a>
+        <a href="../en/index.html" lang="en" hreflang="en">Hotels</a>
+      </nav>
+      <a class="hdr-login" href="login.html" data-acc-login>로그인</a>
+      <a class="hdr-cta" href="index.html#register">견적 요청</a>
+    </div>
+  </div>
+</header>
+<!--demo:start--><div class="demo-strip">DEMO · 회원 기능 예시 화면입니다. 인증번호는 123456을 입력하세요. 상태 미리보기: <code>?state=…</code></div><div class="acc-switch"><div class="acc-switch-in"><details class="state-switch"><summary>상태 미리보기 (검토용)</summary><nav aria-label="상태 미리보기"><a href="?state=list" data-s="list">list</a><a href="?state=empty" data-s="empty">empty</a><a href="?state=linked" data-s="linked">linked</a><a href="?state=link_pending" data-s="link_pending">link_pending</a><a href="?state=need_login" data-s="need_login">need_login</a><a href="?state=loading" data-s="loading">loading</a></nav></details></div></div><!--demo:end-->
+<main id="main" class="app-main"><div class="app-wrap"><h1>내 견적 요청</h1><div data-states="loading" class="mg-loading" role="status" aria-live="polite">불러오는 중입니다… / Loading…</div><div data-states="need_login"><div class="panel"><div class="status-panel is-wait"><div class="status-icon" aria-hidden="true">!</div><div class="status-body"><h2>로그인이 필요합니다</h2><p>내 견적 요청은 로그인한 뒤에 볼 수 있습니다. 회원이 아니어도 견적 요청은 할 수 있습니다.</p><div class="app-actions"><a class="btn btn-accent" href="login.html?next=my.html">로그인</a><a class="btn btn-ghost" href="signup.html">회원가입</a><a class="btn btn-ghost" href="index.html#register">비회원으로 요청하기</a></div></div></div></div></div><div data-states="list empty linked link_pending"><div class="page-head"><div><p class="acc-lead" style="margin-top:6px"><b><span id="myName">김지은</span>님</b> · <span id="myCo">한빛투어</span></p></div><div class="app-actions"><a class="btn btn-accent" href="index.html#register">새 견적 요청</a><a class="btn btn-ghost" href="account.html">계정 설정</a><button type="button" class="btn btn-ghost" id="myLogout">로그아웃</button></div></div><div data-states="linked"><div class="acc-banner ok" role="status"><span class="txt"><b>이전 요청 1건을 연결했습니다.</b> 비회원으로 접수하신 MG-2610-020이 이 계정에 연결되었습니다.</span></div></div><div data-states="link_pending"><div class="acc-banner info" role="status"><span class="txt" id="lnkTxt">휴대전화 번호가 같은 비회원 요청 1건이 있습니다 (MG-2609-011 · 방콕 · 2026-09-02 접수). 본인 요청이라면 연결을 요청해 주세요.</span><button type="button" class="btn btn-ghost btn-sm" id="lnkReq">연결 요청</button></div></div><div data-states="list linked link_pending"><div class="seg seg-tabs" role="group" aria-label="요청 보기"><button type="button" data-tab="active" aria-pressed="true">진행 중 <span data-cnt="active">3</span></button><button type="button" data-tab="closed" aria-pressed="false">종료 <span data-cnt="closed">2</span></button><button type="button" data-tab="all" aria-pressed="false">전체 <span data-cnt="all">5</span></button></div><p class="sr-only" id="tabStatus" role="status" aria-live="polite"></p><div class="rfp-head" aria-hidden="true"><div>REF</div><div>행사명</div><div>목적지·일정</div><div>상태</div><div>다음 일정</div><div class="h-act"></div></div><ul class="rfp-list" id="rfpList"><li class="rfp is-hot" data-grp="active" data-ref="MG-2610-014"><div class="rfp-main"><div class="rfp-cell"><span class="sr-only">요청 번호 </span><span class="ref">MG-2610-014</span></div><div class="rfp-cell"><span class="sr-only">행사명 </span><span class="ttl">다낭 인센티브 행사</span><span class="rfp-hot">선택이 필요합니다</span></div><div class="rfp-cell"><span class="lbl">목적지·일정</span>베트남 다낭<br><span style="white-space:nowrap">2027-03-15(월)</span> – <span style="white-space:nowrap">03-18(목)</span></div><div class="rfp-cell"><span class="lbl">상태</span><span class="badge badge-open">비교표 도착</span></div><div class="rfp-cell"><span class="lbl">다음 일정</span><span style="white-space:nowrap">비교표 도착</span> · <span style="white-space:nowrap">선택 대기</span></div><div class="rfp-act"><a class="btn btn-accent btn-sm" href="track.html?t=demo-2610014&amp;state=delivered" aria-label="MG-2610-014 열기">열기</a><button type="button" class="btn btn-ghost btn-sm" data-share-toggle aria-expanded="false" aria-controls="rs-2610014">공유 링크</button></div></div><div class="rfp-share" id="rs-2610014" hidden><div class="share-ui" data-share data-ref="MG-2610-014" data-num="2610014" data-st="delivered"><p class="share-expl"><b>보기 전용 링크</b> · 진행 상황과 비교표만 보이고 선택·변경은 할 수 없습니다 · 요청이 끝나고 30일 뒤 자동 만료</p><div data-share-none><button type="button" class="btn btn-ghost btn-sm" data-share-create>링크 만들기</button></div><div data-share-on hidden><label class="lbl-t" for="shu-2610014">공유 링크</label><div class="share-line"><input type="text" class="share-url" id="shu-2610014" data-share-url readonly><button type="button" class="btn btn-accent btn-sm" data-share-copy>복사</button></div><div class="app-actions"><button type="button" class="btn btn-ghost btn-sm" data-share-regen>새 링크 만들기</button><button type="button" class="btn btn-ghost btn-sm" data-share-revoke>링크 끄기</button></div><p class="hint">링크는 요청당 하나만 유지됩니다. 새로 만들면 이전 링크는 바로 꺼집니다.</p></div><p class="sr-only" role="status" aria-live="polite" data-share-live></p></div></div></li><li class="rfp" data-grp="active" data-ref="MG-2610-017"><div class="rfp-main"><div class="rfp-cell"><span class="sr-only">요청 번호 </span><span class="ref">MG-2610-017</span></div><div class="rfp-cell"><span class="sr-only">행사명 </span><span class="ttl">방콕 시상식</span></div><div class="rfp-cell"><span class="lbl">목적지·일정</span>태국 방콕<br><span style="white-space:nowrap">2027-04-19(월)</span> – <span style="white-space:nowrap">04-22(목)</span></div><div class="rfp-cell"><span class="lbl">상태</span><span class="badge badge-open">새 조건으로 재요청</span></div><div class="rfp-cell"><span class="lbl">다음 일정</span><span style="white-space:nowrap">제안 마감 10-16(금) 18:00</span></div><div class="rfp-act"><a class="btn btn-accent btn-sm" href="track.html?t=demo-2610017&amp;state=rebid" aria-label="MG-2610-017 열기">열기</a><button type="button" class="btn btn-ghost btn-sm" data-share-toggle aria-expanded="false" aria-controls="rs-2610017">공유 링크</button></div></div><div class="rfp-share" id="rs-2610017" hidden><div class="share-ui" data-share data-ref="MG-2610-017" data-num="2610017" data-st="rebid"><p class="share-expl"><b>보기 전용 링크</b> · 진행 상황과 비교표만 보이고 선택·변경은 할 수 없습니다 · 요청이 끝나고 30일 뒤 자동 만료</p><div data-share-none><button type="button" class="btn btn-ghost btn-sm" data-share-create>링크 만들기</button></div><div data-share-on hidden><label class="lbl-t" for="shu-2610017">공유 링크</label><div class="share-line"><input type="text" class="share-url" id="shu-2610017" data-share-url readonly><button type="button" class="btn btn-accent btn-sm" data-share-copy>복사</button></div><div class="app-actions"><button type="button" class="btn btn-ghost btn-sm" data-share-regen>새 링크 만들기</button><button type="button" class="btn btn-ghost btn-sm" data-share-revoke>링크 끄기</button></div><p class="hint">링크는 요청당 하나만 유지됩니다. 새로 만들면 이전 링크는 바로 꺼집니다.</p></div><p class="sr-only" role="status" aria-live="polite" data-share-live></p></div></div></li><li class="rfp" data-grp="active" data-ref="MG-2610-020"><div class="rfp-main"><div class="rfp-cell"><span class="sr-only">요청 번호 </span><span class="ref">MG-2610-020</span></div><div class="rfp-cell"><span class="sr-only">행사명 </span><span class="ttl">푸껫 팀 워크숍</span><span class="rfp-tag">연결된 이전 요청 · 비회원 접수</span></div><div class="rfp-cell"><span class="lbl">목적지·일정</span>태국 푸껫<br><span style="white-space:nowrap">2027-05-10(월)</span> – <span style="white-space:nowrap">05-13(목)</span></div><div class="rfp-cell"><span class="lbl">상태</span><span class="badge badge-wait">요건 확인 중</span></div><div class="rfp-cell"><span class="lbl">다음 일정</span><span style="white-space:nowrap">요건 확인 중</span> · <span style="white-space:nowrap">10-23(금)까지 회신</span></div><div class="rfp-act"><a class="btn btn-accent btn-sm" href="track.html?t=demo-2610020&amp;state=verifying" aria-label="MG-2610-020 열기">열기</a><button type="button" class="btn btn-ghost btn-sm" data-share-toggle aria-expanded="false" aria-controls="rs-2610020">공유 링크</button></div></div><div class="rfp-share" id="rs-2610020" hidden><div class="share-ui" data-share data-ref="MG-2610-020" data-num="2610020" data-st="verifying"><p class="share-expl"><b>보기 전용 링크</b> · 진행 상황과 비교표만 보이고 선택·변경은 할 수 없습니다 · 요청이 끝나고 30일 뒤 자동 만료</p><div data-share-none><button type="button" class="btn btn-ghost btn-sm" data-share-create>링크 만들기</button></div><div data-share-on hidden><label class="lbl-t" for="shu-2610020">공유 링크</label><div class="share-line"><input type="text" class="share-url" id="shu-2610020" data-share-url readonly><button type="button" class="btn btn-accent btn-sm" data-share-copy>복사</button></div><div class="app-actions"><button type="button" class="btn btn-ghost btn-sm" data-share-regen>새 링크 만들기</button><button type="button" class="btn btn-ghost btn-sm" data-share-revoke>링크 끄기</button></div><p class="hint">링크는 요청당 하나만 유지됩니다. 새로 만들면 이전 링크는 바로 꺼집니다.</p></div><p class="sr-only" role="status" aria-live="polite" data-share-live></p></div></div></li><li class="rfp" data-grp="closed" data-ref="MG-2609-006"><div class="rfp-main"><div class="rfp-cell"><span class="sr-only">요청 번호 </span><span class="ref">MG-2609-006</span></div><div class="rfp-cell"><span class="sr-only">행사명 </span><span class="ttl">세부 인센티브</span></div><div class="rfp-cell"><span class="lbl">목적지·일정</span>필리핀 세부<br><span style="white-space:nowrap">2026-12-07(월)</span> – <span style="white-space:nowrap">12-10(목)</span></div><div class="rfp-cell"><span class="lbl">상태</span><span class="badge badge-done">연결 완료</span></div><div class="rfp-cell"><span class="lbl">다음 일정</span><span style="white-space:nowrap">선정 호텔 연결 완료 (10-14)</span></div><div class="rfp-act"><a class="btn btn-accent btn-sm" href="track.html?t=demo-2609006&amp;state=won" aria-label="MG-2609-006 열기">열기</a><button type="button" class="btn btn-ghost btn-sm" data-share-toggle aria-expanded="false" aria-controls="rs-2609006">공유 링크</button></div></div><div class="rfp-share" id="rs-2609006" hidden><div class="share-ui" data-share data-ref="MG-2609-006" data-num="2609006" data-st="won"><p class="share-expl"><b>보기 전용 링크</b> · 진행 상황과 비교표만 보이고 선택·변경은 할 수 없습니다 · 요청이 끝나고 30일 뒤 자동 만료</p><div data-share-none><button type="button" class="btn btn-ghost btn-sm" data-share-create>링크 만들기</button></div><div data-share-on hidden><label class="lbl-t" for="shu-2609006">공유 링크</label><div class="share-line"><input type="text" class="share-url" id="shu-2609006" data-share-url readonly><button type="button" class="btn btn-accent btn-sm" data-share-copy>복사</button></div><div class="app-actions"><button type="button" class="btn btn-ghost btn-sm" data-share-regen>새 링크 만들기</button><button type="button" class="btn btn-ghost btn-sm" data-share-revoke>링크 끄기</button></div><p class="hint">링크는 요청당 하나만 유지됩니다. 새로 만들면 이전 링크는 바로 꺼집니다.</p></div><p class="sr-only" role="status" aria-live="polite" data-share-live></p></div></div></li><li class="rfp" data-grp="closed" data-ref="MG-2609-003"><div class="rfp-main"><div class="rfp-cell"><span class="sr-only">요청 번호 </span><span class="ref">MG-2609-003</span></div><div class="rfp-cell"><span class="sr-only">행사명 </span><span class="ttl">오사카 세미나</span></div><div class="rfp-cell"><span class="lbl">목적지·일정</span>일본 오사카<br><span style="white-space:nowrap">2026-11-09(월)</span> – <span style="white-space:nowrap">11-11(수)</span></div><div class="rfp-cell"><span class="lbl">상태</span><span class="badge badge-closed">취소됨</span></div><div class="rfp-cell"><span class="lbl">다음 일정</span><span style="white-space:nowrap">취소됨 (09-18)</span></div><div class="rfp-act"><a class="btn btn-accent btn-sm" href="track.html?t=demo-2609003&amp;state=cancelled" aria-label="MG-2609-003 열기">열기</a><button type="button" class="btn btn-ghost btn-sm" data-share-toggle aria-expanded="false" aria-controls="rs-2609003">공유 링크</button></div></div><div class="rfp-share" id="rs-2609003" hidden><div class="share-ui" data-share data-ref="MG-2609-003" data-num="2609003" data-st="cancelled"><p class="share-expl"><b>보기 전용 링크</b> · 진행 상황과 비교표만 보이고 선택·변경은 할 수 없습니다 · 요청이 끝나고 30일 뒤 자동 만료</p><div data-share-none><button type="button" class="btn btn-ghost btn-sm" data-share-create>링크 만들기</button></div><div data-share-on hidden><label class="lbl-t" for="shu-2609003">공유 링크</label><div class="share-line"><input type="text" class="share-url" id="shu-2609003" data-share-url readonly><button type="button" class="btn btn-accent btn-sm" data-share-copy>복사</button></div><div class="app-actions"><button type="button" class="btn btn-ghost btn-sm" data-share-regen>새 링크 만들기</button><button type="button" class="btn btn-ghost btn-sm" data-share-revoke>링크 끄기</button></div><p class="hint">링크는 요청당 하나만 유지됩니다. 새로 만들면 이전 링크는 바로 꺼집니다.</p></div><p class="sr-only" role="status" aria-live="polite" data-share-live></p></div></div></li></ul><!--demo:start--><p class="demo-hint">데모: ‘열기’는 상태만 다른 같은 예시 진행 상황 페이지를 엽니다.</p><!--demo:end--></div><div data-states="empty"><div class="panel empty-panel"><h2>아직 견적 요청이 없습니다</h2><p>일정이 확정된 해외 행사라면 지금 요청하실 수 있습니다. 요청하면 이 계정에서 진행 상황을 확인할 수 있습니다.</p><p>이전에 비회원으로 요청하셨다면 같은 이메일로 가입하면 자동 연결됩니다.</p><div class="app-actions"><a class="btn btn-accent" href="index.html#register">새 견적 요청</a></div></div></div></div></div></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">
+          <svg class="brand-mark" viewBox="0 0 32 32" role="img" aria-hidden="true">
+            <rect width="32" height="32" rx="9" fill="#1F3266"/>
+            <rect x="6.5" y="9" width="14" height="2.6" rx="1.3" fill="#FFFFFF"/>
+            <rect x="6.5" y="14.7" width="11" height="2.6" rx="1.3" fill="#16B5A8"/>
+            <rect x="6.5" y="20.4" width="8" height="2.6" rx="1.3" fill="#FFC24B"/>
+            <circle cx="24.5" cy="16" r="2.6" fill="#FFFFFF"/>
+          </svg>
+          <span class="brand-word">MICE<span class="go">GO</span></span>
+          <span style="font-size:12px;color:rgba(255,255,255,.5);margin-left:8px">마이스고</span>
+        </div>
+        <p class="footer-desc">해외 MICE 호텔 역경매 플랫폼</p>
+      </div>
+      <div class="footer-right">
+        <a class="footer-contact" href="mailto:mysteri1984@gmail.com">mysteri1984@gmail.com</a>
+        <div class="footer-links">
+          <a href="index.html">여행사 모드</a>
+          <a href="about.html">서비스 소개</a>
+          <a href="faq.html">자주 묻는 질문</a>
+          <a href="contact.html">문의하기</a>
+          <a href="terms.html">이용약관</a>
+          <a href="privacy.html">개인정보처리방침</a>
+        </div>
+        <div class="footer-modes"><a href="../en/index.html" lang="en" hreflang="en">Hotels (English) →</a><a href="../index.html">모드 선택 · <span lang="en">Choose mode</span></a></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-notice">해외 호텔 대상 · 수수료 없음 · 영업일 3일 이내 회신 · 요건서에 회사명·예산 미포함.</p>
+      <p class="footer-copyright">© 2026 MICEGO. ALL RIGHTS RESERVED.</p><p class="footer-feedback"><a data-mg-feedback-open href="contact.html">의견 보내기</a></p><noscript><p class="footer-feedback-noscript">의견이나 문제 신고는 <a href="contact.html">문의 페이지</a> 또는 <a href="mailto:mysteri1984@gmail.com">이메일</a>로 보내 주세요.</p></noscript>
+    </div>
+  </div>
+</footer>
+<script>(function(){"use strict";
+  var MAIL='mysteri1984@gmail.com';
+  function toast(m){var t=document.getElementById('toast');if(!t)return;t.textContent=m;t.classList.add('is-on');clearTimeout(toast._t);toast._t=setTimeout(function(){t.classList.remove('is-on');},2200);}
+  function copyText(text,box,okMsg,failMsg){box.value=text;box.hidden=false;
+    function manual(){box.focus();box.select();try{if(document.execCommand('copy')){toast(okMsg);return;}}catch(e){}toast(failMsg);}
+    if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(function(){toast(okMsg);},manual);}else{manual();}}
+  function mailHref(subject,body,shortBody){var b='mailto:'+MAIL+'?subject='+encodeURIComponent(subject)+'&body=';
+    var h=b+encodeURIComponent(body.replace(/\n/g,'\r\n'));return h.length>1800?b+encodeURIComponent(shortBody.replace(/\n/g,'\r\n')):h;}
+  function bindChips(root){root.querySelectorAll('.radio-chip input').forEach(function(i){i.addEventListener('change',function(){
+    root.querySelectorAll('input[name="'+i.name+'"]').forEach(function(x){x.closest('.radio-chip').classList.toggle('is-checked',x.checked);});});});}
+  function setErr(id,bad){var el=document.getElementById(id);if(el)el.classList.toggle('error',!!bad);return !!bad;}
+  var EMAIL_RE=/^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  function showSend(form,panel,text,short,subject,mailBtn,subjEl,box){
+    mailBtn.href=mailHref(subject,text,short);subjEl.textContent=subject;box.value=text;
+    form.hidden=true;panel.hidden=false;panel.focus();}
+
+  try{
+  var _isMember = false;
+  if(window.MG && MG.mode==='api' && !MG.preview){ _isMember = !!MG.auth.member(); }
+  else{/*demo:start*/ var _m=sessionStorage.getItem('mg_demo_member'); _isMember = !!(_m&&JSON.parse(_m)); /*demo:end*/}
+  if(_isMember){document.querySelectorAll('[data-acc-login]').forEach(function(a){a.textContent='내 견적 요청';a.setAttribute('href','my.html');a.classList.add('is-member');});}
+}catch(e){}
+  /* ---- Mobile nav menu (details) ---- */
+  document.querySelectorAll('.nav-menu').forEach(function(menu){
+    menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ menu.removeAttribute('open'); }); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape' && menu.open){ menu.removeAttribute('open'); menu.querySelector('summary').focus(); } });
+    document.addEventListener('click', function(e){ if(menu.open && !menu.contains(e.target)) menu.removeAttribute('open'); });
+  });
+  try{ localStorage.setItem('micego.mode','ko'); }catch(e){}
+
+  function fmtT(s){s=Math.max(0,s);return Math.floor(s/60)+':'+('0'+(s%60)).slice(-2);}
+  function Otp(o){
+    var S={wrong:0,exp:0,cool:0,iv:null,dead:false,announced:false},TTL=o.ttl||180,COOL=o.cool||60,MAX=o.max||5;
+    function say(m,err){if(!o.msg)return;o.msg.textContent=m||'';o.msg.classList.toggle('is-err',!!err&&!!m);}
+    function tick(){var n=Date.now(),left=Math.ceil((S.exp-n)/1000),c=Math.ceil((S.cool-n)/1000);
+      if(o.timer)o.timer.textContent=fmtT(left);
+      if(o.resend){if(c>0){o.resend.disabled=true;o.resend.textContent=fmtT(c)+' 후 재발송';}else{o.resend.disabled=false;o.resend.textContent='인증번호 다시 받기';}}
+      if(left<=0&&!S.announced&&!S.dead){S.announced=true;say('인증번호가 만료되었습니다. 인증번호를 다시 받아 주세요.',true);}}
+    S.say=say;
+    S.start=function(){S.wrong=0;S.dead=false;S.announced=false;S.exp=Date.now()+TTL*1000;S.cool=Date.now()+COOL*1000;if(o.input){o.input.disabled=false;o.input.value='';}say('');tick();clearInterval(S.iv);S.iv=setInterval(tick,1000);};
+    S.stop=function(){clearInterval(S.iv);};
+    S.allow=function(){S.cool=0;tick();};
+    S.expire=function(){S.exp=Date.now()-1000;S.cool=0;S.announced=true;S.dead=false;tick();clearInterval(S.iv);S.iv=setInterval(tick,1000);say('인증번호가 만료되었습니다. 인증번호를 다시 받아 주세요.',true);};
+    S.setWrong=function(n){S.wrong=n;say('인증번호가 맞지 않습니다. 남은 시도 '+(MAX-n)+'회',true);};
+    S.check=function(v){
+      if(S.dead){say(o.deadMsg||'인증번호를 다시 받아 주세요.',true);return 'dead';}
+      if(Date.now()>S.exp){say('인증번호가 만료되었습니다. 인증번호를 다시 받아 주세요.',true);return 'expired';}
+      if(!/^\d{6}$/.test(v)){say('인증번호 6자리를 숫자로 입력해 주세요.',true);return 'format';}
+      /*demo:start*/if(v==='123456'){say('');return 'ok';}/*demo:end*/
+      S.wrong++;var r=MAX-S.wrong;
+      if(r<=0){S.dead=true;return 'void';}
+      say('인증번호가 맞지 않습니다. 남은 시도 '+r+'회',true);return 'wrong';};
+    return S;}
+
+  function shareInit(box){
+    var H2=document.documentElement,ref=box.getAttribute('data-ref'),num=box.getAttribute('data-num'),key='mg_share_'+ref,s={n:0,on:false};
+    var mgApi=false; try{mgApi=!!(window.MG && MG.mode==='api' && !MG.preview);}catch(e){}
+    var none=box.querySelector('[data-share-none]'),on=box.querySelector('[data-share-on]'),url=box.querySelector('[data-share-url]'),live=box.querySelector('[data-share-live]');
+    function st(){return box.getAttribute('data-st')||H2.getAttribute('data-state');}
+    function link(){return new URL('track.html?s=demo-share-'+num+(s.n>1?'-'+s.n:'')+'&state='+st(),location.href).href;}
+    function save(){try{sessionStorage.setItem(key,JSON.stringify(s));}catch(e){}}
+    function render(){none.hidden=s.on;on.hidden=!s.on;if(s.on)url.value=s.url||link();}
+    function make(msg){s={n:s.n+1,on:true};save();render();live.textContent=msg;var c=box.querySelector('[data-share-copy]');if(c)c.focus();}
+    if(mgApi){
+      // WP3 (SPEC_LAUNCH §5): api mode -- create_share_link/revoke_share_link, ref taken from the
+      // loaded track data (mgLoadTrack) rather than the demo data-ref on this element.
+      function getRef(){return (typeof mgTrackData!=='undefined' && mgTrackData && mgTrackData.ref) || ref;}
+      document.addEventListener('mg:trackLoaded', function(){
+        if(typeof mgTrackData!=='undefined' && mgTrackData && mgTrackData.share){
+          s={n:1,on:mgTrackData.share.state==='active',url:mgTrackData.share.url};render();
+        }
+      });
+      box.querySelector('[data-share-create]').addEventListener('click',function(){
+        MG.api.create_share_link({ref:getRef()}).then(function(resp){s={n:s.n+1,on:true,url:resp.url};render();live.textContent='보기 전용 링크를 만들었습니다.';var c=box.querySelector('[data-share-copy]');if(c)c.focus();},function(err){toast(MG.msg(err));});});
+      box.querySelector('[data-share-regen]').addEventListener('click',function(){
+        MG.api.create_share_link({ref:getRef()}).then(function(resp){s={n:s.n+1,on:true,url:resp.url};render();live.textContent='새 링크를 만들었습니다. 이전 링크는 더 이상 열리지 않습니다.';},function(err){toast(MG.msg(err));});});
+      box.querySelector('[data-share-revoke]').addEventListener('click',function(){
+        MG.api.revoke_share_link({ref:getRef()}).then(function(){s.on=false;render();live.textContent='링크를 껐습니다. 이 링크로는 더 이상 열 수 없습니다.';box.querySelector('[data-share-create]').focus();},function(err){toast(MG.msg(err));});});
+      box.querySelector('[data-share-copy]').addEventListener('click',function(){copyText(url.value,url,'링크를 복사했습니다','링크를 직접 선택해 복사해 주세요');});
+      render();
+      return;
+    }
+    try{var v=JSON.parse(sessionStorage.getItem(key)||'null');if(v&&typeof v.n==='number')s=v;}catch(e){}
+    box.querySelector('[data-share-create]').addEventListener('click',function(){make('보기 전용 링크를 만들었습니다.');});
+    box.querySelector('[data-share-regen]').addEventListener('click',function(){make('새 링크를 만들었습니다. 이전 링크는 더 이상 열리지 않습니다.');});
+    box.querySelector('[data-share-revoke]').addEventListener('click',function(){s.on=false;save();render();live.textContent='링크를 껐습니다. 이 링크로는 더 이상 열 수 없습니다.';box.querySelector('[data-share-create]').focus();});
+    box.querySelector('[data-share-copy]').addEventListener('click',function(){copyText(link(),url,'링크를 복사했습니다','링크를 직접 선택해 복사해 주세요');});
+    render();}
+
+  var H=document.documentElement,MK='mg_demo_member',QS=new URLSearchParams(location.search);
+  var $=function(i){return document.getElementById(i);};
+  /*demo:start*/var DEMO={name:'김지은',company:'한빛투어',orgType:'여행사',email:'jieun.kim@hanbit-tour.example',phone:'010-2345-5678'};/*demo:end*/
+  function getMember(){try{var m=sessionStorage.getItem(MK);return m?JSON.parse(m):null;}catch(e){return null;}}
+  function setMember(m){try{sessionStorage.setItem(MK,JSON.stringify(m));}catch(e){}}
+  function clearMember(){try{sessionStorage.removeItem(MK);}catch(e){}}
+  function st(){return H.getAttribute('data-state');}
+  function markSwitch(){document.querySelectorAll('.state-switch a').forEach(function(a){if(a.getAttribute('data-s')===st())a.setAttribute('aria-current','true');else a.removeAttribute('aria-current');});}
+  function go(s,fid){H.setAttribute('data-state',s);markSwitch();var f=fid?$(fid):null;if(f)f.focus();}
+  var PHONE_RE=/^(?:01[016789]-?\d{3,4}-?\d{4}|\+82-?\s?10-?\d{3,4}-?\d{4})$/;
+  function maskPhone(v){var d=(v||'').replace(/\D/g,'');if(d.indexOf('8210')===0)d='0'+d.slice(2);return d.slice(0,3)+'-****-'+d.slice(-4);}
+  function safeNext(n){var d='my.html';if(!n)return d;try{n=decodeURIComponent(n);}catch(e){return d;}
+    return /^[A-Za-z0-9_-]+\.html(?:[?#][A-Za-z0-9_\-=&%.#?]*)?$/.test(n)?n:d;}
+  function pwEval(pw,email){var len=pw.length,kinds=(/[A-Za-z]/.test(pw)?1:0)+(/\d/.test(pw)?1:0)+(/[^A-Za-z0-9]/.test(pw)?1:0);
+    var local=(email||'').split('@')[0].toLowerCase(),r=[len>=10,len>=12||kinds>=2,!(local.length>=3&&pw.toLowerCase().indexOf(local)>=0)];
+    return {r:r,ok:r[0]&&r[1]&&r[2]};}
+  function bindPw(input,list,emailEl){
+    function upd(){var r=pwEval(input.value,emailEl?emailEl.value:''),has=input.value.length>0;
+      list.querySelectorAll('li[data-r]').forEach(function(li){var ok=r.r[+li.getAttribute('data-r')]&&has;li.classList.toggle('is-ok',ok);var s=li.querySelector('.rs');if(s)s.textContent=ok?' (충족)':' (미충족)';});return r;}
+    input.addEventListener('input',upd);if(emailEl)emailEl.addEventListener('input',upd);upd();return upd;}
+  document.querySelectorAll('.pw-toggle').forEach(function(b){var inp=$(b.getAttribute('data-pw'));b.addEventListener('click',function(){var show=inp.type==='password';inp.type=show?'text':'password';b.setAttribute('aria-pressed',show?'true':'false');b.textContent=show?'숨기기':'보기';});});
+  bindChips(document);
+  markSwitch();
+
+  var mgApi=!!(window.MG && MG.mode==='api' && !MG.preview);
+  function esc(s){return (s==null?'':String(s)).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+  function wireTabs(){var tabs=[].slice.call(document.querySelectorAll('[data-tab]')),rows=[].slice.call(document.querySelectorAll('#rfpList .rfp'));
+    function tab(k){tabs.forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-tab')===k?'true':'false');});
+      var n=0;rows.forEach(function(r){var show=k==='all'||r.getAttribute('data-grp')===k;r.hidden=!show;if(show)n++;});
+      $('tabStatus').textContent=n+'건을 보여 줍니다';}
+    tabs.forEach(function(b){b.addEventListener('click',function(){tab(b.getAttribute('data-tab'));});});
+    tab('active');}
+  function wireShareToggles(){document.querySelectorAll('[data-share-toggle]').forEach(function(b){b.addEventListener('click',function(){var p=$(b.getAttribute('aria-controls')),open=p.hidden;p.hidden=!open;b.setAttribute('aria-expanded',open?'true':'false');});});}
+  if(!mgApi){
+    var mem=getMember();
+    if(st()==='list'&&!QS.has('state')&&!mem)go('need_login');
+    var mm=mem||DEMO;$('myName').textContent=mm.name;$('myCo').textContent=mm.company;
+    $('myLogout').addEventListener('click',function(){clearMember();location.href='login.html';});
+    wireTabs();
+    document.querySelectorAll('[data-share]').forEach(shareInit);
+    wireShareToggles();
+    var lr=$('lnkReq');if(lr){lr.addEventListener('click',function(){$('lnkTxt').textContent='연결을 요청했습니다. 운영팀 확인 후 연결됩니다(영업일 기준 1일). 결과는 이메일로 알려 드립니다.';lr.remove();});}
+  } else {
+    $('myLogout').addEventListener('click',function(){MG.auth.signOut().then(function(){location.href='login.html';});});
+    function wireShare(box,ref){
+      var none=box.querySelector('[data-share-none]'),on=box.querySelector('[data-share-on]'),url=box.querySelector('[data-share-url]'),live=box.querySelector('[data-share-live]');
+      function render(u){none.hidden=!!u;on.hidden=!u;if(u)url.value=u;}
+      box.querySelector('[data-share-create]').addEventListener('click',function(){MG.api.create_share_link({ref:ref}).then(function(resp){render(resp.url);live.textContent='보기 전용 링크를 만들었습니다.';box.querySelector('[data-share-copy]').focus();},function(err){toast(MG.msg(err));});});
+      box.querySelector('[data-share-regen]').addEventListener('click',function(){MG.api.create_share_link({ref:ref}).then(function(resp){render(resp.url);live.textContent='새 링크를 만들었습니다. 이전 링크는 더 이상 열리지 않습니다.';},function(err){toast(MG.msg(err));});});
+      box.querySelector('[data-share-revoke]').addEventListener('click',function(){MG.api.revoke_share_link({ref:ref}).then(function(){render('');live.textContent='링크를 껐습니다. 이 링크로는 더 이상 열 수 없습니다.';box.querySelector('[data-share-create]').focus();},function(err){toast(MG.msg(err));});});
+      box.querySelector('[data-share-copy]').addEventListener('click',function(){copyText(url.value,url,'링크를 복사했습니다','링크를 직접 선택해 복사해 주세요');});
+      render(isOnUrl(box));
+    }
+    function isOnUrl(box){var u=box.getAttribute('data-init-url');return u||'';}
+    function buildRow(r,i){
+      var li=document.createElement('li');li.className='rfp'+(r.needs_action?' is-hot':'');li.setAttribute('data-grp',r.group||'active');li.setAttribute('data-ref',r.ref||'');
+      var trackHref=(window.MG&&MG.url&&r.track_token)?MG.url.track(r.track_token):'#';
+      var shareOn=r.share&&r.share.state==='active',shareUrl=shareOn?new URL('track.html?s='+encodeURIComponent(r.share.token),location.href).href:'';
+      li.innerHTML='<div class="rfp-main">'
+        +'<div class="rfp-cell"><span class="sr-only">요청 번호 </span><span class="ref">'+esc(r.ref)+'</span></div>'
+        +'<div class="rfp-cell"><span class="sr-only">행사명 </span><span class="ttl">'+esc(r.title)+'</span>'+(r.needs_action?'<span class="rfp-hot">'+esc(r.needs_action)+'</span>':'')+(r.linked_from_guest?'<span class="rfp-tag">연결된 이전 요청 · 비회원 접수</span>':'')+'</div>'
+        +'<div class="rfp-cell"><span class="lbl">목적지·일정</span>'+esc(r.region)+'<br>'+esc(r.start_date)+' – '+esc(r.end_date)+'</div>'
+        +'<div class="rfp-cell"><span class="lbl">상태</span><span class="badge badge-open">'+esc(r.next_step||r.track_state||'')+'</span></div>'
+        +'<div class="rfp-cell"><span class="lbl">다음 일정</span>'+esc(r.next_step||'')+'</div>'
+        +'<div class="rfp-act"><a class="btn btn-accent btn-sm" href="'+trackHref+'" aria-label="열기">열기</a><button type="button" class="btn btn-ghost btn-sm" data-share-toggle aria-expanded="false" aria-controls="rs-'+i+'">공유 링크</button></div>'
+        +'</div><div class="rfp-share" id="rs-'+i+'" hidden>'
+        +'<div class="share-ui" data-init-url="'+esc(shareUrl)+'"><p class="share-expl"><b>보기 전용 링크</b> · 진행 상황과 비교표만 보이고 선택·변경은 할 수 없습니다 · 요청이 끝나고 30일 뒤 자동 만료</p>'
+        +'<div data-share-none'+(shareOn?' hidden':'')+'><button type="button" class="btn btn-ghost btn-sm" data-share-create>링크 만들기</button></div>'
+        +'<div data-share-on'+(shareOn?'':' hidden')+'><label class="lbl-t">공유 링크</label><div class="share-line"><input type="text" class="share-url" data-share-url readonly value="'+esc(shareUrl)+'"><button type="button" class="btn btn-accent btn-sm" data-share-copy>복사</button></div>'
+        +'<div class="app-actions"><button type="button" class="btn btn-ghost btn-sm" data-share-regen>새 링크 만들기</button><button type="button" class="btn btn-ghost btn-sm" data-share-revoke>링크 끄기</button></div>'
+        +'<p class="hint">링크는 요청당 하나만 유지됩니다. 새로 만들면 이전 링크는 바로 꺼집니다.</p></div>'
+        +'<p class="sr-only" role="status" aria-live="polite" data-share-live></p></div></div>';
+      wireShare(li.querySelector('.share-ui'),r.ref);
+      return li;
+    }
+    if(!MG.auth.session()){go('need_login');}
+    else{
+      Promise.all([MG.api.my_profile(),MG.api.my_rfps()]).then(function(res){
+        var prof=res[0],data=res[1]||{};
+        $('myName').textContent=prof.name;$('myCo').textContent=prof.company;
+        var list=$('rfpList');list.innerHTML='';
+        (data.rows||[]).forEach(function(r,i){list.appendChild(buildRow(r,i));});
+        wireTabs();wireShareToggles();
+        var lr=$('lnkReq');
+        if((data.rows||[]).length===0 && !(data.link_candidates&&data.link_candidates.length) && !data.linked_recent){go('empty');}
+        else if(data.link_candidates&&data.link_candidates.length){var c=data.link_candidates[0];$('lnkTxt').textContent='휴대전화 번호가 같은 비회원 요청 1건이 있습니다 ('+esc(c.ref)+' · '+esc(c.region)+' · '+esc(c.created_at)+' 접수). 본인 요청이라면 연결을 요청해 주세요.';go('link_pending');
+          if(lr)lr.addEventListener('click',function(){MG.api.link_request({ref:c.ref}).then(function(){$('lnkTxt').textContent='연결을 요청했습니다. 운영팀 확인 후 연결됩니다(영업일 기준 1일). 결과는 이메일로 알려 드립니다.';lr.remove();},function(err){toast(MG.msg(err));});});}
+        else if(data.linked_recent){go('linked');}
+        else{go('list');}
+      },function(err){go('need_login');});
+    }
+  }
+})();</script>
+</body>
+</html>

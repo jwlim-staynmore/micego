@@ -1,0 +1,200 @@
+{
+ "title": "MICEGO Privacy Notice",
+ "effective": "{{EFFECTIVE_DATE}}",
+ "sections": [
+  {
+   "no": 1,
+   "title": "Who we are",
+   "paras": [
+    "MICEGO is operated by {{OPERATOR_LEGAL_NAME}} (trading as MatchGo), {{OPERATOR_ADDRESS}}, Republic of Korea (“MICEGO”, “we”). We are the controller of the personal data described in this notice.",
+    "This notice is for hotel and resort contacts who register with MICEGO or quote on requests, and for international visitors to our English pages. Organizers in Korea should read our Korean privacy policy (개인정보처리방침), which covers the same processing in more detail and prevails for organizer data."
+   ]
+  },
+  {
+   "no": 2,
+   "title": "What we collect",
+   "paras": [
+    {
+     "table": {
+      "head": [
+       "Where",
+       "What we collect"
+      ],
+      "rows": [
+       [
+        "Partner registration form",
+        "Property name, city and country, largest group capacity, banquet space availability, contact name and email; optionally a phone / WhatsApp number"
+       ],
+       [
+        "Quote request link",
+        "Property name, contact name and email, optional phone / WhatsApp number; the rates, availability and terms you enter; when you open the link, submit or revise a quote, or decline, and any decline reason you give"
+       ],
+       [
+        "Contact form",
+        "Enquiry type, name, email and message; optionally your property or company and a reference code"
+       ],
+       [
+        "Feedback widget",
+        "Your message and feedback type; optionally a reply email and your name"
+       ],
+       [
+        "Collected automatically with feedback or a contact message",
+        "The page you were viewing and its status, a linked request reference, language and mode, browser type, screen size, time zone and up to three recent error logs"
+       ]
+      ]
+     }
+    },
+    "We do not store your IP address with feedback or contact messages. To limit abuse, we keep a short-lived, irreversibly transformed value derived from your IP address, and we store such a value (never the address itself) with each quote you submit or revise (see section 6).",
+    "The sample request page is a demo. Nothing you type there is transmitted or stored."
+   ]
+  },
+  {
+   "no": 3,
+   "title": "Why we use it and our legal bases",
+   "paras": [
+    {
+     "list": [
+      "To review your registration, send you matching MICE requests, receive your quotes and tell you the result — necessary to operate the partnership you asked to join.",
+      "To show your quote to the organizer in the comparison sheet and, if you are selected, to introduce you — necessary to operate the partnership.",
+      "To contact you about the partnership, pause or reinstate listings and keep the service secure — our legitimate interest in running a reliable marketplace.",
+      "To reply to feedback when you leave a reply email — your consent, which you give separately in the widget and can withdraw at any time.",
+      "To keep records the law requires — legal obligation."
+     ]
+    }
+   ]
+  },
+  {
+   "no": 4,
+   "title": "What we share, and with whom",
+   "paras": [
+    "Organizers: when you submit a quote on a live request, your rates and terms appear in the comparison sent to that organizer, labelled only as Proposal A, B or C with your star rating, area, distance to the beach, size and whether you are chain-affiliated. Your property name and the contact details in your quote are disclosed to the organizer only if the organizer selects your proposal.",
+    "Service providers who process data for us under contract:",
+    {
+     "table": {
+      "head": [
+       "Provider",
+       "What they do",
+       "Location"
+      ],
+      "rows": [
+       [
+        "Resend, Inc.",
+        "Sends our emails (invitations, reminders, results, introductions, feedback acknowledgements)",
+        "United States"
+       ],
+       [
+        "Supabase, Inc.",
+        "Hosts our database, authentication and server functions",
+        "The cloud region where our database is hosted; support access may occur from the United States [legal review]"
+       ],
+       [
+        "{{SMS_VENDOR_NAME}}",
+        "Sends text messages and KakaoTalk notifications to organizers in Korea (not used for hotel contacts)",
+        "Republic of Korea"
+       ],
+       [
+        "Regional Partners (local companies that operate MICEGO requests in a destination on our behalf; named on the request page and in our emails when they handle a request)",
+        "Invite you to quote, enter quotes you agree by phone or messenger (subject to your confirmation), collect and compare quotes, and contact you about a request they handle. They see your property and contact details for that request only. [legal review]",
+        "The destination country of the request, within our service countries: Thailand, Vietnam, Indonesia, Malaysia, the Philippines, Singapore, Japan, Taiwan, Hong Kong, Macao, Guam and Saipan (US territories) and the United States including Hawaii. Currently: Thailand. [legal review]"
+       ]
+      ]
+     }
+    },
+    "We do not sell personal data, and we share it with authorities only when the law requires."
+   ]
+  },
+  {
+   "no": 5,
+   "title": "International transfers",
+   "paras": [
+    "MICEGO is based in the Republic of Korea, and our service providers may process data in the United States or other countries. We transfer data only as needed to run the service, under contracts that require the provider to protect it.",
+    "If you are in the European Economic Area, the United Kingdom or another country with transfer rules, we rely on the safeguards available for that transfer, such as standard contractual clauses, where required. Contact us for details. [legal review]"
+   ]
+  },
+  {
+   "no": 6,
+   "title": "How long we keep it",
+   "paras": [
+    {
+     "table": {
+      "head": [
+       "Data",
+       "Retention"
+      ],
+      "rows": [
+       [
+        "Registration and contact details",
+        "While your partnership is active; deleted when you ask us to or the partnership ends. Details from a registration we did not approve are deleted on request."
+       ],
+       [
+        "Quotes you submit, including contact details and the transformed IP value stored with each revision",
+        "For as long as we keep the related request record; a selected quote is kept with the connection record for 3 years from the introduction"
+       ],
+       [
+        "Invitation activity (viewed, submitted, declined)",
+        "For as long as we keep the related request record"
+       ],
+       [
+        "Reply email and name given with feedback or a contact message",
+        "Anonymised 12 months after we receive it; only the category, status, page and request reference remain for statistics"
+       ],
+       [
+        "Transformed IP values used only to limit abuse",
+        "Up to 48 hours"
+       ]
+      ]
+     }
+    },
+    "Unsubscribing from invitation emails stops invitations but does not delete your details. Ask us if you also want them deleted."
+   ]
+  },
+  {
+   "no": 7,
+   "title": "Your rights",
+   "paras": [
+    "Depending on the law that applies to you, you can ask to access, correct or delete your personal data, to restrict or object to its processing, to receive a copy in a portable format, and to withdraw consent at any time. Email {{PRIVACY_EMAIL}} from the address you registered, or include the reference code. We reply within 10 days where Korean law applies, and within the period your local law requires otherwise.",
+    "You can also complain to a data-protection authority, including the Korean Personal Information Protection Commission or the authority where you live or work.",
+    "Every invitation email contains an unsubscribe link. Selection results for quotes you already submitted are still sent after you unsubscribe."
+   ]
+  },
+  {
+   "no": 8,
+   "title": "Cookies and browser storage",
+   "paras": [
+    "We do not use cookies. If we introduce analytics or other cookies, we will update this notice first.",
+    "Your browser stores the last mode you chose (Travel agencies / Hotels) in localStorage, and anything you are typing in the feedback widget in sessionStorage until you send it or close the tab.",
+    "Fonts and some scripts load from Google Fonts and jsDelivr, which receive connection data such as your IP address when a page loads."
+   ]
+  },
+  {
+   "no": 9,
+   "title": "Security",
+   "paras": [
+    "We encrypt data in transit (HTTPS), restrict access to operators who need it, log operator actions, and use hard-to-guess personal links for each invitation that are hidden from search engines. Please do not forward your invitation links."
+   ]
+  },
+  {
+   "no": 10,
+   "title": "Organizer data you receive",
+   "paras": [
+    "If you are selected, you receive the organizer's company name, contact name, email address and mobile number. Our Partner Terms (Articles 13–15) require you to use this data only for that booking, keep it secure and delete it when no longer needed."
+   ]
+  },
+  {
+   "no": 11,
+   "title": "Children",
+   "paras": [
+    "MICEGO is a business service and is not directed at children. We do not knowingly collect data from anyone under 14."
+   ]
+  },
+  {
+   "no": 12,
+   "title": "Changes and contact",
+   "paras": [
+    "This notice applies from {{EFFECTIVE_DATE}}. We post changes at least 7 days before they take effect, or 30 days before for material changes, and email registered partners.",
+    "Privacy officer: {{OPERATOR_PRIVACY_OFFICER}} · {{PRIVACY_EMAIL}} · {{OPERATOR_PHONE}}.",
+    "Operator: {{OPERATOR_LEGAL_NAME}} · Representative: {{OPERATOR_REPRESENTATIVE}} · Business registration no.: {{OPERATOR_BIZ_REG_NO}} · {{OPERATOR_ADDRESS}}."
+   ]
+  }
+ ]
+}

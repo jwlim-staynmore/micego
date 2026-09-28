@@ -1,0 +1,196 @@
+import os, re
+from urllib.parse import urlparse, parse_qs
+from playwright.sync_api import sync_playwright
+root=os.getcwd(); fails=[]
+def F(m): fails.append(m); print('FAIL',m)
+U=lambda p,q='':'file://'+os.path.join(root,p)+q
+S={'signup':['form','email_sent','email_wrong','email_expired','email_capped','phone_entry','phone_sent','phone_wrong','phone_locked','phone_capped','phone_taken','done'],'login':['default','error','cooldown','locked','pending','suspended'],'reset':['request','sent','form','done','expired'],'my':['list','empty','linked','link_pending','need_login'],'account':['default','reauth','email_step','phone_step','saved','pw_done'],'withdraw':['default','blocked','confirm','done'],'terms':['']}
+# static
+rb=open('robots.txt').read()
+for p in ('my','account','withdraw','reset'):
+    if 'Disallow: /ko/%s.html'%p not in rb: F('robots '+p)
+    h=open('ko/%s.html'%p,encoding='utf-8').read()
+    if 'noindex,nofollow' not in h or 'no-referrer' not in h: F('noindex '+p)
+for p in ('signup','login','terms'):
+    if 'noindex' in open('ko/%s.html'%p,encoding='utf-8').read(): F('unexpected noindex '+p)
+if 'id="art7"' not in open('ko/terms.html',encoding='utf-8').read(): F('art7')
+if 'terms.html#art7' not in open('ko/track.html',encoding='utf-8').read(): F('track art7 link')
+if 'TODO(backend): replace mailto with RPC select_proposal' not in open('ko/track.html',encoding='utf-8').read(): F('todo backend')
+for p in ('ko/faq.html','ko/privacy.html','ko/index.html','ko/terms.html'):
+    if 'terms.html' not in open(p,encoding='utf-8').read() and p!='ko/terms.html': F('footer terms '+p)
+for k in ('회원','제안을 선택할 때 왜 인증번호'):
+    if k not in open('ko/faq.html',encoding='utf-8').read(): F('faq '+k)
+_pv=open('ko/privacy.html',encoding='utf-8').read()
+if not ('회원' in _pv and '처리하는 개인정보 항목과 수집 방법' in _pv and '보유·이용 기간' in _pv): F('privacy member')  # 2026-09-27: 전문(legal/privacy_ko.json) 렌더링으로 절 제목 변경
+with sync_playwright() as pw:
+    b=pw.chromium.launch()
+    def page(w=1280,js=True):
+        c=b.new_context(viewport={'width':w,'height':900},java_script_enabled=js); pg=c.new_page(); pg.errs=[]
+        pg.on('pageerror',lambda e:pg.errs.append(str(e))); return pg
+    for name,sts in S.items():
+        for s in sts:
+            for w in (360,768,1280):
+                pg=page(w); pg.goto(U('ko/%s.html'%name,('?state='+s) if s else '')); pg.wait_for_timeout(100)
+                ov=pg.evaluate("()=>{document.body.style.overflowX='visible';document.documentElement.style.overflowX='visible';return document.documentElement.scrollWidth-innerWidth}")
+                if ov>0: F(f'{name}?{s} w={w} overflow {ov}')
+                if pg.errs: F(f'{name}?{s} console {pg.errs}')
+                if pg.evaluate("document.querySelectorAll('h1').length")!=1: F(f'{name}?{s} h1')
+                if s:
+                    vis=pg.evaluate("()=>[...document.querySelectorAll('[data-states]')].filter(e=>getComputedStyle(e).display!=='none'&&e.getBoundingClientRect().height>0).length")
+                    if not vis: F(f'{name}?{s} no visible state panel')
+                    bad=pg.evaluate("()=>[...document.querySelectorAll('[data-states]')].filter(e=>getComputedStyle(e).display!=='none'&&!(' '+e.getAttribute('data-states')+' ').includes(' '+document.documentElement.dataset.state+' ')).length")
+                    if bad: F(f'{name}?{s} stray {bad}')
+                small=pg.evaluate("()=>[...document.querySelectorAll('main a.btn,main button')].filter(e=>{const r=e.getBoundingClientRect();return r.width>0&&r.height>0&&r.height<43.5&&!e.closest('[hidden]')}).map(e=>e.id||e.textContent.trim().slice(0,10))")
+                if small and w==360: F(f'{name}?{s} small targets {small}')
+                pg.context.close()
+    # unknown state -> default
+    pg=page(); pg.goto(U('ko/signup.html','?state=zzz'))
+    if pg.evaluate("document.documentElement.dataset.state")!='form': F('unknown state default')
+    pg.context.close()
+    # signup flow
+    pg=page(360); pg.goto(U('ko/signup.html','?email=a.b@corp.example'))
+    if pg.input_value('#suEmail')!='a.b@corp.example': F('email prefill')
+    pg.click('#suSubmit')
+    if pg.evaluate("st()" if False else "document.documentElement.dataset.state")!='form': F('invalid step1 passed')
+    pg.fill('#suPw','short'); 
+    pg.fill('#suName','홍길동'); pg.fill('#suCompany','테스트투어'); pg.click('.radio-chip:has(input[name=orgType][value="여행사"])')
+    pg.click('#suSubmit')
+    if pg.evaluate("document.documentElement.dataset.state")!='form': F('weak pw / no consent passed')
+    pg.fill('#suPw','a.b-something1'); pg.click('#suSubmit')
+    if pg.evaluate("document.documentElement.dataset.state")!='form': F('pw containing email local passed')
+    pg.fill('#suPw','Tr4vel-Plan!'); 
+    pg.click('#suSubmit')
+    if pg.evaluate("document.documentElement.dataset.state")!='form': F('no consent passed')
+    if pg.evaluate("document.querySelector('#suMkt').checked"): F('marketing pre-checked')
+    for i in ('suAge','suTerms','suPriv'): pg.check('#'+i)
+    pg.click('#suSubmit'); pg.wait_for_timeout(100)   # optional unchecked must not block
+    if pg.evaluate("document.documentElement.dataset.state")!='email_sent': F('step1 valid did not advance')
+    if not pg.is_disabled('#emResend'): F('email resend not disabled')
+    if '1:00' not in pg.inner_text('#emResend'): F('resend text '+pg.inner_text('#emResend'))
+    if pg.get_attribute('#emCode','autocomplete')!='one-time-code' or pg.get_attribute('#emCode','inputmode')!='numeric': F('code attrs')
+    pg.fill('#emCode','111111'); pg.click('#emVerify')
+    if '남은 시도 4회' not in pg.inner_text('#emMsg'): F('remaining attempts '+pg.inner_text('#emMsg'))
+    for _ in range(4): pg.fill('#emCode','111111'); pg.click('#emVerify')
+    if '무효' not in pg.inner_text('#emMsg') or not pg.is_disabled('#emCode') or pg.is_disabled('#emResend'): F('email void ui')
+    pg.click('#emResend'); pg.fill('#emCode','123456'); pg.click('#emVerify')
+    if pg.evaluate("document.documentElement.dataset.state")!='phone_entry': F('email ok -> phone_entry')
+    pg.fill('#phNum','123'); pg.click('#phSend')
+    if pg.evaluate("document.documentElement.dataset.state")!='phone_entry': F('bad phone passed')
+    pg.fill('#phNum','010-1111-2222'); pg.click('#phSend')
+    if pg.evaluate("document.documentElement.dataset.state")!='phone_sent' or '010-****-2222' not in pg.inner_text('#phShow'): F('phone sent')
+    for _ in range(5): pg.fill('#phCode','000000'); pg.click('#phVerify')
+    if pg.evaluate("document.documentElement.dataset.state")!='phone_locked': F('5 wrong -> phone_locked')
+    pg.context.close()
+    pg=page(360); pg.goto(U('ko/signup.html','?state=phone_entry')); pg.fill('#phNum','010-9999-0000'); pg.click('#phSend'); pg.fill('#phCode','123456'); pg.click('#phVerify')
+    if pg.evaluate("document.documentElement.dataset.state")!='phone_taken': F('phone_taken')
+    pg.context.close()
+    pg=page(360); pg.goto(U('ko/signup.html','?state=phone_entry')); pg.fill('#phNum','010-1111-2222'); pg.click('#phSend'); pg.fill('#phCode','123456'); pg.click('#phVerify')
+    if pg.evaluate("document.documentElement.dataset.state")!='done': F('phone ok -> done')
+    m=pg.evaluate("sessionStorage.getItem('mg_demo_member')")
+    if not m or '010-1111-2222' not in m: F('done did not set member')
+    pg.context.close()
+    # login
+    pg=page(1280); pg.goto(U('ko/login.html','?next=index.html%23register'))
+    if pg.inner_text('[data-acc-login]')!='로그인': F('header login link')
+    pg.fill('#lgEmail','jieun.kim@hanbit-tour.example'); pg.fill('#lgPw','wrongpw'*2)
+    pg.fill('#lgEmail','x@y.co'); pg.click('#lgSubmit')
+    if pg.evaluate("document.documentElement.dataset.state")!='error': F('login error state')
+    for _ in range(4): pg.fill('#lgEmail','x@y.co'); pg.fill('#lgPw','abcdefghijk'); pg.click('#lgSubmit')
+    if pg.evaluate("document.documentElement.dataset.state")!='cooldown' or not pg.is_disabled('#lgSubmit'): F('cooldown after 5')
+    pg.context.close()
+    pg=page(1280); pg.goto(U('ko/login.html','?next=index.html%23register'))
+    pg.fill('#lgEmail','jieun.kim@hanbit-tour.example'); pg.fill('#lgPw','longenoughpw'); pg.click('#lgSubmit'); pg.wait_for_load_state()
+    if not pg.url.endswith('index.html#register'): F('next respected '+pg.url)
+    if pg.inner_text('[data-acc-login]')!='내 견적 요청' or not pg.get_attribute('[data-acc-login]','href').endswith('my.html'): F('header flips')
+    # landing prefill
+    if 'value' and pg.input_value('#email')!='jieun.kim@hanbit-tour.example' or not pg.evaluate("document.getElementById('email').readOnly && document.getElementById('phone').readOnly"): F('landing prefill/readonly')
+    if '김지은님으로 요청합니다' not in pg.inner_text('#accMemberChip'): F('member chip')
+    if pg.is_visible('#accLoginLine'): F('login line visible when member')
+    pg.context.close()
+    pg=page(1280); pg.goto(U('ko/login.html','?next=//evil.example')); pg.fill('#lgEmail','jieun.kim@hanbit-tour.example'); pg.fill('#lgPw','longenoughpw'); pg.click('#lgSubmit'); pg.wait_for_load_state()
+    if not pg.url.endswith('/ko/my.html'): F('unsafe next '+pg.url)
+    pg.context.close()
+    # landing logged out + post-submit CTA
+    pg=page(1280); pg.goto(U('ko/index.html'))
+    if '이미 회원이신가요?' not in pg.inner_text('#accLoginLine') or 'login.html?next=index.html%23register' not in pg.get_attribute('#accLoginLine a','href'): F('landing login line')
+    if '제안 선택 확인' not in pg.inner_text('#f-phone'): F('phone hint')
+    pg.evaluate("()=>{const f=document.getElementById('registerForm');const s=(i,v)=>{document.getElementById(i).value=v};document.querySelector('input[name=orgType]').click();s('company','테스트');s('name','홍길동');s('email','me@ex.co');s('phone','010-1234-5678');for(const e of f.querySelectorAll('select')){e.selectedIndex=1}for(const e of f.querySelectorAll('input[type=date]')){e.value=e.name==='endDate'?'2027-03-18':'2027-03-15'}for(const e of f.querySelectorAll('input[type=number]'))e.value=10;f.querySelector('input[name=region]').value='다낭';f.querySelector('input[name=ballroomUse][value=미사용]').click();document.getElementById('consent').checked=true}")
+    pg.evaluate("()=>document.getElementById('registerForm').requestSubmit()"); pg.wait_for_timeout(200)
+    if not pg.is_visible('#formSuccess'): F('landing submit did not succeed')
+    elif 'signup.html?email=me%40ex.co' not in pg.get_attribute('#accCtaLink','href'): F('cta href '+pg.get_attribute('#accCtaLink','href'))
+    pg.context.close()
+    # my
+    pg=page(1280); pg.goto(U('ko/my.html'))
+    if pg.evaluate("document.documentElement.dataset.state")!='need_login': F('my without session')
+    pg.goto(U('ko/my.html','?state=list'))
+    if pg.evaluate("document.querySelectorAll('#rfpList .rfp:not([hidden])').length")!=3: F('my active tab rows')
+    pg.click('[data-tab=all]')
+    if pg.evaluate("document.querySelectorAll('#rfpList .rfp:not([hidden])').length")!=5: F('my all rows')
+    pg.click('[data-share-toggle][aria-controls="rs-2610014"]'); pg.click('#rs-2610014 [data-share-create]')
+    u1=pg.input_value('#shu-2610014')
+    if 'track.html?s=demo-share-2610014&state=delivered' not in u1: F('share url '+u1)
+    pg.click('#rs-2610014 [data-share-regen]'); u2=pg.input_value('#shu-2610014')
+    if u1==u2: F('regen same url')
+    pg.click('#rs-2610014 [data-share-revoke]')
+    if pg.is_visible('#shu-2610014'): F('revoke')
+    pg.context.close()
+    pg=page(1280); pg.goto(U('ko/my.html','?state=link_pending')); pg.click('#lnkReq')
+    if '영업일 기준 1일' not in pg.inner_text('#lnkTxt'): F('link request')
+    pg.context.close()
+    # track share view
+    pg=page(1280); pg.goto(U('ko/track.html','?s=demo-share-2610014&state=delivered'))
+    if pg.evaluate("document.getElementById('pickCard')") or pg.evaluate("document.querySelectorAll('[data-pick],#sharePanel,.owner-only,main a[href^=mailto]').length"): F('share view leaks owner UI')
+    if not pg.is_visible('.share-banner') or '보기 전용 공유 링크입니다' not in pg.inner_text('.share-banner'): F('share banner')
+    if not pg.is_visible('.cmp-table') and not pg.is_visible('.pcards'): F('share view no comparison')
+    if pg.evaluate("document.documentElement.dataset.view")!='share': F('data-view')
+    pg.context.close()
+    pg=page(1280); pg.goto(U('ko/track.html','?t=demo-2610&state=delivered'))
+    if pg.evaluate("document.querySelectorAll('.share-banner').length"): F('owner sees share banner')
+    if pg.is_visible('#myBack'): F('myBack without session')
+    pg.evaluate("sessionStorage.setItem('mg_demo_member',JSON.stringify({name:'김지은',company:'한빛투어',email:'a@b.co',phone:'010-2345-5678'}))"); pg.reload()
+    if not pg.is_visible('#myBack'): F('myBack with session')
+    pg.click('a[data-pick="A"]')
+    if not pg.is_visible('#pickStep') or '010-****-5678' not in pg.inner_text('#pickSent'): F('otp step')
+    if not pg.is_disabled('#pickResend'): F('pick resend disabled')
+    for _ in range(5): pg.fill('#pickCode','000000'); pg.click('#pickVerify')
+    if not pg.is_visible('#pickLocked'): F('pick lock')
+    pg.click('#pickLockBack'); pg.click('a[data-pick="C"]')
+    if not pg.is_visible('#pickLocked'): F('lock persists')
+    pg.click('#pickLockBack'); 
+    pg.context.close()
+    pg=page(1280); pg.goto(U('ko/track.html','?t=demo-2610&state=delivered')); pg.click('a[data-pick="A"]'); pg.fill('#pickCode','123456'); pg.click('#pickVerify')
+    q=parse_qs(urlparse(pg.get_attribute('#pickConfirm','href')).query)
+    if '휴대전화 확인' not in q['body'][0] or 'MG-2610-014 · 제안 A' not in q['subject'][0]: F('confirm mail')
+    pg.context.close()
+    pg=page(1280,False); pg.goto(U('ko/track.html','?t=demo-2610'))
+    if not pg.evaluate("[...document.querySelectorAll('a[data-pick]')].every(a=>a.href.startsWith('mailto:'))"): F('js-off mailto fallback')
+    pg.context.close()
+    # withdraw
+    pg=page(1280); pg.goto(U('ko/withdraw.html','?state=blocked'))
+    t=pg.inner_text('.blocked-list')
+    if pg.evaluate("document.querySelectorAll('.blocked-list li').length")!=2 or 'MG-2610-014' not in t or 'MG-2610-017' not in t or '2건' not in pg.inner_text('main'): F('withdraw blocked')
+    pg.context.close()
+    pg=page(360); pg.goto(U('ko/withdraw.html','?state=default')); pg.fill('#wdPw','longenoughpw'); pg.check('#wdOk'); pg.click('button.btn-danger'); pg.click('#wdFinal')
+    if pg.evaluate("document.documentElement.dataset.state")!='done' or pg.evaluate("sessionStorage.getItem('mg_demo_member')"): F('withdraw done/session')
+    pg.context.close()
+    # account flows
+    pg=page(360); pg.goto(U('ko/account.html','?state=reauth')); pg.click('#raPw') if False else None
+    pg.goto(U('ko/account.html','?state=default')); pg.click('#acEmailBtn'); pg.fill('#neVal','new@corp.example'); pg.click('#neSend'); pg.fill('#neCode','123456'); pg.click('#neVerify')
+    if pg.evaluate("document.documentElement.dataset.state")!='saved' or 'new@corp.example' not in pg.inner_text('#acEmailCur'): F('email change')
+    pg.context.close()
+    # reset
+    pg=page(360); pg.goto(U('ko/reset.html','?k=demo-reset-1234'))
+    if pg.evaluate("document.documentElement.dataset.state")!='form': F('reset k -> form')
+    pg.fill('#rsPw','Abcdef-12345'); pg.click('#rsNew button[type=submit]')
+    if pg.evaluate("document.documentElement.dataset.state")!='done': F('reset done')
+    pg.context.close()
+    # header at widths on ko pages
+    for p in ('ko/index.html','ko/faq.html','ko/track.html','ko/signup.html','ko/privacy.html','ko/terms.html'):
+        for w in (360,390,768):
+            pg=page(w); pg.goto(U(p,'?t=demo-2610' if 'track' in p else '')); 
+            hd=pg.evaluate("()=>{const c=document.querySelector('.site-header .container');return [...c.children].map(e=>{const r=e.getBoundingClientRect();return [r.left,r.right]})}")
+            if len(hd)>1 and hd[0][1]>hd[-1][0]+1: F(f'{p} w={w} header overlap {hd}')
+            if pg.evaluate("document.querySelector('[data-acc-login]').getBoundingClientRect().right")>w: F(f'{p} login off-screen {w}')
+            pg.context.close()
+    b.close()
+print('FAILS_ACC',len(fails))

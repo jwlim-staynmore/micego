@@ -1,0 +1,21 @@
+{
+  "status": 200,
+  "body": {
+    "rows": [
+      {
+        "ref": "MG-TEST-014",
+        "title": "Da Nang · Conference",
+        "region": "Da Nang, VN",
+        "start_date": "2026-11-01",
+        "end_date": "2026-11-03",
+        "next_step": "비딩중",
+        "track_state": "bidding",
+        "track_token": "trk_test_014",
+        "needs_action": null,
+        "share": {
+          "state": "revoked"
+        }
+      }
+    ]
+  }
+}

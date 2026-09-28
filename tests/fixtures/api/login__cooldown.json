@@ -1,0 +1,9 @@
+{
+  "status": 429,
+  "body": {
+    "error": {
+      "code": "LOGIN_COOLDOWN",
+      "retry_after": 900
+    }
+  }
+}

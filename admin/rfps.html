@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>견적 관리 | MICEGO 운영 콘솔</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="app"></div>
+<noscript><p class="nojs">이 화면은 JavaScript가 있어야 표시됩니다. 브라우저 설정에서 JavaScript를 켜 주세요.</p></noscript>
+<script src="../assets/config.js"></script>
+<script src="../assets/mg.js"></script>
+<script src="../assets/feedback.js" defer></script>
+<script src="data-adapter.js"></script>
+<script src="admin.js"></script>
+<script src="partner.js"></script>
+<script>
+(function(){
+var A=MICEGO,esc=A.esc;
+A.boot('rfps','견적 관리',function(main){
+  var q=new URLSearchParams(location.search);
+  var qf=q.get('filter'); if(!A.FILTERS[qf])qf=null;
+  var st={quick:qf,state:q.get('state')||'',sla:'',q:'',deleg:q.get('deleg')||'',region:q.get('region')||'',view:window.matchMedia('(min-width:1024px)').matches?'kanban':'list'};
+  function match(r){
+    if(st.quick&&!A.FILTERS[st.quick].fn(r))return false;
+    if(st.state&&r.state!==st.state)return false;
+    if(st.sla){var s=A.sla(r);if(!s||s.level!==st.sla)return false;}
+    if(st.deleg&&(r.delegation||'hq_held')!==st.deleg)return false;
+    if(st.region&&!(r.regionCode&&MICEGO_PTR.covers(st.region,r.regionCode)))return false;
+    if(st.q){var t=(r.id+' '+r.destination+' '+r.eventType).toLowerCase();if(t.indexOf(st.q.toLowerCase())<0)return false;}
+    return true;
+  }
+  function note(r){
+    var s=A.sla(r),o=[];
+    if(s&&s.level!=='ok')o.push('<div class="k-note '+s.level+'">'+esc(s.text)+'</div>');
+    if(A.unchecked(r))o.push('<div class="k-note amber">접수 후 미확인</div>');
+    if(r.state==='bidding'){
+      var m=A.curInv(r).length,n=A.submittedCount(r),h=(r.deadline-A.NOW)/3600e3;
+      var dl=!r.deadline?'마감 미설정':h<=0?'마감 지남':'마감 '+A.hoursText(Math.ceil(h))+' 후';
+      o.push('<div class="k-note '+(A.followup(r)?'amber':'info')+'">견적 '+n+'/'+m+' 제출 · '+dl+(A.followup(r)?' · 팔로업 필요':'')+'</div>');
+    }
+    if(r.state==='collecting'){
+      var c=A.currencies(r).length;
+      o.push('<div class="k-note info">제출 견적 '+A.submittedCount(r)+'건'+(c>1?' · 통화 '+c+'종':'')+'</div>');
+      if(A.usdMissing(r))o.push('<div class="k-note amber">USD 참고 미입력</div>');
+    }
+    return o.join('');
+  }
+  function card(r){
+    var s=A.sla(r),cls=s&&s.level!=='ok'?' sla-'+s.level:'';
+    var b=[];
+    if(r.round>=2)b.push('<span class="badge teal">R'+r.round+'</span>');
+    if((r.state==='verifying'||r.state==='open')&&!r.anonReviewed)b.push('<span class="badge amber">익명화 미검토</span>');
+    if(A.isOperator()&&r.delegation)b.push(MICEGO_PTR.delegChip(r,true));
+    var recv=A.fmtD(r.createdAt);
+    return '<a class="kcard'+cls+'" href="rfp.html?id='+r.id+'" data-id="'+r.id+'"><div class="k-top"><span class="mono">'+r.id+'</span><span>'+b.join(' ')+'</span></div>'+
+      '<div class="k-title">'+esc(r.destination)+' · '+esc(r.eventType)+'</div><div class="k-meta">'+r.headcount+'명 · 행사 '+r.start.slice(2)+' · 접수 '+recv+'</div>'+note(r)+'</a>';
+  }
+  function kanban(list){
+    var cols=A.PIPELINE.map(function(s){
+      var items=list.filter(function(r){return r.state===s;});
+      return '<section class="kcol" aria-label="'+A.STATES[s]+'"><h2>'+A.STATES[s]+' <span class="cnt">'+items.length+'</span></h2>'+(items.length?items.map(card).join(''):'<p class="k-empty">해당 없음</p>')+'</section>';
+    }).join('');
+    var closed=list.filter(function(r){return A.PIPELINE.indexOf(r.state)<0;});
+    return '<div class="kanban">'+cols+'</div><details class="closed-sec"'+(st.state&&A.PIPELINE.indexOf(st.state)<0?' open':'')+'><summary>종료·반려·취소 ('+closed.length+')</summary><div class="cards">'+(closed.length?closed.map(card).join(''):'<p class="k-empty">해당 없음</p>')+'</div></details>';
+  }
+  function table(list){
+    var rows=list.map(function(r){
+      var s=A.sla(r);
+      var sl=s&&s.level!=='ok'?'<span class="badge '+s.level+'">'+esc(s.text)+'</span>':(A.unchecked(r)?'<span class="badge amber">접수 후 미확인</span>':'');
+      var extra=[];if(r.round>=2)extra.push('<span class="badge teal">R'+r.round+'</span>');
+      if((r.state==='verifying'||r.state==='open')&&!r.anonReviewed)extra.push('<span class="badge amber">익명화 미검토</span>');
+      if(r.state==='collecting'&&A.usdMissing(r))extra.push('<span class="badge amber">USD 참고 미입력</span>');
+      if(A.isOperator()&&r.delegation)extra.push(MICEGO_PTR.delegChip(r,true));
+      return '<tr><td><a class="mono rowlink" href="rfp.html?id='+r.id+'" data-id="'+r.id+'">'+r.id+'</a></td><td>'+A.chip(r.state)+'</td><td>'+esc(r.destination)+' · '+esc(r.eventType)+'</td><td class="num">'+r.headcount+'명</td><td>'+r.start+'</td><td>'+A.fmtD(r.createdAt)+'</td><td>'+sl+' '+extra.join(' ')+'</td></tr>';
+    }).join('');
+    return '<div class="tbl-wrap"><table><thead><tr><th>ID</th><th>상태</th><th>목적지 · 유형</th><th class="num">인원</th><th>행사일</th><th>접수일</th><th>표시</th></tr></thead><tbody>'+(rows||'<tr><td colspan="7" class="muted">조건에 맞는 견적이 없습니다.</td></tr>')+'</tbody></table></div>';
+  }
+  function draw(){
+    var list=A.data().rfps.filter(match);
+    document.getElementById('res').innerHTML=(st.view==='kanban'?kanban(list):table(list));
+    var af=document.getElementById('af');
+    af.innerHTML=st.quick?'<span class="active-filter">필터: '+esc(A.FILTERS[st.quick].label)+' <button type="button" id="clrq" aria-label="필터 해제">×</button></span>':'';
+    var c=document.getElementById('clrq'); if(c)c.onclick=function(){st.quick=null;history.replaceState(null,'','rfps.html');draw();};
+    document.getElementById('cnt').textContent=list.length+'건';
+    [].forEach.call(document.querySelectorAll('.seg button'),function(b){b.setAttribute('aria-pressed',String(b.getAttribute('data-v')===st.view));});
+  }
+  var stOpts='<option value="">전체</option>'+Object.keys(A.STATES).map(function(k){return '<option value="'+k+'"'+(st.state===k?' selected':'')+'>'+A.STATES[k]+'</option>';}).join('');
+  main.innerHTML='<div class="page-h"><h1>견적 관리</h1><span class="muted small" id="cnt"></span><div class="seg sp" role="group" aria-label="보기 방식"><button type="button" data-v="kanban" aria-pressed="false">칸반</button><button type="button" data-v="list" aria-pressed="false">목록</button></div></div>'+
+    '<div class="filters"><div class="f"><label for="fs">상태</label><select class="inp" id="fs">'+stOpts+'</select></div><div class="f"><label for="fl">SLA·초대 기한</label><select class="inp" id="fl"><option value="">전체</option><option value="red">SLA·초대 기한 초과</option><option value="amber">SLA·초대 기한 임박</option></select></div>'+(A.isOperator()?'<div class="f"><label for="fd">위임</label><select class="inp" id="fd"><option value="">전체</option><option value="delegated"'+(st.deleg==='delegated'?' selected':'')+'>파트너 위임</option><option value="hq_held"'+(st.deleg==='hq_held'?' selected':'')+'>본사 보유</option><option value="taken_over"'+(st.deleg==='taken_over'?' selected':'')+'>본사 인계</option></select></div><div class="f"><label for="fr">지역</label><select class="inp" id="fr"><option value="">전체</option>'+MICEGO_PTR.REGIONS.filter(function(x){return x[0].length===2;}).map(function(x){return '<option value="'+x[0]+'"'+(st.region===x[0]?' selected':'')+'>'+esc(x[1])+'</option>';}).join('')+'</select></div>':'')+'<div class="f"><label for="fq">검색 (ID · 목적지)</label><input class="inp" id="fq" type="search" placeholder="MG-2610-014, 다낭"></div></div><div id="af"></div><div id="res"></div>';
+  document.getElementById('fs').onchange=function(){st.state=this.value;draw();};
+  document.getElementById('fl').onchange=function(){st.sla=this.value;draw();};
+  var fd=document.getElementById('fd');if(fd)fd.onchange=function(){st.deleg=this.value;draw();};
+  var fr=document.getElementById('fr');if(fr)fr.onchange=function(){st.region=this.value;draw();};
+  document.getElementById('fq').oninput=function(){st.q=this.value.trim();draw();};
+  main.querySelector('.seg').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;st.view=b.getAttribute('data-v');draw();});
+  draw();
+});
+})();
+
+</script>
+</body>
+</html>

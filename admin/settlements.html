@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>정산 | MICEGO 운영 콘솔</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="app"></div>
+<noscript><p class="nojs">이 화면은 JavaScript가 있어야 표시됩니다. 브라우저 설정에서 JavaScript를 켜 주세요.</p></noscript>
+<script src="../assets/config.js"></script>
+<script src="../assets/mg.js"></script>
+<script src="../assets/feedback.js" defer></script>
+<script src="data-adapter.js"></script>
+<script src="admin.js"></script>
+<script src="partner.js"></script>
+<script>
+(function(){
+
+var A=MICEGO,esc=A.esc,P=MICEGO_PTR;
+A.boot('settlements','정산',function(main){
+  var q=new URLSearchParams(location.search);
+  var st={status:q.get('status')||'',partner:'',q:''};
+  function base(s){
+    if(st.status==='todo'){var hq=A.isOperator();if(!(hq?['commission_submitted','remitted','disputed']:['pending_commission','commission_confirmed','collected']).some(function(k){return k===s.status;}))return false;}
+    else if(st.status&&s.status!==st.status)return false;
+    if(st.partner&&!(s.partner&&s.partner.code===st.partner))return false;
+    if(st.q){var t=(s.ref+' '+s.rfpId+' '+(s.hotel||'')+' '+(s.destination||'')).toLowerCase();if(t.indexOf(st.q.toLowerCase())<0)return false;}
+    return true;
+  }
+  function due(s){
+    var d=null,lbl='';
+    if(['pending_commission','commission_submitted','commission_confirmed'].indexOf(s.status)>=0&&s.collectDue){d=s.collectDue;lbl='수금 기한';}
+    else if(s.status==='collected'&&s.remitDue){d=s.remitDue;lbl='송금 기한';}
+    if(!d)return '<span class="muted">—</span>';
+    var ms=typeof d==='number'?d:Date.parse(d),over=ms<A.NOW;
+    return '<span class="badge '+(over?'red':'')+'">'+lbl+(over?' 초과':'')+'</span><div class="small muted">'+A.fmtD(ms)+'</div>';
+  }
+  function table(list){
+    var rows=list.map(function(s){
+      var flags=(s.flags||[]).map(function(f){return '<span class="badge amber">'+esc(f==='hotel_unreviewed'?'호텔 사후검토 필요':f)+'</span>';}).join(' ');
+      return '<tr><td><a class="mono rowlink" href="settlement.html?ref='+esc(s.ref)+'">'+esc(s.ref)+'</a><div class="small muted"><a class="mono" href="rfp.html?id='+esc(s.rfpId)+'">'+esc(s.rfpId)+'</a></div></td><td>'+P.stChip(s.status)+' '+flags+'</td><td>'+esc(s.hotel||'—')+'<div class="small muted">'+esc(s.destination||'')+' · '+esc(s.eventType||'')+'</div></td><td>'+(s.partner?esc(s.partner.name||s.partner.code):'<span class="muted">본사 직접</span>')+'</td><td class="num">'+P.fmtMoney(s.contractAmount,s.hotelCurrency)+'</td><td class="num">'+P.fmtMoney(s.commissionAmount,s.hotelCurrency)+(s.commissionBasis==='rate'&&s.commissionRatePct!=null?'<div class="small muted">'+s.commissionRatePct+'%</div>':'')+'</td><td class="num">'+P.fmtMoney(s.micegoShareAmount,s.hotelCurrency)+(s.partnerSharePct!=null?'<div class="small muted">파트너 '+s.partnerSharePct+'%</div>':'')+'</td><td>'+due(s)+'</td></tr>';
+    }).join('');
+    return '<div class="tbl-wrap"><table><thead><tr><th>정산</th><th>상태</th><th>호텔 · 행사</th><th>지역 파트너</th><th class="num">계약 금액</th><th class="num">커미션</th><th class="num">MICEGO 몫</th><th>기한</th></tr></thead><tbody>'+(rows||'<tr><td colspan="8" class="muted">조건에 맞는 정산이 없습니다.</td></tr>')+'</tbody></table></div>';
+  }
+  function summary(list){
+    var by={};list.forEach(function(s){var c=s.hotelCurrency||'—';by[c]=by[c]||{n:0,comm:0,mg:0};by[c].n++;by[c].comm+=Number(s.commissionAmount||0);by[c].mg+=Number(s.micegoShareAmount||0);});
+    return Object.keys(by).map(function(c){return '<div class="metric"><div class="nm">'+esc(c)+' · '+by[c].n+'건</div><div class="v">'+P.fmtMoney(by[c].comm,c)+'</div><div class="sb">커미션 합계 · MICEGO 몫 '+P.fmtMoney(by[c].mg,c)+'</div></div>';}).join('');
+  }
+  function draw(){
+    var list=(A.data().settlements||[]).filter(base).sort(function(a,b){return (Date.parse(b.createdAt)||b.createdAt)-(Date.parse(a.createdAt)||a.createdAt);});
+    document.getElementById('res').innerHTML='<div class="metrics" style="margin-bottom:12px">'+summary(list)+'</div>'+table(list);
+    document.getElementById('cnt').textContent=list.length+'건';
+  }
+  var orgs=A.data().partnerOrgs||[];
+  var stOpts='<option value="">전체</option><option value="todo"'+(st.status==='todo'?' selected':'')+'>내 처리 차례</option>'+Object.keys(P.ST).map(function(k){return '<option value="'+k+'"'+(st.status===k?' selected':'')+'>'+esc(P.ST[k])+'</option>';}).join('');
+  main.innerHTML='<div class="page-h"><h1>정산</h1><span class="muted small" id="cnt"></span></div>'+
+    '<p class="sub">성사(won)된 건마다 정산이 자동으로 열립니다. 흐름: 커미션 입력 → 본사 승인 → 수금 → 송금 → 입금 확인. 금액은 호텔 통화 기준이고 송금 시 환율을 기록합니다.</p>'+
+    '<div class="filters"><div class="f"><label for="fs">상태</label><select class="inp" id="fs">'+stOpts+'</select></div>'+
+    (A.isOperator()?'<div class="f"><label for="fp">지역 파트너</label><select class="inp" id="fp"><option value="">전체</option>'+orgs.map(function(o){return '<option value="'+esc(o.code)+'">'+esc(o.displayName)+'</option>';}).join('')+'</select></div>':'')+
+    '<div class="f"><label for="fq">검색 (정산 · RFP · 호텔)</label><input class="inp" id="fq" type="search" placeholder="ST-2610, MG-2610-014"></div></div><div id="res"></div>';
+  document.getElementById('fs').onchange=function(){st.status=this.value;draw();};
+  var fp=document.getElementById('fp');if(fp)fp.onchange=function(){st.partner=this.value;draw();};
+  document.getElementById('fq').oninput=function(){st.q=this.value.trim();draw();};
+  draw();
+});
+
+})();
+</script>
+</body>
+</html>

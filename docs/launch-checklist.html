@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>MICEGO 오픈 당일 체크리스트</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{--teal:#0B8F86;--teal-soft:#E3F5F2;--amber:#FFC24B;--amber-soft:#FFF3D6;--navy:#0F1E3D;--bg:#F6F8FB;--line:#E4E8F0;--gray:#6B7794;--error:#EF4444;--card:#fff;
+--sans:'Pretendard Variable',Pretendard,-apple-system,'Segoe UI','Noto Sans CJK KR','Noto Sans KR','Malgun Gothic',sans-serif;
+--disp:'Archivo','Pretendard Variable',Pretendard,'Noto Sans CJK KR',sans-serif;
+--mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,'Noto Sans Mono CJK KR','Noto Sans CJK KR',monospace}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--navy);font-family:var(--sans);font-size:15px;line-height:1.7;word-break:keep-all;overflow-wrap:break-word}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 56px}
+header.top{padding:40px 0 20px}
+.brand{font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:.02em;color:var(--navy)}
+.brand b{color:var(--teal)}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.25;margin:10px 0 6px;letter-spacing:-.02em}
+.ver{font-family:var(--mono);font-size:13px;color:var(--gray);margin:0 0 14px}
+.note{background:var(--amber-soft);border-left:4px solid var(--amber);padding:12px 14px;border-radius:0 8px 8px 0;font-size:14px;margin:0}
+nav.toc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:18px 0 8px}
+nav.toc b{font-size:13px;color:var(--gray);letter-spacing:.04em}
+nav.toc ol{margin:8px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:2px 16px;counter-reset:t}
+nav.toc li{counter-increment:t}
+nav.toc a{display:block;padding:5px 0;color:var(--navy);text-decoration:none;font-size:14px}
+nav.toc a::before{content:counter(t)".";font-family:var(--mono);color:var(--teal);margin-right:6px}
+nav.toc a:hover{color:var(--teal);text-decoration:underline}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin-top:18px;scroll-margin-top:12px}
+h2{font-size:20px;margin:0 0 4px;letter-spacing:-.01em}
+h2 .n{font-family:var(--mono);color:var(--teal);font-size:15px;margin-right:8px}
+p.lead{color:var(--gray);margin:0 0 14px;font-size:14px}
+h3{font-size:15px;margin:20px 0 6px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;margin:10px 0}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:13.5px;line-height:1.55}
+th,td{padding:9px 11px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:#EEF2F8;font-size:12.5px;color:var(--navy);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.nw{white-space:nowrap}
+code,.slug{font-family:var(--mono);font-size:12px;background:#EEF2F8;border-radius:5px;padding:1px 6px;white-space:nowrap}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:99px;white-space:nowrap;border:1px solid transparent}
+.op{background:var(--teal-soft);color:#076B64;border-color:#B5E3DD}
+.sys{background:var(--amber-soft);color:#8A5A00;border-color:#F3D48F}
+.org{background:#EEF0F5;color:#4A5570;border-color:#D5DAE5}
+.hot{background:#FDECEC;color:#B42323;border-color:#F6C4C4}
+.arrow{font-family:var(--mono);color:var(--gray)}
+.diagram{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px}
+.diagram svg{display:block;width:100%;min-width:720px;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin:12px 0 0;font-size:13px;color:var(--gray)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{display:inline-block;width:26px;height:0;border-top:3px solid}
+.legend i.dash{border-top-style:dashed}
+.small{font-size:13px;color:var(--gray)}
+.callout{background:var(--teal-soft);border-radius:8px;padding:11px 14px;font-size:14px;margin:12px 0 0}
+ul.tight{margin:6px 0;padding-left:20px}
+ul.tight li{margin:2px 0}
+footer{margin-top:22px;padding:18px 4px;color:var(--gray);font-size:13px;border-top:1px solid var(--line)}
+@media (max-width:520px){section{padding:18px 14px}body{font-size:14.5px}.kv2{grid-template-columns:1fr;gap:2px 0}.kv2 dt{margin-top:8px}}
+@media print{
+@page{size:A4;margin:12mm}
+html,body{background:#fff}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+nav.toc{display:none}
+.wrap{max-width:none;padding:0}
+section{border-radius:0;box-shadow:none;padding:12px 0;border-left:0;border-right:0;margin-top:10px}
+.tw,.diagram{overflow:visible;border-radius:0}
+table{min-width:0;font-size:10.5px}
+th,td{padding:5px 6px}
+tr,thead{break-inside:avoid;page-break-inside:avoid}
+thead{display:table-header-group}
+h2,h3{break-after:avoid}
+.diagram svg{min-width:0;width:100%}
+.diagram,.callout,.note{break-inside:avoid}
+body{font-size:11.5px}
+}
+/* -- additions for docs/launch-checklist.html, docs/incident-runbook.html, docs/operator-onboarding.html -- */
+.stop{background:#FDECEC;border-left:4px solid var(--error);padding:14px 16px;border-radius:0 8px 8px 0;font-size:14px;margin:14px 0 0}
+.stop b{color:#B42323}
+.warnbox{background:var(--amber-soft);border-left:4px solid var(--amber);padding:12px 14px;border-radius:0 8px 8px 0;font-size:14px;margin:12px 0 0}
+.kv2{margin:10px 0 0;display:grid;grid-template-columns:132px minmax(0,1fr);gap:7px 14px}
+.kv2 dt{font-weight:700;font-size:12.5px;color:var(--gray);align-self:start;padding-top:1px;white-space:nowrap}
+.kv2 dd{margin:0;font-size:13.5px;min-width:0}
+.kv2 code,ol.steps code,.callout code,.warnbox code,.stop code,.donot code,.note code{white-space:normal;word-break:break-all;overflow-wrap:anywhere}
+.card-inc{border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-top:14px;background:#FBFCFE}
+.card-inc h3{margin:0 0 2px;font-size:16px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.card-inc h3 .num{font-family:var(--mono);color:var(--gray);font-size:12.5px;font-weight:500}
+dl.gloss{margin:8px 0 0}
+dl.gloss dt{font-weight:700;margin-top:11px;font-size:14px;color:var(--navy)}
+dl.gloss dd{margin:2px 0 0 0;font-size:13.5px;color:#39435E}
+ol.steps{margin:8px 0 0;padding-left:22px}
+ol.steps li{margin:6px 0}
+ol.steps b{color:var(--navy)}
+.donot{background:#FDECEC;border-radius:10px;padding:14px 16px;margin:8px 0 0;border:1px solid #F6C4C4}
+.donot li{margin:6px 0}
+.donot b{color:#B42323}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<div class="brand">MICE<b>GO</b></div>
+<h1>MICEGO 오픈 당일 체크리스트</h1>
+<p class="ver">v1.0 · 2026-09-27 · 상태전이표 v1.7 · 배포 런북(supabase/README.md) · 사이트맵 점검 v1.2 기준</p>
+<p class="note">상태전이표(state-transitions.html), 사이트맵·미구현 항목(sitemap.html), Supabase 배포 런북(supabase/README.md), 운영 콘솔 화면(admin/*.html·admin.js)을 근거로 정리했습니다. 이 리포지토리에 근거가 없어 확정하지 못한 값(SSL 발급사, PITR 요금제 지원 여부 등)은 <span class="tag hot">확인 필요</span>로 표시했습니다.</p>
+
+</header>
+<nav class="toc" aria-label="목차">
+<b>목차</b>
+<ol>
+<li><a href="#overview">한눈에 보기</a></li>
+<li><a href="#d7">D-7</a></li>
+<li><a href="#d1">D-1</a></li>
+<li><a href="#dday-am">D-day 오전</a></li>
+<li><a href="#dday-1h">오픈 직후 1시간</a></li>
+<li><a href="#d-plus-1">D+1</a></li>
+<li><a href="#week1">첫 주</a></li>
+<li><a href="#notify-mode">NOTIFY_MODE 전환과 되돌리기</a></li>
+<li><a href="#stop-criteria">오픈 중단 기준</a></li>
+</ol>
+</nav>
+<section id="overview">
+<h2><span class="n">1</span>한눈에 보기</h2>
+<p class="lead">이 체크리스트는 오픈 전 7일부터 오픈 뒤 첫 주까지, 데모(mock) 데이터로 만들어진 지금의 프런트엔드를 실제 Supabase 백엔드로 전환하는 과정을 단계별로 확인합니다. 근거는 <a href="state-transitions.html">상태전이표 v1.7</a>, <a href="sitemap.html">사이트맵·오픈 전 점검</a>, <code>supabase/README.md</code>, 운영 콘솔(<code>admin/*.html</code>) 코드입니다.</p>
+<div class="tw"><table><thead><tr><th>단계</th><th>핵심 질문</th><th>항목 수</th></tr></thead><tbody>
+<tr><td class="nw"><b>D-7</b></td><td>백엔드·발신 채널 준비가 끝났는가</td><td>8</td></tr>
+<tr><td class="nw"><b>D-1</b></td><td>실제 도메인·실제 값으로 다시 빌드했는가</td><td>10</td></tr>
+<tr><td class="nw"><b>D-day 오전</b></td><td>사람이 직접 눌러서 한 바퀴가 도는가</td><td>6</td></tr>
+<tr><td class="nw"><b>오픈 직후 1시간</b></td><td>자동으로 도는 것들이 실제로 돌고 있는가</td><td>4</td></tr>
+<tr><td class="nw"><b>D+1</b></td><td>밤사이 쌓인 것들이 정상 처리됐는가</td><td>4</td></tr>
+<tr><td class="nw"><b>첫 주</b></td><td>주간 루틴과 지표가 실데이터 기준으로 도는가</td><td>5</td></tr>
+</tbody></table></div>
+<p class="callout">각 항목은 <b>확인 내용 · 담당 · 확인 방법(정확한 화면·명령·URL) · 통과 기준</b> 네 칸으로 되어 있습니다. 통과하지 못한 항목이 있으면 <a href="#stop-criteria">오픈 중단 기준</a>을 먼저 보세요.</p>
+</section>
+<section id="d7"><h2><span class="n">2</span>D-7 · 오픈 7일 전</h2><p class="lead">벤더 심사(알림톡·발신번호)와 법무 검토처럼 시간이 걸리는 항목을 먼저 신청합니다. 이 단계가 늦어지면 오픈일이 밀립니다.</p><div class="tw"><table><thead><tr><th>#</th><th>확인 내용</th><th>담당</th><th>확인 방법</th><th>통과 기준</th></tr></thead><tbody><tr><td class="nw">1</td><td><b>site.config.json 값 확인</b></td><td>대표·운영</td><td><code>site.config.json</code>을 열어 <code>domain·officialEmail·privacyEmail·operator.*(상호·대표자·사업자등록번호·주소·개인정보책임자)·analytics.ga4·siteVerification·supabase·sms·prod·demo</code> 값을 하나씩 확인합니다.</td><td>필수 항목에 빈 문자열이 없습니다. 리포지토리 기본값은 전부 빈칸이고 <code>prod:false, demo:true</code>이므로, 이번 주 안에 실값을 채워 넣는 것이 목표입니다.</td></tr><tr><td class="nw">2</td><td>Supabase 프로젝트·마이그레이션 적용</td><td>개발</td><td><code>supabase link --project-ref …</code> 후 <code>supabase db push</code>로 <code>migrations/0001~0009</code>를 적용하고, <code>psql "$SUPABASE_DB_URL"</code>로 <code>private.*</code>·<code>public.*</code> 스키마가 생성됐는지 확인합니다.</td><td>마이그레이션 9개가 오류 없이 적용되고, <code>seed.sql</code>(공휴일·설정값·알림 템플릿 메타)까지 반영됩니다.</td></tr><tr><td class="nw">3</td><td>Supabase secrets 전체 등록</td><td>개발</td><td><code>supabase secrets list</code>로 README §3·§8.1 표의 변수(<code>SUPABASE_URL/ANON_KEY/SERVICE_ROLE_KEY, SUPABASE_DB_URL, SITE_BASE_URL, SITE_ORIGINS, SUPPORT_EMAIL/OPS_INBOX/FROM_ADDRESS, RESEND_API_KEY, SMS_VENDOR, SOLAPI_*, OTP_PEPPER, IP_HASH_SALT, CRON_SECRET, FEEDBACK_*</code> 등)이 모두 있는지 대조합니다.</td><td>표의 필수 변수가 전부 등록되어 있습니다. <code>NOTIFY_MODE</code>는 이 시점에는 아직 <code>log</code>로 둡니다. <code>ALIGO_*</code>는 폴백 벤더를 안 쓰면 비워도 됩니다.</td></tr><tr><td class="nw">4</td><td>kr_holiday 내년까지 입력</td><td>운영</td><td>DB에서 <code>select * from kr_holiday where date &gt;= '내년-01-01'</code> 또는 콘솔 설정 &gt; 영업일·공휴일 탭에서 확인합니다.</td><td>내년 한 해 공휴일이 모두 입력돼 있습니다. 비어 있으면 SLA·심사 기한이 실제보다 짧게 계산됩니다(상태전이표 §8).</td></tr><tr><td class="nw">5</td><td>알림톡 템플릿 심사 신청</td><td>운영</td><td>Solapi(카카오 비즈니스) 콘솔에서 <code>docs/notification-templates.json</code>의 알림톡 9종(<code>micego_*</code> 코드)을 심사 신청합니다.</td><td>최소 <code>ORG_RECEIVED·ORG_BIDDING·ORG_DELIVERED·ORG_WON·ORG_LOST</code> 등 오거나이저용 알림톡이 심사 접수 상태입니다. <span class="tag hot">확인 필요</span> — 심사 소요 기간은 벤더·시점에 따라 다르므로 여유를 두고 신청합니다.</td></tr><tr><td class="nw">6</td><td>SMS 발신번호 사전등록</td><td>운영</td><td>Solapi 콘솔에서 <code>SMS_SENDER</code>로 쓸 발신번호 등록 상태를 확인합니다.</td><td>발신번호 등록이 완료됩니다. 이 번호로 <code>ORG_PICK_OTP</code>(제안 선택 인증)와 <code>ACC_SMS_OTP</code>(회원 휴대전화 인증)가 나갑니다 — 둘 다 알림톡을 쓰지 않고 SMS 전용입니다.</td></tr><tr><td class="nw">7</td><td>이용약관 전문·개인정보처리방침 법무 검토</td><td>대표·법무</td><td><code>ko/terms.html, ko/privacy.html, en/terms.html, en/privacy.html</code>에서 <code>TODO(legal)</code> 표시를 검색합니다.</td><td>10개 조항 요약 초안이 전문으로 교체되고, 개인정보처리방침의 TODO(legal) 5건(제3자 제공·국외 이전 고지, 보관 기간, SMS 수탁사, 개정일 등)이 확정됩니다.</td></tr><tr><td class="nw">8</td><td>임시 흔적 제거 대상 확인</td><td>개발·운영</td><td>코드 전체에서 <code>mysteri1984@gmail.com</code>, <code>micego.example</code>, 예시 데이터(REF <code>MG-2610-014</code>, &quot;김지은 과장&quot; 등)를 검색합니다.</td><td>검색 결과가 남아 있는 위치를 전부 목록화합니다(실제 제거는 D-1에 재빌드로 반영). 사이트맵 §2 &quot;데모 흔적 제거&quot; 표와 대조합니다.</td></tr></tbody></table></div></section>
+<section id="d1"><h2><span class="n">3</span>D-1 · 오픈 하루 전</h2><p class="lead">이 시점부터는 실제 도메인·실제 값 기준으로 다시 빌드합니다. D-7에서 신청만 해둔 항목(알림톡 심사 등)의 결과를 여기서 확정합니다.</p><div class="tw"><table><thead><tr><th>#</th><th>확인 내용</th><th>담당</th><th>확인 방법</th><th>통과 기준</th></tr></thead><tbody><tr><td class="nw">1</td><td>site.config.json 최종값 반영 후 재빌드</td><td>개발</td><td><code>site.config.json</code>에 <code>prod:true, demo:false</code>와 D-7에서 채운 실값을 넣고 빌드 파이프라인(<code>build2.py</code> → 말미에 <code>build_launch.py</code> 실행)을 다시 돌립니다.</td><td><code>site_config.py</code>의 <code>prod:true but …</code> 검사가 통과하고(필수값 누락 없음), 공개 페이지에서 DEMO 띠와 <code>?state=</code> 미리보기 스위처가 사라집니다.</td></tr><tr><td class="nw">2</td><td>sitemap.xml · robots.txt · canonical 확인</td><td>개발</td><td><code>sitemap.xml</code>에 공개 페이지 15개만 있는지, <code>robots.txt</code>의 <code>Disallow: /admin/ /docs/ /emails/</code>와 <code>Sitemap:</code> 줄, 각 페이지 <code>&lt;link rel=canonical&gt;</code>가 실제 도메인 절대 URL인지 확인합니다.</td><td>토큰 링크(<code>track.html?t=</code>, <code>bid.html?t=</code>)와 회원·admin 페이지가 sitemap에 없고, canonical·hreflang의 <code>TODO(domain)</code> 주석이 모두 실제 도메인으로 풀립니다.</td></tr><tr><td class="nw">3</td><td>Supabase secrets 최종 재확인</td><td>개발</td><td><code>supabase secrets list</code>로 D-7 값을 다시 확인하고, 특히 <code>SITE_BASE_URL</code>·<code>SITE_ORIGINS</code>·<code>FEEDBACK_ALLOWED_ORIGINS</code>가 실제 운영 도메인인지 봅니다.</td><td>임시·스테이징 도메인이 <code>FEEDBACK_ALLOWED_ORIGINS</code>가 아니라 <code>FEEDBACK_STAGING_ORIGINS</code> 쪽에만 들어 있습니다(운영 Origin에 남아 있으면 실제 피드백이 <code>is_demo</code>로 잘못 분류됩니다).</td></tr><tr><td class="nw">4</td><td>NOTIFY_MODE 전환 리허설</td><td>개발</td><td>스테이징 프로젝트에서 <code>supabase secrets set NOTIFY_MODE=live</code> 후 테스트 알림 1건을 실제로 발송해 봅니다. 절차는 <a href="#notify-mode">8장</a> 참고.</td><td><code>notification_deliveries.status</code>가 <code>skipped</code>가 아니라 <code>sent</code>로 남습니다. 문제가 있으면 즉시 <code>log</code>로 되돌리는 절차까지 리허설합니다.</td></tr><tr><td class="nw">5</td><td>카카오 인앱 브라우저 실기기 검증</td><td>QA</td><td>안드로이드·iOS 카카오톡 안에서 <code>ko/track.html?t=…</code>, <code>en/bid.html?t=…</code> 링크를 열어 봅니다(알림톡 링크가 실제로 열리는 대표 환경).</td><td>인앱 브라우저에서 레이아웃이 깨지지 않고, 제안 선택·견적 제출 폼이 정상 동작합니다. 외부 브라우저로 열어야만 되는 기능이 있다면 안내 문구가 보입니다.</td></tr><tr><td class="nw">6</td><td>메일 도달 테스트(수신함 확인)</td><td>QA</td><td>네이버·카카오(다음)·Gmail 각 1계정으로 <code>ORG_RECEIVED</code> 등 테스트 메일을 받아 확인합니다.</td><td>세 서비스 모두 <b>스팸함이 아닌 받은편지함</b>에 도착합니다. 스팸 처리되면 Resend 발신 도메인의 SPF/DKIM 인증부터 다시 확인합니다.</td></tr><tr><td class="nw">7</td><td>알림톡 템플릿 승인 상태 최종 확인</td><td>운영</td><td>Solapi 콘솔에서 D-7에 신청한 <code>micego_*</code> 알림톡 템플릿의 심사 결과를 확인합니다.</td><td>오거나이저용 알림톡(<code>ORG_*</code>)이 전부 승인 완료 상태입니다. 승인이 안 됐다면 LMS 문자 대체로만 나간다는 점을 <a href="#stop-criteria">오픈 중단 기준</a>과 함께 검토합니다.</td></tr><tr><td class="nw">8</td><td>도메인 SSL 확인</td><td>개발</td><td><code>https://실제도메인</code>으로 접속해 인증서 발급자·유효기간을 확인하고, <code>http://</code>로 접속했을 때 <code>https://</code>로 리다이렉트되는지 확인합니다.</td><td>유효한 인증서이고 자동 갱신이 걸려 있습니다. <span class="tag hot">확인 필요</span> — 인증서 발급·자동 갱신 방식은 호스팅사 설정에 따라 다릅니다.</td></tr><tr><td class="nw">9</td><td>백업(PITR) 켜짐 확인</td><td>개발</td><td>Supabase 대시보드 <code>Database → Backups</code>에서 Point-in-Time Recovery 활성 여부를 확인합니다.</td><td>운영 프로젝트에 PITR이 켜져 있습니다. <span class="tag hot">확인 필요</span> — Supabase 요금제에 따라 PITR 지원 여부와 보관 기간이 다르므로 대시보드에서 직접 확인해야 합니다.</td></tr><tr><td class="nw">10</td><td>404 페이지 확인</td><td>QA</td><td>존재하지 않는 경로(예: <code>/아무거나</code>)로 접속해 봅니다.</td><td>호스팅 기본 화면이 아니라 <code>404.html</code>(한/영 병기)이 나타납니다. 토큰 링크 오류 화면(<code>invalid</code>)과는 다른 화면임을 확인합니다.</td></tr></tbody></table></div></section>
+<section id="dday-am"><h2><span class="n">4</span>D-day 오전 · 오픈 당일</h2><p class="lead">사람이 직접 화면을 눌러서 처음부터 끝까지 한 바퀴 도는 것을 확인하는 단계입니다. 자동화된 검사로는 잡지 못하는 문제가 여기서 나옵니다.</p><div class="tw"><table><thead><tr><th>#</th><th>확인 내용</th><th>담당</th><th>확인 방법</th><th>통과 기준</th></tr></thead><tbody><tr><td class="nw">1</td><td>첫 운영자 로그인</td><td>대표·운영</td><td><code>admin/index.html</code>에서 Supabase Auth에 만들어 둔 실제 운영자 이메일·비밀번호로 로그인합니다(사전에 <code>app_metadata.role = &quot;operator&quot;</code>가 부여돼 있어야 합니다).</td><td>DEMO 리본과 &quot;DEMO · 실제 인증은 없습니다&quot; 안내가 사라지고 <code>dashboard.html</code>로 정상 진입합니다. 권한이 없는 계정이면 <code>index.html?e=role</code>로 돌아가며 &quot;운영자 권한이 있는 계정으로 로그인해 주세요&quot;가 뜹니다 — 이 메시지가 보이면 통과가 아닙니다.</td></tr><tr><td class="nw">2</td><td>대시보드 SLA 시계가 실제 시각인지 확인</td><td>운영</td><td><code>dashboard.html</code> 상단 &quot;기준 시각 … KST&quot;가 지금 시각과 맞는지 확인합니다.</td><td>데모 고정 시각(<code>2026-10-08 19:30</code>)이 아니라 실제 현재 시각이 표시됩니다. mock 모드가 아니라 <code>MGA.mode === 'api'</code>로 동작 중이라는 뜻입니다.</td></tr><tr><td class="nw">3</td><td>견적 요청 한 바퀴(테스트 데이터)</td><td>운영·개발</td><td><code>ko/index.html</code>에서 테스트 요청을 접수 → <code>ko/track.html</code> 추적 링크 수신 확인 → <code>admin/rfp.html</code>에서 검증중→오픈→비딩중 전이하며 승인 파트너 1곳 초대 → <code>en/bid.html</code>에서 견적 제출 → 콘솔에서 취합중→전달됨 → 추적 페이지에서 제안 선택 + 인증번호 입력 → 전달됨→성사 전이까지 실제로 눌러 봅니다.</td><td>상태전이표 v1.7의 전이 순서와 어긋나지 않고, 각 단계 알림(<code>ORG_RECEIVED · ORG_BIDDING · HTL_INVITE · HTL_QUOTE_RECEIVED · ORG_DELIVERED · ORG_PICK_OTP · HTL_SELECTED_CONNECT · ORG_WON</code>)이 실제로 발송됩니다.</td></tr><tr><td class="nw">4</td><td>회원가입 한 바퀴</td><td>운영</td><td><code>ko/signup.html</code>에서 테스트 계정으로 기본 정보 → 이메일 인증번호 → 휴대전화 인증번호까지 진행합니다.</td><td><code>active</code> 상태에 도달하고 <code>ACC_WELCOME</code>을 수신하며, <code>admin/members.html</code>에 새 회원으로 표시됩니다.</td></tr><tr><td class="nw">5</td><td>피드백 위젯 한 바퀴</td><td>운영</td><td>아무 공개 페이지 우하단 &quot;의견 보내기&quot; 버튼으로 테스트 피드백을 제출합니다.</td><td><code>FB-YYMMDD-XXXX</code> 접수번호가 발급되고, 운영팀이 <code>FB_OPS_ALERT</code>을 수신하며, <code>admin/feedback.html</code>에 <b>신규</b> 상태로 보입니다.</td></tr><tr><td class="nw">6</td><td>검색엔진 등록</td><td>운영</td><td>네이버 서치어드바이저·구글 서치콘솔에 <code>site.config.json</code>의 <code>siteVerification</code> 값으로 소유 확인 후 <code>sitemap.xml</code>을 제출합니다.</td><td>두 콘솔 모두 소유 확인이 완료되고 sitemap이 정상 접수됩니다.</td></tr></tbody></table></div></section>
+<section id="dday-1h"><h2><span class="n">5</span>오픈 직후 1시간</h2><p class="lead">사람이 누른 한 바퀴가 문제없더라도, 시스템이 알아서 도는 부분(크론·알림 재시도)은 따로 확인해야 합니다.</p><div class="tw"><table><thead><tr><th>#</th><th>확인 내용</th><th>담당</th><th>확인 방법</th><th>통과 기준</th></tr></thead><tbody><tr><td class="nw">1</td><td>실시간 발송 로그 확인</td><td>운영</td><td><code>admin/settings.html#notify</code> 발송 로그와 <code>admin/dashboard.html</code>의 &quot;발송 실패&quot; 카드를 봅니다.</td><td>발송 실패가 0건이거나, 있다면 즉시 원인(주소 오타 등)이 파악되는 개별 건 정도입니다.</td></tr><tr><td class="nw">2</td><td>pg_cron 동작 확인</td><td>개발</td><td>Supabase 대시보드 <code>Database → Cron Jobs</code>(또는 <code>select * from cron.job_run_details order by start_time desc</code>)에서 6개 작업 — 알림 발송(매분) · <code>mg-system-tick</code>(10분) · <code>mgfb-mail-retry</code>(10분) · 레이트리밋 정리(매시) · 데모 정리(매일) · 익명화(매월) — 의 최근 실행 시각을 확인합니다.</td><td>6개 작업 모두 각자 주기 안에 최근 정상 실행 기록이 있습니다.</td></tr><tr><td class="nw">3</td><td>실사용 접수 1건을 실제로 진행</td><td>운영</td><td>가짜 테스트가 아니라 첫 실사용 접수 건을 <code>admin/rfps.html</code>에서 찾아 검증중까지 넘겨 봅니다.</td><td>SLA 기산(검증중 전이 시각)이 실제 접수 시각을 기준으로 정확히 걸립니다.</td></tr><tr><td class="nw">4</td><td>오류 로그 확인</td><td>개발</td><td>브라우저 콘솔과 <code>supabase functions logs &lt;함수명&gt;</code>(<code>submit_rfp, get_track, get_bid, submit_quote, login</code> 등)을 확인합니다.</td><td>반복되는 500 오류나 인증 오류가 없습니다.</td></tr></tbody></table></div></section>
+<section id="d-plus-1"><h2><span class="n">6</span>D+1</h2><p class="lead">오픈 첫날 밤사이 쌓인 것들 — SLA, 발송 실패, 피드백 — 을 아침에 정리합니다.</p><div class="tw"><table><thead><tr><th>#</th><th>확인 내용</th><th>담당</th><th>확인 방법</th><th>통과 기준</th></tr></thead><tbody><tr><td class="nw">1</td><td>SLA 임박 목록 재확인</td><td>운영</td><td><code>dashboard.html</code>의 &quot;SLA·초대 기한 초과/임박&quot; 카드를 확인합니다.</td><td>D-day에 접수된 건이 제때 검증중으로 넘어갔고, 방치된 건이 없습니다.</td></tr><tr><td class="nw">2</td><td>발송 실패·재시도 확인</td><td>운영</td><td><code>settings.html#notify</code> 발송 로그에서 <code>failed</code> 건을 확인합니다(자동 재시도는 1/5/30/120/360분 백오프로 5회까지, 이후 <code>failed</code>로 표시).</td><td>실패 건이 전부 &quot;직접 보냄&quot; 처리되었거나 재발송으로 해소됩니다.</td></tr><tr><td class="nw">3</td><td>신규 피드백 트리아지</td><td>운영</td><td><code>admin/feedback.html</code>에서 D-day에 들어온 신규 건을 우선순위(P1~P4)와 하위 코드로 분류합니다(VOC SOP: 일일 트리아지 영업일 10:00·16:00, 신규→분류 1영업일).</td><td>신규 건이 1영업일 안에 전부 분류됩니다. P1은 접수 후 4영업시간 안에 착수합니다.</td></tr><tr><td class="nw">4</td><td>도메인·SSL·404·검색엔진 재점검</td><td>운영</td><td>D-1/D-day 항목(SSL 유효기간, 404 페이지, 서치콘솔 등록)을 다시 한번 확인합니다.</td><td>전날 확인한 상태 그대로 이상이 없습니다.</td></tr></tbody></table></div></section>
+<section id="week1"><h2><span class="n">7</span>첫 주</h2><p class="lead">일회성 점검에서 벗어나 정규 운영 루틴(<a href="operator-onboarding.html">운영자 온보딩</a> 문서 참고)으로 넘어가는 단계입니다.</p><div class="tw"><table><thead><tr><th>#</th><th>확인 내용</th><th>담당</th><th>확인 방법</th><th>통과 기준</th></tr></thead><tbody><tr><td class="nw">1</td><td>주간 정리(VOC 월요일 11:00)</td><td>운영</td><td><code>admin/feedback.html</code> 주간 정리 프리셋으로 <code>on_hold</code>·미분류 건을 정리합니다(VOC SOP 기준).</td><td>보류 건에 사유 메모가 남아 있고, 오래 방치된 신규 건이 없습니다.</td></tr><tr><td class="nw">2</td><td>파트너 심사 지연 재확인</td><td>운영</td><td><code>dashboard.html</code>의 &quot;파트너 심사 지연&quot; 카드를 확인합니다.</td><td>신청·심사중 상태에서 5영업일을 넘긴 건이 없습니다.</td></tr><tr><td class="nw">3</td><td>알림톡 대체발송(LMS) 비율 확인</td><td>운영</td><td><code>settings.html#notify</code> 발송 로그에서 오거나이저 알림톡이 실패해 LMS 문자로 대체된 비율을 봅니다.</td><td>특정 통신사·기기에서 알림톡이 반복적으로 실패하지 않습니다. 반복된다면 카카오 알림톡 프로필·발신 설정을 재점검합니다.</td></tr><tr><td class="nw">4</td><td>지표 카드가 실데이터로 갱신되는지 확인</td><td>대표</td><td><code>dashboard.html</code>의 &quot;지난달 지표 · 예시 데이터&quot; 카드가 실접수 기준으로 바뀌었는지 확인합니다.</td><td>&quot;예시 데이터&quot; 표시가 사라지고 실제 접수·성사 건수로 계산됩니다.</td></tr><tr><td class="nw">5</td><td>카카오 인앱·메일 도달 재검증</td><td>QA</td><td>첫 주 실사용자 문의·피드백 중에 링크가 안 열리거나 메일을 못 받았다는 제보가 있는지 <code>admin/feedback.html</code>에서 확인합니다.</td><td>전달 관련 제보가 없거나, 있다면 원인이 파악되어 조치됩니다.</td></tr></tbody></table></div></section>
+<section id="notify-mode">
+<h2><span class="n">8</span>NOTIFY_MODE 전환과 되돌리기</h2>
+<p class="lead"><code>NOTIFY_MODE</code>는 <code>log</code> 또는 <code>live</code> 두 값입니다. <code>log</code>는 실제 HTTP 발송 없이 <code>notification_deliveries.status = 'skipped'</code>로만 기록하고, <code>live</code>는 실제로 이메일·알림톡·SMS를 내보냅니다(supabase/README.md §3).</p>
+<h3>시작값과 전환 시점</h3>
+<ul class="tight">
+<li>개발·검증 기간에는 계속 <code>log</code>로 둡니다. 이 상태에서는 상태전이 자체는 정상 동작하고 알림만 실제로 나가지 않습니다.</li>
+<li><b>D-1</b>: 스테이징 프로젝트에서 먼저 <code>live</code>로 전환해 리허설합니다.</li>
+<li><b>D-day 오픈 직전</b>: 운영 프로젝트를 <code>live</code>로 전환합니다.</li>
+</ul>
+<h3>전환 절차</h3>
+<ol class="steps">
+<li><code>supabase secrets set NOTIFY_MODE=live --project-ref &lt;project-ref&gt;</code>를 실행합니다. Edge Function을 다시 배포할 필요는 없고, 다음 <code>dispatch_notifications</code> 호출(매분 크론)부터 바로 반영됩니다.</li>
+<li>테스트 알림 1건(예: 테스트 계정으로 <code>ORG_RECEIVED</code> 유도)을 발송해 실제로 도착하는지, <code>settings.html#notify</code> 발송 로그에 &quot;발송됨&quot;으로 남는지 확인합니다.</li>
+<li><code>MG_DEMO_OTP=1</code>은 QA 전용이며 <code>NOTIFY_MODE=live</code>에서는 코드가 강제로 무시하므로(README §3), 운영 전환 시 별도로 끌 필요는 없습니다 — 다만 QA 시크릿이 운영 프로젝트에 남아 있지 않은지 한 번은 확인합니다.</li>
+</ol>
+<h3>되돌리기(오발송·대량 실패 시)</h3>
+<ol class="steps">
+<li><code>supabase secrets set NOTIFY_MODE=log --project-ref &lt;project-ref&gt;</code>로 즉시 원복합니다. 이후 알림은 다시 <code>skipped</code>로만 기록되고 실제 발송은 멈춥니다.</li>
+<li>원복하기 전에 이미 <code>pending</code>으로 쌓인 큐가 있는지 확인합니다 — <code>log</code>로 돌아가도 큐 자체는 지워지지 않으므로, <code>live</code>로 다시 전환하는 순간 밀린 알림이 한꺼번에 나갈 수 있습니다.</li>
+<li>원인을 파악한 뒤 재전환하거나, 문제가 된 개별 건만 운영자가 <code>settings.html#notify</code> 발송 로그에서 &quot;직접 보냄&quot;으로 표시하고 나머지는 <code>log</code>로 유지합니다.</li>
+</ol>
+<div class="callout">발송 실패는 1/5/30/120/360분 백오프로 최대 5회 자동 재시도된 뒤 <code>failed</code>로 남아 대시보드 &quot;발송 실패&quot; 카드와 콘솔 <code>failed</code> 필터에 노출됩니다. <code>failed</code> 건은 운영자가 직접 발송하고 화면에서 체크 표시합니다.</div>
+</section>
+<section id="stop-criteria">
+<h2><span class="n">9</span>오픈 중단 기준</h2>
+<p class="lead">아래 중 하나라도 해당하면 오픈을 미룹니다. 부분적으로 열고 나중에 고치는 방식은 개인정보·법적 리스크가 있는 항목(약관·방침·사업자 정보)에는 적용하지 않습니다.</p>
+<div class="stop">
+<ul class="tight">
+<li><b>핵심 흐름 중 하나라도 안 됨</b> — 견적 요청 제출(<code>submit_rfp</code>) → 토큰 조회(<code>get_track</code>/<code>get_bid</code>) → 견적 제출·거절(<code>submit_quote</code>/<code>decline_bid</code>) → 제안 선택 인증(<code>pick_send_otp</code>/<code>pick_verify</code>) 중 하나라도 <a href="#dday-am">D-day 오전 한 바퀴</a>에서 실패</li>
+<li><b>제안 선택 자체가 막힘</b> — SMS 발신번호 미등록으로 <code>ORG_PICK_OTP</code>가 전혀 가지 않음(성사 전이가 원천적으로 불가능해짐)</li>
+<li><b>Supabase 연결 실패 또는 마이그레이션 미적용</b> — 콘솔 로그인이 <code>e=config</code>·<code>e=snapshot</code>으로 반복 실패</li>
+<li><b>도메인 SSL 미비</b> — 인증서 오류로 브라우저 경고가 뜸(카카오 인앱 브라우저에서는 그대로 접속이 막히는 경우가 있음)</li>
+<li><b>이용약관 전문·개인정보처리방침 미확정</b> — <code>TODO(legal)</code>이 남아 있는 상태로는 오픈하지 않습니다</li>
+<li><b>사업자 정보 미기재</b> — 상호·대표자·사업자등록번호·주소·개인정보 보호책임자가 푸터·약관·방침에 비어 있음</li>
+<li><b>임시 메일 주소·예시 데이터가 화면에 남아 있음</b> — <code>mysteri1984@gmail.com</code>, REF 예시값, 고정 날짜 등이 재빌드 후에도 보임</li>
+<li><b><code>site.config.json</code>이 <code>prod:false</code> 또는 <code>demo:true</code>인 채로 배포됨</b> — DEMO 띠·상태 미리보기 스위처가 실사용자에게 노출됨</li>
+</ul>
+</div>
+<p class="small" style="margin-top:12px">경미한 항목(이메일 열람용 웹 버전, 파트너 신청 상태 확인 페이지 등 사이트맵 §2의 &quot;C 오픈 직후&quot; 항목)은 오픈을 막지 않고 첫 주 안에 처리합니다.</p>
+</section>
+<footer>
+<b>연관 문서</b> · <a href="state-transitions.html">상태전이표 v1.7</a> · <a href="sitemap.html">사이트맵 · 오픈 전 점검 v1.2</a> · <a href="notification-library.html">알림 라이브러리</a> · <a href="incident-runbook.html">장애 대응 runbook</a> · <a href="operator-onboarding.html">운영자 온보딩</a> · supabase/README.md
+</footer>
+</div>
+</body>
+</html>

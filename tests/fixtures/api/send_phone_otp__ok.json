@@ -1,0 +1,7 @@
+{
+  "status": 200,
+  "body": {
+    "otp_id": "otp_phone_1",
+    "phone_masked": "010-****-5678"
+  }
+}

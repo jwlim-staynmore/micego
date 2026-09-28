@@ -1,0 +1,8 @@
+{
+  "status": 423,
+  "body": {
+    "error": {
+      "code": "ACCOUNT_LOCKED"
+    }
+  }
+}

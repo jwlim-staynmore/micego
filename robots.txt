@@ -1,0 +1,14 @@
+User-agent: *
+Disallow: /admin/
+Disallow: /docs/
+Disallow: /emails/
+Disallow: /ko/track.html
+Disallow: /ko/my.html
+Disallow: /ko/account.html
+Disallow: /ko/withdraw.html
+Disallow: /ko/reset.html
+Disallow: /en/bid.html
+Disallow: /en/unsubscribe.html
+Disallow: /404.html
+# TODO(domain): add "Sitemap: https://<domain>/sitemap.xml" once the domain is confirmed.
+# This file only works when micego-site is served from the domain root.

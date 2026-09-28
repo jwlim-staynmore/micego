@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<script src="../assets/config.js"></script><script src="../assets/mg.js"></script><script src="../assets/feedback.js" defer></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sample MICE quote request (demo) | MICEGO Partner</title>
+<meta name="robots" content="noindex">
+<meta property="og:locale" content="en_US">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" href="../favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
+<meta name="description" content="MICEGO partner sourcing request: quote submission for a confirmed MICE program in Da Nang, Vietnam.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --ink:#0F1E3D;
+  --ink-80:#1F3266;
+  --ink-60:#4A5D8C;
+  --teal:#0B8F86;
+  --teal-deep:#076E67;
+  --teal-bright:#16B5A8;
+  --teal-soft:#E3F5F2;
+  --amber:#FFC24B;
+  --amber-soft:#FFF3D6;
+  --white:#FFFFFF;
+  --bg:#F6F8FB;
+  --bg-warm:#EEF2F6;
+  --line:#E4E8F0;
+  --line-dim:#EEF1F6;
+  --gray:#6B7794;
+  --gray-light:#A0AAC2;
+  --success:#22C55E;
+  --warn:#F59E0B;
+  --error:#EF4444;
+  --amber-deep:#8A5A00;
+
+  --font-display:'Archivo','Pretendard',-apple-system,sans-serif;
+  --font-sans:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',monospace;
+
+  --sh-card:0 1px 2px rgba(15,30,61,.04), 0 4px 12px rgba(15,30,61,.05);
+  --sh-card-hover:0 4px 8px rgba(15,30,61,.06), 0 12px 24px rgba(15,30,61,.08);
+  --sh-elevated:0 8px 20px rgba(15,30,61,.06), 0 24px 48px rgba(15,30,61,.10);
+}
+.container{max-width:1200px;margin:0 auto;padding:0 32px}
+/* ===== Site header ===== */
+.site-header{position:fixed;top:0;left:0;right:0;height:72px;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .2s ease,border-color .2s ease}
+.site-header.is-scrolled{background:rgba(255,255,255,.86);backdrop-filter:blur(14px) saturate(150%);border-bottom:1px solid var(--line)}
+.site-header .container{height:100%;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:28px;height:28px;border-radius:9px;flex:0 0 auto}
+.brand-word{font-family:var(--font-display);font-weight:800;font-size:21px;letter-spacing:-.02em;white-space:nowrap}
+.brand-word .go{color:var(--teal-deep)}
+.header-nav{display:flex;align-items:center;gap:32px}
+.header-nav a{font-size:14px;color:var(--gray);transition:color .15s ease}
+.header-nav a:hover{color:var(--ink)}
+.header-right{display:flex;align-items:center;gap:16px}
+
+
+.site-footer{background:var(--ink);padding:56px 0 32px;color:rgba(255,255,255,.7)}
+.footer-top{display:grid;grid-template-columns:1fr auto;gap:32px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.12)}
+.footer-brand{display:flex;align-items:center;gap:10px}
+.footer-brand .brand-word{color:var(--white)}
+.footer-brand .brand-word .go{color:var(--amber)}
+.footer-desc{font-size:13px;color:rgba(255,255,255,.55);margin-top:10px}
+.footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+.footer-contact{font-size:14px;color:var(--white)}
+.footer-links{display:flex;gap:18px;font-size:13px;color:rgba(255,255,255,.6)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;flex-wrap:wrap;gap:10px}
+.footer-notice{font-size:12px;color:rgba(255,255,255,.5);max-width:640px}
+.footer-copyright{font:400 11px/1 var(--font-mono);color:rgba(255,255,255,.4)}
+body.has-fixed-header{padding-top:72px}
+.site-header a,.site-footer a{text-decoration:none}
+@media (max-width:768px){body.has-fixed-header{padding-top:56px}.container{padding:0 20px}.site-header{height:56px}.site-header .container{height:56px}.brand-mark{width:26px;height:26px}.brand-word{font-size:19px}.footer-top{grid-template-columns:1fr}.footer-bottom{flex-direction:column;align-items:flex-start}}
+
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--ink);background:var(--bg);line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:960px;margin:0 auto;padding:0 24px}
+a{color:inherit}
+
+/* ---- Demo strip ---- */
+.demo-strip{background:var(--amber-soft);color:var(--amber-deep);text-align:center;font:600 11px/28px var(--font-mono);letter-spacing:.04em;text-transform:uppercase}
+
+/* ---- Top bar ---- */
+.req-bar{background:var(--white);border-bottom:1px solid var(--line)}
+.req-bar-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 24px;flex-wrap:wrap;gap:10px}
+.req-bar-right{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.ref-code{font:600 13px/1 var(--font-mono);color:var(--gray)}
+.badge{font:700 11px/1 var(--font-mono);letter-spacing:.05em;text-transform:uppercase;padding:6px 10px;border-radius:6px}
+.badge-new{background:var(--teal-soft);color:var(--teal-deep)}
+.badge-deadline{background:var(--amber-soft);color:var(--amber-deep)}
+.badge-closed{background:var(--line);color:var(--gray)}
+
+/* ---- Header ---- */
+.header{padding:40px 0 28px}
+.header h1{font-family:var(--font-display);font-size:clamp(24px,3.2vw,32px);letter-spacing:-.02em;margin-bottom:12px}
+.header .lead{font-size:15px;color:var(--ink-60);max-width:640px;margin-bottom:22px}
+.meta-row{display:flex;gap:28px;flex-wrap:wrap;padding-top:18px;border-top:1px solid var(--line)}
+.meta-item .lbl{display:block;font:600 10.5px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--gray-light);margin-bottom:6px}
+.meta-item .val{font-size:13.5px;font-weight:600;color:var(--ink)}
+
+.anon-callout{background:var(--teal-soft);border-radius:10px;padding:16px 18px;margin-top:22px;font-size:13.5px;line-height:1.65;color:#0B4B45}
+.anon-callout b{color:var(--teal-deep)}
+
+/* ---- Cards ---- */
+.card{background:var(--white);border:1px solid var(--line);border-radius:12px;padding:26px 28px;margin-bottom:20px}
+.card h2{font-family:var(--font-display);font-size:15px;letter-spacing:-.01em;margin-bottom:18px;display:flex;align-items:center;gap:8px}
+.card h2 .num{font:700 11px/1 var(--font-mono);color:var(--white);background:var(--ink);width:20px;height:20px;border-radius:5px;display:inline-flex;align-items:center;justify-content:center}
+
+.lv-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 24px}
+.lv .lbl{display:block;font:600 10.5px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--gray-light);margin-bottom:5px}
+.lv .val{font-size:14.5px;font-weight:600;color:var(--ink)}
+
+.subhead{font:700 11px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--gray);margin:22px 0 12px}
+.subhead:first-child{margin-top:0}
+
+table.data{width:100%;border-collapse:collapse;font-size:13.5px}
+table.data th{text-align:left;font:600 10.5px/1 var(--font-mono);letter-spacing:.05em;text-transform:uppercase;color:var(--gray-light);padding:0 0 8px;border-bottom:1px solid var(--line)}
+table.data td{padding:10px 0;border-bottom:1px solid var(--line);color:var(--ink)}
+table.data tr:last-child td{border-bottom:none}
+table.data tr.total td{font-weight:700;color:var(--teal-deep)}
+table.data td.num{font-family:var(--font-mono)}
+
+.notes-quote{border-left:3px solid var(--line);padding:12px 16px;font-size:13.5px;color:var(--ink-60);font-style:italic;margin-top:16px;background:var(--bg);border-radius:0 8px 8px 0}
+
+/* ---- Form ---- */
+fieldset{border:none;padding:0;margin:0 0 28px}
+fieldset:last-of-type{margin-bottom:0}
+.field{margin-bottom:16px}
+.field label{display:block;font-weight:700;font-size:13px;color:var(--ink);margin-bottom:6px}
+.field label .req{color:var(--error)}
+.field label .opt{color:var(--gray-light);font-weight:400;text-transform:none;letter-spacing:0}
+.field .hint{font-size:12px;color:var(--gray-light);margin-top:5px}
+.field input[type=text],.field input[type=number],.field input[type=email],.field input[type=tel],.field input[type=date],.field select,.field textarea{
+  width:100%;height:46px;padding:12px 14px;border:1.5px solid var(--line);border-radius:8px;font-size:15px;background:var(--white);transition:border-color .15s ease;font-family:var(--font-sans)}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7794' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;cursor:pointer}
+.field select:focus{border-color:var(--teal);outline:none}
+.field input.with-prefix{padding-left:58px}
+.prefix-wrap{position:relative}
+.prefix-wrap .prefix{position:absolute;left:14px;top:50%;transform:translateY(-50%);font:700 12px/1 var(--font-mono);color:var(--gray);pointer-events:none;min-width:32px}
+.currency-select-wrap{max-width:320px;margin-bottom:18px}
+.field textarea{height:auto;resize:vertical;padding:12px 14px}
+.field input:focus,.field textarea:focus{border-color:var(--teal);outline:none}
+.field.error input,.field.error textarea{border-color:var(--error)}
+.field-msg{display:none;font-size:12px;color:var(--error);margin-top:6px}
+.field.error .field-msg{display:block}
+.field-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+
+.radio-row{display:flex;flex-wrap:wrap;gap:10px}
+.radio-chip{border:1.5px solid var(--line);border-radius:8px;padding:10px 14px;font-size:13.5px;font-weight:600;color:var(--gray);cursor:pointer;flex:1;min-width:180px;text-align:center;transition:all .15s ease}
+.radio-chip input{position:absolute;opacity:0;pointer-events:none}
+.radio-chip.is-checked{background:var(--teal-soft);border-color:var(--teal);color:var(--teal-deep)}
+
+.check-row{display:flex;align-items:flex-start;gap:10px;margin-top:8px}
+.check-row input{width:18px;height:18px;margin-top:2px;accent-color:var(--teal);flex:0 0 auto}
+.check-row label{font-size:13px;line-height:1.6;color:var(--gray);font-weight:400}
+
+.usd-note{font-size:12.5px;color:var(--gray);background:var(--bg);border-radius:8px;padding:12px 14px;margin-bottom:24px;line-height:1.6}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;height:52px;padding:0 32px;border-radius:8px;font:700 15px/1 var(--font-sans);cursor:pointer;border:none;transition:opacity .15s ease}
+.btn:hover{opacity:.9}
+.btn-submit{background:var(--teal);color:var(--white)}
+.submit-row{display:flex;justify-content:flex-end;align-items:center;gap:16px;flex-wrap:wrap;padding-top:8px;border-top:1px solid var(--line);margin-top:8px}
+.submit-note{font-size:12px;color:var(--gray-light);flex:1;min-width:220px}
+
+/* ---- Success ---- */
+.success{text-align:center;padding:40px 20px}
+.success-icon{width:60px;height:60px;border-radius:50%;background:var(--teal-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.success-icon svg{width:26px;height:26px;stroke:var(--teal-deep);stroke-width:2.4;fill:none}
+.success h2{font-family:var(--font-display);font-size:22px;margin-bottom:12px}
+.success p{font-size:14.5px;color:var(--ink-60);max-width:460px;margin:0 auto 8px;line-height:1.7}
+.success .refcode{font:700 13px/1 var(--font-mono);color:var(--gray);margin-top:14px}
+.success .demo-note{font-size:11.5px;color:var(--gray-light);margin-top:18px}
+
+/* ---- Footer ---- */
+.req-foot{margin-top:8px;padding:36px 0 44px}
+.next-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:26px}
+.next-step{background:var(--white);border:1px solid var(--line);border-radius:10px;padding:16px 18px}
+.next-step .n{font:700 11px/1 var(--font-mono);color:var(--teal-deep);display:block;margin-bottom:8px}
+.next-step p{font-size:12.5px;color:var(--ink-60);line-height:1.6}
+.req-foot-bottom{border-top:1px solid var(--line);padding-top:20px;font-size:12px;color:var(--gray-light);display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+@media (max-width:720px){
+  .lv-grid{grid-template-columns:1fr}
+  .field-grid{grid-template-columns:1fr}
+  .next-steps{grid-template-columns:1fr}
+  .card{padding:20px}
+  .meta-row{gap:18px}
+}
+/* mobile card/step grids: icon spans rows, text stays in column 2 */
+@media (max-width:1024px){.problem .card>.problem-icon,.why-grid .card>.problem-icon{grid-row:1/span 2}.problem .card>h3,.problem .card>p,.why-grid .card>h3,.why-grid .card>p{grid-column:2;min-width:0}.problem .card,.why-grid .card{row-gap:8px}.problem .card>h3,.why-grid .card>h3{margin:0;padding-top:8px}}
+html[lang="ko"] .card h3,html[lang="ko"] .card p,html[lang="ko"] .how-step h3,html[lang="ko"] .how-step p,html[lang="ko"] .section-head .lead,html[lang="ko"] .faq-panel p{word-break:keep-all;overflow-wrap:anywhere}
+@media (max-width:768px){.how-step>.how-badge{grid-row:1/span 2}.how-step>h3,.how-step>p{grid-column:2;min-width:0}.how-step{row-gap:6px}.how-step>h3{margin:0;padding-top:7px}}
+/* ===== Shared: header additions ===== */
+.site-header.is-solid,html:not(.js-anim) .site-header{background:rgba(255,255,255,.96);border-bottom:1px solid var(--line)}
+.header-right{display:flex;align-items:center;gap:12px}
+.mode-switch{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;background:var(--white);overflow:hidden;flex:0 0 auto}
+.mode-switch a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:0 14px;font:700 13px/1 var(--font-sans);color:var(--gray);white-space:nowrap}
+.mode-switch a[lang=en]{font-family:var(--font-display)}
+.mode-switch a:hover{color:var(--ink);background:var(--bg)}
+.mode-switch a[aria-current],.mode-switch a.is-current{background:var(--ink);color:var(--white)}
+.hdr-cta{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:8px;background:var(--ink);color:var(--white);font:700 13.5px/1 var(--font-sans);white-space:nowrap}
+.hdr-cta:hover{background:var(--teal)}
+.hdr-login{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:0 8px;font:600 13.5px/1 var(--font-sans);color:var(--ink-60);white-space:nowrap}
+.hdr-login:hover{color:var(--ink)}
+.hdr-login.is-member{color:var(--teal-deep)}
+.nav-menu{display:none}
+.nav-menu summary{list-style:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:1.5px solid var(--line);border-radius:8px;background:var(--white);cursor:pointer}
+.nav-menu summary::-webkit-details-marker{display:none}
+.nav-bars,.nav-bars::before,.nav-bars::after{display:block;width:18px;height:2px;border-radius:1px;background:var(--ink);position:relative;transition:transform .15s}
+.nav-bars::before,.nav-bars::after{content:'';position:absolute;left:0}
+.nav-bars::before{top:-6px}.nav-bars::after{top:6px}
+.nav-menu[open] .nav-bars{background:transparent}
+.nav-menu[open] .nav-bars::before{top:0;transform:rotate(45deg)}
+.nav-menu[open] .nav-bars::after{top:0;transform:rotate(-45deg)}
+.nav-menu-panel{position:absolute;top:100%;left:0;right:0;display:flex;flex-direction:column;background:var(--white);border-bottom:1px solid var(--line);box-shadow:var(--sh-elevated);padding:8px 20px 16px;max-height:calc(100vh - 72px);overflow-y:auto}
+.nav-menu-panel a{display:flex;align-items:center;min-height:48px;border-bottom:1px solid var(--line-dim);font-size:15px;font-weight:600;color:var(--ink)}
+.nav-menu-panel a.nav-menu-cta{justify-content:center;margin-top:12px;border:none;border-radius:8px;background:var(--teal);color:var(--white)}
+.nav-menu-panel a.nav-menu-hub{justify-content:center;border:none;font-size:13px;color:var(--gray)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.footer-links{flex-wrap:wrap;row-gap:10px}
+.footer-modes{display:flex;flex-wrap:wrap;gap:10px 18px;font-size:13px}
+.footer-modes a{color:var(--white)}
+@media (max-width:1200px){.header-nav{gap:24px}}
+@media (max-width:1024px){.header-nav{display:none}.nav-menu{display:block}}
+@media (max-width:768px){.hdr-cta{display:none}.header-right{gap:8px}.nav-menu-panel{padding:8px 16px 16px}.has-mobile-cta .site-footer{padding-bottom:calc(96px + env(safe-area-inset-bottom))}.footer-right{align-items:flex-start}}
+@media (max-width:480px){.brand-tag{display:none}.mode-switch a{padding:0 10px;font-size:12.5px}.hdr-login{padding:0 4px;font-size:12.5px}}
+@media (max-width:400px){.mode-switch a{padding:0 8px}.header-right{gap:4px}.brand-word{font-size:18px}}
+/* ===== /Shared ===== */
+</style>
+</head>
+<body class="has-fixed-header">
+<header class="site-header is-solid" id="siteHeader">
+  <div class="container">
+    <a class="brand" href="index.html" aria-label="MICEGO Partner home">
+      <svg class="brand-mark" viewBox="0 0 32 32" role="img" aria-hidden="true">
+        <rect width="32" height="32" rx="9" fill="#0F1E3D"/>
+        <rect x="6.5" y="9" width="14" height="2.6" rx="1.3" fill="#FFFFFF"/>
+        <rect x="6.5" y="14.7" width="11" height="2.6" rx="1.3" fill="#16B5A8"/>
+        <rect x="6.5" y="20.4" width="8" height="2.6" rx="1.3" fill="#FFC24B"/>
+        <circle cx="24.5" cy="16" r="2.6" fill="#FFFFFF"/>
+      </svg>
+      <span class="brand-word">MICE<span class="go">GO</span></span>
+    </a>
+    <div class="header-right">
+      <nav class="mode-switch" aria-label="모드 선택 / Choose mode">
+        <a href="../ko/index.html" lang="ko">여행사</a>
+        <a href="index.html" lang="en" hreflang="en" class="is-current">Hotels</a>
+      </nav>
+      <a class="hdr-cta" href="index.html#register">Register</a>
+    </div>
+  </div>
+</header>
+
+<!--demo:start--><div class="demo-strip">DEMO — Sample request page for demonstration purposes. Not a live RFP.</div><!--demo:end-->
+
+<div class="req-bar">
+  <div class="wrap req-bar-inner">
+    <span class="ref-code">MICE QUOTE REQUEST</span>
+    <div class="req-bar-right">
+      <span class="ref-code">REF MG-2608-007</span>
+      <span class="badge badge-new">New Request</span>
+      <span class="badge badge-deadline">Deadline: Day 4, 18:00 KST</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="header">
+    <h1>New MICE quote request</h1>
+    <p class="lead">An organizer has submitted a confirmed-date incentive program in Da Nang, Vietnam. Review the requirements below and submit your quote before the deadline.</p>
+    <div class="meta-row">
+      <div class="meta-item"><span class="lbl">Issued</span><span class="val">Day 1 · 09:00 KST</span></div>
+      <div class="meta-item"><span class="lbl">Quote deadline</span><span class="val">Day 4 · 18:00 KST (3 business days after the invitation)</span></div>
+      <div class="meta-item"><span class="lbl">Organizer response due</span><span class="val">Day 5</span></div>
+    </div>
+    <div class="anon-callout">
+      <b>Why some details are hidden.</b> MICEGO withholds the organizer's company name and budget from suppliers. Quote on the requirements as stated below; if the organizer selects your proposal, MICEGO introduces both parties directly.
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="num">1</span>Requirements</h2>
+
+    <div class="subhead">Program</div>
+    <div class="lv-grid">
+      <div class="lv"><span class="lbl">Event type</span><span class="val">Incentive group travel</span></div>
+      <div class="lv"><span class="lbl">Organizer type</span><span class="val">Travel agency (organizer)</span></div>
+      <div class="lv"><span class="lbl">Dates</span><span class="val">Mon – Thu, 3 nights</span></div>
+      <div class="lv"><span class="lbl">Duration</span><span class="val">3 nights, 4 days</span></div>
+      <div class="lv"><span class="lbl">Attendees</span><span class="val">150–199 attendees</span></div>
+      <div class="lv"><span class="lbl">Destination</span><span class="val">Da Nang, Vietnam</span></div>
+    </div>
+
+    <div class="subhead">Accommodation</div>
+    <table class="data">
+      <tr><th>Room type</th><th>Rooms</th><th>Nights</th></tr>
+      <tr><td>Twin (2 beds)</td><td class="num">60</td><td class="num">3</td></tr>
+      <tr><td>King</td><td class="num">20</td><td class="num">3</td></tr>
+      <tr class="total"><td>Total</td><td class="num">80 rooms</td><td class="num">240 room-nights</td></tr>
+    </table>
+
+    <div class="subhead">Banquet</div>
+    <div class="lv-grid">
+      <div class="lv"><span class="lbl">Ballroom</span><span class="val">Required</span></div>
+      <div class="lv"><span class="lbl">Purpose</span><span class="val">Gala dinner — one evening</span></div>
+      <div class="lv"><span class="lbl">Date</span><span class="val">Night 3 (Wed)</span></div>
+      <div class="lv"><span class="lbl">Seating</span><span class="val">Banquet round tables, 150–199 pax</span></div>
+    </div>
+
+    <div class="subhead">Notes (reviewed by MICEGO)</div>
+    <div class="notes-quote">"Beachfront or near-beach preferred. Single property to host all rooms and the gala dinner."</div>
+  </div>
+
+  <div class="card" id="bidCard">
+    <h2><span class="num">2</span>Submit your quote</h2>
+
+    <div class="field currency-select-wrap" id="f-currency">
+      <label for="currency">Quote currency <span class="req">*</span></label>
+      <select id="currency" name="currency">
+        <option value="USD">USD — US Dollar</option>
+        <option value="VND">VND — Vietnamese Dong</option>
+        <option value="EUR">EUR — Euro</option>
+        <option value="KRW">KRW — Korean Won</option>
+        <option value="GBP">GBP — British Pound</option>
+        <option value="JPY">JPY — Japanese Yen</option>
+        <option value="SGD">SGD — Singapore Dollar</option>
+      </select>
+    </div>
+    <div class="usd-note" id="currencyNote">Quote in whichever currency your property invoices in. MICEGO records the currency with each quote and reconfirms it before compiling the comparison for the organizer.</div>
+
+    <form id="bidForm" novalidate action="javascript:void(0)">
+
+      <fieldset>
+        <div class="subhead">Guest rooms</div>
+        <div class="field-grid">
+          <div class="field" id="f-twinRate">
+            <label for="twinRate">Twin room rate — per room, per night <span class="req">*</span></label>
+            <div class="prefix-wrap"><span class="prefix" data-prefix-for="twinRate">USD</span><input class="with-prefix" type="number" id="twinRate" name="twinRate" min="0" step="1" placeholder="e.g. 145"></div>
+            <p class="field-msg">Enter a rate of 0 or more.</p>
+          </div>
+          <div class="field" id="f-kingRate">
+            <label for="kingRate">King room rate — per room, per night <span class="req">*</span></label>
+            <div class="prefix-wrap"><span class="prefix" data-prefix-for="kingRate">USD</span><input class="with-prefix" type="number" id="kingRate" name="kingRate" min="0" step="1" placeholder="e.g. 165"></div>
+            <p class="field-msg">Enter a rate of 0 or more.</p>
+          </div>
+        </div>
+
+        <div class="field" id="f-breakfast">
+          <label>Breakfast <span class="req">*</span></label>
+          <div class="radio-row" role="radiogroup" aria-label="Breakfast">
+            <label class="radio-chip"><input type="radio" name="breakfast" value="Included in rate">Included in rate</label>
+            <label class="radio-chip"><input type="radio" name="breakfast" value="Not included">Not included</label>
+          </div>
+          <p class="field-msg">Please select an option.</p>
+        </div>
+
+        <div class="field" id="f-breakfastSupplement" hidden>
+          <label for="breakfastSupplement">Breakfast supplement — per person, per night <span class="opt">(optional)</span></label>
+          <div class="prefix-wrap"><span class="prefix" data-prefix-for="breakfastSupplement">USD</span><input class="with-prefix" type="number" id="breakfastSupplement" name="breakfastSupplement" min="0" step="1" placeholder="e.g. 18"></div>
+        </div>
+
+        <div class="field" id="f-availability">
+          <label>Rooms available for these dates <span class="req">*</span></label>
+          <div class="radio-row" role="radiogroup" aria-label="Room availability">
+            <label class="radio-chip"><input type="radio" name="availability" value="All 80 rooms available">All 80 rooms available</label>
+            <label class="radio-chip"><input type="radio" name="availability" value="Partially available">Partially available</label>
+          </div>
+          <p class="field-msg">Please select an option.</p>
+        </div>
+
+        <div class="field" id="f-availabilityNotes" hidden>
+          <label for="availabilityNotes">Availability notes <span class="opt">(optional)</span></label>
+          <textarea id="availabilityNotes" name="availabilityNotes" rows="2" placeholder="e.g. 55 twin + 20 king available; 5 twin on request."></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <div class="subhead">Banquet — gala dinner</div>
+        <div class="field" id="f-ballroomFee">
+          <label for="ballroomFee">Ballroom rental fee — total for the evening <span class="req">*</span></label>
+          <div class="prefix-wrap"><span class="prefix" data-prefix-for="ballroomFee">USD</span><input class="with-prefix" type="number" id="ballroomFee" name="ballroomFee" min="0" step="1" placeholder="e.g. 3500"></div>
+          <p class="field-msg">Enter a fee of 0 or more.</p>
+        </div>
+        <div class="field" id="f-ballroomName">
+          <label for="ballroomName">Ballroom name &amp; capacity <span class="req">*</span></label>
+          <input type="text" id="ballroomName" name="ballroomName" placeholder="e.g. Grand Ballroom, 300 pax banquet">
+          <p class="field-msg">Please enter the ballroom name and capacity.</p>
+        </div>
+        <div class="field-grid">
+          <div class="field" id="f-fnbMinimum">
+            <label for="fnbMinimum">F&amp;B minimum — per person <span class="opt">(optional)</span></label>
+            <div class="prefix-wrap"><span class="prefix" data-prefix-for="fnbMinimum">USD</span><input class="with-prefix" type="number" id="fnbMinimum" name="fnbMinimum" min="0" step="1" placeholder="e.g. 55"></div>
+          </div>
+        </div>
+        <div class="field">
+          <label for="ballroomIncludes">Included in rental (AV, staging, setup) <span class="opt">(optional)</span></label>
+          <textarea id="ballroomIncludes" name="ballroomIncludes" rows="3" placeholder="e.g. Basic AV package, stage, dance floor, standard lighting."></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <div class="subhead">Terms</div>
+        <div class="field" id="f-validUntil">
+          <label for="validUntil">Quote valid until <span class="req">*</span></label>
+          <input type="date" id="validUntil" name="validUntil">
+          <p class="field-msg">Please enter a valid-until date.</p>
+        </div>
+        <div class="field" id="f-cancellation">
+          <label for="cancellation">Cancellation policy <span class="req">*</span></label>
+          <textarea id="cancellation" name="cancellation" rows="4" placeholder="e.g. Free cancellation until 60 days prior; 30% within 30 days."></textarea>
+          <p class="field-msg">Please describe your cancellation policy.</p>
+        </div>
+        <div class="field">
+          <label for="additionalProposals">Additional proposals <span class="opt">(optional)</span></label>
+          <textarea id="additionalProposals" name="additionalProposals" rows="5" placeholder="Complimentary upgrades, welcome amenities, airport transfers, group discounts, site inspection offer."></textarea>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <div class="subhead">Your details</div>
+        <div class="field-grid">
+          <div class="field" id="f-hotelName">
+            <label for="hotelName">Hotel / property name <span class="req">*</span></label>
+            <input type="text" id="hotelName" name="hotelName" placeholder="e.g. Ocean Pearl Resort Da Nang">
+            <p class="field-msg">Please enter the property name.</p>
+          </div>
+          <div class="field" id="f-contactName">
+            <label for="contactName">Contact name <span class="req">*</span></label>
+            <input type="text" id="contactName" name="contactName" placeholder="e.g. Nguyen Van A">
+            <p class="field-msg">Please enter a contact name.</p>
+          </div>
+        </div>
+        <div class="field-grid">
+          <div class="field" id="f-contactEmail">
+            <label for="contactEmail">Contact email <span class="req">*</span></label>
+            <input type="email" id="contactEmail" name="contactEmail" placeholder="name@hotel.com">
+            <p class="field-msg">Please enter a valid email address.</p>
+          </div>
+          <div class="field">
+            <label for="contactPhone">Contact phone (WhatsApp) <span class="opt">(optional)</span></label>
+            <input type="tel" id="contactPhone" name="contactPhone" placeholder="+84 ...">
+          </div>
+        </div>
+        <div class="field full" id="f-consent">
+          <div class="check-row">
+            <input type="checkbox" id="consent" name="consent">
+            <label for="consent">I confirm the rates and terms above are accurate and may be shared with the organizer under reference MG-2608-007. My property name is disclosed to the organizer only if they select this proposal.</label>
+          </div>
+          <p class="field-msg">Please confirm before submitting.</p>
+        </div>
+      </fieldset>
+
+      <div class="submit-row">
+        <p class="submit-note">Sample deadline: Day 4, 18:00 KST · On a live request you can revise your quote by resubmitting through the same link before the deadline.</p>
+        <button type="submit" class="btn btn-submit">Submit Quote</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="req-foot">
+    <div class="next-steps">
+      <div class="next-step"><span class="n">1 · Quotes collected</span><p>MICEGO verifies rates, currency and dates.</p></div>
+      <div class="next-step"><span class="n">2 · Comparison delivered</span><p>The organizer sees proposals side by side; property names stay hidden unless selected.</p></div>
+      <div class="next-step"><span class="n">3 · Direct introduction</span><p>If selected, MICEGO connects you with the organizer directly.</p></div>
+    </div>
+    <div class="req-foot-bottom">
+      <span>Questions? <a href="mailto:mysteri1984@gmail.com">mysteri1984@gmail.com</a> · <a href="index.html#sample" style="text-decoration:underline">← Back to hotel mode</a></span>
+      <span>Demo sample — not a live sourcing request. Sample dates are shown as Day 1, Day 4 and so on; every live request states exact calendar dates and a KST deadline.</span>
+    </div>
+  </div>
+
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">
+          <svg class="brand-mark" viewBox="0 0 32 32" role="img" aria-hidden="true">
+            <rect width="32" height="32" rx="9" fill="#1F3266"/>
+            <rect x="6.5" y="9" width="14" height="2.6" rx="1.3" fill="#FFFFFF"/>
+            <rect x="6.5" y="14.7" width="11" height="2.6" rx="1.3" fill="#16B5A8"/>
+            <rect x="6.5" y="20.4" width="8" height="2.6" rx="1.3" fill="#FFC24B"/>
+            <circle cx="24.5" cy="16" r="2.6" fill="#FFFFFF"/>
+          </svg>
+          <span class="brand-word">MICE<span class="go">GO</span></span>
+          <span style="font-size:12px;color:rgba(255,255,255,.5);margin-left:8px">Partner Network</span>
+        </div>
+        <p class="footer-desc">Overseas MICE hotel sourcing for Korean organizers.</p>
+      </div>
+      <div class="footer-right">
+        <a class="footer-contact" href="mailto:mysteri1984@gmail.com">mysteri1984@gmail.com</a>
+        <div class="footer-links">
+          <a href="index.html">Hotel mode</a>
+          <a href="faq.html">FAQ</a>
+          <a href="contact.html">Contact</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="terms.html">Partner terms</a>
+        </div>
+        <div class="footer-modes"><a href="../ko/index.html" lang="ko" hreflang="ko">여행사 (한국어) →</a><a href="../index.html">Choose mode · <span lang="ko">모드 선택</span></a></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-notice">Demo sample — not a live sourcing request.</p>
+      <p class="footer-copyright">© 2026 MICEGO. ALL RIGHTS RESERVED.</p><p class="footer-feedback"><a data-mg-feedback-open href="contact.html">Feedback</a></p><noscript><p class="footer-feedback-noscript">To send feedback or report a problem, use the <a href="contact.html">contact page</a> or <a href="mailto:mysteri1984@gmail.com">email</a>.</p></noscript>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+
+  /* ---- Radio chip visual state (scoped per group) ---- */
+  document.querySelectorAll('.radio-chip input').forEach(function(input){
+    input.addEventListener('change', function(){
+      var group = document.querySelectorAll('input[name="' + input.name + '"]');
+      group.forEach(function(i){ i.closest('.radio-chip').classList.remove('is-checked'); });
+      input.closest('.radio-chip').classList.add('is-checked');
+    });
+  });
+
+  /* ---- Conditional fields ---- */
+  var breakfastSupplementField = document.getElementById('f-breakfastSupplement');
+  document.querySelectorAll('input[name="breakfast"]').forEach(function(input){
+    input.addEventListener('change', function(){
+      breakfastSupplementField.hidden = (input.value !== 'Not included');
+    });
+  });
+  var availabilityNotesField = document.getElementById('f-availabilityNotes');
+  document.querySelectorAll('input[name="availability"]').forEach(function(input){
+    input.addEventListener('change', function(){
+      availabilityNotesField.hidden = (input.value !== 'Partially available');
+    });
+  });
+
+  /* ---- Currency selector: updates the USD prefix on every rate field + placeholder examples ---- */
+  var CURRENCY_PLACEHOLDERS = {
+    USD: { twinRate: '145',     kingRate: '165',     breakfastSupplement: '18',     ballroomFee: '3500',     fnbMinimum: '55'    },
+    VND: { twinRate: '3500000', kingRate: '4000000', breakfastSupplement: '450000', ballroomFee: '85000000', fnbMinimum: '1350000' },
+    EUR: { twinRate: '135',     kingRate: '155',     breakfastSupplement: '17',     ballroomFee: '3200',     fnbMinimum: '50'    },
+    KRW: { twinRate: '190000',  kingRate: '215000',  breakfastSupplement: '24000',  ballroomFee: '4600000',  fnbMinimum: '72000' },
+    GBP: { twinRate: '115',     kingRate: '132',     breakfastSupplement: '14',     ballroomFee: '2750',     fnbMinimum: '43'    },
+    JPY: { twinRate: '21000',   kingRate: '24000',   breakfastSupplement: '2600',   ballroomFee: '510000',   fnbMinimum: '8000'  },
+    SGD: { twinRate: '195',     kingRate: '222',     breakfastSupplement: '24',     ballroomFee: '4700',     fnbMinimum: '74'    }
+  };
+  var currencySelect = document.getElementById('currency');
+  var currencyNote = document.getElementById('currencyNote');
+  function applyCurrency(code){
+    document.querySelectorAll('[data-prefix-for]').forEach(function(span){
+      span.textContent = code;
+      var input = document.getElementById(span.getAttribute('data-prefix-for'));
+      var example = CURRENCY_PLACEHOLDERS[code] && CURRENCY_PLACEHOLDERS[code][span.getAttribute('data-prefix-for')];
+      if(input && example) input.placeholder = 'e.g. ' + example;
+    });
+    currencyNote.innerHTML = 'Quote in whichever currency your property invoices in &mdash; every rate below will be recorded in <b>' + code + '</b>. MICEGO reconfirms the currency before compiling the comparison for the organizer.';
+  }
+  currencySelect.addEventListener('change', function(){ applyCurrency(currencySelect.value); });
+  applyCurrency(currencySelect.value);
+
+  /* ---- Validation ---- */
+  var form = document.getElementById('bidForm');
+  var attemptedSubmit = false;
+
+  function setFieldError(id, hasError){
+    var el = document.getElementById(id);
+    if(!el) return;
+    el.classList.toggle('error', !!hasError);
+  }
+
+  function validate(){
+    var data = new FormData(form);
+    var errors = [];
+
+    function reqNumber(field, id){
+      var v = data.get(field);
+      var invalid = v === null || String(v).trim() === '' || Number(v) < 0 || !isFinite(Number(v));
+      setFieldError(id, invalid);
+      if(invalid) errors.push(id);
+      return invalid;
+    }
+    function reqText(field, id, minLen){
+      var v = (data.get(field) || '').trim();
+      var invalid = v.length < (minLen || 1);
+      setFieldError(id, invalid);
+      if(invalid) errors.push(id);
+      return invalid;
+    }
+    function reqRadio(field, id){
+      var v = data.get(field);
+      setFieldError(id, !v);
+      if(!v) errors.push(id);
+      return !v;
+    }
+
+    reqNumber('twinRate', 'f-twinRate');
+    reqNumber('kingRate', 'f-kingRate');
+    reqRadio('breakfast', 'f-breakfast');
+    reqRadio('availability', 'f-availability');
+    reqNumber('ballroomFee', 'f-ballroomFee');
+    reqText('ballroomName', 'f-ballroomName');
+
+    var validUntil = data.get('validUntil');
+    setFieldError('f-validUntil', !validUntil);
+    if(!validUntil) errors.push('f-validUntil');
+
+    reqText('cancellation', 'f-cancellation', 5);
+    reqText('hotelName', 'f-hotelName');
+    reqText('contactName', 'f-contactName');
+
+    var email = (data.get('contactEmail') || '').trim();
+    var emailInvalid = !EMAIL_RE.test(email);
+    setFieldError('f-contactEmail', emailInvalid);
+    if(emailInvalid) errors.push('f-contactEmail');
+
+    var consent = document.getElementById('consent').checked;
+    setFieldError('f-consent', !consent);
+    if(!consent) errors.push('f-consent');
+
+    return {valid: errors.length === 0, firstErrorId: errors[0], data: data};
+  }
+
+  form.querySelectorAll('input,textarea').forEach(function(el){
+    el.addEventListener('blur', function(){ if(attemptedSubmit) validate(); });
+    el.addEventListener('change', function(){ if(attemptedSubmit) validate(); });
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    attemptedSubmit = true;
+    var result = validate();
+    if(!result.valid){
+      var firstField = document.getElementById(result.firstErrorId);
+      if(firstField){
+        firstField.scrollIntoView({block:'center', behavior:'smooth'});
+        var focusable = firstField.querySelector('input,textarea') || firstField;
+        if(focusable && focusable.focus) focusable.focus();
+      }
+      return;
+    }
+
+    var submittedCurrency = currencySelect.value;
+    var card = document.getElementById('bidCard');
+    card.innerHTML =
+      '<div class="success">' +
+        '<div class="success-icon"><svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg></div>' +
+        '<h2>Quote submitted</h2>' +
+        '<p>Thank you. Your quote for MG-2608-007 (in ' + submittedCurrency + ') has been recorded. On a live request, MICEGO compiles all responses and delivers the comparison to the organizer by the stated response date.</p>' +
+        '<div class="refcode">Reference: MG-2608-007-BID-03</div>' +
+        '<div class="demo-note">Demo only — no data was transmitted.</div>' +
+      '</div>';
+    card.scrollIntoView({block:'center', behavior:'smooth'});
+  });
+  try{ localStorage.setItem('micego.mode','en'); }catch(e){}
+})();
+</script>
+
+</body>
+</html>

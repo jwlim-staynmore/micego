@@ -1,0 +1,1355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<script>document.documentElement.className+=' js-anim';</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<script src="../assets/config.js"></script><script src="../assets/mg.js"></script><script src="../assets/feedback.js" defer></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MICEGO 마이스고 · 해외 MICE 호텔 역경매 견적, 수수료 없이 영업일 3일 이내</title>
+<meta name="description" content="해외 MICE 행사 호텔 견적을 한 번의 요청으로 받아보세요. 수수료 없음 · 영업일 3일 이내 회신 · 회사명·예산 비공개.">
+<meta property="og:title" content="MICEGO 마이스고 · 해외 MICE 호텔 견적, 영업일 3일 이내">
+<meta property="og:description" content="행사 요건을 한 번만 등록하면 해외 호텔이 먼저 제안합니다. 수수료 없음 · 영업일 3일 이내 회신.">
+<meta property="og:type" content="website">
+<!-- TODO(domain): og:image must be an absolute URL (https://<domain>/og/…) once the domain is fixed -->
+<meta property="og:image" content="../og/og-ko.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<!-- TODO(domain): 도메인 확정 후 주석 해제 / uncomment once the domain is confirmed
+<link rel="canonical" href="https://micego.kr/ko/">
+<link rel="alternate" hreflang="ko" href="https://micego.kr/ko/">
+<link rel="alternate" hreflang="en" href="https://micego.kr/en/">
+<link rel="alternate" hreflang="x-default" href="https://micego.kr/">
+-->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="icon" href="../favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="manifest" href="../site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* ===== Reset ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:88px}
+body{overflow-x:hidden;font-family:var(--font-sans);color:var(--ink);background:var(--white);line-height:1.5;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:none}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em}
+
+/* ===== Tokens ===== */
+:root{
+  --ink:#0F1E3D;
+  --ink-80:#1F3266;
+  --ink-60:#4A5D8C;
+  --teal:#0B8F86;
+  --teal-deep:#076E67;
+  --teal-bright:#16B5A8;
+  --teal-soft:#E3F5F2;
+  --amber:#FFC24B;
+  --amber-soft:#FFF3D6;
+  --white:#FFFFFF;
+  --bg:#F6F8FB;
+  --bg-warm:#EEF2F6;
+  --line:#E4E8F0;
+  --line-dim:#EEF1F6;
+  --gray:#6B7794;
+  --gray-light:#A0AAC2;
+  --success:#22C55E;
+  --warn:#F59E0B;
+  --error:#EF4444;
+  --amber-deep:#8A5A00;
+
+  --font-display:'Archivo','Pretendard',-apple-system,sans-serif;
+  --font-sans:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',monospace;
+
+  --sh-card:0 1px 2px rgba(15,30,61,.04), 0 4px 12px rgba(15,30,61,.05);
+  --sh-card-hover:0 4px 8px rgba(15,30,61,.06), 0 12px 24px rgba(15,30,61,.08);
+  --sh-elevated:0 8px 20px rgba(15,30,61,.06), 0 24px 48px rgba(15,30,61,.10);
+}
+
+/* ===== Layout utils ===== */
+.container{max-width:1200px;margin:0 auto;padding:0 32px}
+.section{padding:112px 0}
+.section-num{display:block;font:600 12px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--teal-deep);margin-bottom:14px}
+.section-num.on-dark{color:var(--teal-bright)}
+h2{font-family:var(--font-display);font-size:clamp(26px,3.4vw,40px);line-height:1.25;letter-spacing:-.03em}
+.lead{font-size:17px;line-height:1.7;color:var(--gray);max-width:640px;margin-top:14px}
+.section-head{margin-bottom:48px}
+
+.hl{position:relative;display:inline-block;z-index:0}
+.hl::after{content:'';position:absolute;left:-2px;right:-2px;bottom:.06em;height:.34em;background:var(--amber);opacity:.55;border-radius:2px;z-index:-1}
+
+/* ===== Buttons ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:8px;font-weight:700;font-size:14.5px;padding:13px 24px;transition:all .15s ease;white-space:nowrap;min-height:44px}
+.btn-lg{font-size:15.5px;padding:16px 28px}
+.btn-sm{font-size:13.5px;padding:9px 16px}
+.btn-block{width:100%}
+.btn-primary{background:var(--ink);color:var(--white)}
+.btn-primary:hover{background:var(--teal);transform:translateY(-1px);box-shadow:0 6px 16px rgba(11,143,134,.28)}
+.btn-accent{background:var(--teal);color:var(--white)}
+.btn-accent:hover{background:var(--teal-deep);transform:translateY(-1px)}
+.btn-ghost{background:var(--white);color:var(--ink);border:1.5px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink);background:var(--bg)}
+.btn-ghost.on-dark{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.3)}
+.btn-ghost.on-dark:hover{border-color:var(--white);background:rgba(255,255,255,.08)}
+.btn-arrow::after{content:'→';transition:transform .15s ease}
+.btn-arrow:hover::after{transform:translateX(3px)}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+
+/* ===== Card / Chip / Callout ===== */
+.card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:32px;box-shadow:var(--sh-card);transition:border-color .15s ease,box-shadow .15s ease,transform .15s ease}
+@media (hover:hover){.card:hover{border-color:var(--teal);box-shadow:var(--sh-card-hover);transform:translateY(-2px)}}
+.chip{display:inline-flex;align-items:center;padding:5px 11px;border-radius:6px;background:var(--teal-soft);color:var(--teal-deep);font:600 12px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase}
+.callout{background:var(--teal-soft);border:1px solid rgba(11,143,134,.16);border-radius:12px;padding:20px 22px}
+.callout-label{display:block;font:800 11px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--teal-deep);margin-bottom:8px}
+.callout p{font-size:14.5px;line-height:1.7;color:var(--ink-80)}
+
+/* ===== Reveal animation =====
+   기본값은 항상 "보임"이다. 자바스크립트가 실제로 실행된 경우에만(<html class="js-anim">)
+   opacity:0 진입 애니메이션을 적용한다. 파일 미리보기(iOS Quick Look 등)처럼 스크립트가
+   동작하지 않는 환경에서는 .js-anim 클래스가 붙지 않으므로 모든 콘텐츠가 즉시 보인다. */
+.reveal{opacity:1}
+.js-anim .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.js-anim .reveal.is-visible{opacity:1;transform:translateY(0)}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .reveal{opacity:1!important;transform:none!important}
+}
+html:not(.js-anim) .reveal{opacity:1!important;transform:none!important}
+
+/* ===== Skip link ===== */
+.skip-link{position:absolute;left:-9999px;top:0;background:var(--ink);color:#fff;padding:12px 20px;border-radius:0 0 8px 0;z-index:200}
+.skip-link:focus{left:0}
+
+/* ===== Header ===== */
+.site-header{position:fixed;top:0;left:0;right:0;height:72px;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .2s ease,border-color .2s ease}
+.site-header.is-scrolled{background:rgba(255,255,255,.86);backdrop-filter:blur(14px) saturate(150%);border-bottom:1px solid var(--line)}
+.site-header .container{height:100%;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:28px;height:28px;border-radius:9px;flex:0 0 auto}
+.brand-word{font-family:var(--font-display);font-weight:800;font-size:21px;letter-spacing:-.02em;white-space:nowrap}
+.brand-word .go{color:var(--teal-deep)}
+.header-nav{display:flex;align-items:center;gap:32px}
+.header-nav a{font-size:14px;color:var(--gray);transition:color .15s ease}
+.header-nav a:hover{color:var(--ink)}
+.header-right{display:flex;align-items:center;gap:16px}
+
+/* ===== Hero ===== */
+.hero{padding:152px 0 112px;position:relative;overflow:hidden;background:var(--white)}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(600px 400px at 82% 18%,var(--teal-soft) 0%,transparent 70%);pointer-events:none}
+.hero .container{position:relative;display:grid;grid-template-columns:6fr 6fr;gap:48px;align-items:center}
+.hero-chip{margin-bottom:22px}
+.hero h1{font-family:var(--font-display);font-size:clamp(30px,4.4vw,52px);line-height:1.22;letter-spacing:-.03em;margin-bottom:24px}
+.hero-lead{font-size:17px;line-height:1.7;color:var(--gray);max-width:520px}
+.hero-lead.p2{margin-top:14px}
+.hero-cta{display:flex;gap:12px;margin-top:36px}
+.hero-micro{font-size:13px;color:var(--gray);margin-top:14px}
+.hero-trust{margin-top:32px;padding-top:20px;border-top:1px solid var(--line);font-size:13px;color:var(--gray);max-width:520px}
+
+.hero-visual{position:relative}
+.mock-card{background:var(--white);border:1px solid var(--line);border-radius:16px;box-shadow:var(--sh-elevated);padding:22px}
+.mock-label{font:600 11px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--gray-light);margin-bottom:16px}
+.mock-row{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.mock-row:last-child{margin-bottom:0}
+.mock-row .mock-key{font-size:12px;color:var(--gray-light);width:64px;flex:0 0 auto}
+.mock-skel{height:10px;border-radius:5px;background:var(--line-dim);flex:1 1 auto}
+.mock-offers{margin-top:20px;position:relative;height:96px}
+.mock-offer{position:absolute;left:0;right:0;display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--line);border-radius:12px;padding:14px 16px;box-shadow:var(--sh-card)}
+.mock-offer .arrow{color:var(--teal);font-size:14px}
+.mock-offer .lbl{font:600 11px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--gray)}
+.mock-offer .skel{height:8px;border-radius:4px;background:var(--line-dim);flex:1 1 auto}
+.mock-offer.o1{top:0;z-index:3}
+.mock-offer.o2{top:10px;z-index:2;opacity:.85}
+.mock-offer.o3{top:20px;z-index:1;opacity:.65}
+.mock-caption{font-size:12px;color:var(--gray-light);margin-top:14px;text-align:center}
+
+/* ===== Problem ===== */
+.problem{background:var(--white)}
+.problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.problem-icon{width:40px;height:40px;border-radius:10px;background:var(--teal-soft);display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+.problem-icon svg{width:20px;height:20px;stroke:var(--teal-deep)}
+.card h3{font-family:var(--font-display);font-size:20px;line-height:1.35;letter-spacing:-.02em;margin-bottom:10px}
+.card p{font-size:15px;line-height:1.75;color:var(--gray)}
+
+/* ===== How ===== */
+.how{background:var(--bg)}
+.how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.how-step{position:relative;padding:0 20px}
+.how-step:not(:last-child)::after{content:'';position:absolute;top:24px;left:calc(50% + 44px);right:calc(-50% + 44px);border-top:1px dashed var(--line)}
+.how-badge{width:48px;height:48px;border-radius:50%;background:var(--white);border:1.5px solid var(--teal);display:flex;align-items:center;justify-content:center;font:700 15px/1 var(--font-mono);color:var(--teal-deep);margin-bottom:20px;position:relative;z-index:2}
+.how-step h3{font-family:var(--font-display);font-size:18px;margin-bottom:8px}
+.how-step p{font-size:14.5px;line-height:1.7;color:var(--gray)}
+.how .callout{margin-top:48px}
+
+/* ===== Who ===== */
+.who-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px}
+.who-card .chip{margin-bottom:16px}
+.who-situation{font-size:15px;color:var(--ink-80);margin-bottom:18px;line-height:1.5}
+.who-bullets li{font-size:14.5px;line-height:1.8;color:var(--gray);padding-left:16px;position:relative}
+.who-bullets li::before{content:'·';position:absolute;left:0;color:var(--teal)}
+.who-note{text-align:center;font-size:13px;color:var(--gray);margin-top:32px}
+
+/* ===== Difference ===== */
+.difference{background:var(--bg)}
+.diff-table{border-top:1px solid var(--line-dim)}
+.diff-row{display:grid;grid-template-columns:1fr 140px 1fr;align-items:center;padding:24px 0;border-bottom:1px solid var(--line-dim)}
+.diff-cell{font-size:15px;line-height:1.7;padding:0 24px}
+.diff-cell.before{color:var(--gray);background:var(--bg-warm);border-radius:10px;padding:18px 20px}
+.diff-cell.after{color:var(--ink);background:var(--white);border:1.5px solid var(--teal);border-radius:10px;padding:18px 20px}
+.diff-tag{text-align:center;font:600 11px/1.4 var(--font-mono);letter-spacing:.04em;color:var(--gray-light);text-transform:uppercase}
+
+/* ===== Policy ===== */
+.policy-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:24px}
+.stat-tile{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:28px 24px;text-align:center}
+.stat-num{display:block;font-family:var(--font-display);font-size:clamp(28px,3vw,36px);font-weight:800;color:var(--teal-deep);letter-spacing:-.02em;line-height:1.1;margin-bottom:8px}
+.stat-label{font-size:14px;color:var(--gray)}
+.policy-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:24px;margin-bottom:24px}
+.policy-card{display:flex;gap:16px;align-items:flex-start}
+.policy-card .policy-icon{width:36px;height:36px;border-radius:9px;background:var(--teal-soft);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.policy-card .policy-icon svg{width:18px;height:18px;stroke:var(--teal-deep)}
+.policy-card h3{font-family:var(--font-display);font-size:16px;margin-bottom:4px}
+.policy-card p{font-size:14px;line-height:1.65;color:var(--gray)}
+.policy .callout{margin-top:0}
+
+/* ===== Register ===== */
+.register{background:var(--ink);position:relative;overflow:hidden}
+.register::before{content:'';position:absolute;inset:0;background:radial-gradient(700px 420px at 15% 0%,rgba(11,143,134,.28),transparent 70%);pointer-events:none}
+.register .container{position:relative;display:grid;grid-template-columns:5fr 7fr;gap:56px;align-items:start}
+.register-copy h2{color:var(--white)}
+.register-copy .lead{color:rgba(255,255,255,.72);max-width:none}
+.form-card{background:var(--white);border-radius:20px;padding:40px;box-shadow:var(--sh-elevated)}
+.form-hint{font-size:13px;color:var(--gray);margin-bottom:24px}
+.form-group-label{font:600 11px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--gray-light);margin:24px 0 14px}
+.form-group-label:first-of-type{margin-top:0}
+.form-group + .form-group-label{border-top:1px solid var(--line-dim);padding-top:24px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 20px}
+.field{grid-column:span 1}
+.field.full{grid-column:1/-1}
+.field label{display:block;font-weight:700;font-size:13px;color:var(--ink);margin-bottom:6px}
+.field label .req{color:var(--error)}
+.field input[type=text],.field input[type=email],.field input[type=tel],.field input[type=date],.field input[type=number],.field select,.field textarea{
+  width:100%;height:48px;padding:13px 14px;border:1.5px solid var(--line);border-radius:8px;font-size:16px;background:var(--white);transition:border-color .15s ease}
+.field input[type=date]{appearance:none}
+.field textarea{height:auto;resize:vertical}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--teal);outline:none}
+.field.error input,.field.error select,.field.error textarea{border-color:var(--error)}
+.field-msg{display:none;font-size:12px;color:var(--error);margin-top:6px}
+.field.error .field-msg{display:block}
+.field select{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236B7794' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center}
+
+.chip-radio-group{display:flex;flex-wrap:wrap;gap:8px}
+.chip-radio{border:1.5px solid var(--line);border-radius:20px;padding:9px 16px;font-size:13.5px;font-weight:600;color:var(--gray);transition:all .15s ease;min-height:40px}
+.chip-radio input{position:absolute;opacity:0;pointer-events:none}
+.chip-radio.is-checked,.chip-radio:has(input:checked){background:var(--teal-soft);border-color:var(--teal);color:var(--teal-deep)}
+
+.check-row{display:flex;align-items:flex-start;gap:10px;margin-top:16px}
+.check-row input{width:18px;height:18px;margin-top:2px;accent-color:var(--teal);flex:0 0 auto}
+.check-row label{font-size:13px;line-height:1.6;color:var(--gray)}
+
+.form-submit-note{font-size:12px;color:var(--gray-light);text-align:center;margin-top:12px}
+
+.form-success{text-align:center;padding:20px 0}
+.success-icon{width:64px;height:64px;border-radius:50%;background:var(--teal-soft);display:flex;align-items:center;justify-content:center;margin:0 auto 20px}
+.success-icon svg{width:28px;height:28px;stroke:var(--teal-deep);stroke-width:2.4;fill:none}
+.form-success h3{font-size:24px;font-family:var(--font-display);margin-bottom:14px}
+.form-success p{font-size:15px;line-height:1.75;color:var(--gray);margin-bottom:6px}
+.success-interview{margin-top:18px;text-align:left}
+.success-actions{display:flex;gap:10px;justify-content:center;margin-top:24px}
+.success-dev-note{font-size:12px;color:var(--gray-light);margin-top:20px}
+.copy-textarea{width:100%;margin-top:12px;height:120px;font-size:12px;font-family:var(--font-mono);padding:10px;border:1px solid var(--line);border-radius:8px}
+
+/* ===== FAQ ===== */
+.faq-list{max-width:820px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-q{width:100%;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:22px 4px;text-align:left;font-weight:700;font-size:15.5px;min-height:44px}
+.faq-icon{flex:0 0 auto;width:20px;height:20px;position:relative}
+.faq-icon::before,.faq-icon::after{content:'';position:absolute;background:var(--ink);top:50%;left:50%;transform:translate(-50%,-50%)}
+.faq-icon::before{width:14px;height:1.6px}
+.faq-icon::after{width:1.6px;height:14px;transition:transform .2s ease}
+.faq-q[aria-expanded=true] .faq-icon::after{transform:translate(-50%,-50%) rotate(90deg) scaleY(0)}
+.js-anim .faq-panel{overflow:hidden;max-height:0;transition:max-height .24s ease}
+.faq-panel p{font-size:14.5px;line-height:1.8;color:var(--gray);padding:0 4px 22px}
+
+/* ===== Footer ===== */
+.site-footer{background:var(--ink);padding:56px 0 32px;color:rgba(255,255,255,.7)}
+.footer-top{display:grid;grid-template-columns:1fr auto;gap:32px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.12)}
+.footer-brand{display:flex;align-items:center;gap:10px}
+.footer-brand .brand-word{color:var(--white)}
+.footer-brand .brand-word .go{color:var(--amber)}
+.footer-desc{font-size:13px;color:rgba(255,255,255,.55);margin-top:10px}
+.footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+.footer-contact{font-size:14px;color:var(--white)}
+.footer-links{display:flex;gap:18px;font-size:13px;color:rgba(255,255,255,.6)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;flex-wrap:wrap;gap:10px}
+.footer-notice{font-size:12px;color:rgba(255,255,255,.5);max-width:640px}
+.footer-copyright{font:400 11px/1 var(--font-mono);color:rgba(255,255,255,.4)}
+
+/* ===== Mobile sticky CTA ===== */
+.mobile-cta{display:none;position:fixed;left:0;right:0;bottom:0;z-index:99;background:var(--white);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(15,30,61,.06);padding:10px 16px calc(10px + env(safe-area-inset-bottom));transform:translateY(100%);transition:transform .2s ease}
+.mobile-cta.is-visible{transform:translateY(0)}
+
+/* ===================== RESPONSIVE ===================== */
+@media (max-width:1280px){
+  .container{max-width:100%}
+}
+@media (max-width:1024px){
+  .container{padding:0 28px}
+  .section{padding:88px 0}
+  .hero{padding-top:132px}
+  .hero .container{grid-template-columns:1fr}
+  .hero-visual{display:none}
+  .problem-grid{grid-template-columns:1fr}
+  .card{padding:24px}
+  .problem .card{display:grid;grid-template-columns:48px 1fr;column-gap:20px;row-gap:4px;align-items:start}
+  .problem .card .problem-icon{grid-column:1;grid-row:1/3;margin-bottom:0}
+  .problem .card h3{grid-column:2;grid-row:1}
+  .problem .card p{grid-column:2;grid-row:2}
+  .how-grid{grid-template-columns:1fr 1fr;gap:32px 20px}
+  .how-step:not(:last-child)::after{display:none}
+  .who-grid{grid-template-columns:1fr 1fr 1fr}
+  .register .container{grid-template-columns:1fr}
+  .form-card{max-width:640px;margin:0 auto}
+}
+@media (max-width:768px){
+  .container{padding:0 20px}
+  .section{padding:64px 0}
+  html{scroll-padding-top:72px}
+  .site-header{height:56px}
+  .site-header .container{height:56px}
+  .brand-mark{width:26px;height:26px}
+  .brand-word{font-size:19px}
+  .header-nav{display:none}
+  .hero{padding:88px 0 56px}
+  .hero-lead.p2{display:none}
+  .hero-cta{flex-direction:column;gap:10px;margin-top:28px}
+  .hero-cta .btn{width:100%}
+  .problem-grid{gap:16px}
+  .how-grid{grid-template-columns:1fr;gap:0}
+  .how-step{display:grid;grid-template-columns:40px 1fr;column-gap:20px;row-gap:4px;padding:0 0 32px;position:relative}
+  .how-step:not(:last-child)::before{content:'';position:absolute;left:19px;top:40px;bottom:0;border-left:1px dashed var(--line)}
+  .how-step .how-badge{grid-column:1;grid-row:1/3;width:40px;height:40px;font-size:13px;margin-bottom:0}
+  .how-step h3{grid-column:2;grid-row:1}
+  .how-step p{grid-column:2;grid-row:2}
+  .who-grid{grid-template-columns:1fr;gap:16px}
+  .diff-row{grid-template-columns:1fr;gap:10px;padding:20px 0}
+  .diff-tag{text-align:left}
+  .diff-cell.before,.diff-cell.after{padding:16px 18px}
+  .policy-stats{grid-template-columns:1fr;gap:12px}
+  .policy-grid{grid-template-columns:1fr;gap:16px}
+  .form-grid{grid-template-columns:1fr}
+  .field{grid-column:1/-1!important}
+  .form-card{padding:24px;border-radius:16px}
+  .success-actions{flex-direction:column}
+  .footer-top{grid-template-columns:1fr}
+  .footer-right{align-items:flex-start}
+  .footer-bottom{flex-direction:column;align-items:flex-start}
+  .mobile-cta{display:block}
+}
+@media (max-width:480px){
+  .container{padding:0 16px}
+  .section{padding:56px 0}
+  .card{padding:20px}
+  h1{font-size:27px}
+}
+/* mobile card/step grids: icon spans rows, text stays in column 2 */
+@media (max-width:1024px){.problem .card>.problem-icon,.why-grid .card>.problem-icon{grid-row:1/span 2}.problem .card>h3,.problem .card>p,.why-grid .card>h3,.why-grid .card>p{grid-column:2;min-width:0}.problem .card,.why-grid .card{row-gap:8px}.problem .card>h3,.why-grid .card>h3{margin:0;padding-top:8px}}
+html[lang="ko"] .card h3,html[lang="ko"] .card p,html[lang="ko"] .how-step h3,html[lang="ko"] .how-step p,html[lang="ko"] .section-head .lead,html[lang="ko"] .faq-panel p{word-break:keep-all;overflow-wrap:anywhere}
+@media (max-width:768px){.how-step>.how-badge{grid-row:1/span 2}.how-step>h3,.how-step>p{grid-column:2;min-width:0}.how-step{row-gap:6px}.how-step>h3{margin:0;padding-top:7px}}
+.acc-login-line{font-size:14px;line-height:1.7;color:var(--ink-80);background:var(--bg);border-radius:10px;padding:12px 14px;margin-bottom:16px}
+.acc-login-line a{color:var(--teal-deep);font-weight:700;text-decoration:underline}
+.acc-member-chip{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 12px;background:var(--teal-soft);color:var(--teal-deep);font-size:14px;font-weight:700;border-radius:10px;padding:8px 8px 8px 14px;margin-bottom:16px}
+.acc-member-chip[hidden]{display:none}
+.acc-linkbtn{min-height:44px;padding:0 10px;font:600 13.5px/1 var(--font-sans);color:var(--ink-60);text-decoration:underline}
+.acc-ro{font-size:12.5px;line-height:1.6;color:var(--gray);margin-top:6px}
+.acc-ro a{color:var(--teal-deep);text-decoration:underline}
+.acc-ro[hidden]{display:none}
+input.is-ro{background:var(--bg);color:var(--ink-60)}
+.acc-cta{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;background:var(--teal-soft);border:1px solid rgba(11,143,134,.16);border-radius:12px;padding:18px 16px;margin-top:20px}
+.acc-cta[hidden]{display:none}
+.acc-cta b{font-size:15px;line-height:1.55;color:var(--ink);word-break:keep-all}
+.acc-cta span{font-size:13.5px;line-height:1.6;color:var(--ink-60);word-break:keep-all}
+/* ===== Shared: header additions ===== */
+.site-header.is-solid,html:not(.js-anim) .site-header{background:rgba(255,255,255,.96);border-bottom:1px solid var(--line)}
+.header-right{display:flex;align-items:center;gap:12px}
+.mode-switch{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;background:var(--white);overflow:hidden;flex:0 0 auto}
+.mode-switch a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:0 14px;font:700 13px/1 var(--font-sans);color:var(--gray);white-space:nowrap}
+.mode-switch a[lang=en]{font-family:var(--font-display)}
+.mode-switch a:hover{color:var(--ink);background:var(--bg)}
+.mode-switch a[aria-current],.mode-switch a.is-current{background:var(--ink);color:var(--white)}
+.hdr-cta{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:8px;background:var(--ink);color:var(--white);font:700 13.5px/1 var(--font-sans);white-space:nowrap}
+.hdr-cta:hover{background:var(--teal)}
+.hdr-login{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:0 8px;font:600 13.5px/1 var(--font-sans);color:var(--ink-60);white-space:nowrap}
+.hdr-login:hover{color:var(--ink)}
+.hdr-login.is-member{color:var(--teal-deep)}
+.nav-menu{display:none}
+.nav-menu summary{list-style:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:1.5px solid var(--line);border-radius:8px;background:var(--white);cursor:pointer}
+.nav-menu summary::-webkit-details-marker{display:none}
+.nav-bars,.nav-bars::before,.nav-bars::after{display:block;width:18px;height:2px;border-radius:1px;background:var(--ink);position:relative;transition:transform .15s}
+.nav-bars::before,.nav-bars::after{content:'';position:absolute;left:0}
+.nav-bars::before{top:-6px}.nav-bars::after{top:6px}
+.nav-menu[open] .nav-bars{background:transparent}
+.nav-menu[open] .nav-bars::before{top:0;transform:rotate(45deg)}
+.nav-menu[open] .nav-bars::after{top:0;transform:rotate(-45deg)}
+.nav-menu-panel{position:absolute;top:100%;left:0;right:0;display:flex;flex-direction:column;background:var(--white);border-bottom:1px solid var(--line);box-shadow:var(--sh-elevated);padding:8px 20px 16px;max-height:calc(100vh - 72px);overflow-y:auto}
+.nav-menu-panel a{display:flex;align-items:center;min-height:48px;border-bottom:1px solid var(--line-dim);font-size:15px;font-weight:600;color:var(--ink)}
+.nav-menu-panel a.nav-menu-cta{justify-content:center;margin-top:12px;border:none;border-radius:8px;background:var(--teal);color:var(--white)}
+.nav-menu-panel a.nav-menu-hub{justify-content:center;border:none;font-size:13px;color:var(--gray)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.footer-links{flex-wrap:wrap;row-gap:10px}
+.footer-modes{display:flex;flex-wrap:wrap;gap:10px 18px;font-size:13px}
+.footer-modes a{color:var(--white)}
+@media (max-width:1200px){.header-nav{gap:24px}}
+@media (max-width:1024px){.header-nav{display:none}.nav-menu{display:block}}
+@media (max-width:768px){.hdr-cta{display:none}.header-right{gap:8px}.nav-menu-panel{padding:8px 16px 16px}.has-mobile-cta .site-footer{padding-bottom:calc(96px + env(safe-area-inset-bottom))}.footer-right{align-items:flex-start}}
+@media (max-width:480px){.brand-tag{display:none}.mode-switch a{padding:0 10px;font-size:12.5px}.hdr-login{padding:0 4px;font-size:12.5px}}
+@media (max-width:400px){.mode-switch a{padding:0 8px}.header-right{gap:4px}.brand-word{font-size:18px}}
+/* ===== /Shared ===== */
+</style>
+</head>
+<body class="has-mobile-cta">
+<a class="skip-link" href="#hero">본문으로 건너뛰기</a>
+
+<!-- ===================== HEADER ===================== -->
+<header class="site-header" id="siteHeader">
+  <div class="container">
+    <a class="brand" href="#hero" aria-label="MICEGO 처음으로">
+      <svg class="brand-mark" viewBox="0 0 32 32" role="img" aria-hidden="true">
+        <rect width="32" height="32" rx="9" fill="#0F1E3D"/>
+        <rect x="6.5" y="9" width="14" height="2.6" rx="1.3" fill="#FFFFFF"/>
+        <rect x="6.5" y="14.7" width="11" height="2.6" rx="1.3" fill="#16B5A8"/>
+        <rect x="6.5" y="20.4" width="8" height="2.6" rx="1.3" fill="#FFC24B"/>
+        <circle cx="24.5" cy="16" r="2.6" fill="#FFFFFF"/>
+      </svg>
+      <span class="brand-word">MICE<span class="go">GO</span></span>
+    </a>
+    <nav class="header-nav" aria-label="주요 메뉴">
+      <a href="#problem">문제</a>
+      <a href="#how">동작 방식</a>
+      <a href="#who">대상</a>
+      <a href="#policy">이용 조건</a>
+      <a href="#faq">자주 묻는 질문</a>
+    </nav>
+    <div class="header-right">
+      <nav class="mode-switch" aria-label="모드 선택 / Choose mode">
+        <a href="index.html" lang="ko" aria-current="page">여행사</a>
+        <a href="../en/index.html" lang="en" hreflang="en">Hotels</a>
+      </nav>
+      <a class="hdr-login" href="login.html" data-acc-login>로그인</a>
+      <a class="hdr-cta" href="#register">견적 요청</a>
+      <details class="nav-menu">
+        <summary><span class="nav-bars" aria-hidden="true"></span><span class="sr-only">메뉴</span></summary>
+        <nav class="nav-menu-panel" aria-label="메뉴">
+          <a href="#problem">문제</a>
+          <a href="#how">동작 방식</a>
+          <a href="#who">대상</a>
+          <a href="#policy">이용 조건</a>
+          <a href="#faq">자주 묻는 질문</a>
+          <a href="about.html">서비스 소개</a>
+          <a href="faq.html">자주 묻는 질문 전체</a>
+          <a href="contact.html">문의하기</a>
+          <a class="nav-menu-cta" href="#register">지금 견적 요청하기</a>
+          <a class="nav-menu-hub" href="../index.html">모드 선택 · <span lang="en">Choose mode</span></a>
+        </nav>
+      </details>
+    </div>
+  </div>
+</header>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-text">
+      <span class="chip hero-chip reveal">해외 MICE 호텔 역경매 · 수수료 없음</span>
+      <h1 class="reveal">행사 견적 하나 받는 데,<br><span class="hl">며칠씩</span> 걸리고 계신가요?</h1>
+      <p class="hero-lead p1 reveal">MICEGO는 행사 요건을 한 번만 등록하면 해외 호텔이 먼저 제안하는 MICE 역경매 플랫폼입니다.</p>
+      <p class="hero-lead p2 reveal">수수료 없이, 영업일 기준 3일 이내에 회신드립니다. 회사명과 예산은 호텔 요청서에 담기지 않으며, 행사 규모에 제한이 없습니다.</p>
+      <div class="hero-cta reveal">
+        <a class="btn btn-primary btn-lg btn-arrow" href="#register">지금 견적 요청하기</a>
+        <a class="btn btn-ghost btn-lg" href="#how">어떻게 동작하나요</a>
+      </div>
+      <p class="hero-micro reveal">약 1분 소요 · 직접 입력하는 항목은 3개 · 일정이 확정된 해외 행사만 접수합니다</p>
+      <p class="hero-trust reveal">여행 인플루언서 마케팅 플랫폼 MatchGo를 운영해 온 팀이 만드는 서비스입니다</p>
+    </div>
+    <div class="hero-visual reveal" aria-hidden="true">
+      <div class="mock-card">
+        <span class="mock-label">MY RFP</span>
+        <div class="mock-row"><span class="mock-key">행사 유형</span><span class="mock-skel" style="max-width:70%"></span></div>
+        <div class="mock-row"><span class="mock-key">행사 일정</span><span class="mock-skel" style="max-width:50%"></span></div>
+        <div class="mock-row"><span class="mock-key">예상 인원</span><span class="mock-skel" style="max-width:60%"></span></div>
+        <div class="mock-row"><span class="mock-key">희망 지역</span><span class="mock-skel" style="max-width:40%"></span></div>
+        <div class="mock-offers">
+          <div class="mock-offer o1"><span class="arrow">←</span><span class="lbl">제안 도착</span><span class="skel"></span></div>
+          <div class="mock-offer o2"><span class="arrow">←</span><span class="lbl">제안 도착</span><span class="skel"></span></div>
+          <div class="mock-offer o3"><span class="arrow">←</span><span class="lbl">제안 도착</span><span class="skel"></span></div>
+        </div>
+      </div>
+      <p class="mock-caption">미리 보는 화면 구성 예시입니다</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROBLEM ===================== -->
+<section class="section problem" id="problem">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-num">01_PROBLEM</span>
+      <h2>견적 한 번 받는 데,<br>시간이 너무 많이 듭니다</h2>
+      <p class="lead">행사 담당자들이 공통으로 겪는 세 가지입니다.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="card reveal">
+        <div class="problem-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <h3>같은 설명을 처음부터 반복합니다</h3>
+        <p>행사 개요, 일정, 인원, 예산… 업체를 새로 접촉할 때마다 같은 내용을 다시 설명합니다. 답변은 메일과 메신저에 흩어지고, 정리는 결국 담당자 몫이 됩니다.</p>
+      </div>
+      <div class="card reveal">
+        <div class="problem-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17V9m6 8V5M3 21h18M5 21V13"/></svg></div>
+        <h3>받은 견적을 나란히 놓기 어렵습니다</h3>
+        <p>업체마다 양식도 항목도 달라서 비교표는 매번 새로 만듭니다. 무엇이 포함이고 무엇이 별도인지 확인하는 데만 며칠이 지나갑니다.</p>
+      </div>
+      <div class="card reveal">
+        <div class="problem-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+        <h3>결국 아는 곳에만 다시 묻게 됩니다</h3>
+        <p>시간이 없으니 늘 거래하던 곳부터 연락합니다. 더 잘 맞는 조건을 가진 곳이 있어도 후보에조차 오르지 못합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== HOW ===================== -->
+<section class="section how" id="how">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-num">02_HOW IT WORKS</span>
+      <h2>MICEGO가 일하는 방식</h2>
+      <p class="lead">복잡한 절차 없이, 네 단계로 진행합니다.</p>
+    </div>
+    <div class="how-grid">
+      <div class="how-step reveal">
+        <div class="how-badge">01</div>
+        <h3>행사 요건을 한 번만 작성</h3>
+        <p>행사 목적, 확정된 일정, 인원, 희망 국가·도시를 한 번 입력합니다. 업체마다 다시 설명할 필요가 없습니다.</p>
+      </div>
+      <div class="how-step reveal">
+        <div class="how-badge">02</div>
+        <h3>조건에 맞는 해외 호텔에 전달</h3>
+        <p>요건에 맞는 해외 호텔에 동일한 요건서를 전달합니다. 회사명과 예산은 요건서에서 빼고 보냅니다.</p>
+      </div>
+      <div class="how-step reveal">
+        <div class="how-badge">03</div>
+        <h3>제안이 역으로 도착</h3>
+        <p>찾아다니며 묻는 대신, 호텔이 먼저 제안을 보내옵니다.</p>
+      </div>
+      <div class="how-step reveal">
+        <div class="how-badge">04</div>
+        <h3>같은 기준으로 비교</h3>
+        <p>항목 구조가 통일된 제안을 나란히 놓고 비교합니다.</p>
+      </div>
+    </div>
+    <div class="callout reveal">
+      <span class="callout-label">SLA</span>
+      <p>요청을 받은 영업일부터 3영업일 안에 진행 상황과 다음 일정을 회신드립니다. 영업일은 주말과 한국 공휴일을 뺀 날이며, 기한은 마지막 날 18:00(KST)입니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== WHO ===================== -->
+<section class="section who" id="who">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-num">03_FOR WHOM</span>
+      <h2>누구를 위한 서비스인가</h2>
+      <p class="lead">해외 행사 하나를 두고 여러 호텔에서 견적을 받아야 하는 모든 담당자를 위한 서비스입니다.</p>
+    </div>
+    <!-- 카드 순서: 여행사 → 랜드사 → 기업체. 가나다순도 규모순도 아닌 임의 순서이며 우선순위를 의미하지 않습니다. -->
+    <div class="who-grid">
+      <div class="card who-card reveal">
+        <span class="chip">여행사</span>
+        <p class="who-situation">인센티브 단체와 포상 여행을 기획하는 팀</p>
+        <ul class="who-bullets">
+          <li>목적지별 후보를 한 번에 확보</li>
+          <li>고객 제안서에 붙일 비교 근거 확보</li>
+          <li>담당자 한 명이 여러 건을 동시에 진행</li>
+        </ul>
+      </div>
+      <div class="card who-card reveal">
+        <span class="chip">랜드사</span>
+        <p class="who-situation">현지 수배와 운영을 책임지는 팀</p>
+        <ul class="who-bullets">
+          <li>현지 호텔 견적을 한 번에 요청</li>
+          <li>일정이 바뀌어도 대안 후보를 빠르게</li>
+          <li>발주처에 그대로 제출할 비교안 확보</li>
+        </ul>
+      </div>
+      <div class="card who-card reveal">
+        <span class="chip">기업체</span>
+        <p class="who-situation">사내 행사·컨퍼런스·시상식을 담당하는 팀</p>
+        <ul class="who-bullets">
+          <li>내부 품의에 필요한 비교 견적 확보</li>
+          <li>복수 견적 요건을 절차대로 충족</li>
+          <li>담당자가 바뀌어도 기록이 남는 진행</li>
+        </ul>
+      </div>
+    </div>
+    <p class="who-note reveal">협회·기관, 에이전시 등 그 외 주최자도 '기타'로 남겨주시면 함께 검토합니다.</p>
+  </div>
+</section>
+
+<!-- ===================== DIFFERENCE ===================== -->
+<section class="section difference" id="difference">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-num">04_DIFFERENCE</span>
+      <h2>무엇이 달라지는가</h2>
+      <p class="lead">오른쪽이 MICEGO를 이용했을 때의 방식입니다.</p>
+    </div>
+    <div class="diff-table reveal">
+      <div class="diff-row">
+        <div class="diff-cell before">업체마다 따로 설명하고, 빠진 내용은 다시 묻습니다</div>
+        <div class="diff-tag">요건 전달</div>
+        <div class="diff-cell after">한 번 작성한 요건서가 여러 해외 호텔에 동일하게 전달됩니다</div>
+      </div>
+      <div class="diff-row">
+        <div class="diff-cell before">양식이 제각각이라 비교표를 매번 새로 만듭니다</div>
+        <div class="diff-tag">견적 비교</div>
+        <div class="diff-cell after">항목 구조가 통일된 상태로 제안이 정리되어 도착합니다</div>
+      </div>
+      <div class="diff-row">
+        <div class="diff-cell before">시간이 없어 늘 거래하던 곳부터 연락합니다</div>
+        <div class="diff-tag">후보 발굴</div>
+        <div class="diff-cell after">조건이 맞는 호텔이 먼저 제안해 후보의 폭이 넓어집니다</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== POLICY ===================== -->
+<section class="section policy" id="policy">
+  <div class="container">
+    <div class="section-head reveal">
+      <span class="section-num">05_POLICY</span>
+      <h2>이용 조건</h2>
+      <p class="lead">MICEGO 오거나이저 이용 조건입니다.</p>
+    </div>
+    <div class="policy-stats">
+      <div class="stat-tile reveal">
+        <span class="stat-num">0원</span>
+        <span class="stat-label">별도의 수수료가 없습니다</span>
+      </div>
+      <div class="stat-tile reveal">
+        <span class="stat-num">영업일 3일</span>
+        <span class="stat-label">안에 회신드립니다 (주말·공휴일 제외)</span>
+      </div>
+      <div class="stat-tile reveal">
+        <span class="stat-num">제한 없음</span>
+        <span class="stat-label">최소 행사 규모 제한이 없습니다</span>
+      </div>
+    </div>
+    <div class="policy-grid">
+      <div class="card policy-card reveal">
+        <div class="policy-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h20M12 2c2.5 2.5 4 6 4 10s-1.5 7.5-4 10c-2.5-2.5-4-6-4-10s1.5-7.5 4-10z"/></svg></div>
+        <div>
+          <h3>해외 호텔 전 지역</h3>
+          <p>해외 호텔이라면 국가·도시 제한 없이 견적을 진행합니다. 국내 행사는 지원하지 않습니다.</p>
+        </div>
+      </div>
+      <div class="card policy-card reveal">
+        <div class="policy-icon"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12s3.5-7 9-7 9 7 9 7-3.5 7-9 7-9-7-9-7z"/><circle cx="12" cy="12" r="3"/><path d="M3 3l18 18" stroke-linecap="round"/></svg></div>
+        <div>
+          <h3>선정 전까지 회사명 비공개</h3>
+          <p>호텔은 회사명·예산·담당자 연락처를 뺀 표준 요건서만 받습니다. 제안을 선택하시면 선정된 호텔에만 회사명과 담당자 연락처가 전달됩니다.</p>
+        </div>
+      </div>
+    </div>
+    <div class="callout reveal">
+      <span class="callout-label">접수 조건</span>
+      <p>일정이 확정된 해외 행사만 견적 요청이 가능합니다. 일정이 정해지는 대로 다시 요청해 주세요.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== REGISTER ===================== -->
+<section class="section register" id="register">
+  <div class="container">
+    <div class="register-copy reveal">
+      <span class="section-num on-dark">06_REQUEST</span>
+      <h2>지금 견적을 요청하세요</h2>
+      <p class="lead">일정이 확정된 해외 행사라면 지금 요청하실 수 있습니다. 수수료 없이, 영업일 기준 3일 이내에 회신드립니다. 회사명과 예산은 호텔 요청서에 담기지 않습니다.</p>
+    </div>
+
+    <div class="form-card reveal">
+      <form id="registerForm" novalidate action="mailto:mysteri1984@gmail.com" method="post" enctype="text/plain">
+        <p class="acc-login-line" id="accLoginLine">이미 회원이신가요? <a href="login.html?next=index.html%23register">로그인</a>하면 담당자 정보가 자동으로 채워집니다.</p>
+        <div class="acc-member-chip" id="accMemberChip" hidden><span id="accMemberText"></span><button type="button" class="acc-linkbtn" id="accLogout">로그아웃</button></div>
+        <p class="form-hint">필수 항목만 빠르게 입력하시면 됩니다. 나머지는 선택만 하면 돼요. 일정이 확정된 해외 행사만 접수됩니다.</p>
+
+        <div class="form-group-label">누구신가요</div>
+        <div class="form-grid">
+          <div class="field full" id="f-orgType">
+            <label>소속 유형 <span class="req">*</span></label>
+            <div class="chip-radio-group" role="radiogroup" aria-label="소속 유형">
+              <label class="chip-radio"><input type="radio" name="orgType" value="여행사">여행사</label>
+              <label class="chip-radio"><input type="radio" name="orgType" value="랜드사">랜드사</label>
+              <label class="chip-radio"><input type="radio" name="orgType" value="기업(행사 주최)">기업(행사 주최)</label>
+              <label class="chip-radio"><input type="radio" name="orgType" value="협회·기관">협회·기관</label>
+              <label class="chip-radio"><input type="radio" name="orgType" value="기타">기타</label>
+            </div>
+            <p class="field-msg">소속 유형을 선택해 주세요</p>
+          </div>
+          <div class="field" id="f-company">
+            <label for="company">회사·기관명 <span class="req">*</span></label>
+            <input type="text" id="company" name="company" placeholder="예: 마이스투어" autocomplete="organization">
+            <p class="field-msg">회사 또는 기관명을 입력해 주세요</p>
+          </div>
+          <div class="field" id="f-name">
+            <label for="name">담당자명 <span class="req">*</span></label>
+            <input type="text" id="name" name="name" placeholder="예: 홍길동" autocomplete="name">
+            <p class="field-msg">담당자명을 입력해 주세요</p>
+          </div>
+          <div class="field" id="f-email">
+            <label for="email">이메일 <span class="req">*</span></label>
+            <input type="email" id="email" name="email" placeholder="name@company.com" autocomplete="email">
+            <p class="acc-ro" data-acc-ro hidden>회원 정보로 채워졌습니다. <a href="account.html">계정 설정에서 변경</a></p>
+            <p class="field-msg">이메일 형식을 확인해 주세요</p>
+          </div>
+          <div class="field" id="f-phone">
+            <label for="phone">휴대전화 <span class="req">*</span></label>
+            <input type="tel" id="phone" name="phone" placeholder="010-0000-0000" autocomplete="tel" inputmode="tel" required aria-required="true">
+            <p class="field-hint" style="font-size:12.5px;line-height:1.6;color:var(--gray);margin-top:6px">진행 알림과 제안 선택 확인(인증번호)에 사용합니다. 진행 상황은 카카오 알림톡(안 되면 문자)으로 알려 드립니다.</p>
+            <p class="field-msg">휴대전화 번호를 확인해 주세요.</p>
+          </div>
+        </div>
+
+        <div class="form-group-label">어떤 행사인가요</div>
+        <div class="form-grid">
+          <div class="field" id="f-eventType">
+            <label for="eventType">행사 유형 <span class="req">*</span></label>
+            <select id="eventType" name="eventType">
+              <option value="">선택해 주세요</option>
+              <option>인센티브 단체여행</option>
+              <option>기업 워크숍·연수</option>
+              <option>컨퍼런스·세미나</option>
+              <option>시상식·갈라</option>
+              <option>전시·부스 참가</option>
+            </select>
+            <p class="field-msg">항목을 선택해 주세요</p>
+          </div>
+          <div class="field field-empty" aria-hidden="true"></div>
+          <div class="field" id="f-startDate">
+            <label for="startDate">행사 시작일 <span class="req">*</span></label>
+            <input type="date" id="startDate" name="startDate">
+            <p class="field-msg">확정된 시작일을 입력해 주세요</p>
+          </div>
+          <div class="field" id="f-endDate">
+            <label for="endDate">행사 종료일</label>
+            <input type="date" id="endDate" name="endDate">
+            <p class="field-msg">시작일 이후 날짜를 입력해 주세요</p>
+          </div>
+          <div class="field" id="f-headcount">
+            <label for="headcount">예상 인원 <span class="req">*</span></label>
+            <select id="headcount" name="headcount">
+              <option value="">선택해 주세요</option>
+              <option>50명 미만</option>
+              <option>50~100명</option>
+              <option>100~300명</option>
+              <option>300~500명</option>
+              <option>500명 이상</option>
+            </select>
+            <p class="field-msg">항목을 선택해 주세요</p>
+          </div>
+          <div class="field field-empty" aria-hidden="true"></div>
+          <div class="field full" id="f-region">
+            <label for="region">행사 국가·도시(해외) <span class="req">*</span></label>
+            <input type="text" id="region" name="region" placeholder="예: 다낭, 방콕, 세부, 발리 등 해외 도시·국가">
+            <p class="field-msg">해외 국가 또는 도시를 입력해 주세요</p>
+          </div>
+        </div>
+
+        <div class="form-group-label">객실·부대시설</div>
+        <div class="form-grid">
+          <div class="field" id="f-twinRooms">
+            <label for="twinRooms">트윈룸 필요 객실 수 <span class="req">*</span></label>
+            <input type="number" id="twinRooms" name="twinRooms" min="0" step="1" inputmode="numeric" placeholder="예: 20">
+            <p class="field-msg">0 이상의 숫자를 입력해 주세요</p>
+          </div>
+          <div class="field" id="f-kingRooms">
+            <label for="kingRooms">킹룸 필요 객실 수 <span class="req">*</span></label>
+            <input type="number" id="kingRooms" name="kingRooms" min="0" step="1" inputmode="numeric" placeholder="예: 10">
+            <p class="field-msg">0 이상의 숫자를 입력해 주세요</p>
+          </div>
+          <div class="field full" id="f-ballroomUse">
+            <label>볼룸(연회장) 사용 여부 <span class="req">*</span></label>
+            <div class="chip-radio-group" role="radiogroup" aria-label="볼룸 사용 여부">
+              <label class="chip-radio"><input type="radio" name="ballroomUse" value="사용">사용</label>
+              <label class="chip-radio"><input type="radio" name="ballroomUse" value="미사용">미사용</label>
+            </div>
+            <p class="field-msg">볼룸 사용 여부를 선택해 주세요</p>
+          </div>
+          <div class="field full" id="f-ballroomPurpose" hidden>
+            <label>볼룸 사용 목적 <span class="req">*</span></label>
+            <div class="chip-radio-group" role="radiogroup" aria-label="볼룸 사용 목적">
+              <label class="chip-radio"><input type="radio" name="ballroomPurpose" value="디너">디너</label>
+              <label class="chip-radio"><input type="radio" name="ballroomPurpose" value="Full Day">Full Day</label>
+              <label class="chip-radio"><input type="radio" name="ballroomPurpose" value="Half Day">Half Day</label>
+              <label class="chip-radio"><input type="radio" name="ballroomPurpose" value="기타">기타</label>
+            </div>
+            <p class="field-msg">볼룸 사용 목적을 선택해 주세요</p>
+          </div>
+        </div>
+
+        <div class="form-group-label">그 밖에</div>
+        <div class="form-grid">
+          <div class="field full" id="f-note">
+            <label for="note">더 알려주실 내용</label>
+            <textarea id="note" name="note" rows="3" placeholder="예산 범위, 꼭 필요한 조건, 지금 가장 불편한 점 등 무엇이든 좋습니다"></textarea>
+          </div>
+          <div class="field full" id="f-consent">
+            <div class="check-row">
+              <input type="checkbox" id="consent" name="consent">
+              <label for="consent">행사 관련 안내를 받기 위해 개인정보 수집·이용에 동의합니다.<br>수집 항목: 소속·회사명·담당자명·이메일·휴대전화·행사 정보 / 이용 목적: 견적 요청 처리, 진행 상황 안내(이메일·카카오 알림톡·문자) / 보유 기간: 처리 완료 또는 동의 철회 시까지<br>제안을 선택하시면 선정된 호텔에 회사명·담당자명·이메일·연락처가 전달됩니다.<!-- TODO(legal): 제3자 제공·국외 이전 동의/고지 방식 검토 --><br><a href="terms.html" target="_blank" rel="noopener" style="text-decoration:underline">이용약관 보기</a> · <a href="privacy.html" target="_blank" rel="noopener" style="text-decoration:underline">개인정보처리방침 보기</a><!-- TODO(legal): 문구 법무 검토 필요 --></label>
+            </div>
+            <p class="field-msg">개인정보 수집·이용에 동의해 주세요</p>
+          </div>
+          <div class="field full">
+            <button type="submit" class="btn btn-accent btn-lg btn-block">견적 요청하기</button>
+            <p class="form-submit-note">회사명과 예산은 호텔 요청서에 담기지 않습니다. 남겨주신 정보는 견적 처리 목적 외에 사용하지 않습니다.</p>
+          </div>
+        </div>
+      </form>
+
+      <div class="form-success" id="formSuccess" hidden tabindex="-1">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg>
+        </div>
+        <h3>감사합니다. 접수되었습니다.</h3>
+        <p>접수 확인 메일에 진행 상황을 볼 수 있는 개인 링크를 넣어 드립니다. 영업일 기준 3일 안에 담당자가 진행 상황과 다음 일정을 회신드립니다.</p>
+        <p>회사명과 예산은 호텔 요청서에 담기지 않습니다. 제안을 선택하시면 선정된 호텔에만 회사명과 담당자 연락처가 전달됩니다.</p>
+        <p>궁금한 점이 있으시면 mysteri1984@gmail.com 로 편하게 문의해 주세요.</p>
+        <div id="rfpDone" hidden><span data-mg="rfpDoneRef"></span><span data-mg="rfpDoneTrack"></span></div>
+        <div class="acc-cta" id="accCta"><b>이 이메일로 가입하면 모든 요청을 한곳에서 확인할 수 있습니다.</b><span>동료에게 보기 전용 링크도 보낼 수 있습니다.</span><a class="btn btn-accent btn-sm" id="accCtaLink" href="signup.html">이 이메일로 가입하기</a></div>
+        <div class="success-actions">
+          <button type="button" class="btn btn-ghost btn-sm" id="copyBtn">제출 내용 복사</button>
+          <a class="btn btn-ghost btn-sm" href="#hero">맨 위로</a>
+        </div>
+        <textarea class="copy-textarea" id="copyFallback" hidden readonly></textarea>
+        <!-- TODO(backend): 지금은 제출 시 mailto로 담당자 메일함에 전달을 시도하는 임시방편이며, 실제 서비스 오픈 전 폼 백엔드(Formspree/Google Apps Script/자체 API 등)로 반드시 교체해야 합니다. 메일 클라이언트가 없는 기기에서는 전달되지 않을 수 있습니다. -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== FAQ ===================== -->
+<section class="section" id="faq" style="background:var(--bg)">
+  <div class="container">
+    <div class="section-head reveal" style="text-align:center;margin-left:auto;margin-right:auto">
+      <span class="section-num">07_FAQ</span>
+      <h2>자주 묻는 질문</h2>
+    </div>
+    <div class="faq-list reveal">
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a1">
+          지금 바로 견적을 받을 수 있나요?<span class="faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="faq-panel" id="faq-a1" role="region">
+          <p>네, 지금 바로 요청하실 수 있습니다. 접수 후 영업일 기준 3일 이내에 회신드립니다.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a2">
+          이용 요금은 어떻게 되나요?<span class="faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="faq-panel" id="faq-a2" role="region">
+          <p>별도의 수수료가 없습니다.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a3">
+          회사 이름이나 예산이 공급자에게 그대로 공개되나요?<span class="faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="faq-panel" id="faq-a3" role="region">
+          <p>선정 전에는 공개되지 않습니다. 호텔은 회사명·예산·담당자 연락처를 뺀 표준 요건서만 받습니다. 제안을 선택하시면 선정된 호텔에 회사명·담당자명·이메일·연락처가 전달되고, 선정되지 않은 호텔에는 결과만 알립니다.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a4">
+          국내 행사도 되나요, 해외만 되나요?<span class="faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="faq-panel" id="faq-a4" role="region">
+          <p>해외 호텔만 지원합니다. 해외라면 국가·도시 제한이 없으며, 국내 행사는 지원하지 않습니다.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a5">
+          행사 규모가 작아도 등록할 수 있나요?<span class="faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="faq-panel" id="faq-a5" role="region">
+          <p>네, 최소 규모 제한이 없습니다.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a6">
+          아직 일정이 확정되지 않았는데 요청해도 되나요?<span class="faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="faq-panel" id="faq-a6" role="region">
+          <p>일정이 확정된 행사만 접수합니다. 일정이 정해지는 대로 다시 요청해 주세요.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q" aria-expanded="false" aria-controls="faq-a7">
+          공급자(호텔)인데 참여하고 싶습니다.<span class="faq-icon" aria-hidden="true"></span>
+        </button>
+        <div class="faq-panel" id="faq-a7" role="region">
+          <p>호텔·리조트 파트너 등록은 영문 호텔 모드에서 진행합니다. <a href="../en/index.html#register" lang="en" style="text-decoration:underline">Hotels → Register</a></p>
+        </div>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:32px"><a class="btn btn-ghost btn-arrow" href="faq.html">자주 묻는 질문 더 보기</a></p>
+  </div>
+</section>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">
+          <svg class="brand-mark" viewBox="0 0 32 32" role="img" aria-hidden="true">
+            <rect width="32" height="32" rx="9" fill="#1F3266"/>
+            <rect x="6.5" y="9" width="14" height="2.6" rx="1.3" fill="#FFFFFF"/>
+            <rect x="6.5" y="14.7" width="11" height="2.6" rx="1.3" fill="#16B5A8"/>
+            <rect x="6.5" y="20.4" width="8" height="2.6" rx="1.3" fill="#FFC24B"/>
+            <circle cx="24.5" cy="16" r="2.6" fill="#FFFFFF"/>
+          </svg>
+          <span class="brand-word">MICE<span class="go">GO</span></span>
+          <span style="font-size:12px;color:rgba(255,255,255,.5);margin-left:8px">마이스고</span>
+        </div>
+        <p class="footer-desc">해외 MICE 호텔 역경매 플랫폼</p>
+      </div>
+      <div class="footer-right">
+        <a class="footer-contact" href="mailto:mysteri1984@gmail.com">mysteri1984@gmail.com</a>
+        <div class="footer-links">
+          <a href="#how">동작 방식</a>
+          <a href="about.html">서비스 소개</a>
+          <a href="#policy">이용 조건</a>
+          <a href="faq.html">자주 묻는 질문</a>
+          <a href="contact.html">문의하기</a>
+          <a href="terms.html">이용약관</a>
+          <a href="privacy.html">개인정보처리방침</a>
+        </div>
+        <div class="footer-modes"><a href="../en/index.html" lang="en" hreflang="en">Hotels (English) →</a><a href="../index.html">모드 선택 · <span lang="en">Choose mode</span></a></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-notice">해외 호텔 대상 · 수수료 없음 · 영업일 3일 이내 회신 · 요건서에 회사명·예산 미포함.</p>
+      <p class="footer-copyright">© 2026 MICEGO. ALL RIGHTS RESERVED.</p><p class="footer-feedback"><a data-mg-feedback-open href="contact.html">의견 보내기</a></p><noscript><p class="footer-feedback-noscript">의견이나 문제 신고는 <a href="contact.html">문의 페이지</a> 또는 <a href="mailto:mysteri1984@gmail.com">이메일</a>로 보내 주세요.</p></noscript>
+    </div>
+  </div>
+</footer>
+
+<!-- ===================== MOBILE STICKY CTA ===================== -->
+<div class="mobile-cta" id="mobileCta" data-mg-fixed-bottom>
+  <a class="btn btn-accent btn-block" href="#register">지금 견적 요청하기</a>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  document.querySelectorAll('.faq-panel').forEach(function(p){ p.hidden = true; });
+
+  /* ---- Header scroll state ---- */
+  var header = document.getElementById('siteHeader');
+  function onScroll(){
+    if(window.scrollY > 8){ header.classList.add('is-scrolled'); }
+    else{ header.classList.remove('is-scrolled'); }
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+
+  /* ---- Reveal on scroll ---- */
+  var revealEls = document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, {threshold:0.12, rootMargin:'0px 0px -40px 0px'});
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('is-visible'); });
+  }
+  /* Safety net: some embedded/limited webviews run this script but IntersectionObserver
+     never fires (e.g. odd viewport reporting). Force everything visible after 2.5s so
+     content can never be stuck invisible. */
+  setTimeout(function(){
+    document.querySelectorAll('.reveal:not(.is-visible)').forEach(function(el){ el.classList.add('is-visible'); });
+  }, 2500);
+
+  /* ---- Mobile sticky CTA visibility ---- */
+  var mobileCta = document.getElementById('mobileCta');
+  var heroCtaBtn = document.querySelector('.hero-cta .btn-primary');
+  var registerSection = document.getElementById('register');
+  var heroPastFold = false, inRegister = false;
+
+  function updateMobileCta(){
+    if(mobileCta.style.display === 'none') return;
+    mobileCta.classList.toggle('is-visible', heroPastFold && !inRegister);
+  }
+  if('IntersectionObserver' in window && heroCtaBtn){
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){ heroPastFold = !entry.isIntersecting; updateMobileCta(); });
+    }, {threshold:0}).observe(heroCtaBtn);
+    new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){ inRegister = entry.intersectionRatio >= 0.1; updateMobileCta(); });
+    }, {threshold:[0,0.1]}).observe(registerSection);
+  }
+
+  /* ---- Chip radio visual state ---- */
+  document.querySelectorAll('.chip-radio input').forEach(function(input){
+    input.addEventListener('change', function(){
+      var group = input.closest('.chip-radio-group');
+      if(group){ group.querySelectorAll('.chip-radio').forEach(function(l){ l.classList.remove('is-checked'); }); }
+      input.closest('.chip-radio').classList.add('is-checked');
+    });
+  });
+
+  /* ---- Ballroom purpose: only relevant (and required) when the ballroom is used ---- */
+  var ballroomPurposeField = document.getElementById('f-ballroomPurpose');
+  document.querySelectorAll('input[name="ballroomUse"]').forEach(function(input){
+    input.addEventListener('change', function(){
+      if(input.value === '사용'){
+        ballroomPurposeField.hidden = false;
+      } else {
+        ballroomPurposeField.hidden = true;
+        ballroomPurposeField.classList.remove('error');
+        ballroomPurposeField.querySelectorAll('input[name="ballroomPurpose"]').forEach(function(p){ p.checked = false; p.closest('.chip-radio').classList.remove('is-checked'); });
+      }
+    });
+  });
+
+  /* ---- FAQ accordion ---- */
+  document.querySelectorAll('.faq-q').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var expanded = btn.getAttribute('aria-expanded') === 'true';
+      document.querySelectorAll('.faq-q').forEach(function(other){
+        if(other !== btn){
+          other.setAttribute('aria-expanded','false');
+          var p = document.getElementById(other.getAttribute('aria-controls'));
+          p.style.maxHeight = null; p.hidden = true;
+        }
+      });
+      if(expanded){
+        btn.setAttribute('aria-expanded','false');
+        var panel = document.getElementById(btn.getAttribute('aria-controls'));
+        panel.style.maxHeight = null; panel.hidden = true;
+      } else {
+        btn.setAttribute('aria-expanded','true');
+        var panel2 = document.getElementById(btn.getAttribute('aria-controls'));
+        panel2.hidden = false;
+        panel2.style.maxHeight = panel2.scrollHeight + 'px';
+      }
+    });
+  });
+
+  /* ---- Form validation & submission (no backend, no storage APIs) ---- */
+  var submissions = [];
+  window.__micegoLeads = submissions;
+
+  var form = document.getElementById('registerForm');
+  var successEl = document.getElementById('formSuccess');
+  var attemptedSubmit = false;
+
+  var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+  var PHONE_RE = /^(?:01[016789]-?\d{3,4}-?\d{4}|\+82-?\s?10-?\d{3,4}-?\d{4})$/;
+
+  function setFieldError(id, hasError){
+    var field = document.getElementById(id);
+    if(!field) return;
+    field.classList.toggle('error', hasError);
+    var input = field.querySelector('input,select,textarea');
+    if(input) input.setAttribute('aria-invalid', hasError ? 'true' : 'false');
+  }
+
+  function validate(){
+    var data = new FormData(form);
+    var errors = [];
+
+    var orgType = data.get('orgType');
+    setFieldError('f-orgType', !orgType);
+    if(!orgType) errors.push('f-orgType');
+
+    var company = (data.get('company') || '').trim();
+    setFieldError('f-company', company.length < 1);
+    if(company.length < 1) errors.push('f-company');
+
+    var name = (data.get('name') || '').trim();
+    setFieldError('f-name', name.length < 2);
+    if(name.length < 2) errors.push('f-name');
+
+    var email = (data.get('email') || '').trim();
+    setFieldError('f-email', !EMAIL_RE.test(email));
+    if(!EMAIL_RE.test(email)) errors.push('f-email');
+
+    var phone = (data.get('phone') || '').trim();
+    var phoneInvalid = !PHONE_RE.test(phone.replace(/\s+/g, ""));
+    setFieldError('f-phone', phoneInvalid);
+    if(phoneInvalid) errors.push('f-phone');
+
+    var eventType = data.get('eventType');
+    setFieldError('f-eventType', !eventType);
+    if(!eventType) errors.push('f-eventType');
+
+    var startDate = data.get('startDate');
+    var startDateInvalid = !startDate;
+    setFieldError('f-startDate', startDateInvalid);
+    if(startDateInvalid) errors.push('f-startDate');
+
+    var endDate = data.get('endDate');
+    var endDateInvalid = !!(endDate && startDate && endDate < startDate);
+    setFieldError('f-endDate', endDateInvalid);
+    if(endDateInvalid) errors.push('f-endDate');
+
+    var headcount = data.get('headcount');
+    setFieldError('f-headcount', !headcount);
+    if(!headcount) errors.push('f-headcount');
+
+    var region = (data.get('region') || '').trim();
+    setFieldError('f-region', region.length < 1);
+    if(region.length < 1) errors.push('f-region');
+
+    var twinRoomsRaw = data.get('twinRooms');
+    var twinInvalid = twinRoomsRaw === null || String(twinRoomsRaw).trim() === '' || Number(twinRoomsRaw) < 0 || !isFinite(Number(twinRoomsRaw));
+    setFieldError('f-twinRooms', twinInvalid);
+    if(twinInvalid) errors.push('f-twinRooms');
+
+    var kingRoomsRaw = data.get('kingRooms');
+    var kingInvalid = kingRoomsRaw === null || String(kingRoomsRaw).trim() === '' || Number(kingRoomsRaw) < 0 || !isFinite(Number(kingRoomsRaw));
+    setFieldError('f-kingRooms', kingInvalid);
+    if(kingInvalid) errors.push('f-kingRooms');
+
+    var ballroomUse = data.get('ballroomUse');
+    setFieldError('f-ballroomUse', !ballroomUse);
+    if(!ballroomUse) errors.push('f-ballroomUse');
+
+    var ballroomPurpose = data.get('ballroomPurpose');
+    var ballroomPurposeInvalid = ballroomUse === '사용' && !ballroomPurpose;
+    setFieldError('f-ballroomPurpose', ballroomPurposeInvalid);
+    if(ballroomPurposeInvalid) errors.push('f-ballroomPurpose');
+
+    var consent = document.getElementById('consent').checked;
+    setFieldError('f-consent', !consent);
+    if(!consent) errors.push('f-consent');
+
+    return {valid: errors.length === 0, firstErrorId: errors[0], data: data};
+  }
+
+  form.querySelectorAll('input,select,textarea').forEach(function(el){
+    el.addEventListener('blur', function(){ if(attemptedSubmit) validate(); });
+    el.addEventListener('change', function(){ if(attemptedSubmit) validate(); });
+  });
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    attemptedSubmit = true;
+    var result = validate();
+    if(!result.valid){
+      var firstField = document.getElementById(result.firstErrorId);
+      if(firstField){
+        firstField.scrollIntoView({block:'center', behavior:'smooth'});
+        var focusable = firstField.querySelector('input,select,textarea');
+        if(focusable) focusable.focus();
+      }
+      return;
+    }
+    var d = result.data;
+    var record = {
+      submittedAt: new Date().toISOString(),
+      orgType: d.get('orgType'),
+      company: d.get('company'),
+      name: d.get('name'),
+      email: d.get('email'),
+      phone: d.get('phone') || '',
+      eventType: d.get('eventType'),
+      startDate: d.get('startDate'),
+      endDate: d.get('endDate') || '',
+      headcount: d.get('headcount'),
+      region: d.get('region'),
+      twinRooms: d.get('twinRooms'),
+      kingRooms: d.get('kingRooms'),
+      ballroomUse: d.get('ballroomUse'),
+      ballroomPurpose: d.get('ballroomUse') === '사용' ? (d.get('ballroomPurpose') || '') : '',
+      note: d.get('note') || ''
+    };
+    submissions.push(record);
+    window.__micegoLastLead = record;
+
+    function mgToast(m){
+      var mt = document.getElementById('mgToast');
+      if(!mt){ mt = document.createElement('div'); mt.id = 'mgToast'; mt.setAttribute('role','status'); mt.setAttribute('aria-live','polite');
+        mt.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#111;color:#fff;font:600 14px/1.4 sans-serif;padding:12px 18px;border-radius:10px;z-index:999;max-width:calc(100vw - 32px);text-align:center';
+        document.body.appendChild(mt);
+      }
+      mt.textContent = m; mt.style.opacity = '1';
+      clearTimeout(mt._to); mt._to = setTimeout(function(){ mt.style.opacity = '0'; }, 3200);
+    }
+    function mgShowSuccess(){
+      var accCta = document.getElementById('accCta');
+      if(accCta){ if(accMember){ accCta.hidden = true; } else { document.getElementById('accCtaLink').href = 'signup.html?email=' + encodeURIComponent(record.email); } }
+      form.hidden = true;
+      successEl.hidden = false;
+      successEl.setAttribute('tabindex','-1');
+      successEl.focus();
+    }
+    function mgMailtoFallback(){
+      /* Best-effort delivery: opens the visitor's mail client with a pre-filled request
+         addressed to the intake inbox. Demo/no-backend fallback -- in API mode
+         (MG.mode==='api') the request is submitted to the server instead, below. */
+      try{
+        var mailBody = [
+          '소속 유형: ' + record.orgType,
+          '회사·기관명: ' + record.company,
+          '담당자명: ' + record.name,
+          '이메일: ' + record.email,
+          '연락처: ' + (record.phone || '-'),
+          '행사 유형: ' + record.eventType,
+          '행사 시작일: ' + record.startDate,
+          '행사 종료일: ' + (record.endDate || '-'),
+          '예상 인원: ' + record.headcount,
+          '행사 국가·도시: ' + record.region,
+          '트윈룸 필요 객실 수: ' + record.twinRooms + '실',
+          '킹룸 필요 객실 수: ' + record.kingRooms + '실',
+          '볼룸(연회장) 사용 여부: ' + record.ballroomUse + (record.ballroomUse === '사용' ? ' (' + record.ballroomPurpose + ')' : ''),
+          '더 알려주실 내용: ' + (record.note || '-')
+        ].join('\n');
+        var mailLink = document.createElement('a');
+        mailLink.href = 'mailto:mysteri1984@gmail.com?subject=' + encodeURIComponent('[MICEGO 견적 요청] ' + record.company) + '&body=' + encodeURIComponent(mailBody);
+        mailLink.click();
+      }catch(err){ /* mail client unavailable — the copy-to-clipboard fallback below still works */ }
+      mgShowSuccess();
+    }
+    if(window.MG && MG.mode==='api' && !MG.preview){
+      var mgIdem = (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : ('idem-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+      MG.api.submit_rfp({
+        orgType: record.orgType, company: record.company, name: record.name, email: record.email, phone: record.phone,
+        eventType: record.eventType, startDate: record.startDate, endDate: record.endDate, headcount: record.headcount,
+        region: record.region, twinRooms: record.twinRooms, kingRooms: record.kingRooms, ballroomUse: record.ballroomUse,
+        ballroomPurpose: record.ballroomPurpose, note: record.note, consent: true, idem: mgIdem, lang: 'ko'
+      }).then(function(resp){
+        record.ref = resp.ref; record.trackToken = resp.track_token;
+        var refEl = document.querySelector('[data-mg="rfpDoneRef"]');
+        if(refEl) refEl.textContent = resp.ref;
+        var trackEl = document.querySelector('[data-mg="rfpDoneTrack"]');
+        if(trackEl){ trackEl.innerHTML = ''; var mgA = document.createElement('a'); mgA.href = resp.track_url || MG.url.track(resp.track_token); mgA.className = 'btn btn-ghost btn-sm'; mgA.textContent = '진행 상황 보기'; trackEl.appendChild(mgA); }
+        var rd = document.getElementById('rfpDone');
+        if(rd) rd.hidden = false;
+        if(window.mgTrack) mgTrack('rfp_submit', {mode: 'api', event_type: record.eventType});
+        mgShowSuccess();
+      }, function(err){
+        MG.show(err, { toast: mgToast, setErr: setFieldError, fieldMap: {
+          orgType: 'f-orgType', company: 'f-company', name: 'f-name', email: 'f-email', phone: 'f-phone', eventType: 'f-eventType',
+          startDate: 'f-startDate', endDate: 'f-endDate', headcount: 'f-headcount', region: 'f-region', twinRooms: 'f-twinRooms',
+          kingRooms: 'f-kingRooms', ballroomUse: 'f-ballroomUse', ballroomPurpose: 'f-ballroomPurpose'
+        }});
+      });
+    } else {
+      mgMailtoFallback();
+    }
+  });
+
+  /* ---- Copy submission (clipboard) ---- */
+  document.getElementById('copyBtn').addEventListener('click', function(){
+    var lead = window.__micegoLastLead;
+    if(!lead) return;
+    var lines = [
+      '소속 유형: ' + lead.orgType,
+      '회사·기관명: ' + lead.company,
+      '담당자명: ' + lead.name,
+      '이메일: ' + lead.email,
+      '연락처: ' + (lead.phone || '-'),
+      '행사 유형: ' + lead.eventType,
+      '행사 시작일: ' + lead.startDate,
+      '행사 종료일: ' + (lead.endDate || '-'),
+      '예상 인원: ' + lead.headcount,
+      '행사 국가·도시: ' + lead.region,
+      '트윈룸 필요 객실 수: ' + lead.twinRooms + '실',
+      '킹룸 필요 객실 수: ' + lead.kingRooms + '실',
+      '볼룸(연회장) 사용 여부: ' + lead.ballroomUse + (lead.ballroomUse === '사용' ? ' (' + lead.ballroomPurpose + ')' : ''),
+      '더 알려주실 내용: ' + (lead.note || '-')
+    ].join('\n');
+    var btn = document.getElementById('copyBtn');
+    function done(){
+      var original = '제출 내용 복사';
+      btn.textContent = '복사되었습니다';
+      setTimeout(function(){ btn.textContent = original; }, 2000);
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(lines).then(done).catch(function(){ fallbackCopy(lines, done); });
+    } else {
+      fallbackCopy(lines, done);
+    }
+  });
+
+  function fallbackCopy(text, cb){
+    var ta = document.getElementById('copyFallback');
+    ta.value = text;
+    ta.hidden = false;
+    ta.focus();
+    ta.select();
+    try{ document.execCommand('copy'); cb(); }catch(err){ /* leave textarea visible for manual copy */ }
+  }
+
+
+  try{
+  var _isMember = false;
+  if(window.MG && MG.mode==='api' && !MG.preview){ _isMember = !!MG.auth.member(); }
+  else{/*demo:start*/ var _m=sessionStorage.getItem('mg_demo_member'); _isMember = !!(_m&&JSON.parse(_m)); /*demo:end*/}
+  if(_isMember){document.querySelectorAll('[data-acc-login]').forEach(function(a){a.textContent='내 견적 요청';a.setAttribute('href','my.html');a.classList.add('is-member');});}
+}catch(e){}
+  /* ---- Member prefill: MG.auth.member() in api mode, demo session (sessionStorage mg_demo_member) otherwise ---- */
+  var accMember = null;
+  if(window.MG && MG.mode==='api' && !MG.preview){ accMember = MG.auth.member(); }
+  else{ try{ var _am = sessionStorage.getItem('mg_demo_member'); accMember = _am ? JSON.parse(_am) : null; }catch(e){ accMember = null; } }
+  if(accMember){
+    document.getElementById('accLoginLine').hidden = true;
+    document.getElementById('accMemberChip').hidden = false;
+    document.getElementById('accMemberText').textContent = accMember.name + '님으로 요청합니다 · ' + accMember.company;
+    (function(){
+      function setv(id, v, ro){ var el = document.getElementById(id); if(!el) return; el.value = v || ''; if(ro){ el.readOnly = true; el.setAttribute('aria-readonly','true'); el.classList.add('is-ro'); } }
+      setv('company', accMember.company); setv('name', accMember.name); setv('email', accMember.email, true); setv('phone', accMember.phone, true);
+      var ot = {'기업(인하우스)':'기업(행사 주최)'}[accMember.orgType] || accMember.orgType;
+      var r = ot ? form.querySelector('input[name="orgType"][value="' + ot + '"]') : null;
+      if(r){ r.checked = true; r.dispatchEvent(new Event('change', {bubbles:true})); }
+      document.querySelectorAll('[data-acc-ro]').forEach(function(x){ x.hidden = false; });
+    })();
+    document.getElementById('accLogout').addEventListener('click', function(){
+      if(window.MG && MG.mode==='api' && !MG.preview){ MG.auth.signOut().then(function(){ location.reload(); }); }
+      else{ try{ sessionStorage.removeItem('mg_demo_member'); }catch(e){} location.reload(); }
+    });
+  } else {
+    document.getElementById('accMemberChip').remove();
+  }
+
+  /* ---- Mobile nav menu (details) ---- */
+  document.querySelectorAll('.nav-menu').forEach(function(menu){
+    menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ menu.removeAttribute('open'); }); });
+    document.addEventListener('keydown', function(e){ if(e.key==='Escape' && menu.open){ menu.removeAttribute('open'); menu.querySelector('summary').focus(); } });
+    document.addEventListener('click', function(e){ if(menu.open && !menu.contains(e.target)) menu.removeAttribute('open'); });
+  });
+  try{ localStorage.setItem('micego.mode','ko'); }catch(e){}
+
+})();
+</script>
+</body>
+</html>

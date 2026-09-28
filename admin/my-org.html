@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>내 조직 | MICEGO 운영 콘솔</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="app"></div>
+<noscript><p class="nojs">이 화면은 JavaScript가 있어야 표시됩니다. 브라우저 설정에서 JavaScript를 켜 주세요.</p></noscript>
+<script src="../assets/config.js"></script>
+<script src="../assets/mg.js"></script>
+<script src="../assets/feedback.js" defer></script>
+<script src="data-adapter.js"></script>
+<script src="admin.js"></script>
+<script src="partner.js"></script>
+<script>
+(function(){
+
+var A=MICEGO,esc=A.esc,P=MICEGO_PTR;
+A.boot('my-org','내 조직',function(main){
+  var org;
+  function render(){
+    var me=A.me||{};
+    org=(A.data().partnerOrgs||[]).filter(function(o){return o.code===me.partnerCode;})[0];
+    if(!org){main.innerHTML='<div class="empty card"><h1>조직 정보를 불러오지 못했습니다</h1><p>계정이 지역 파트너 조직에 연결돼 있지 않습니다. MICEGO 운영팀에 문의해 주세요.</p></div>';return;}
+    var susp=org.status!=='active'?'<div class="callout warn" style="margin-bottom:16px"><b>조직 상태: '+esc(P.ORG_ST[org.status]||org.status)+'</b>'+(org.status==='suspended'?'정지 중에는 콘솔이 읽기 전용입니다. '+(org.suspendedReason?'사유: '+esc(org.suspendedReason):''):org.status==='onboarding'?'MICEGO가 활성화하면 담당 지역의 요청이 자동으로 배정됩니다.':'')+'</div>':'';
+    main.innerHTML='<div class="page-h"><h1>내 조직</h1><span class="muted small">'+esc(org.code)+'</span></div>'+susp+'<div class="stack">'+P.orgInfoCard(org)+
+      (A.isPartnerAdmin()?P.orgUsersCard(org):'<section class="card"><h2>계정</h2><p class="muted small">계정 초대·관리는 파트너 관리자만 할 수 있습니다.</p></section>')+
+      '<section class="card"><h2>운영 규칙 요약</h2><ul style="padding-left:18px;line-height:1.7"><li>담당 지역의 요청은 접수 후 <b>24시간 안에</b> 검증을 시작해야 합니다. 넘기면 본사 개입 목록에 오릅니다.</li><li>오거나이저 신원 정보 열람은 모두 기록되며 견적 성사 목적 외 사용은 계약 위반입니다.</li><li>호텔 대신 견적을 입력하면 호텔에 확인 링크가 가고, 호텔이 확인해야 비교표에 실립니다(72시간).</li><li>커미션은 본사가 승인한 뒤 수금·송금하고, 송금 시 환율과 증빙 링크를 남깁니다.</li><li>위험 표시(무료 메일·도메인 불일치 등)가 있는 호텔은 본사만 승인합니다.</li></ul></section></div>';
+  }
+  A.onChange=render;
+  main.addEventListener('click',function(e){
+    var b=e.target.closest('button');if(!b||!org)return;
+    if(b.hasAttribute('data-org')){if(A.isPartnerAdmin())P.handleOrgAction(b,org,render);return;}
+    if(b.hasAttribute('data-usr')){if(A.isPartnerAdmin())P.handleUserAction(b,org,render);return;}
+  });
+  render();
+});
+
+})();
+</script>
+</body>
+</html>

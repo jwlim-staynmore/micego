@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MatchGo · Kế hoạch Kinh doanh MVP — Đấu giá Ngược MICE</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F1E3D; --ink-80:#1F3266; --ink-60:#4A5D8C;
+    --electric:#2D5BFF; --electric-bright:#4A77FF; --electric-soft:#E6EDFF;
+    --coral:#FF6B6B; --coral-deep:#F25151; --coral-soft:#FFE4E4;
+    --mint:#5FD4B5; --mint-soft:#D4F4EA;
+    --lime:#D4F542; --lime-soft:#F0FFB3;
+    --sky:#7AC4F0; --sky-soft:#E0F2FC;
+    --white:#FFFFFF; --bg:#FAFBFD; --bg-warm:#F7F8FB; --line:#E4E8F0; --line-dim:#EEF1F6;
+    --gray:#6B7794; --gray-light:#A0AAC2;
+    --font-display:'Archivo','Pretendard',sans-serif;
+    --font-sans:'Pretendard',-apple-system,sans-serif;
+    --font-mono:'JetBrains Mono','SF Mono',monospace;
+    --r-sm:4px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-2xl:20px;
+    --sh-card:0 1px 2px rgba(15,30,61,.04), 0 4px 12px rgba(15,30,61,.05);
+    --sh-elevated:0 8px 20px rgba(15,30,61,.06), 0 24px 48px rgba(15,30,61,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;scroll-padding-top:74px;}
+  body{font-family:var(--font-sans);color:var(--ink);background:var(--bg);line-height:1.62;-webkit-font-smoothing:antialiased;font-size:15px;}
+  a{color:inherit;text-decoration:none;}
+  .nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);}
+  .nav .in{max-width:1000px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:12px;}
+  .brand{display:inline-flex;align-items:center;gap:9px;}
+  .brand .wm{font-family:var(--font-display);font-size:19px;font-weight:800;letter-spacing:-.025em;color:var(--ink);line-height:1;}
+  .brand .wm i{color:var(--coral);font-style:normal;}
+  .nav .tag{margin-left:auto;font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--electric);background:var(--electric-soft);padding:4px 10px;border-radius:var(--r-sm);}
+  .hero{background:linear-gradient(150deg,#0c1830 0%,var(--ink) 50%,#15264a 100%);color:#fff;overflow:hidden;position:relative;}
+  .hero::after{content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(45,91,255,.35),transparent 68%);}
+  .hero .in{max-width:1000px;margin:0 auto;padding:66px 22px 54px;position:relative;z-index:1;}
+  .hero .num{font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;color:var(--lime);margin-bottom:20px;}
+  .hero h1{font-family:var(--font-display);font-weight:800;font-size:clamp(30px,5vw,46px);line-height:1.1;letter-spacing:-.035em;margin-bottom:18px;}
+  .hero .ac{position:relative;display:inline-block;color:#fff;}
+  .hero .ac::after{content:"";position:absolute;left:-2px;right:-2px;bottom:5px;height:13px;background:var(--lime);z-index:-1;border-radius:2px;opacity:.9;}
+  .hero .sub{font-size:17px;color:#C5D0E4;max-width:640px;margin-bottom:32px;}
+  .hero .meta{display:grid;grid-template-columns:auto 1fr;gap:7px 20px;font-size:13px;max-width:560px;}
+  .hero .meta b{font-family:var(--font-mono);font-weight:500;color:var(--lime);}
+  .hero .meta span{color:#DCE3F0;}
+  .wrap{max-width:1000px;margin:0 auto;padding:36px 22px 90px;}
+  .toc{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px 26px;margin-bottom:30px;box-shadow:var(--sh-card);}
+  .toc .lab{font-family:var(--font-mono);font-size:11px;color:var(--electric);letter-spacing:.08em;margin-bottom:12px;}
+  .toc ol{list-style:none;columns:2;column-gap:34px;}
+  .toc li{margin:6px 0;font-size:14px;display:flex;gap:9px;align-items:baseline;}
+  .toc li em{font-family:var(--font-mono);font-style:normal;font-size:11px;color:var(--gray-light);}
+  .toc a:hover{color:var(--electric);}
+  section{background:var(--white);border:1px solid var(--line);border-radius:var(--r-xl);padding:30px 36px;margin-bottom:18px;box-shadow:var(--sh-card);}
+  .secnum{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--electric);background:var(--electric-soft);display:inline-block;padding:4px 9px;border-radius:var(--r-sm);margin-bottom:14px;letter-spacing:.04em;}
+  h2.sec{font-family:var(--font-display);font-weight:800;font-size:26px;letter-spacing:-.025em;margin-bottom:16px;line-height:1.2;}
+  h3{font-family:var(--font-display);font-weight:700;font-size:17px;letter-spacing:-.01em;margin:22px 0 8px;color:var(--ink);}
+  h4{font-weight:700;font-size:14.5px;margin:16px 0 6px;color:var(--ink-80);}
+  p{margin:0 0 12px;}
+  .lead{font-size:17px;color:var(--ink-80);}
+  strong.e{color:var(--electric);font-weight:700;}
+  .hl{position:relative;font-weight:700;}
+  .hl::after{content:"";position:absolute;left:-1px;right:-1px;bottom:1px;height:9px;background:var(--lime);z-index:-1;border-radius:2px;}
+  ul{padding-left:20px;margin:0 0 12px;} li{margin:6px 0;} ul.tight li{margin:3px 0;}
+  .box{border:1px solid var(--line);border-left:4px solid var(--electric);background:var(--bg-warm);border-radius:var(--r-md);padding:15px 20px;margin:16px 0;}
+  .box.lime{border-left-color:#B9DE1F;background:var(--lime-soft);}
+  .box.coral{border-left-color:var(--coral);background:var(--coral-soft);}
+  .box .bt{font-family:var(--font-display);font-weight:700;font-size:15px;margin-bottom:5px;}
+  .box p{margin:3px 0;font-size:14px;} .box small{font-size:13px;color:var(--ink-80);display:block;margin:3px 0;}
+  table{width:100%;border-collapse:separate;border-spacing:0;margin:14px 0 6px;font-size:13.5px;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;}
+  thead th{background:var(--ink);color:#fff;text-align:left;padding:10px 13px;font-family:var(--font-display);font-weight:600;font-size:13px;}
+  tbody td{padding:9px 13px;border-top:1px solid var(--line-dim);vertical-align:top;}
+  tbody tr:nth-child(even){background:var(--bg-warm);}
+  td.acc{font-weight:700;color:var(--electric);} td.mono{font-family:var(--font-mono);font-weight:500;}
+  .pill{display:inline-block;padding:2px 10px;border-radius:30px;font-size:12px;font-weight:700;font-family:var(--font-mono);}
+  .pill.s{background:var(--lime);color:var(--ink);} .pill.gray{background:#EEF1F6;color:var(--gray);}
+  .pill.sky{background:var(--sky-soft);color:#1C6A99;}
+  .gate p{margin:6px 0;font-size:14px;} .tag{font-weight:800;font-family:var(--font-mono);font-size:12.5px;padding:1px 7px;border-radius:var(--r-sm);}
+  .tag.go{background:var(--lime);color:var(--ink);} .tag.pv{background:var(--electric-soft);color:var(--electric);} .tag.st{background:var(--coral-soft);color:var(--coral-deep);}
+  .foot{color:var(--gray);font-size:12.5px;margin-top:22px;text-align:center;font-family:var(--font-mono);}
+  .backtop{position:fixed;right:18px;bottom:18px;background:var(--ink);color:#fff;width:42px;height:42px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:var(--sh-elevated);transition:background .15s;}
+  .backtop:hover{background:var(--electric);}
+  @media(max-width:620px){
+    .hero .in{padding:46px 18px 38px;} .toc ol{columns:1;}
+    section{padding:22px 18px;} h2.sec{font-size:21px;} table{font-size:12.5px;} thead th,tbody td{padding:7px 9px;}
+  }
+  @media print{
+    body{background:#fff;} .nav,.backtop{display:none;} section{break-inside:avoid;box-shadow:none;border:none;padding:0 0 10px;border-radius:0;}
+    .hero{background:var(--ink)!important;} *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+</style>
+</head>
+<body>
+<div class="nav">
+  <div class="in">
+    <a class="brand">
+      <svg width="28" height="28" viewBox="0 0 48 48" fill="none">
+        <path d="M14 6C9.58 6 6 9.58 6 14C6 18.42 9.58 22 14 22L24 22V12C24 8.69 21.31 6 18 6C16.46 6 15.05 6.6 14 7.58V6Z" fill="#FF4D9D"/>
+        <path d="M34 6C38.42 6 42 9.58 42 14C42 18.42 38.42 22 34 22L24 22V12C24 8.69 26.69 6 30 6C31.54 6 32.95 6.6 34 7.58V6Z" fill="#FFC93C"/>
+        <path d="M14 42C9.58 42 6 38.42 6 34C6 29.58 9.58 26 14 26L24 26V36C24 39.31 21.31 42 18 42C16.46 42 15.05 41.4 14 40.42V42Z" fill="#2D5BFF"/>
+        <path d="M34 42C38.42 42 42 38.42 42 34C42 29.58 38.42 26 34 26L24 26V36C24 39.31 26.69 42 30 42C31.54 42 32.95 41.4 34 40.42V42Z" fill="#FF6B3D"/>
+        <circle cx="24" cy="24" r="3" fill="#0F1E3D" opacity=".15"/>
+      </svg>
+      <span class="wm">Matchgo<i>.</i></span>
+    </a>
+    <span class="tag">ĐẤU GIÁ NGƯỢC MICE · MVP</span>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="in">
+    <div class="num">MVP_BUSINESS_PLAN</div>
+    <h1>Nền tảng Đấu giá Ngược MICE<br><span class="ac">Mô hình hóa Kinh doanh MVP</span></h1>
+    <p class="sub">Tài liệu kế hoạch xác thực kinh doanh tối thiểu (MVP) cho phân khúc sự kiện doanh nghiệp · hội thảo quy mô nhỏ–vừa — Mô hình giao dịch mới dựa trên MatchGo</p>
+    <div class="meta">
+      <b>VERSION</b><span>v1.0 (Draft)</span>
+      <b>DATE</b><span>2026-06-19</span>
+      <b>SEGMENT</b><span>Sự kiện DN · Hội thảo (100–300 người)</span>
+      <b>OWNER</b><span>MatchGo / jwlim</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="toc">
+    <div class="lab">CONTENTS</div>
+    <ol>
+      <li><em>01</em><a href="#s1">Tóm tắt</a></li>
+      <li><em>02</em><a href="#s2">Định nghĩa vấn đề</a></li>
+      <li><em>03</em><a href="#s3">Giải pháp — Mô hình đấu giá ngược</a></li>
+      <li><em>04</em><a href="#s4">Thị trường mục tiêu · Người dùng cốt lõi</a></li>
+      <li><em>05</em><a href="#s5">Định nghĩa phạm vi MVP</a></li>
+      <li><em>06</em><a href="#s6">Đề xuất mô hình doanh thu</a></li>
+      <li><em>07</em><a href="#s7">Kinh tế đơn vị · Giả định tài chính</a></li>
+      <li><em>08</em><a href="#s8">Chỉ số xác thực · Tiêu chí đạt</a></li>
+      <li><em>09</em><a href="#s9">Rủi ro · Đối ứng</a></li>
+      <li><em>10</em><a href="#s10">Bước tiếp theo</a></li>
+    </ol>
+  </nav>
+
+  <section id="s1">
+    <div class="secnum">01_SUMMARY</div>
+    <h2 class="sec">Tóm tắt</h2>
+    <p class="lead">Đây là nền tảng trung gian giao dịch: người phụ trách doanh nghiệp chỉ đăng ký một lần các yêu cầu sự kiện (số người, ngày, ngân sách, điều kiện địa điểm), sau đó các nhà cung cấp đã xác minh — khách sạn, trung tâm đào tạo, địa điểm, dịch vụ tiệc — nộp báo giá cạnh tranh theo <strong class="e">phương thức đấu giá ngược</strong>.</p>
+    <p>Ở giai đoạn xác thực đầu tiên, không phát triển nền tảng full-stack mà vận hành <span class="hl">"MVP kiểu concierge" — người vận hành thủ công thu thập, so sánh và trung gian các báo giá</span> để nhanh chóng kiểm chứng các giả thuyết cốt lõi. Tận dụng mạng lưới nhà cung cấp du lịch · hospitality và uy tín thương hiệu sẵn có của MatchGo làm đòn bẩy đảm bảo cung · cầu ban đầu.</p>
+    <div class="box lime">
+      <div class="bt">Định nghĩa MVP trong một câu</div>
+      <p>"Loại bỏ <strong class="e">'công sức đi xin báo giá từng nơi'</strong> của người phụ trách sự kiện doanh nghiệp quy mô nhỏ–vừa, và giúp họ nhận được <b>3–5 báo giá cạnh tranh có thể so sánh</b> trong vòng 48 giờ."</p>
+    </div>
+    <p>Doanh thu phát sinh từ <strong class="e">phí thành công khi trúng thầu (10% giá trị giao dịch)</strong> do nhà cung cấp chi trả khi giao dịch thành công. Người mua (doanh nghiệp · công ty du lịch) dùng miễn phí để loại bỏ rào cản gia nhập phía cầu (chi tiết ở chương 6 · 7).</p>
+  </section>
+
+  <section id="s2">
+    <div class="secnum">02_PROBLEM</div>
+    <h2 class="sec">Định nghĩa vấn đề</h2>
+    <h3>2.1 Pain point của người phụ trách sự kiện hiện nay</h3>
+    <ul>
+      <li><b>Chi phí tìm kiếm:</b> Để tìm địa điểm · báo giá phù hợp phải liên hệ riêng 5–10 nơi, mất 2–3 tuần qua lại điện thoại · email.</li>
+      <li><b>Không thể so sánh:</b> Mỗi đơn vị có mẫu báo giá · hạng mục khác nhau nên thành "so sánh táo với cam". Thường "tưởng rẻ nhưng phát sinh phụ phí".</li>
+      <li><b>Bất đối xứng thông tin:</b> Không biết giá thị trường hợp lý nên trả thừa, hoặc không có đòn bẩy đàm phán.</li>
+      <li><b>Lặp lại:</b> Mỗi quý · mỗi sự kiện lặp lại quá trình tìm kiếm từ đầu.</li>
+    </ul>
+    <h3>2.2 Pain point phía nhà cung cấp (khách sạn · trung tâm đào tạo · địa điểm)</h3>
+    <ul>
+      <li>Thiếu <b>kênh thu hút nhu cầu chi phí thấp</b> để lấp đầy không gian trống vào mùa thấp điểm · ngày trống.</li>
+      <li>Phần lớn yêu cầu đến là <b>lead kém hiệu quả</b> (ngân sách · độ chắc chắn thấp) gây lãng phí nguồn lực bán hàng.</li>
+    </ul>
+    <div class="box">
+      <div class="bt">Insight cốt lõi</div>
+      <p>Cả hai phía đều thấy giá trị ở việc "<strong class="e">gặp đúng đối tác một cách nhanh chóng, dưới hình thức có thể so sánh</strong>". Đấu giá ngược gom nhu cầu về một nơi để nhà cung cấp cạnh tranh, qua đó giải quyết đồng thời cả hai pain point.</p>
+    </div>
+  </section>
+
+  <section id="s3">
+    <div class="secnum">03_SOLUTION</div>
+    <h2 class="sec">Giải pháp — Mô hình đấu giá ngược</h2>
+    <p>Đối với một RFP (yêu cầu báo giá) duy nhất mà người mua đưa ra, nhiều nhà cung cấp <strong class="e">đấu thầu cạnh tranh bằng cách hạ giá · điều kiện</strong>. Ngược với chợ thông thường (nhà cung cấp niêm yết giá), ở đây <b>cầu nắm quyền chủ động hình thành giá</b>.</p>
+    <h3>3.1 Luồng giao dịch (5 bước)</h3>
+    <table>
+      <thead><tr><th>Bước</th><th>Chủ thể</th><th>Hoạt động cốt lõi</th><th>Đầu ra</th></tr></thead>
+      <tbody>
+        <tr><td class="acc">① Đăng ký nhu cầu</td><td>Người phụ trách DN</td><td>Nhập số người · ngày · ngân sách · khu vực · điều kiện bắt buộc</td><td>RFP chuẩn</td></tr>
+        <tr><td class="acc">② Mời thầu</td><td>Người vận hành (MVP)</td><td>Gửi RFP cho 3–5 NCC phù hợp điều kiện</td><td>Yêu cầu thầu</td></tr>
+        <tr><td class="acc">③ Báo giá cạnh tranh</td><td>Nhà cung cấp</td><td>Nộp giá · nội dung bao gồm theo mẫu chuẩn</td><td>Báo giá so sánh</td></tr>
+        <tr><td class="acc">④ So sánh · Trúng thầu</td><td>Người phụ trách DN</td><td>Chọn trên bảng so sánh cùng mẫu</td><td>Quyết định trúng thầu</td></tr>
+        <tr><td class="acc">⑤ Thành công · Quyết toán</td><td>Người vận hành</td><td>Kết nối hợp đồng, thu phí thành công</td><td>Doanh thu phí</td></tr>
+      </tbody>
+    </table>
+    <h3>3.2 Điểm khác biệt từ chuẩn hóa</h3>
+    <p>Tài sản cốt lõi của MVP không phải công nghệ mà là <span class="hl">'mẫu RFP chuẩn' và 'bảng so sánh cùng tiêu chí'</span>. Chuẩn hóa mọi báo giá theo cùng hạng mục (thuê không gian · đơn giá F&amp;B/người · AV · có bao gồm VAT hay không…) để lần đầu tiên người phụ trách có thể "so sánh thật sự".</p>
+  </section>
+
+  <section id="s4">
+    <div class="secnum">04_MARKET</div>
+    <h2 class="sec">Thị trường mục tiêu · Người dùng cốt lõi</h2>
+    <h3>4.1 A. Người dùng cốt lõi mục tiêu chính (tập trung MVP)</h3>
+    <p>Nhắm đồng thời hai loại người mua làm mục tiêu chính (A) — <b>nhu cầu trực tiếp</b> của doanh nghiệp và <b>nhu cầu đại lý</b> của công ty du lịch · land operator.</p>
+    <ul>
+      <li><b>Quy mô:</b> Hội thảo · workshop · đào tạo · townhall · incentive · hội nghị nhỏ 100–300 người (bao gồm có lưu trú).</li>
+      <li><b>A-① Người phụ trách sự kiện DN:</b> Người mua lặp lại thuộc phòng hành chính · nhân sự · đào tạo · marketing.</li>
+      <li><b>A-② Công ty du lịch · land operator quy mô nhỏ–vừa trong nước:</b> Các đơn vị tổ chức đại lý tour incentive · đào tạo đoàn · workshop. Tiếp giáp trực tiếp với mạng lưới du lịch của MatchGo nên <strong class="e">synergy lớn ở cả hai phía cung · cầu</strong>, và đặt báo giá định hình lặp lại tập trung vào phòng khách sạn.</li>
+      <li><b>Lý do chọn:</b> Tần suất giao dịch cao (lặp theo quý), chu kỳ ra quyết định ngắn nên tốc độ xác thực nhanh, dễ chuẩn hóa hơn so với hội nghị lớn.</li>
+    </ul>
+    <h3>4.2 B. Mục tiêu thứ cấp · mở rộng</h3>
+    <ul class="tight">
+      <li>Hội nghị lớn · sự kiện hiệp hội · sự kiện cơ quan (mở rộng sau khi xác thực giai đoạn 1).</li>
+      <li>MICE inbound quốc tế · đoàn incentive (liên kết mạng lưới toàn cầu MatchGo).</li>
+    </ul>
+    <h3>4.3 Bối cảnh thị trường · Liên kết MatchGo</h3>
+    <p>Hội họp · sự kiện doanh nghiệp thuộc 'M (Meetings)' của MICE và là loại giao dịch phát sinh thường xuyên nhất. Ngành MICE trong nước đã được thể chế hóa đến mức Tổng cục Du lịch Hàn Quốc vận hành hạ tầng · lịch riêng, nhưng <b>việc báo giá · kết nối cho sự kiện DN quy mô nhỏ–vừa vẫn phụ thuộc vào quan hệ · thủ công · bán hàng cá nhân</b>. MatchGo đã sở hữu mạng lưới thương hiệu du lịch · hospitality và nhà cung cấp, nên có thể gia nhập <strong class="e">khoảng trống trung gian số này</strong> với lợi thế phía cung.</p>
+    <div class="box">
+      <div class="bt">Cơ sở giả định đơn giá giao dịch (benchmark)</div>
+      <small>· Take rate trung bình của marketplace 10–30% (trung vị ~10–12%).</small>
+      <small>· Phí nền tảng đặt địa điểm sự kiện thường 15–20% (vd: Peerspace 20%).</small>
+      <small>· Thông lệ phí đại lý bên thứ ba MICE khách sạn 7–10% (chuẩn cũ 10%, hiện tại 7–10%).</small>
+      <small><strong class="e">→ Vì là giao dịch tập trung vào phòng khách sạn nên mức chấp nhận của NCC cao; đặt phí MVP ở mức trên cùng của chuẩn đại lý MICE khách sạn là 10%.</strong></small>
+    </div>
+  </section>
+
+  <section id="s5">
+    <div class="secnum">05_SCOPE</div>
+    <h2 class="sec">Định nghĩa phạm vi MVP</h2>
+    <p><b>Nguyên tắc xác thực "tối thiểu":</b> Bắt đầu không cần một dòng code. Phát triển full-stack hoãn lại sau khi giả thuyết cốt lõi được chứng minh (tránh bẫy build).</p>
+    <h3>5.1 Trong phạm vi (In Scope)</h3>
+    <ul>
+      <li><b>Mẫu nhập RFP chuẩn</b> — Cấu hình ngay bằng công cụ sẵn có như Notion form / Google Form / Typeform.</li>
+      <li><b>Sheet liên hệ nhà cung cấp</b> — DB 30–50 địa điểm · khách sạn · trung tâm đào tạo (bảng tính).</li>
+      <li><b>Bảng so sánh báo giá chuẩn</b> — Sản phẩm so sánh 1 trang đã chuẩn hóa hạng mục (làm thủ công).</li>
+      <li><b>Trung gian thủ công của người vận hành</b> — Con người vận hành từ tiếp nhận RFP → mời thầu → cung cấp bảng so sánh → trúng thầu → quyết toán.</li>
+    </ul>
+    <h3>5.2 Ngoài phạm vi (Out of Scope, hoãn sau khi xác thực)</h3>
+    <ul class="tight">
+      <li>Engine đấu thầu tự động · đồng hồ đấu giá thời gian thực, hệ thống đăng ký · đăng nhập.</li>
+      <li>Thanh toán online · escrow · quyết toán tự động, app di động.</li>
+      <li>Dashboard tự phục vụ cho NCC, thuật toán đề xuất · xếp hạng.</li>
+    </ul>
+    <div class="box lime">
+      <div class="bt">Tại sao chọn MVP kiểu concierge</div>
+      <p>Giả thuyết chưa kiểm chứng cốt lõi không phải "công nghệ có làm được không" mà là <b>"người mua có nhận báo giá theo cách này và thực sự ký hợp đồng không", "nhà cung cấp có tham gia đấu thầu cạnh tranh không"</b>. Cả hai đều có thể xác thực bằng vận hành thủ công, và có thể thử giao dịch đầu tiên trong 2 tuần mà không cần phát triển.</p>
+    </div>
+  </section>
+
+  <section id="s6">
+    <div class="secnum">06_REVENUE</div>
+    <h2 class="sec">Đề xuất mô hình doanh thu</h2>
+    <p>Đây là đề xuất cho mục 'Chưa quyết định — cần đề xuất'. Kết luận trước: <span class="hl">MVP bắt đầu bằng mô hình đơn nhất 'phí thành công trúng thầu phía nhà cung cấp'</span>, sau khi xác thực sẽ mở rộng dần sang mô hình hỗn hợp.</p>
+    <h3>6.1 So sánh mô hình</h3>
+    <table>
+      <thead><tr><th>Mô hình</th><th>Ưu điểm</th><th>Nhược điểm</th><th>Độ phù hợp MVP</th></tr></thead>
+      <tbody>
+        <tr><td>Phí thành công trúng thầu<br>(NCC 10%)</td><td>Gánh nặng trả trước 0, căn chỉnh động lực, khớp thông lệ ngành</td><td>Doanh thu biến động lớn nếu lượng GD ban đầu ít</td><td><span class="pill s">Chọn</span></td></tr>
+        <tr><td>Subscription · listing<br>(NCC phí tháng)</td><td>Doanh thu dự đoán được</td><td>Thu phí trước khi có kết quả → kháng cự đăng ký cold-start lớn</td><td><span class="pill gray">Không phù hợp</span></td></tr>
+        <tr><td>Thu phí người mua</td><td>Tránh kháng cự NCC</td><td>Rào cản phía cầu↑, phản tác dụng khi cầu là tài nguyên khan hiếm giai đoạn đầu</td><td><span class="pill gray">Không phù hợp</span></td></tr>
+        <tr><td>Hỗn hợp<br>(phí + tùy chọn trả phí)</td><td>Đa dạng hóa doanh thu</td><td>Quản lý phức tạp, over-design ở giai đoạn đầu</td><td><span class="pill sky">Giai đoạn 2</span></td></tr>
+      </tbody>
+    </table>
+    <h3>6.2 Đề xuất — Lộ trình kiếm tiền theo giai đoạn</h3>
+    <ol>
+      <li><strong class="e">Giai đoạn 1 (MVP, 0–6 tháng):</strong> Phí thành công trúng thầu NCC 10%. Người mua miễn phí. Mục tiêu không phải tối đa hóa doanh thu mà chứng minh 'giao dịch có thành công'.</li>
+      <li><strong class="e">Giai đoạn 2 (tăng trưởng, 6–18 tháng):</strong> Giữ phí cơ bản + thêm tùy chọn trả phí cho NCC (hiển thị ưu tiên · quyền đấu thầu ưu tiên · tăng cường hồ sơ).</li>
+      <li><strong class="e">Giai đoạn 3 (mở rộng):</strong> Subscription SaaS thanh toán · quyết toán, sản phẩm dữ liệu · insight, mở rộng phân khúc sang hội nghị lớn.</li>
+    </ol>
+    <div class="box">
+      <div class="bt">Ghi chú thiết kế tỷ lệ phí</div>
+      <p>10% được khuyến nghị theo cấu trúc khấu trừ từ biên lợi nhuận NCC mà không ảnh hưởng 'giá người mua nhìn thấy' (giữ sức cạnh tranh giá). Khi đàm phán có thể chênh lệch trong khoảng 8–12%. N giao dịch đầu dùng <b>khuyến mãi (vd: phí 7%)</b> để tăng tốc onboarding phía cung. Khớp với nguyên tắc risk-free 'No Match, No Fee' của MatchGo.</p>
+    </div>
+  </section>
+
+  <section id="s7">
+    <div class="secnum">07_UNIT_ECONOMICS</div>
+    <h2 class="sec">Kinh tế đơn vị · Giả định tài chính</h2>
+    <h3>7.1 Kinh tế đơn vị 1 giao dịch (tái tính theo chi phí khách sạn)</h3>
+    <table>
+      <thead><tr><th>Hạng mục</th><th>Giá trị giả định</th><th>Ghi chú</th></tr></thead>
+      <tbody>
+        <tr><td>Giá trị GD trung bình (GMV)/GD</td><td class="mono">₩25,000,000</td><td>Chuẩn 150–200 người · 1 đêm, blended tập trung phòng khách sạn</td></tr>
+        <tr><td>Tỷ lệ phí thành công</td><td class="mono">10%</td><td>Phía NCC, khi trúng thầu thành công</td></tr>
+        <tr><td>Doanh thu/GD (Net)</td><td class="acc mono">₩2,500,000</td><td>25,000,000 × 10%</td></tr>
+        <tr><td>Đầu tư vận hành/GD</td><td class="mono">~4–6 giờ</td><td>Chuẩn hóa RFP + mời thầu + bảng so sánh (thủ công MVP)</td></tr>
+      </tbody>
+    </table>
+    <h4>Cấu phần giá trị giao dịch — Phòng (lưu trú) chiếm tỷ trọng lớn nhất</h4>
+    <table>
+      <thead><tr><th>Hạng mục cấu phần</th><th>Giá trị giả định</th><th>Tỷ trọng</th></tr></thead>
+      <tbody>
+        <tr><td>Phòng (lưu trú) — chi phí chủ lực</td><td class="acc mono">₩12,000,000</td><td class="mono">48%</td></tr>
+        <tr><td>Ăn uống (tiệc · sáng)</td><td class="mono">₩8,000,000</td><td class="mono">32%</td></tr>
+        <tr><td>Thuê phòng tiệc · phòng hội thảo</td><td class="mono">₩3,000,000</td><td class="mono">12%</td></tr>
+        <tr><td>AV · khác</td><td class="mono">₩2,000,000</td><td class="mono">8%</td></tr>
+        <tr><td><b>Tổng (GMV)</b></td><td class="acc mono">₩25,000,000</td><td class="mono">100%</td></tr>
+      </tbody>
+    </table>
+    <div class="box">
+      <div class="bt">Cơ sở tái tính theo chi phí khách sạn</div>
+      <small>Khi nhu cầu đại lý của công ty du lịch · land và sự kiện DN có lưu trú được đưa vào mục tiêu chính, trọng tâm giá trị giao dịch dịch chuyển từ 'không gian hội thảo' sang <b>phòng khách sạn (lưu trú)</b>. Đơn giá phòng ~₩150,000 × 80 phòng (150–200 người · 2 người/phòng) ≈ ₩12M chiếm khoảng một nửa GMV.</small>
+    </div>
+    <h3>7.2 Kịch bản ramp-up 6 tháng (thận trọng)</h3>
+    <table>
+      <thead><tr><th>Tháng</th><th>GD thành công/tháng</th><th>GMV</th><th>Doanh thu (10%)</th><th>Lũy kế</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">M1</td><td class="mono">1</td><td class="mono">₩25M</td><td class="mono">₩2.5M</td><td class="mono">₩2.5M</td></tr>
+        <tr><td class="mono">M2</td><td class="mono">2</td><td class="mono">₩50M</td><td class="mono">₩5.0M</td><td class="mono">₩7.5M</td></tr>
+        <tr><td class="mono">M3</td><td class="mono">4</td><td class="mono">₩100M</td><td class="mono">₩10.0M</td><td class="mono">₩17.5M</td></tr>
+        <tr><td class="mono">M4</td><td class="mono">6</td><td class="mono">₩150M</td><td class="mono">₩15.0M</td><td class="mono">₩32.5M</td></tr>
+        <tr><td class="mono">M5</td><td class="mono">9</td><td class="mono">₩225M</td><td class="mono">₩22.5M</td><td class="mono">₩55.0M</td></tr>
+        <tr><td class="acc mono">M6</td><td class="acc mono">12</td><td class="acc mono">₩300M</td><td class="acc mono">₩30.0M</td><td class="acc mono">₩85.0M</td></tr>
+      </tbody>
+    </table>
+    <h3>7.3 Cảm nhận điểm hòa vốn (chuẩn vận hành Lean)</h3>
+    <p>Giả định đội MVP 1–2 người vận hành (gồm founder) và chi phí cố định/tháng (nhân sự tối thiểu · công cụ · marketing) ~<b>₩8,000,000</b>, thì với doanh thu/GD ₩2.5M, <span class="hl">hòa vốn ở ~4 giao dịch thành công/tháng</span>. Theo kịch bản trên, có thể đạt <strong class="e">BEP quanh tháng thứ 3</strong> (doanh thu M3 ₩10M &gt; chi phí cố định ₩8M). Việc tăng giá trị GD · tỷ lệ phí đã hạ BEP từ 7 xuống 4 giao dịch. (Chi phí cố định · giá trị GD thực tế cần hiệu chỉnh theo dữ liệu sở hữu.)</p>
+    <div class="box coral">
+      <div class="bt">Lưu ý — bản chất các con số</div>
+      <small>Tất cả con số trên là <b>'giá trị giả định khởi đầu'</b> để xác thực. Sẽ cập nhật ngay khi có GMV · độ chấp nhận phí · tỷ lệ chuyển đổi thực tế của 5–10 giao dịch đầu. Mục đích của MVP là biến các giả định này thành dữ liệu thực.</small>
+    </div>
+  </section>
+
+  <section id="s8">
+    <div class="secnum">08_VALIDATION</div>
+    <h2 class="sec">Chỉ số xác thực · Tiêu chí đạt</h2>
+    <p>MVP được đánh giá không phải bằng 'đã làm xong' mà 'giả thuyết có đúng không'. Chỉ số đo lường và tiêu chí đạt theo từng giả thuyết cốt lõi như sau.</p>
+    <table>
+      <thead><tr><th>Giả thuyết xác thực</th><th>KPI cốt lõi</th><th>Tiêu chí đạt (3 tháng)</th></tr></thead>
+      <tbody>
+        <tr><td>Cầu: người phụ trách đăng ký RFP</td><td>Số RFP tiếp nhận</td><td class="acc">Từ 15 RFP/tháng</td></tr>
+        <tr><td>Cung: NCC đấu thầu cạnh tranh</td><td>Số thầu TB/RFP</td><td class="acc">Từ 3/giao dịch</td></tr>
+        <tr><td>Chuyển đổi: ký HĐ bằng báo giá nhận được</td><td>Tỷ lệ chuyển đổi (RFP→thành công)</td><td class="acc">Từ 25%</td></tr>
+        <tr><td>Doanh thu: chấp nhận phí</td><td>Tỷ lệ thu phí thành công</td><td class="acc">Từ 90% GD thành công</td></tr>
+        <tr><td>Lặp lại: dùng lại</td><td>Ý định dùng lại · giới thiệu (NPS)</td><td class="acc">Dùng lại 50%+</td></tr>
+        <tr><td>Tốc độ: nhận nhanh</td><td>Lead time RFP→giao báo giá</td><td class="acc">Trong 48 giờ</td></tr>
+      </tbody>
+    </table>
+    <div class="box gate">
+      <div class="bt">Cổng Go / No-Go (khi kết thúc 3 tháng)</div>
+      <p><span class="tag go">GO</span> Chuyển đổi 25%+ VÀ thầu/RFP 3+ đồng thời đạt → khởi động phát triển bán tự động.</p>
+      <p><span class="tag pv">PIVOT</span> Có cầu nhưng thiếu đấu thầu phía cung → tái thiết lập onboarding cung · danh mục.</p>
+      <p><span class="tag st">STOP</span> Bản thân RFP không gom được → xem lại phân khúc · đề xuất giá trị.</p>
+    </div>
+  </section>
+
+  <section id="s9">
+    <div class="secnum">09_RISK</div>
+    <h2 class="sec">Rủi ro · Đối ứng</h2>
+    <table>
+      <thead><tr><th>Rủi ro</th><th>Mức độ</th><th>Đối ứng</th></tr></thead>
+      <tbody>
+        <tr><td>Bài toán con gà-quả trứng<br>(cần đồng thời cung↔cầu)</td><td><span class="pill" style="background:var(--coral-soft);color:var(--coral-deep)">Cao</span></td><td>Đảm bảo trước 30–50 NCC bằng mạng lưới cung MatchGo rồi mới thu hút cầu (dù chỉ 1 cầu cũng 'lấp được')</td></tr>
+        <tr><td>Bỏ qua trung gian<br>(hai phía giao dịch trực tiếp)</td><td><span class="pill" style="background:var(--coral-soft);color:var(--coral-deep)">Cao</span></td><td>Tiếp tục cung cấp tiện ích so sánh · hành chính, giao dịch đầu miễn phí/phí thấp để tạo quan hệ, lock-in bằng giá trị lặp lại</td></tr>
+        <tr><td>NCC từ chối phí</td><td><span class="pill sky">Trung bình</span></td><td>Nhấn mạnh cấu trúc không ảnh hưởng giá người mua, phí khuyến mãi N giao dịch đầu, truyền đạt giá trị lấp đầy phòng trống mùa thấp điểm</td></tr>
+        <tr><td>Chất lượng báo giá · no-show</td><td><span class="pill sky">Trung bình</span></td><td>Bắt buộc mẫu chuẩn, SLA phản hồi NCC, giảm điểm NCC không phản hồi</td></tr>
+        <tr><td>Giới hạn mở rộng của vận hành thủ công</td><td><span class="pill sky">Trung bình</span></td><td>Khi lượng GD tháng vượt cổng thì chuyển ngay sang giai đoạn bán tự động</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="s10">
+    <div class="secnum">10_NEXT</div>
+    <h2 class="sec">Bước tiếp theo</h2>
+    <ol>
+      <li>Rà soát · chốt kế hoạch này (hiệu chỉnh giả định tỷ lệ phí · giá trị giao dịch).</li>
+      <li>Khởi động thực thi theo sản phẩm đi kèm "Checklist vận hành ban đầu · Lộ trình 90 ngày".</li>
+      <li>Lập danh sách liên hệ 30 NCC giai đoạn 1 dựa trên mạng lưới MatchGo + chốt template RFP · bảng so sánh chuẩn.</li>
+      <li>Đảm bảo 3–5 cầu pilot rồi chạy đấu giá ngược đầu tiên, bắt đầu thu thập chỉ số.</li>
+    </ol>
+    <p class="foot">— Tất cả con số trong tài liệu là giá trị giả định khởi đầu để xác thực, sẽ cập nhật khi có dữ liệu giao dịch thực.</p>
+  </section>
+</div>
+<a class="backtop" href="#" aria-label="Lên đầu trang">↑</a>
+</body>
+</html>

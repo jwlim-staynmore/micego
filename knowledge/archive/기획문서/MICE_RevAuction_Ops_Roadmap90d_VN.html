@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MatchGo · Checklist vận hành ban đầu & Lộ trình 90 ngày</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0F1E3D; --ink-80:#1F3266; --ink-60:#4A5D8C;
+    --electric:#2D5BFF; --electric-bright:#4A77FF; --electric-soft:#E6EDFF;
+    --coral:#FF6B6B; --coral-deep:#F25151; --coral-soft:#FFE4E4;
+    --mint:#5FD4B5; --mint-soft:#D4F4EA;
+    --lime:#D4F542; --lime-soft:#F0FFB3;
+    --sky:#7AC4F0; --sky-soft:#E0F2FC;
+    --white:#FFFFFF; --bg:#FAFBFD; --bg-warm:#F7F8FB; --line:#E4E8F0; --line-dim:#EEF1F6;
+    --gray:#6B7794; --gray-light:#A0AAC2;
+    --font-display:'Archivo','Pretendard',sans-serif;
+    --font-sans:'Pretendard',-apple-system,sans-serif;
+    --font-mono:'JetBrains Mono','SF Mono',monospace;
+    --r-sm:4px; --r-md:8px; --r-lg:12px; --r-xl:16px; --r-2xl:20px;
+    --sh-card:0 1px 2px rgba(15,30,61,.04), 0 4px 12px rgba(15,30,61,.05);
+    --sh-elevated:0 8px 20px rgba(15,30,61,.06), 0 24px 48px rgba(15,30,61,.10);
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;scroll-padding-top:74px;}
+  body{font-family:var(--font-sans);color:var(--ink);background:var(--bg);line-height:1.62;-webkit-font-smoothing:antialiased;font-size:15px;}
+  a{color:inherit;text-decoration:none;}
+  .nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--line);}
+  .nav .in{max-width:1000px;margin:0 auto;padding:12px 22px;display:flex;align-items:center;gap:12px;}
+  .brand{display:inline-flex;align-items:center;gap:9px;}
+  .brand .wm{font-family:var(--font-display);font-size:19px;font-weight:800;letter-spacing:-.025em;color:var(--ink);line-height:1;}
+  .brand .wm i{color:var(--coral);font-style:normal;}
+  .nav .tag{margin-left:auto;font-family:var(--font-mono);font-size:11px;font-weight:500;color:var(--electric);background:var(--electric-soft);padding:4px 10px;border-radius:var(--r-sm);}
+  .hero{background:linear-gradient(150deg,#0c1830 0%,var(--ink) 50%,#15264a 100%);color:#fff;overflow:hidden;position:relative;}
+  .hero::after{content:"";position:absolute;right:-80px;top:-80px;width:320px;height:320px;background:radial-gradient(circle,rgba(212,245,66,.22),transparent 68%);}
+  .hero .in{max-width:1000px;margin:0 auto;padding:66px 22px 54px;position:relative;z-index:1;}
+  .hero .num{font-family:var(--font-mono);font-size:12px;letter-spacing:.12em;color:var(--lime);margin-bottom:20px;}
+  .hero h1{font-family:var(--font-display);font-weight:800;font-size:clamp(28px,5vw,44px);line-height:1.1;letter-spacing:-.035em;margin-bottom:18px;}
+  .hero .ac{position:relative;display:inline-block;color:#fff;}
+  .hero .ac::after{content:"";position:absolute;left:-2px;right:-2px;bottom:5px;height:13px;background:var(--lime);z-index:-1;border-radius:2px;opacity:.9;}
+  .hero .sub{font-size:17px;color:#C5D0E4;max-width:640px;margin-bottom:32px;}
+  .hero .meta{display:grid;grid-template-columns:auto 1fr;gap:7px 20px;font-size:13px;max-width:580px;}
+  .hero .meta b{font-family:var(--font-mono);font-weight:500;color:var(--lime);}
+  .hero .meta span{color:#DCE3F0;}
+  .wrap{max-width:1000px;margin:0 auto;padding:36px 22px 90px;}
+  .toc{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);padding:20px 26px;margin-bottom:30px;box-shadow:var(--sh-card);}
+  .toc .lab{font-family:var(--font-mono);font-size:11px;color:var(--electric);letter-spacing:.08em;margin-bottom:12px;}
+  .toc ol{list-style:none;columns:2;column-gap:34px;}
+  .toc li{margin:6px 0;font-size:14px;display:flex;gap:9px;align-items:baseline;}
+  .toc li em{font-family:var(--font-mono);font-style:normal;font-size:11px;color:var(--gray-light);}
+  .toc a:hover{color:var(--electric);}
+  section{background:var(--white);border:1px solid var(--line);border-radius:var(--r-xl);padding:30px 36px;margin-bottom:18px;box-shadow:var(--sh-card);}
+  .secnum{font-family:var(--font-mono);font-size:11px;font-weight:600;color:var(--electric);background:var(--electric-soft);display:inline-block;padding:4px 9px;border-radius:var(--r-sm);margin-bottom:14px;letter-spacing:.04em;}
+  h2.sec{font-family:var(--font-display);font-weight:800;font-size:26px;letter-spacing:-.025em;margin-bottom:16px;line-height:1.2;}
+  h3{font-family:var(--font-display);font-weight:700;font-size:17px;letter-spacing:-.01em;margin:24px 0 8px;color:var(--ink);}
+  h3:first-of-type{margin-top:6px;}
+  h4{font-weight:700;font-size:14px;margin:16px 0 6px;color:var(--ink-80);font-family:var(--font-mono);letter-spacing:.02em;}
+  p{margin:0 0 12px;} .lead{font-size:17px;color:var(--ink-80);}
+  strong.e{color:var(--electric);font-weight:700;}
+  .hl{position:relative;font-weight:700;}
+  .hl::after{content:"";position:absolute;left:-1px;right:-1px;bottom:1px;height:9px;background:var(--lime);z-index:-1;border-radius:2px;}
+  ul{padding-left:20px;margin:0 0 12px;} li{margin:6px 0;}
+  ul.check{list-style:none;padding-left:2px;} ul.check li{position:relative;padding-left:28px;margin:8px 0;}
+  ul.check li::before{content:"";position:absolute;left:0;top:3px;width:15px;height:15px;border:2px solid var(--electric);border-radius:var(--r-sm);}
+  .box{border:1px solid var(--line);border-left:4px solid var(--electric);background:var(--bg-warm);border-radius:var(--r-md);padding:15px 20px;margin:16px 0;}
+  .box.lime{border-left-color:#B9DE1F;background:var(--lime-soft);}
+  .box .bt{font-family:var(--font-display);font-weight:700;font-size:15px;margin-bottom:5px;}
+  .box small{font-size:13px;color:var(--ink-80);display:block;margin:3px 0;}
+  .exit{display:flex;align-items:center;gap:10px;border:1px dashed var(--electric);background:var(--electric-soft);border-radius:var(--r-md);padding:11px 16px;margin:13px 0 4px;font-size:14px;}
+  .exit b{font-family:var(--font-mono);font-size:11px;color:var(--electric);white-space:nowrap;letter-spacing:.04em;}
+  table{width:100%;border-collapse:separate;border-spacing:0;margin:12px 0 6px;font-size:13.5px;border:1px solid var(--line);border-radius:var(--r-md);overflow:hidden;}
+  thead th{background:var(--ink);color:#fff;text-align:left;padding:10px 13px;font-family:var(--font-display);font-weight:600;font-size:13px;}
+  tbody td{padding:9px 13px;border-top:1px solid var(--line-dim);vertical-align:top;}
+  tbody tr:nth-child(even){background:var(--bg-warm);}
+  td.w{font-family:var(--font-mono);font-weight:600;color:var(--electric);white-space:nowrap;font-size:12.5px;}
+  td.g{font-weight:700;color:var(--ink);}
+  .gate p{margin:6px 0;font-size:14px;} .tag{font-weight:800;font-family:var(--font-mono);font-size:12.5px;padding:1px 7px;border-radius:var(--r-sm);}
+  .tag.go{background:var(--lime);color:var(--ink);} .tag.pv{background:var(--electric-soft);color:var(--electric);} .tag.st{background:var(--coral-soft);color:var(--coral-deep);}
+  .foot{color:var(--gray);font-size:12.5px;margin-top:22px;text-align:center;font-family:var(--font-mono);}
+  .backtop{position:fixed;right:18px;bottom:18px;background:var(--ink);color:#fff;width:42px;height:42px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:var(--sh-elevated);transition:background .15s;}
+  .backtop:hover{background:var(--electric);}
+  @media(max-width:620px){
+    .hero .in{padding:46px 18px 38px;} .toc ol{columns:1;}
+    section{padding:22px 18px;} h2.sec{font-size:20px;} table{font-size:12.5px;} thead th,tbody td{padding:7px 9px;}
+  }
+  @media print{
+    body{background:#fff;} .nav,.backtop{display:none;} section{break-inside:avoid;box-shadow:none;border:none;padding:0 0 10px;border-radius:0;}
+    .hero{background:var(--ink)!important;} *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  }
+</style>
+</head>
+<body>
+<div class="nav">
+  <div class="in">
+    <a class="brand">
+      <svg width="28" height="28" viewBox="0 0 48 48" fill="none">
+        <path d="M14 6C9.58 6 6 9.58 6 14C6 18.42 9.58 22 14 22L24 22V12C24 8.69 21.31 6 18 6C16.46 6 15.05 6.6 14 7.58V6Z" fill="#FF4D9D"/>
+        <path d="M34 6C38.42 6 42 9.58 42 14C42 18.42 38.42 22 34 22L24 22V12C24 8.69 26.69 6 30 6C31.54 6 32.95 6.6 34 7.58V6Z" fill="#FFC93C"/>
+        <path d="M14 42C9.58 42 6 38.42 6 34C6 29.58 9.58 26 14 26L24 26V36C24 39.31 21.31 42 18 42C16.46 42 15.05 41.4 14 40.42V42Z" fill="#2D5BFF"/>
+        <path d="M34 42C38.42 42 42 38.42 42 34C42 29.58 38.42 26 34 26L24 26V36C24 39.31 26.69 42 30 42C31.54 42 32.95 41.4 34 40.42V42Z" fill="#FF6B3D"/>
+        <circle cx="24" cy="24" r="3" fill="#0F1E3D" opacity=".15"/>
+      </svg>
+      <span class="wm">Matchgo<i>.</i></span>
+    </a>
+    <span class="tag">ĐẤU GIÁ NGƯỢC MICE · OPS</span>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="in">
+    <div class="num">OPERATIONS_PLAYBOOK</div>
+    <h1>Checklist vận hành ban đầu<br><span class="ac">& Lộ trình 90 ngày</span></h1>
+    <p class="sub">MVP Đấu giá ngược MICE — Hướng dẫn thực thi 3 tháng đầu · SOP · Cổng xác thực (chuẩn vận hành MatchGo)</p>
+    <div class="meta">
+      <b>VERSION</b><span>v1.0 (Draft)</span>
+      <b>DATE</b><span>2026-06-19</span>
+      <b>LINKED</b><span>Kế hoạch KD MVP Đấu giá ngược MICE</span>
+      <b>MODE</b><span>MVP kiểu concierge (thủ công)</span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="toc">
+    <div class="lab">CONTENTS</div>
+    <ol>
+      <li><em>01</em><a href="#s1">Lộ trình 90 ngày (3 Phase)</a></li>
+      <li><em>02</em><a href="#s2">Checklist onboarding nhà cung cấp</a></li>
+      <li><em>03</em><a href="#s3">Checklist đảm bảo nhu cầu</a></li>
+      <li><em>04</em><a href="#s4">SOP vận hành giao dịch</a></li>
+      <li><em>05</em><a href="#s5">Nhật ký giao dịch · Mẫu dữ liệu</a></li>
+      <li><em>06</em><a href="#s6">Nhịp tuần · Cổng xác thực</a></li>
+      <li><em>07</em><a href="#s7">Checklist rủi ro vận hành</a></li>
+    </ol>
+  </nav>
+
+  <section id="s1">
+    <div class="secnum">01_ROADMAP</div>
+    <h2 class="sec">Lộ trình 90 ngày (3 Phase)</h2>
+    <p>Chia 3 tháng thành 3 giai đoạn 'Chuẩn bị → Giao dịch đầu → Lặp lại · Xác thực'. Mỗi phase có <span class="hl">Điều kiện thoát (Exit Criteria)</span> để chuyển sang phase tiếp theo.</p>
+
+    <h3>Phase 1 · Chuẩn bị (Week 1–4)</h3>
+    <table>
+      <thead><tr><th>Tuần</th><th>Mục tiêu cốt lõi</th><th>Công việc chính</th></tr></thead>
+      <tbody>
+        <tr><td class="w">W1</td><td class="g">Chốt định nghĩa</td><td>Chốt mục tiêu · tỷ lệ phí, thiết kế hạng mục RFP chuẩn, bản nháp template bảng so sánh</td></tr>
+        <tr><td class="w">W2</td><td class="g">Lập danh sách cung</td><td>Xây DB liên hệ 30–50 địa điểm · khách sạn · trung tâm đào tạo dựa trên mạng lưới MatchGo, gắn tag ưu tiên</td></tr>
+        <tr><td class="w">W3</td><td class="g">Onboarding cung</td><td>Tiếp xúc 15–20 nơi đợt 1, đảm bảo ý định tham gia · điều kiện 'đấu thầu cạnh tranh'</td></tr>
+        <tr><td class="w">W4</td><td class="g">Thiết lập kênh cầu</td><td>Phát hành form RFP, đảm bảo 3–5 lead cầu pilot</td></tr>
+      </tbody>
+    </table>
+    <div class="exit"><b>EXIT ▸</b> Đảm bảo 15+ NCC có ý định đấu thầu VÀ 3+ lead RFP pilot</div>
+
+    <h3>Phase 2 · Giao dịch đầu (Week 5–8)</h3>
+    <table>
+      <thead><tr><th>Tuần</th><th>Mục tiêu cốt lõi</th><th>Công việc chính</th></tr></thead>
+      <tbody>
+        <tr><td class="w">W5</td><td class="g">Chạy đấu giá ngược đầu</td><td>Chuẩn hóa 1 RFP → mời thầu 3–5 NCC</td></tr>
+        <tr><td class="w">W6</td><td class="g">So sánh · trúng thầu</td><td>Cung cấp bảng so sánh chuẩn → người phụ trách chọn → kết nối hợp đồng</td></tr>
+        <tr><td class="w">W7</td><td class="g">Quyết toán · hồi cố</td><td>Thu phí · thu tiền, phỏng vấn hai phía thu thập điểm ma sát</td></tr>
+        <tr><td class="w">W8</td><td class="g">Lặp 2–3 giao dịch</td><td>Vừa hiệu chỉnh quy trình vừa chạy thêm giao dịch</td></tr>
+      </tbody>
+    </table>
+    <div class="exit"><b>EXIT ▸</b> 1+ giao dịch thành công thực tế VÀ thu 1+ phí hoàn tất, có số liệu kinh tế đơn vị thực đầu tiên</div>
+
+    <h3>Phase 3 · Lặp lại · Xác thực (Week 9–12)</h3>
+    <table>
+      <thead><tr><th>Tuần</th><th>Mục tiêu cốt lõi</th><th>Công việc chính</th></tr></thead>
+      <tbody>
+        <tr><td class="w">W9~10</td><td class="g">Mở rộng lượng GD</td><td>Mở rộng kênh cầu thành 2–3, mục tiêu 3–4 RFP/tuần</td></tr>
+        <tr><td class="w">W11</td><td class="g">Tổng hợp chỉ số</td><td>Đo KPI thực, so sánh giả định vs thực</td></tr>
+        <tr><td class="w">W12</td><td class="g">Go/No-Go</td><td>Phán định cổng → quyết định PRD bán tự động hoặc pivot</td></tr>
+      </tbody>
+    </table>
+    <div class="exit"><b>EXIT ▸</b> Khi đạt chuyển đổi 25%+ &amp; thầu/RFP 3+ thì GO → khởi động phát triển bán tự động</div>
+  </section>
+
+  <section id="s2">
+    <div class="secnum">02_SUPPLY</div>
+    <h2 class="sec">Checklist onboarding nhà cung cấp</h2>
+    <p>Vì bài toán 'con gà-quả trứng' nên <span class="hl">đảm bảo cung trước</span>. Tạo trạng thái dù 1 cầu vào cũng lấp được là ưu tiên số 1. Tận dụng quan hệ đối tác hospitality sẵn có của MatchGo làm ưu tiên liên hệ đầu tiên.</p>
+    <h4>LIST_UP — Mục tiêu 30–50 nơi</h4>
+    <ul class="check">
+      <li>Chọn khu vực · danh mục đợt 1 (vd: ưu tiên trung tâm đào tạo · khách sạn business vùng thủ đô).</li>
+      <li>Mỗi NCC: thu thập tên người phụ trách · liên hệ · sức chứa · đơn giá cơ bản · mùa thấp điểm · điều kiện thanh toán.</li>
+      <li>Ưu tiên hóa bằng tag 3 mức 'ý định đấu thầu cao/trung bình/thấp'.</li>
+    </ul>
+    <h4>ONBOARD — Mục tiêu 15+ nơi có ý định đấu thầu</h4>
+    <ul class="check">
+      <li>Truyền đạt đề xuất giá trị: 'nhu cầu phù hợp lấp đầy mùa thấp điểm · ngày trống, chi phí trả trước 0'.</li>
+      <li>Giải thích cấu trúc phí (10% khi trúng thầu, giới thiệu tùy chọn khuyến mãi giao dịch đầu).</li>
+      <li>Thống nhất mẫu báo giá chuẩn · SLA phản hồi (vd: hồi đáp trong 24 giờ).</li>
+      <li>Đánh dấu 'xác nhận tham gia' trong DB NCC + đăng ký ngày · điều kiện khả dụng.</li>
+    </ul>
+  </section>
+
+  <section id="s3">
+    <div class="secnum">03_DEMAND</div>
+    <h2 class="sec">Checklist đảm bảo nhu cầu</h2>
+    <h4>CHANNEL</h4>
+    <ul class="check">
+      <li>Đề xuất pilot tới mạng lưới khách hàng · đối tác thương hiệu sẵn có của MatchGo (cầu đầu nhanh nhất).</li>
+      <li>Outreach công ty du lịch · land operator quy mô nhỏ–vừa trong nước (nhu cầu đại lý incentive · đào tạo đoàn — đặt lặp tập trung phòng khách sạn).</li>
+      <li>Outreach trực tiếp người quen · người phụ trách trong ngành (hành chính · HR · đào tạo).</li>
+      <li>Phát thông điệp 'nhận miễn phí 3–5 báo giá cạnh tranh' qua LinkedIn · cộng đồng · newsletter.</li>
+    </ul>
+    <h4>CONVERT</h4>
+    <ul class="check">
+      <li>Đơn giản hóa bằng 1 link form RFP chuẩn (điền trong 5 phút).</li>
+      <li>Người thật liên hệ xác nhận trong 1 giờ ngay khi tiếp nhận (tạo niềm tin).</li>
+      <li>Thông báo rõ cam kết 'giao báo giá so sánh trong 48 giờ'.</li>
+    </ul>
+  </section>
+
+  <section id="s4">
+    <div class="secnum">04_SOP</div>
+    <h2 class="sec">SOP vận hành giao dịch (quy trình chuẩn xử lý 1 giao dịch)</h2>
+    <table>
+      <thead><tr><th>Bước</th><th>Phụ trách</th><th>Việc cần làm</th><th>Thời gian</th></tr></thead>
+      <tbody>
+        <tr><td class="g">1. Tiếp nhận RFP</td><td>Người vận hành</td><td>Kiểm tra phản hồi form, gọi bổ sung hạng mục thiếu · mơ hồ</td><td class="w">+1h</td></tr>
+        <tr><td class="g">2. Chuẩn hóa RFP</td><td>Người vận hành</td><td>Sắp xếp theo hạng mục chuẩn, chọn 3–5 NCC phù hợp</td><td class="w">+3h</td></tr>
+        <tr><td class="g">3. Mời thầu</td><td>Người vận hành</td><td>Gửi RFP cho NCC, hướng dẫn SLA phản hồi</td><td class="w">+4h</td></tr>
+        <tr><td class="g">4. Thu thập báo giá</td><td>Nhà cung cấp</td><td>Nộp giá · nội dung theo mẫu chuẩn</td><td class="w">+24h</td></tr>
+        <tr><td class="g">5. Lập bảng so sánh</td><td>Người vận hành</td><td>Lập · gửi bảng so sánh 1 trang cùng tiêu chí</td><td class="w">+30h</td></tr>
+        <tr><td class="g">6. Hỗ trợ trúng thầu</td><td>Người phụ trách</td><td>So sánh · hỏi đáp · chọn</td><td class="w">+48h</td></tr>
+        <tr><td class="g">7. Kết nối hợp đồng</td><td>Người vận hành</td><td>Kết nối NCC trúng thầu↔người phụ trách, chốt điều kiện</td><td class="w">Ngay</td></tr>
+        <tr><td class="g">8. Quyết toán</td><td>Người vận hành</td><td>Xác nhận thành công → thu phí · thu tiền · ghi nhận</td><td class="w">Sau sự kiện</td></tr>
+      </tbody>
+    </table>
+    <div class="box">
+      <div class="bt">Nguyên tắc vận hành</div>
+      <small>· Mọi báo giá theo <b>cùng mẫu</b> — khả năng so sánh là giá trị cốt lõi.</small>
+      <small>· Cam kết và giữ <strong class="e">lead time 48 giờ</strong> (tốc độ là điểm khác biệt).</small>
+      <small>· Ghi GMV · số thầu · chuyển đổi · điểm ma sát của mọi giao dịch vào <b>sheet nhật ký giao dịch</b> — dữ liệu gốc của xác thực.</small>
+    </div>
+  </section>
+
+  <section id="s5">
+    <div class="secnum">05_DATA_LOG</div>
+    <h2 class="sec">Nhật ký giao dịch · Mẫu thu thập dữ liệu</h2>
+    <p>Vận hành bằng bảng tính, mỗi giao dịch điền các trường dưới đây. Nhật ký này chính là cơ sở hiệu chỉnh KPI · giả định.</p>
+    <table>
+      <thead><tr><th>Trường</th><th>Ví dụ</th><th>Công dụng</th></tr></thead>
+      <tbody>
+        <tr><td class="g">RFP ID / Ngày tiếp nhận</td><td class="w">R-001 / 06-22</td><td>Theo dõi</td></tr>
+        <tr><td class="g">Số người · khu vực · ngân sách</td><td>180 người · 1 đêm / thủ đô / ₩30M</td><td>Phân tích phân khúc</td></tr>
+        <tr><td class="g">Số NCC đấu thầu</td><td class="w">4</td><td>KPI mức cạnh tranh cung</td></tr>
+        <tr><td class="g">Báo giá thấp nhất · cao nhất</td><td class="w">₩23M / ₩29M</td><td>Phân tán giá · giá trị</td></tr>
+        <tr><td class="g">Thành công · giá trúng thầu</td><td class="w">Thành công / ₩25M</td><td>Tỷ lệ chuyển đổi · GMV</td></tr>
+        <tr><td class="g">Phí · thu tiền</td><td class="w">₩2.5M / Hoàn tất</td><td>Xác thực doanh thu (10%)</td></tr>
+        <tr><td class="g">Lead time</td><td class="w">41 giờ</td><td>KPI tốc độ</td></tr>
+        <tr><td class="g">Ghi chú điểm ma sát</td><td>Đàm phán lại đơn giá F&amp;B</td><td>Cải tiến quy trình</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section id="s6">
+    <div class="secnum">06_RHYTHM</div>
+    <h2 class="sec">Nhịp vận hành tuần · Cổng xác thực</h2>
+    <h4>WEEKLY_RHYTHM</h4>
+    <ul>
+      <li><b>Thứ 2:</b> Kiểm tra RFP mới · pipeline, đặt mục tiêu tuần.</li>
+      <li><b>Thứ 4:</b> Kiểm tra trạng thái giao dịch đang chạy, đốc thúc phản hồi cung.</li>
+      <li><b>Thứ 6:</b> Chốt nhật ký giao dịch, cập nhật KPI, 1 hành động cải tiến điểm ma sát.</li>
+    </ul>
+    <h4>MONTHLY_GATE</h4>
+    <table>
+      <thead><tr><th>Chỉ số</th><th>Tháng 1</th><th>Tháng 2</th><th>Tháng 3 (đạt)</th></tr></thead>
+      <tbody>
+        <tr><td class="g">RFP tiếp nhận/tháng</td><td class="w">≥3</td><td class="w">≥8</td><td class="w" style="color:var(--ink)">≥15</td></tr>
+        <tr><td class="g">Số thầu/RFP</td><td class="w">≥2</td><td class="w">≥3</td><td class="w" style="color:var(--ink)">≥3</td></tr>
+        <tr><td class="g">Tỷ lệ chuyển đổi trúng thầu</td><td class="w">—</td><td class="w">≥15%</td><td class="w" style="color:var(--ink)">≥25%</td></tr>
+        <tr><td class="g">GD thành công/tháng</td><td class="w">≥1</td><td class="w">≥3</td><td class="w" style="color:var(--ink)">≥6</td></tr>
+        <tr><td class="g">Lead time</td><td class="w">≤72h</td><td class="w">≤48h</td><td class="w" style="color:var(--ink)">≤48h</td></tr>
+      </tbody>
+    </table>
+    <div class="box gate">
+      <div class="bt">Quyết định khi kết thúc 3 tháng</div>
+      <p><span class="tag go">GO</span> Đạt cổng → soạn PRD bán tự động, quyết định ưu tiên phát triển thanh toán · form · dashboard.</p>
+      <p><span class="tag pv">PIVOT</span> Đạt một phần → tập trung nguồn lực vào phía thiếu (cầu/cung/giá) rồi đo lại sau 1 tháng.</p>
+      <p><span class="tag st">STOP</span> Không có cầu → xem lại căn bản phân khúc · đề xuất giá trị.</p>
+    </div>
+  </section>
+
+  <section id="s7">
+    <div class="secnum">07_RISK_CHECK</div>
+    <h2 class="sec">Checklist kiểm tra nhanh rủi ro vận hành</h2>
+    <ul class="check">
+      <li>Cung để lấp luôn đảm bảo 3+ nơi cho mỗi 1 cầu chứ?</li>
+      <li>Có đang giữ lead time 48 giờ không? (ghi nguyên nhân khi trễ)</li>
+      <li>Có dấu hiệu bỏ qua trung gian (hai phía thử liên hệ trực tiếp) không? Đã nhấn mạnh lại giá trị chưa?</li>
+      <li>Có giao dịch nào sót thu phí không?</li>
+      <li>Mọi giao dịch đã ghi vào nhật ký chưa? (chống rò rỉ dữ liệu xác thực)</li>
+      <li>Tỷ lệ phản hồi · no-show của NCC có đang xấu đi không?</li>
+    </ul>
+    <p class="foot">— Lộ trình · tiêu chuẩn này là giả định khởi đầu, sẽ hiệu chỉnh ngay sau khi có dữ liệu giao dịch đầu.</p>
+  </section>
+</div>
+<a class="backtop" href="#" aria-label="Lên đầu trang">↑</a>
+</body>
+</html>

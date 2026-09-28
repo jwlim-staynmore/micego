@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>회원 상세 | MICEGO 운영 콘솔</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="app"></div>
+<noscript><p class="nojs">이 화면은 JavaScript가 있어야 표시됩니다. 브라우저 설정에서 JavaScript를 켜 주세요.</p></noscript>
+<script src="../assets/config.js"></script>
+<script src="../assets/mg.js"></script>
+<script src="../assets/feedback.js" defer></script>
+<script src="data-adapter.js"></script>
+<script src="admin.js"></script>
+<script src="partner.js"></script>
+<script>
+(function(){
+var A=MICEGO,esc=A.esc;
+A.boot('members','회원 상세',function(main){
+  var id=new URLSearchParams(location.search).get('id')||'';
+  var m;
+  function pendingLink(){return A.linkPending().filter(function(l){return l.memberId===m.id;});}
+  function header(){
+    var pl=pendingLink().length,pa=A.purgeAt(m);
+    return '<p class="crumb"><a href="members.html">← 회원</a></p><div class="dh"><h1>'+esc(A.memberName(m))+(m.company?' · '+esc(m.company):'')+'</h1>'+A.mchip(m.state)+(pl?'<span class="badge amber">연결 요청 대기 '+pl+'건</span>':'')+(pa?'<span class="badge">파기 예정 '+A.fmtDT(pa)+'</span>':'')+
+      '<div class="dh-act"><a class="btn" href="members.html">목록으로</a></div></div>';
+  }
+  function side(){
+    var al=A.mactions(m),btns='',hints='';
+    al.forEach(function(a){
+      var d=A.MACT[a];
+      btns+='<button type="button" class="btn '+(d.danger?'danger':'')+'" data-act="'+a+'">'+d.label+'</button>';
+      var g=A.mguard(m,a);if(g)hints+='<p class="ghint">'+esc(d.label)+': '+esc(g)+'</p>';
+    });
+    var flow=(A.MFLOW[m.state]||[]).map(function(s){return A.MSTATES[s];});
+    return '<section class="card" aria-labelledby="h-st"><h2 id="h-st">계정 조치</h2><div class="hint">'+esc(A.MHINT[m.state])+'</div>'+
+      (btns?'<div class="tbtns" id="tbtns">'+btns+'</div>'+hints:'<p class="muted small">이 상태에서는 운영자가 할 수 있는 조치가 없습니다.</p>')+
+      '<p class="small muted" style="margin-top:12px">모든 조치는 사유를 남기고 감사 로그에 기록됩니다. 가입과 인증, 잠금은 회원의 행동과 시스템이 바꾸는 상태입니다.</p></section>';
+  }
+  function profileCard(){
+    var gone=m.state==='withdrawn',pa=A.purgeAt(m);
+    var mk=(m.mktEmail||m.mktSms)?[m.mktEmail?'이메일':'',m.mktSms?'문자·알림톡':''].filter(Boolean).join(' · ')+' 동의 ('+A.fmtDT(m.mktAt)+')':'수신 동의 없음';
+    return '<section class="card" aria-labelledby="h-pf"><h2 id="h-pf">회원 정보</h2><dl class="kv" id="profile">'+
+      '<dt>이름</dt><dd>'+(gone?'<span class="muted">파기됨</span>':esc(m.name))+'</dd><dt>소속 유형</dt><dd>'+esc(m.orgType)+'</dd><dt>회사·단체명</dt><dd>'+esc(m.company)+'</dd>'+
+      '<dt>이메일</dt><dd>'+(m.email?esc(m.email):'<span class="muted">'+(gone?'파기됨':'—')+'</span>')+'</dd><dt>휴대전화</dt><dd class="mono-s">'+(gone?'<span class="muted">파기됨</span>':A.maskPhone(m.phone))+(m.state==='pending_phone'?' <span class="badge amber">인증 전</span>':'')+'</dd>'+
+      '<dt>가입 일시</dt><dd>'+A.fmtDT(m.createdAt)+'</dd><dt>이메일 인증</dt><dd>'+(m.emailVerifiedAt?A.fmtDT(m.emailVerifiedAt):'<span class="warn-cell">미완료</span>')+'</dd><dt>휴대전화 인증</dt><dd>'+(m.phoneVerifiedAt?A.fmtDT(m.phoneVerifiedAt):'<span class="'+(m.state==='pending_email'?'muted':'warn-cell')+'">'+(m.state==='pending_email'?'이메일 인증 뒤 진행':'미완료')+'</span>')+'</dd>'+
+      '<dt>마지막 로그인</dt><dd>'+(m.lastLoginAt?A.fmtDT(m.lastLoginAt):'—')+'</dd><dt>활성 세션</dt><dd id="sessN">'+(m.sessions.length?m.sessions.length+'곳 · '+m.sessions.map(function(s){return esc(s.device)+' ('+esc(s.ip)+', '+A.fmtDT(s.at)+')';}).join(' / '):'없음')+'</dd>'+
+      (gone?'':'<dt>마케팅 수신</dt><dd>'+esc(mk)+'</dd>')+
+      (m.state==='locked'?'<dt>잠금</dt><dd>'+A.fmtDT(m.lockedAt)+' · 로그인 실패 '+m.fails+'회</dd>':'')+
+      (m.state==='suspended'?'<dt>정지</dt><dd>'+A.fmtDT(m.suspendedAt)+'</dd>':'')+
+      (gone?'<dt>탈퇴</dt><dd>'+A.fmtDT(m.withdrawnAt)+'</dd>':'')+
+      (pa?'<dt>미완료 가입</dt><dd>인증을 마치지 않으면 <b>'+A.fmtDT(pa)+'</b>(가입 72시간 뒤)에 자동으로 파기됩니다.'+(m.state==='pending_email'?' 오늘 인증 메일 '+m.sends+'/10회 발송.':'')+'</dd>':'')+
+      '</dl>'+(m.retained?'<p class="note-box" id="retained" style="margin-top:12px">'+esc(m.retained)+'</p>':'')+'</section>';
+  }
+  function linkCard(){
+    var all=A.data().linkRequests.filter(function(l){return l.memberId===m.id;});
+    if(!all.length)return '';
+    var rows=all.map(function(l){
+      var r=l.ref,tail;
+      if(l.status==='pending')tail='<div class="memo-add"><button type="button" class="btn primary sm" data-lr="approve" data-id="'+l.id+'">승인</button><button type="button" class="btn danger sm" data-lr="reject" data-id="'+l.id+'">거절</button></div>';
+      else tail='<p class="small" style="margin-top:6px"><b>'+(l.status==='approved'?'승인됨':'거절됨')+'</b> · '+A.fmtDT(l.decidedAt)+'</p>';
+      return '<div class="lr-box" data-lr-row="'+l.id+'"><b>'+esc(r.id)+'</b> · '+esc(r.title)+' · '+A.fmtDay(new Date(r.createdAt+9*3600e3).toISOString().slice(0,10))+' 접수 · 비회원 요청<br><span class="small">'+esc(l.matchType)+' · 요청 '+A.fmtDT(l.requestedAt)+'</span>'+tail+'</div>';
+    }).join('');
+    return '<section class="card" aria-labelledby="h-lr"><h2 id="h-lr">연결 요청</h2><p class="sub">비회원으로 접수한 요청의 휴대전화가 이 회원과 같습니다. 이메일이 같으면 가입할 때 자동으로 연결되고, 휴대전화만 같으면 운영자가 확인합니다.</p>'+rows+'</section>';
+  }
+  function rfpCard(){
+    var l=A.memberRfps(m);
+    var rows=l.map(function(x){
+      var idc=x.live?'<a class="mono rowlink" href="rfp.html?id='+x.id+'">'+x.id+'</a>':'<span class="mono">'+x.id+'</span> <span class="badge">과거</span>';
+      return '<tr><td>'+idc+'</td><td>'+esc(x.title)+'</td><td>'+A.refChip(x.state)+(x.round>=2&&x.live?' <span class="badge teal">R'+x.round+'</span>':'')+(A.MBLOCK.indexOf(x.state)>=0?' <span class="badge amber">탈퇴 차단</span>':'')+'</td><td>'+A.fmtD(x.createdAt)+'</td></tr>';
+    }).join('');
+    return '<section class="card" aria-labelledby="h-rq"><h2 id="h-rq">견적 요청 <span class="badge">'+l.length+'건</span></h2>'+(l.length?'<div class="tbl-wrap"><table id="rfpTable"><thead><tr><th>요청</th><th>목적지 · 유형</th><th>상태</th><th>접수일</th></tr></thead><tbody>'+rows+'</tbody></table></div><p class="small muted" style="margin-top:8px">비딩중·재요청·취합중·전달됨 요청이 있으면 탈퇴 처리할 수 없습니다. "과거" 표시는 이 콘솔에 상세가 없는 이전 요청입니다.</p>':'<p class="muted small">아직 견적 요청이 없습니다.</p>')+'</section>';
+  }
+  function shareCard(){
+    var ls=A.data().shareLinks.filter(function(l){return l.memberId===m.id;});
+    var rows=ls.map(function(l){
+      var s=A.shareState(l),ex=A.shareExpiry(l);
+      return '<tr><td>'+(A.get(l.rfpId)?'<a class="mono rowlink" href="rfp.html?id='+l.rfpId+'">'+l.rfpId+'</a>':'<span class="mono">'+l.rfpId+'</span>')+'</td><td>'+A.shareChip(s)+'</td><td>'+A.fmtDT(l.createdAt)+'</td><td>'+(ex?A.fmtDT(ex):'<span class="muted">종료 후 30일</span>')+'</td><td class="num">'+l.views+'회</td></tr>';
+    }).join('');
+    return '<section class="card" aria-labelledby="h-sl"><h2 id="h-sl">공유 링크</h2><p class="sub">보기 전용입니다. 진행 상황과 비교표만 보이고 제안 선택은 할 수 없습니다. 요청당 1개, 요청 종료 후 30일에 만료되며 탈퇴하면 중지됩니다.</p>'+(ls.length?'<div class="tbl-wrap"><table id="shareTable"><thead><tr><th>요청</th><th>상태</th><th>만든 시각</th><th>만료</th><th class="num">열람</th></tr></thead><tbody>'+rows+'</tbody></table></div>':'<p class="muted small">만든 공유 링크가 없습니다.</p>')+'</section>';
+  }
+  function accessCard(){
+    var cut=A.NOW-92*864e5;
+    var rows=(m.access||[]).filter(function(a){return a.t>=cut;}).sort(function(a,b){return b.t-a.t;}).map(function(a){return '<tr><td class="mono" style="white-space:nowrap">'+A.fmtDT(a.t)+'</td><td>'+(a.ok?'<span class="st-ok">성공</span>':'<span class="st-no">실패</span>')+'</td><td class="mono-s">'+esc(a.ip)+'</td><td>'+esc(a.ua)+'</td></tr>';}).join('');
+    return '<section class="card" aria-labelledby="h-ac"><h2 id="h-ac">접속 기록 <span class="badge">최근 3개월</span></h2>'+(rows?'<div class="tbl-wrap"><table id="accessTable"><thead><tr><th>시각</th><th>결과</th><th>IP</th><th>기기</th></tr></thead><tbody>'+rows+'</tbody></table></div><p class="small muted" style="margin-top:8px">접속 기록(IP·일시·브라우저)은 통신비밀보호법에 따라 3개월 보관합니다.</p>':'<p class="muted small">접속 기록이 없습니다.</p>')+'</section>';
+  }
+  function logCard(){
+    var rows=A.memberLog(m).map(function(x){return '<tr><td class="mono" style="white-space:nowrap">'+A.fmtDT(x.t)+'</td><td>'+esc(x.template)+'</td><td class="cw">'+esc(x.to||'—')+'</td><td>'+(x.status==='sent'?'<span class="st-ok">발송됨</span>':'<span class="st-warn">직접 발송 필요</span>')+'</td></tr>';}).join('');
+    return '<section class="card" aria-labelledby="h-nl"><h2 id="h-nl">발송 기록 <span class="badge">ACC_* · OPS</span></h2>'+(rows?'<div class="tbl-wrap"><table id="notifTable"><thead><tr><th>시각</th><th>템플릿</th><th>수신 주소</th><th>결과</th></tr></thead><tbody>'+rows+'</tbody></table></div>':'<p class="muted small">발송 기록이 없습니다.</p>')+'</section>';
+  }
+  function auditCard(){
+    var rows=A.memberAudit(m).map(function(x){return '<tr><td class="mono" style="white-space:nowrap">'+A.fmtDT(x.t)+'</td><td>'+esc(x.actor)+'</td><td>'+esc(x.label)+(x.notif?' <span class="badge">'+esc(x.notif)+'</span>':'')+'</td><td>'+esc(x.reason)+'</td></tr>';}).join('');
+    return '<section class="card" aria-labelledby="h-au"><h2 id="h-au">감사 로그</h2><div class="tbl-wrap"><table id="auditTable"><thead><tr><th>시각</th><th>주체</th><th>내용</th><th>사유</th></tr></thead><tbody>'+(rows||'<tr><td colspan="4" class="muted">기록이 없습니다.</td></tr>')+'</tbody></table></div></section>';
+  }
+  function render(){
+    m=A.member(id);
+    if(!m){document.title='회원을 찾을 수 없음 | MICEGO 운영 콘솔';main.innerHTML='<div class="empty card"><h1>해당 회원을 찾을 수 없습니다</h1><p>회원 "'+esc(id)+'"에 해당하는 계정이 없습니다.</p><a class="btn primary" href="members.html">회원으로 돌아가기</a></div>';return;}
+    document.title=A.memberName(m)+' · '+m.company+' | MICEGO 운영 콘솔';
+    main.innerHTML=header()+'<div class="detail" style="margin-top:16px"><aside class="dside" id="dside" aria-label="계정 조치">'+side()+'</aside><div class="dmain stack">'+profileCard()+linkCard()+rfpCard()+shareCard()+accessCard()+logCard()+auditCard()+'</div></div>';
+  }
+  A.onChange=function(){var y=window.scrollY;render();window.scrollTo(0,y);};
+  main.addEventListener('click',function(e){
+    var b=e.target.closest('button[data-act]');if(b&&m){A.memberRequest(m.id,b.getAttribute('data-act'));return;}
+    var l=e.target.closest('button[data-lr]');if(l&&m)A.linkRequest(l.getAttribute('data-id'),l.getAttribute('data-lr'));
+  });
+  render();
+});
+})();
+</script>
+</body>
+</html>

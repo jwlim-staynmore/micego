@@ -1,0 +1,11 @@
+{
+  "status": 200,
+  "body": [
+    {
+      "ua": "Chrome/Windows",
+      "ip": "1.2.3.4",
+      "updated_at": "2026-09-26",
+      "current": true
+    }
+  ]
+}

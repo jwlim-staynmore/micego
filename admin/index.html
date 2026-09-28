@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>로그인 | MICEGO 운영 콘솔</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div class="ribbon" role="note" id="demoRibbon"><span>DEMO · 예시 데이터 · 새로고침하면 처음 상태로 돌아갑니다</span></div>
+<div class="login">
+  <section class="login-brand" aria-label="MICEGO 운영 콘솔 소개">
+    <a class="brand" href="index.html" aria-label="MICEGO 운영 콘솔"><svg class="brand-mark" viewBox="0 0 32 32" role="img" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0F1E3D"/><rect x="6.5" y="9" width="14" height="2.6" rx="1.3" fill="#FFFFFF"/><rect x="6.5" y="14.7" width="11" height="2.6" rx="1.3" fill="#16B5A8"/><rect x="6.5" y="20.4" width="8" height="2.6" rx="1.3" fill="#FFC24B"/><circle cx="24.5" cy="16" r="2.6" fill="#FFFFFF"/></svg><span class="brand-word">MICE<span class="go">GO</span></span></a>
+    <h1>MICEGO 운영 콘솔</h1>
+    <p>견적 요청을 접수부터 종료까지 처리하는 운영자 전용 화면입니다.</p>
+  </section>
+  <section class="login-form">
+    <form id="lf" novalidate>
+      <h2>운영자 로그인</h2>
+      <p class="muted small">운영자 계정으로 로그인해 주세요.</p>
+      <p class="field-err" id="formErr" role="alert"></p>
+      <label class="lbl" for="em">이메일</label>
+      <input class="inp" id="em" name="email" type="email" autocomplete="username" aria-describedby="em-e">
+      <p class="field-err" id="em-e" role="alert"></p>
+      <label class="lbl" for="pw">비밀번호</label>
+      <input class="inp" id="pw" name="password" type="password" autocomplete="current-password" aria-describedby="pw-e">
+      <p class="field-err" id="pw-e" role="alert"></p>
+      <button class="btn primary block" type="submit" style="margin-top:16px" id="lfSubmit">로그인</button>
+      <p class="demo-note" id="demoNote">DEMO · 실제 인증은 없습니다.</p>
+    </form>
+  </section>
+</div>
+<script src="../assets/config.js"></script>
+<script src="../assets/mg.js"></script>
+<script src="../assets/feedback.js" defer></script>
+<script src="data-adapter.js"></script>
+<script>
+(function(){
+  if (MGA.mode === 'api') {
+    var rb=document.getElementById('demoRibbon'); if(rb)rb.remove();
+    var dn=document.getElementById('demoNote'); if(dn)dn.remove();
+  }
+  var ERR_MSG={role:'운영자 권한이 있는 계정으로 로그인해 주세요.',config:'설정이 올바르지 않습니다. 관리자에게 문의하세요.',snapshot:'데이터를 불러오지 못했습니다. 다시 로그인해 주세요.'};
+  var eCode=new URLSearchParams(location.search).get('e');
+  if(eCode&&ERR_MSG[eCode])document.getElementById('formErr').textContent=ERR_MSG[eCode];
+  var f=document.getElementById('lf'),btn=document.getElementById('lfSubmit');
+  f.addEventListener('submit',function(e){
+    e.preventDefault();
+    var em=document.getElementById('em'),pw=document.getElementById('pw'),ok=true;
+    function chk(el,id,msg){var bad=!el.value.trim();document.getElementById(id).textContent=bad?msg:'';el.classList.toggle('bad',bad);if(bad)ok=false;}
+    chk(em,'em-e','이메일을 입력해 주세요');chk(pw,'pw-e','비밀번호를 입력해 주세요');
+    if(!ok){(em.value.trim()?pw:em).focus();return;}
+    document.getElementById('formErr').textContent='';
+    btn.disabled=true;
+    MGA.login(em.value.trim(),pw.value).then(function(){
+      location.href='dashboard.html';
+    }, function(err){
+      btn.disabled=false;
+      document.getElementById('formErr').textContent=(err&&err.message)||'로그인하지 못했습니다.';
+    });
+  });
+})();
+</script>
+</body>
+</html>

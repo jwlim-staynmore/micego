@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko" data-mgfb-launcher="off">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>피드백 | MICEGO 운영 콘솔</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="app"></div>
+<noscript><p class="nojs">이 화면은 JavaScript가 있어야 표시됩니다. 브라우저 설정에서 JavaScript를 켜 주세요.</p></noscript>
+<script src="../assets/config.js"></script>
+<script src="../assets/mg.js"></script>
+<script src="../assets/feedback.js" defer></script>
+<script src="data-adapter.js"></script>
+<script src="admin.js"></script>
+<script src="partner.js"></script>
+<script src="feedback-console.js"></script>
+<script>
+(function(){
+var A=MICEGO,esc=A.esc;
+A.boot('feedback','피드백',function(main){
+  var st=FB.stateFromQuery(location.search);
+
+  function subcodeOptions(cat){
+    if(!cat||!FB.SUBCODES[cat]||!Object.keys(FB.SUBCODES[cat]).length)return '<option value="">해당 없음</option>';
+    var o='<option value="">전체</option>';
+    for(var k in FB.SUBCODES[cat])o+='<option value="'+k+'"'+(st.sub===k?' selected':'')+'>'+esc(FB.SUBCODES[cat][k])+'</option>';
+    return o;
+  }
+  function typeText(r){return FB.CAT[r.category]+'·'+(r.subcode?esc(FB.subcodeLabel(r.category,r.subcode)):'<span class="muted">—</span>');}
+  function slaCell(r){var s=FB.sla(r);return s?'<div class="small" style="margin-top:4px"><span class="badge '+s.level+'">'+esc(s.text)+'</span></div>':'';}
+  function summary(r){var c=r.content||'';var s=c.slice(0,60);return esc(s)+(c.length>60?'…':'');}
+  function sentBy(r){return esc(FB.who(r))+(r.reply_email?' <span title="회신 이메일: '+esc(r.reply_email)+'" aria-label="회신 이메일 있음">✉</span>':'');}
+  function pageCol(r){return '<span class="mono-s">'+esc(r.page_path)+'</span>'+(r.ui_state?'<div class="small muted">'+esc(r.ui_state)+'</div>':'');}
+  function assignCol(r){return r.assignee?esc(FB.operatorName(r.assignee)):'<span class="muted">미지정</span>';}
+  function timeCell(r){return '<span title="'+A.fmtDT(r.created_at)+'">'+esc(FB.relTime(r.created_at))+'</span>';}
+
+  function match(r){return FB.match(r,st,null)&&(!st.warn||true);}
+  function poolExcept(field){return FB.data().filter(function(r){return FB.match(r,st,field);});}
+
+  function table(list){
+    var rows=list.map(function(r){
+      return '<tr data-id="'+r.id+'"><td><a class="mono rowlink" href="feedback-detail.html?id='+r.id+'" data-id="'+r.id+'">'+esc(r.ref)+'</a></td>'+
+        '<td>'+timeCell(r)+'</td><td>'+typeText(r)+'</td><td>'+FB.pchip(r.priority)+'</td>'+
+        '<td>'+FB.schip(r.status)+slaCell(r)+'<span class="fb-inflag">'+(FB.flags(r)||'')+'</span></td><td class="fb-preview">'+summary(r)+'</td>'+
+        '<td>'+sentBy(r)+'</td><td>'+pageCol(r)+'</td><td>'+(r.rfp_ref?'<span class="mono-s">'+esc(r.rfp_ref)+'</span>':'<span class="muted">—</span>')+'</td>'+
+        '<td>'+assignCol(r)+'</td><td>'+(FB.flags(r)||'<span class="muted">—</span>')+'</td></tr>';
+    }).join('');
+    var sortArrow=function(k){return st.sort===k?' ▲':st.sort===k+'_desc'?' ▼':'';};
+    return '<div class="tbl-wrap fb-table"><table><thead><tr>'+
+      '<th>접수번호</th><th data-sortcol="created" style="cursor:pointer">접수 시각'+(st.sort==='created_asc'?' ▲':st.sort==='created_desc'||st.sort==='default'?' ▼':'')+'</th>'+
+      '<th>유형</th><th data-sortcol="priority" style="cursor:pointer">P'+(st.sort==='priority'?' ▲':st.sort==='priority_desc'?' ▼':'')+'</th>'+
+      '<th>상태</th><th>요약</th><th>보낸 사람</th><th>페이지</th><th>연결 요청</th><th>담당</th><th>플래그</th></tr></thead><tbody>'+
+      (rows||'<tr><td colspan="11" class="muted">조건에 맞는 접수가 없습니다.</td></tr>')+'</tbody></table></div>';
+  }
+  function cards(list){
+    if(!list.length)return '<div class="fb-cards"><p class="muted">조건에 맞는 접수가 없습니다.</p></div>';
+    return '<div class="fb-cards">'+list.map(function(r){
+      var s=FB.sla(r),lv=s?' '+s.level:'';
+      return '<a class="fb-card'+lv+'" href="feedback-detail.html?id='+r.id+'" data-id="'+r.id+'">'+
+        '<div class="fb-c1"><span class="mono">'+esc(r.ref)+'</span>'+FB.pchip(r.priority)+FB.schip(r.status)+'</div>'+
+        '<div class="fb-c2">'+summary(r)+'</div>'+
+        '<div class="fb-c3">'+typeText(r)+' · '+esc(r.page_path)+' · '+esc(FB.relTime(r.created_at))+'</div>'+
+        (FB.flags(r)?'<div class="fb-c3">'+FB.flags(r)+'</div>':'')+'</a>';
+    }).join('')+'</div>';
+  }
+  function summaryChips(){
+    var pool=poolExcept('status');
+    return FB.STATUS_ORDER.map(function(s){
+      var n=pool.filter(function(r){return r.status===s;}).length;
+      var on=st.status.indexOf(s)>=0;
+      return '<button type="button" class="chip fb-st-'+s+'" data-status="'+s+'" aria-pressed="'+on+'">'+esc(FB.STATUS[s])+' '+n+'</button>';
+    }).join('');
+  }
+  function warnChips(){
+    var w=FB.warnCounts();
+    var items=[['p1late','P1 미착수',w.p1Late],['mailfail','알림 실패',w.mailFailed],['triagelate','분류 지연',w.triageLate]];
+    return items.map(function(x){
+      return '<button type="button" class="badge'+(x[2]?' red':'')+'" data-warn="'+x[0]+'" aria-pressed="'+(st.warn===x[0])+'">'+x[1]+' '+x[2]+'</button>';
+    }).join('');
+  }
+  function assigneeOptions(){
+    var o='<option value="">전체</option><option value="me"'+(st.assignee==='me'?' selected':'')+'>나</option><option value="none"'+(st.assignee==='none'?' selected':'')+'>미지정</option>';
+    FB.operators().forEach(function(op){o+='<option value="'+op.id+'"'+(st.assignee===op.id?' selected':'')+'>'+esc(op.name)+'</option>';});
+    return o;
+  }
+  function draw(){
+    FB.syncUrl(st);
+    var list=FB.sortList(FB.filterList(st),st.sort);
+    document.getElementById('summary').innerHTML=summaryChips();
+    document.getElementById('warns').innerHTML=warnChips();
+    document.getElementById('res').innerHTML=table(list)+cards(list);
+    var af=[];
+    if(st.preset==='weekly')af.push('주간 정리');
+    if(st.warn)af.push('경고: '+({p1late:'P1 미착수',mailfail:'알림 실패',triagelate:'분류 지연'}[st.warn]));
+    document.getElementById('af').innerHTML=af.length?'<span class="active-filter">'+esc(af.join(' · '))+' <button type="button" id="clrq" aria-label="필터 해제">×</button></span>':'';
+    var c=document.getElementById('clrq');if(c)c.onclick=function(){st.preset='';st.warn='';draw();};
+    document.getElementById('cnt').textContent=list.length+'건';
+    document.getElementById('custRange').style.display=st.period==='custom'?'flex':'none';
+  }
+  main.innerHTML='<div class="page-h"><h1>피드백</h1><span class="muted small" id="cnt"></span>'+
+    '<button type="button" class="btn sm sp" id="weeklyBtn">주간 정리</button></div>'+
+    '<div class="fb-summary" id="summary" role="group" aria-label="상태별 개수"></div>'+
+    '<div class="fb-warn" id="warns" role="group" aria-label="경고"></div>'+
+    '<div id="af"></div>'+
+    '<div class="filters">'+
+      '<div class="f"><label for="fCat">대분류</label><select class="inp" id="fCat"><option value="">전체</option>'+Object.keys(FB.CAT).map(function(k){return '<option value="'+k+'"'+(st.cat===k?' selected':'')+'>'+esc(FB.CAT[k])+'</option>';}).join('')+'</select></div>'+
+      '<div class="f"><label for="fSub">하위 코드</label><select class="inp" id="fSub">'+subcodeOptions(st.cat)+'</select></div>'+
+      '<div class="f"><label for="fP">우선순위</label><select class="inp" id="fP"><option value="">전체</option>'+[1,2,3,4].map(function(p){return '<option value="'+p+'"'+(st.p===String(p)?' selected':'')+'>P'+p+'</option>';}).join('')+'<option value="none"'+(st.p==='none'?' selected':'')+'>미지정</option></select></div>'+
+      '<div class="f"><label for="fUt">유저 유형</label><select class="inp" id="fUt"><option value="">전체</option>'+Object.keys(FB.USER_TYPE).map(function(k){return '<option value="'+k+'"'+(st.ut===k?' selected':'')+'>'+esc(FB.USER_TYPE[k])+'</option>';}).join('')+'</select></div>'+
+      '<div class="f"><label for="fMode">모드</label><select class="inp" id="fMode"><option value="">전체</option>'+Object.keys(FB.MODE).map(function(k){return '<option value="'+k+'"'+(st.mode===k?' selected':'')+'>'+esc(FB.MODE[k])+'</option>';}).join('')+'</select></div>'+
+      '<div class="f"><label for="fLang">언어</label><select class="inp" id="fLang"><option value="">전체</option>'+Object.keys(FB.LANG).map(function(k){return '<option value="'+k+'"'+(st.lang===k?' selected':'')+'>'+esc(FB.LANG[k])+'</option>';}).join('')+'</select></div>'+
+      '<div class="f"><label for="fAsg">담당</label><select class="inp" id="fAsg">'+assigneeOptions()+'</select></div>'+
+      '<div class="f"><label for="fPeriod">기간</label><select class="inp" id="fPeriod"><option value="today"'+(st.period==='today'?' selected':'')+'>오늘</option><option value="7d"'+(st.period==='7d'?' selected':'')+'>7일</option><option value="30d"'+(st.period==='30d'?' selected':'')+'>30일</option><option value="custom"'+(st.period==='custom'?' selected':'')+'>직접 선택</option></select></div>'+
+      '<div class="f" id="custRange" style="display:'+(st.period==='custom'?'flex':'none')+';gap:6px"><div><label class="lbl" style="margin:0" for="fFrom">부터</label><input class="inp" id="fFrom" type="date" value="'+esc(st.from)+'"></div><div><label class="lbl" style="margin:0" for="fTo">까지</label><input class="inp" id="fTo" type="date" value="'+esc(st.to)+'"></div></div>'+
+      '<div class="f" style="max-width:320px;flex-basis:220px"><label for="fQ">검색 (접수번호·본문·요청번호·이메일)</label><input class="inp" id="fQ" type="search" value="'+esc(st.q)+'" placeholder="FB-261008, MG-2610-014"></div>'+
+    '</div>'+
+    '<div class="fb-flag-row"><label><input type="checkbox" id="fDemo"'+(st.demo?' checked':'')+'> DEMO 포함</label><label><input type="checkbox" id="fSuspect"'+(st.suspect?' checked':'')+'> 의심만</label><label><input type="checkbox" id="fMailfail"'+(st.mailfail?' checked':'')+'> 알림 실패만</label><label><input type="checkbox" id="fHasemail"'+(st.hasemail?' checked':'')+'> 회신 이메일 있음</label></div>'+
+    '<div id="res"></div>';
+
+  function rebuildSub(){document.getElementById('fSub').innerHTML=subcodeOptions(st.cat);}
+  document.getElementById('fCat').onchange=function(){st.cat=this.value;st.sub='';rebuildSub();draw();};
+  document.getElementById('fSub').onchange=function(){st.sub=this.value;draw();};
+  document.getElementById('fP').onchange=function(){st.p=this.value;draw();};
+  document.getElementById('fUt').onchange=function(){st.ut=this.value;draw();};
+  document.getElementById('fMode').onchange=function(){st.mode=this.value;draw();};
+  document.getElementById('fLang').onchange=function(){st.lang=this.value;draw();};
+  document.getElementById('fAsg').onchange=function(){st.assignee=this.value;draw();};
+  document.getElementById('fPeriod').onchange=function(){st.period=this.value;draw();};
+  document.getElementById('fFrom').onchange=function(){st.from=this.value;draw();};
+  document.getElementById('fTo').onchange=function(){st.to=this.value;draw();};
+  document.getElementById('fQ').oninput=function(){st.q=this.value.trim();draw();};
+  document.getElementById('fDemo').onchange=function(){st.demo=this.checked;draw();};
+  document.getElementById('fSuspect').onchange=function(){st.suspect=this.checked;draw();};
+  document.getElementById('fMailfail').onchange=function(){st.mailfail=this.checked;draw();};
+  document.getElementById('fHasemail').onchange=function(){st.hasemail=this.checked;draw();};
+  document.getElementById('weeklyBtn').onclick=function(){st.preset=st.preset==='weekly'?'':'weekly';st.warn='';draw();};
+  document.getElementById('summary').addEventListener('click',function(e){
+    var b=e.target.closest('button[data-status]');if(!b)return;
+    var s=b.getAttribute('data-status'),i=st.status.indexOf(s);
+    if(i>=0)st.status.splice(i,1);else st.status.push(s);
+    st.preset='';draw();
+  });
+  document.getElementById('warns').addEventListener('click',function(e){
+    var b=e.target.closest('button[data-warn]');if(!b)return;
+    var w=b.getAttribute('data-warn');st.warn=st.warn===w?'':w;st.preset='';draw();
+  });
+  document.getElementById('res').addEventListener('click',function(e){
+    var th=e.target.closest('[data-sortcol]');if(!th)return;
+    var k=th.getAttribute('data-sortcol');
+    if(k==='created')st.sort=st.sort==='created_desc'?'created_asc':'created_desc';
+    else if(k==='priority')st.sort=st.sort==='priority'?'priority_desc':'priority';
+    draw();
+  });
+  draw();
+});
+})();
+</script>
+</body>
+</html>

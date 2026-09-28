@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ko" data-mgfb-launcher="off">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>피드백 상세 | MICEGO 운영 콘솔</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="app"></div>
+<noscript><p class="nojs">이 화면은 JavaScript가 있어야 표시됩니다. 브라우저 설정에서 JavaScript를 켜 주세요.</p></noscript>
+<script src="../assets/config.js"></script>
+<script src="../assets/mg.js"></script>
+<script src="../assets/feedback.js" defer></script>
+<script src="data-adapter.js"></script>
+<script src="admin.js"></script>
+<script src="partner.js"></script>
+<script src="feedback-console.js"></script>
+<script>
+(function(){
+var A=MICEGO,esc=A.esc;
+A.boot('feedback','피드백 상세',function(main){
+  var id=new URLSearchParams(location.search).get('id')||'';
+  var r,resolveInfo=null;
+
+  function header(r){
+    var flags=FB.flags(r);
+    return '<p class="crumb"><a href="feedback.html">← 피드백</a></p><div class="dh">'+
+      '<h1 class="mono" id="refTitle">'+esc(r.ref)+'</h1><button type="button" class="btn sm" id="copyRef">복사</button>'+
+      FB.schip(r.status)+FB.pchip(r.priority)+(flags?flags:'')+
+      '<span class="small muted">접수 '+A.fmtDT(r.created_at)+' · '+esc(FB.SOURCE[r.source]||r.source)+'</span>'+
+      '<div class="dh-act"><a class="btn" href="feedback.html">목록으로</a></div></div>';
+  }
+
+  function bodyCard(r){
+    var replyLine;
+    if(r.anonymized_at){
+      replyLine='<p class="small muted" style="margin-top:10px">이 접수는 개인정보 보관 기간이 지나 익명화되었습니다. 회신 이메일 등 개인 식별 정보는 파기되었습니다.</p>';
+    }else if(r.reply_email){
+      replyLine='<p class="small" style="margin-top:10px">메일함에서 <b class="mono">'+esc(r.ref)+'</b>(으)로 검색해 알림 메일에 답장하세요. <a href="mailto:'+encodeURIComponent(r.reply_email)+'?subject='+encodeURIComponent('Re: [MICEGO 피드백] '+r.ref)+'" id="mailtoLink">'+esc(r.reply_email)+'(으)로 바로 쓰기</a></p>';
+    }else{
+      replyLine='<p class="small muted" style="margin-top:10px">회신 이메일 없음 — 답장할 수 없습니다.</p>';
+    }
+    var name=r.contact_name?'<p class="small muted" style="margin-top:6px">이름: '+esc(r.contact_name)+'</p>':'';
+    return '<section class="card fb-body" aria-labelledby="h-body"><h2 id="h-body">본문</h2><div class="memo-raw" id="bodyText" style="white-space:pre-wrap">'+esc(r.content)+'</div>'+name+replyLine+'</section>';
+  }
+
+  function catSeg(r){
+    return Object.keys(FB.CAT).map(function(k){return '<button type="button" data-cat="'+k+'" aria-pressed="'+(r.category===k)+'">'+esc(FB.CAT[k])+'</button>';}).join('');
+  }
+  function subSel(r){
+    var subs=FB.SUBCODES[r.category]||{};
+    var keys=Object.keys(subs);
+    if(!keys.length)return '<select class="inp" id="subSel" disabled><option>해당 없음</option></select>';
+    return '<select class="inp" id="subSel"><option value="">선택</option>'+keys.map(function(k){return '<option value="'+k+'"'+(r.subcode===k?' selected':'')+'>'+esc(subs[k])+'</option>';}).join('')+'</select>';
+  }
+  function pGrid(r){
+    return [1,2,3,4].map(function(p){return '<button type="button" class="fb-p'+p+'" data-p="'+p+'" aria-pressed="'+(r.priority===p)+'">P'+p+'</button>';}).join('');
+  }
+  function assigneeSel(r){
+    var o='<option value="">미지정</option>';
+    FB.operators().forEach(function(op){o+='<option value="'+op.id+'"'+(r.assignee===op.id?' selected':'')+'>'+esc(op.name)+'</option>';});
+    return '<select class="inp" id="asgSel" style="max-width:220px;display:inline-block;width:auto">'+o+'</select> <button type="button" class="btn sm" id="asgMe">나에게 배정</button>';
+  }
+  function triageCard(r){
+    return '<section class="card fb-triage" aria-labelledby="h-tg"><h2 id="h-tg">분류</h2>'+
+      '<label class="lbl" style="margin-top:0">대분류 (바꾸면 하위 코드가 초기화됩니다)</label><div class="fb-seg" id="catSeg" role="group" aria-label="대분류">'+catSeg(r)+'</div>'+
+      '<label class="lbl" for="subSel">하위 코드</label><div id="subWrap">'+subSel(r)+'</div>'+
+      '<label class="lbl">우선순위</label><div class="fb-pgrid" id="pGrid" role="group" aria-label="우선순위">'+pGrid(r)+'</div>'+
+      '<label class="lbl">담당자</label><div id="asgWrap">'+assigneeSel(r)+'</div></section>';
+  }
+  function statusButtons(r){
+    var allowed=FB.ALLOWED[r.status]||[];
+    if(!allowed.length)return '<p class="muted small">이 상태에서는 바꿀 수 있는 항목이 없습니다.</p>';
+    var btns='',hints='';
+    allowed.forEach(function(to){
+      var pg=FB.preGuard(r,to);
+      var cls=(to==='on_hold')?'danger':(to==='in_progress'&&r.status==='done')?'':'fwd';
+      btns+='<button type="button" class="btn '+cls+(pg?' fb-disabled':'')+'" data-to="'+to+'"'+(pg?' disabled':'')+'>'+esc(FB.label(r.status,to))+'</button>';
+      if(pg)hints+='<p class="ghint">'+esc(FB.label(r.status,to))+': '+esc(pg)+'</p>';
+    });
+    return '<div class="tbtns" id="tbtns">'+btns+'</div>'+hints;
+  }
+  function statusPanel(r){
+    return '<section class="card fb-triage" aria-labelledby="h-st2"><h2 id="h-st2">상태 바꾸기</h2>'+statusButtons(r)+'</section>';
+  }
+  function noteAdd(){
+    return '<section class="card fb-triage" aria-labelledby="h-nt"><h2 id="h-nt">메모</h2>'+
+      '<div class="memo-add"><label class="sr" for="noteIn">메모 내용</label><input class="inp" id="noteIn" placeholder="이력에 남길 메모"><button type="button" class="btn" id="addNoteBtn">메모 남기기</button></div></section>';
+  }
+
+  function resolveBadge(info,r){
+    if(!info||!info.match){
+      return r.rfp_ref||r.token_kind?'<div class="fb-resolve">연결된 요청을 찾지 못했습니다.</div>':'<p class="muted small">연결된 요청 정보가 없습니다.</p>';
+    }
+    var lv=FB.RESOLVE_LEVEL[info.match]||'';
+    var lines=(info.candidates||[]).map(function(c){return '<div class="mono-s">'+esc(c.rfp_ref)+(c.hotel_name?' · '+esc(c.hotel_name):'')+'</div><a class="small" href="rfp.html?id='+esc(c.rfp_ref)+'" target="_blank" rel="noopener">rfp.html?id='+esc(c.rfp_ref)+'</a>';}).join('');
+    return '<div class="fb-resolve'+(lv?' '+lv:'')+'"><b>'+esc(FB.RESOLVE_LABEL[info.match])+'</b>'+lines+'</div>';
+  }
+  function jsErrCard(r){
+    if(!r.last_js_errors||!r.last_js_errors.length)return '';
+    var rows=r.last_js_errors.map(function(e){return '<div class="small mono" style="margin-top:4px;overflow-wrap:anywhere">'+esc(e.t)+' · '+esc(e.s)+':'+esc(e.l)+'<br>'+esc(e.m)+'</div>';}).join('');
+    return '<details class="fb-tech" open><summary>최근 오류 ('+r.last_js_errors.length+'건)</summary>'+rows+'</details>';
+  }
+  function mailLine(label,status,attempts,error,sentAt,key,r){
+    var line='<div class="fb-mailline"><b>'+label+'</b> <span class="chip">'+esc(FB.MAIL[status]||status)+'</span>'+(attempts?' <span class="small muted">시도 '+attempts+'회</span>':'')+(sentAt?' <span class="small muted">'+A.fmtDT(sentAt)+'</span>':'');
+    if(status==='failed'){
+      line+=' <button type="button" class="btn sm" data-mailretry="'+key+'">알림 다시 보내기</button>';
+    }
+    line+='</div>';
+    if(error)line+='<p class="small muted" style="margin-top:0">'+esc(error)+'</p>';
+    return line;
+  }
+  function techCard(r){
+    var diff=r.submitted_at&&r.created_at?Math.round((r.created_at-r.submitted_at)/1000):null;
+    return '<details class="fb-tech"><summary>기술 정보</summary>'+
+      '<dl class="kv"><dt>체류 시간</dt><dd>'+(r.dwell_ms!=null?Math.round(r.dwell_ms/1000)+'초':'—')+'</dd>'+
+      '<dt>시각 차이</dt><dd>'+(diff!=null?diff+'초':'—')+'</dd>'+
+      '<dt>의심 사유</dt><dd>'+((r.suspect_reasons&&r.suspect_reasons.length)?esc(r.suspect_reasons.join(', ')):'없음')+'</dd>'+
+      '<dt>접수 ID</dt><dd class="mono-s">'+esc(r.client_submission_id)+'</dd>'+
+      (r.token_hash8?'<dt>토큰 해시</dt><dd class="mono-s">'+esc(r.token_hash8)+' ('+esc(FB.TOKEN_KIND[r.token_kind]||r.token_kind)+')</dd>':'')+
+      '</dl></details>';
+  }
+  function contextCard(r){
+    var pageHref=r.page_path?'..'+r.page_path:null;
+    var kv='<dl class="kv">'+
+      '<dt>보낸 사람</dt><dd>'+esc(FB.who(r))+(r.member_id?' · <a href="member.html?id='+esc(r.member_id)+'">회원 상세</a>':'')+'</dd>'+
+      '<dt>페이지</dt><dd>'+(pageHref?'<a href="'+esc(pageHref)+'" target="_blank" rel="noopener">'+esc(r.page_path)+'</a>':'—')+(r.ui_state?' · '+esc(r.ui_state):'')+'</dd>'+
+      '<dt>모드·언어</dt><dd>'+esc(FB.MODE[r.mode]||r.mode)+' · '+esc(FB.LANG[r.lang]||r.lang)+'</dd>'+
+      '<dt>브라우저</dt><dd>'+(r.ua?esc(r.ua):'—')+'</dd>'+
+      '<dt>화면·시간대</dt><dd>'+(r.viewport?esc(r.viewport):'—')+(r.tz?' · '+esc(r.tz):'')+'</dd>'+
+      '<dt>빌드</dt><dd>'+(r.build_version?esc(r.build_version):'—')+'</dd>'+
+      '<dt>이전 페이지</dt><dd>'+(r.referrer?esc(r.referrer):'—')+'</dd>'+
+      '</dl>';
+    return '<section class="card fb-side" aria-labelledby="h-ctx"><h2 id="h-ctx">컨텍스트</h2>'+kv+
+      '<h3>연결된 요청</h3><div id="resolveBox">'+resolveBadge(resolveInfo,r)+'</div>'+
+      jsErrCard(r)+
+      '<h3>메일</h3><div id="mailBox">'+mailLine('운영 알림',r.ops_mail_status,r.ops_mail_attempts,r.ops_mail_error,r.ops_mail_sent_at,'ops',r)+mailLine('접수 확인',r.ack_mail_status,r.ack_mail_attempts,r.ack_mail_error,r.ack_mail_sent_at,'ack',r)+'</div>'+
+      techCard(r)+'</section>';
+  }
+  function timeline(r){
+    var notes=FB.notes(r.id).map(function(n){return {t:n.created_at,html:'<b>'+esc(FB.operatorName(n.author))+'</b> 메모: '+esc(n.body)};});
+    var events=FB.events(r.id).map(function(e){
+      var who=e.actor?esc(FB.operatorName(e.actor)):'시스템';
+      var body;
+      if(e.kind==='status')body=who+' · 상태 '+(e.from_value?FB.STATUS[e.from_value]||e.from_value:'없음')+' → '+FB.STATUS[e.to_value]||e.to_value;
+      else if(e.kind==='triage')body=who+' · 분류 변경('+esc(e.field)+') → '+esc(e.to_value);
+      else if(e.kind==='mail')body=who+' · 메일 '+esc(e.field)+' '+esc(e.from_value)+' → '+esc(e.to_value);
+      else if(e.kind==='anonymize')body='시스템 · 개인정보 익명화 처리';
+      else body=who+' · '+esc(e.kind);
+      return {t:e.created_at,html:body};
+    });
+    var all=notes.concat(events).sort(function(a,b){return a.t-b.t;});
+    var rows=all.map(function(x){return '<li><span class="fb-tl-t">'+A.fmtDT(x.t)+'</span> '+x.html+'</li>';}).join('');
+    return '<section class="card fb-hist" aria-labelledby="h-hi"><h2 id="h-hi">기록</h2><ul class="fb-timeline" id="timeline">'+(rows||'<li class="muted">기록이 없습니다.</li>')+'</ul></section>';
+  }
+
+  function render(){
+    r=FB.get(id);
+    if(!r){
+      document.title='피드백을 찾을 수 없음 | MICEGO 운영 콘솔';
+      main.innerHTML='<div class="empty card"><h1>해당 접수를 찾을 수 없습니다</h1><p>접수 "'+esc(id)+'"에 해당하는 피드백이 없습니다.</p><a class="btn primary" href="feedback.html">피드백으로 돌아가기</a></div>';
+      return;
+    }
+    document.title=r.ref+' | MICEGO 운영 콘솔';
+    main.innerHTML=header(r)+'<div class="fb-detail" style="margin-top:16px">'+bodyCard(r)+triageCard(r)+statusPanel(r)+noteAdd(r)+contextCard(r)+timeline(r)+'</div>';
+    if(r.rfp_ref||r.token_kind){
+      FB.resolveRfp(r).then(function(info){resolveInfo=info;var box=document.getElementById('resolveBox');if(box)box.innerHTML=resolveBadge(info,r);});
+    }
+  }
+  A.onChange=function(){render();};
+
+  function saveTriagePatch(){
+    var patch={category:r.category,subcode:r.subcode,priority:r.priority,assignee:r.assignee};
+    FB.saveTriage(r,patch).then(function(ok){if(ok){render();A.toast('분류를 저장했습니다','ok');}});
+  }
+
+  main.addEventListener('click',function(e){
+    var t=e.target.closest('button');if(!t||!r)return;
+    if(t.hasAttribute('data-cat')){
+      var cat=t.getAttribute('data-cat');
+      if(cat!==r.category){r.category=cat;r.subcode=null;saveTriagePatch();}
+      return;
+    }
+    if(t.hasAttribute('data-p')){
+      var p=Number(t.getAttribute('data-p'));
+      r.priority=(r.priority===p)?null:p;saveTriagePatch();return;
+    }
+    if(t.id==='asgMe'){r.assignee=FB.ME;saveTriagePatch();return;}
+    if(t.id==='copyRef'){
+      var done=function(){A.toast('접수번호를 복사했습니다: '+r.ref,'ok');};
+      try{navigator.clipboard.writeText(r.ref).then(done,function(){A.toast('복사하지 못했습니다. 접수번호: '+r.ref,'info');});}catch(err){A.toast('접수번호: '+r.ref,'info');}
+      return;
+    }
+    if(t.hasAttribute('data-mailretry')){
+      FB.retryMail(r).then(function(ok){if(ok){render();A.toast('알림 메일을 다시 보냈습니다','ok');}});
+      return;
+    }
+    if(t.id==='addNoteBtn'){
+      var v=document.getElementById('noteIn').value.trim();
+      if(!v){A.toast('메모 내용을 입력해 주세요','error');return;}
+      FB.addNote(r,v).then(function(ok){if(ok){render();A.toast('메모를 남겼습니다','ok');}});
+      return;
+    }
+    if(t.hasAttribute('data-to')){
+      var to=t.getAttribute('data-to');
+      doTransition(r,to);
+      return;
+    }
+  });
+  main.addEventListener('change',function(e){
+    var t=e.target;
+    if(t.id==='subSel'){r.subcode=t.value||null;saveTriagePatch();return;}
+    if(t.id==='asgSel'){r.assignee=t.value||null;saveTriagePatch();return;}
+  });
+
+  async function doTransition(r,to){
+    var extra={};
+    if(to==='done'){
+      var isNew=r.status==='new';
+      var keys=isNew?FB.NEW_TO_DONE_KEYS:FB.RESOLUTION_KEYS;
+      var labels=keys.map(function(k){return FB.RESOLUTION[k];});
+      var res=await A.reasonDialog(isNew?'바로 종료':'완료',labels);
+      if(!res)return;
+      var revMap={};keys.forEach(function(k){revMap[FB.RESOLUTION[k]]=k;});
+      extra.resolution=revMap[res.reason];extra.note=res.note;
+    }else if(to==='on_hold'){
+      var n=await A.memoDialog('보류','보류 사유','처리를 잠시 멈추는 이유를 적어 주세요. 이력에 남습니다.','보류하기',true);
+      if(n===null)return;extra.note=n;
+    }else if(to==='in_progress'&&r.status==='done'){
+      var n2=await A.memoDialog('다시 열기','다시 여는 사유','완료된 접수를 다시 처리 중으로 되돌리는 이유를 적어 주세요.','다시 열기',true);
+      if(n2===null)return;extra.note=n2;
+    }
+    var ok=await FB.setStatus(r,to,extra);
+    if(ok){render();A.toast(FB.STATUS[to]+'(으)로 바꿨습니다','ok');}
+  }
+
+  render();
+});
+})();
+</script>
+</body>
+</html>

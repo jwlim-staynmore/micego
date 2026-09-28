@@ -1,0 +1,9 @@
+{
+  "status": 400,
+  "body": {
+    "message": "MG:STATE_CONFLICT",
+    "details": "요청 상태가 바뀌어 처리하지 못했습니다. 새로고침해 주세요.",
+    "hint": null,
+    "code": "P0001"
+  }
+}

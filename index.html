@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<script>document.documentElement.className+=' js-anim';</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<script src="assets/config.js"></script><script src="assets/mg.js"></script><script src="assets/feedback.js" defer></script>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MICEGO 마이스고 · 여행사 / Hotels</title>
+<meta name="description" content="해외 MICE 호텔 역경매 MICEGO. 여행사·기업 행사 담당자는 한국어 페이지로, 호텔·리조트는 영문 페이지로 이동하세요. Hotels &amp; resorts: continue in English.">
+<meta property="og:title" content="MICEGO 마이스고 · 여행사 / Hotels">
+<meta property="og:description" content="해외 MICE 호텔 역경매 MICEGO. 여행사·기업 행사 담당자는 한국어 페이지로, 호텔·리조트는 영문 페이지로 이동하세요. Hotels &amp; resorts: continue in English.">
+<meta property="og:type" content="website">
+<!-- TODO(domain): og:image must be an absolute URL (https://<domain>/og/…) once the domain is fixed -->
+<meta property="og:image" content="og/og-hub.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:locale:alternate" content="en_US">
+<!-- TODO(domain): 도메인 확정 후 주석 해제 / uncomment once the domain is confirmed
+<link rel="canonical" href="https://micego.kr/">
+<link rel="alternate" hreflang="ko" href="https://micego.kr/ko/">
+<link rel="alternate" hreflang="en" href="https://micego.kr/en/">
+<link rel="alternate" hreflang="x-default" href="https://micego.kr/">
+-->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* ===== Reset ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;scroll-padding-top:88px}
+body{overflow-x:hidden;font-family:var(--font-sans);color:var(--ink);background:var(--white);line-height:1.5;-webkit-font-smoothing:antialiased}
+img,svg{display:block;max-width:100%}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:none}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+h1,h2,h3{font-weight:800;letter-spacing:-.02em}
+
+/* ===== Tokens ===== */
+:root{
+  --ink:#0F1E3D;
+  --ink-80:#1F3266;
+  --ink-60:#4A5D8C;
+  --teal:#0B8F86;
+  --teal-deep:#076E67;
+  --teal-bright:#16B5A8;
+  --teal-soft:#E3F5F2;
+  --amber:#FFC24B;
+  --amber-soft:#FFF3D6;
+  --white:#FFFFFF;
+  --bg:#F6F8FB;
+  --bg-warm:#EEF2F6;
+  --line:#E4E8F0;
+  --line-dim:#EEF1F6;
+  --gray:#6B7794;
+  --gray-light:#A0AAC2;
+  --success:#22C55E;
+  --warn:#F59E0B;
+  --error:#EF4444;
+  --amber-deep:#8A5A00;
+
+  --font-display:'Archivo','Pretendard',-apple-system,sans-serif;
+  --font-sans:'Pretendard',-apple-system,BlinkMacSystemFont,sans-serif;
+  --font-mono:'JetBrains Mono','SF Mono',monospace;
+
+  --sh-card:0 1px 2px rgba(15,30,61,.04), 0 4px 12px rgba(15,30,61,.05);
+  --sh-card-hover:0 4px 8px rgba(15,30,61,.06), 0 12px 24px rgba(15,30,61,.08);
+  --sh-elevated:0 8px 20px rgba(15,30,61,.06), 0 24px 48px rgba(15,30,61,.10);
+}
+
+/* ===== Layout utils ===== */
+.container{max-width:1200px;margin:0 auto;padding:0 32px}
+.section{padding:112px 0}
+.section-num{display:block;font:600 12px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--teal-deep);margin-bottom:14px}
+.section-num.on-dark{color:var(--teal-bright)}
+h2{font-family:var(--font-display);font-size:clamp(26px,3.4vw,40px);line-height:1.25;letter-spacing:-.03em}
+.lead{font-size:17px;line-height:1.7;color:var(--gray);max-width:640px;margin-top:14px}
+.section-head{margin-bottom:48px}
+
+.hl{position:relative;display:inline-block;z-index:0}
+.hl::after{content:'';position:absolute;left:-2px;right:-2px;bottom:.06em;height:.34em;background:var(--amber);opacity:.55;border-radius:2px;z-index:-1}
+
+/* ===== Buttons ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border-radius:8px;font-weight:700;font-size:14.5px;padding:13px 24px;transition:all .15s ease;white-space:nowrap;min-height:44px}
+.btn-lg{font-size:15.5px;padding:16px 28px}
+.btn-sm{font-size:13.5px;padding:9px 16px}
+.btn-block{width:100%}
+.btn-primary{background:var(--ink);color:var(--white)}
+.btn-primary:hover{background:var(--teal);transform:translateY(-1px);box-shadow:0 6px 16px rgba(11,143,134,.28)}
+.btn-accent{background:var(--teal);color:var(--white)}
+.btn-accent:hover{background:var(--teal-deep);transform:translateY(-1px)}
+.btn-ghost{background:var(--white);color:var(--ink);border:1.5px solid var(--line)}
+.btn-ghost:hover{border-color:var(--ink);background:var(--bg)}
+.btn-ghost.on-dark{background:transparent;color:var(--white);border:1.5px solid rgba(255,255,255,.3)}
+.btn-ghost.on-dark:hover{border-color:var(--white);background:rgba(255,255,255,.08)}
+.btn-arrow::after{content:'→';transition:transform .15s ease}
+.btn-arrow:hover::after{transform:translateX(3px)}
+:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
+
+/* ===== Card / Chip / Callout ===== */
+.card{background:var(--white);border:1px solid var(--line);border-radius:16px;padding:32px;box-shadow:var(--sh-card);transition:border-color .15s ease,box-shadow .15s ease,transform .15s ease}
+@media (hover:hover){.card:hover{border-color:var(--teal);box-shadow:var(--sh-card-hover);transform:translateY(-2px)}}
+.chip{display:inline-flex;align-items:center;padding:5px 11px;border-radius:6px;background:var(--teal-soft);color:var(--teal-deep);font:600 12px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase}
+.callout{background:var(--teal-soft);border:1px solid rgba(11,143,134,.16);border-radius:12px;padding:20px 22px}
+.callout-label{display:block;font:800 11px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--teal-deep);margin-bottom:8px}
+.callout p{font-size:14.5px;line-height:1.7;color:var(--ink-80)}
+
+/* ===== Reveal animation =====
+   기본값은 항상 "보임"이다. 자바스크립트가 실제로 실행된 경우에만(<html class="js-anim">)
+   opacity:0 진입 애니메이션을 적용한다. 파일 미리보기(iOS Quick Look 등)처럼 스크립트가
+   동작하지 않는 환경에서는 .js-anim 클래스가 붙지 않으므로 모든 콘텐츠가 즉시 보인다. */
+.reveal{opacity:1}
+.js-anim .reveal{opacity:0;transform:translateY(16px);transition:opacity .5s ease,transform .5s ease}
+.js-anim .reveal.is-visible{opacity:1;transform:translateY(0)}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;transition-duration:.01ms!important}
+  .reveal{opacity:1!important;transform:none!important}
+}
+html:not(.js-anim) .reveal{opacity:1!important;transform:none!important}
+
+/* ===== Skip link ===== */
+.skip-link{position:absolute;left:-9999px;top:0;background:var(--ink);color:#fff;padding:12px 20px;border-radius:0 0 8px 0;z-index:200}
+.skip-link:focus{left:0}
+
+/* ===== Header ===== */
+.site-header{position:fixed;top:0;left:0;right:0;height:72px;z-index:100;background:transparent;border-bottom:1px solid transparent;transition:background .2s ease,border-color .2s ease}
+.site-header.is-scrolled{background:rgba(255,255,255,.86);backdrop-filter:blur(14px) saturate(150%);border-bottom:1px solid var(--line)}
+.site-header .container{height:100%;display:flex;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:10px}
+.brand-mark{width:28px;height:28px;border-radius:9px;flex:0 0 auto}
+.brand-word{font-family:var(--font-display);font-weight:800;font-size:21px;letter-spacing:-.02em;white-space:nowrap}
+.brand-word .go{color:var(--teal-deep)}
+.header-nav{display:flex;align-items:center;gap:32px}
+.header-nav a{font-size:14px;color:var(--gray);transition:color .15s ease}
+.header-nav a:hover{color:var(--ink)}
+.header-right{display:flex;align-items:center;gap:16px}
+
+
+.site-footer{background:var(--ink);padding:56px 0 32px;color:rgba(255,255,255,.7)}
+.footer-top{display:grid;grid-template-columns:1fr auto;gap:32px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,.12)}
+.footer-brand{display:flex;align-items:center;gap:10px}
+.footer-brand .brand-word{color:var(--white)}
+.footer-brand .brand-word .go{color:var(--amber)}
+.footer-desc{font-size:13px;color:rgba(255,255,255,.55);margin-top:10px}
+.footer-right{display:flex;flex-direction:column;align-items:flex-end;gap:14px}
+.footer-contact{font-size:14px;color:var(--white)}
+.footer-links{display:flex;gap:18px;font-size:13px;color:rgba(255,255,255,.6)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:24px;flex-wrap:wrap;gap:10px}
+.footer-notice{font-size:12px;color:rgba(255,255,255,.5);max-width:640px}
+.footer-copyright{font:400 11px/1 var(--font-mono);color:rgba(255,255,255,.4)}
+
+body.has-fixed-header{padding-top:72px}
+.site-header a,.site-footer a{text-decoration:none}
+@media (max-width:768px){body.has-fixed-header{padding-top:56px}.container{padding:0 20px}.site-header{height:56px}.site-header .container{height:56px}.brand-mark{width:26px;height:26px}.brand-word{font-size:19px}.footer-top{grid-template-columns:1fr}.footer-bottom{flex-direction:column;align-items:flex-start}}
+
+
+.hub-main{position:relative;padding:136px 0 88px;background:var(--white)}
+.hub-main::before{content:'';position:absolute;inset:0;background:radial-gradient(600px 400px at 82% 12%,var(--teal-soft) 0%,transparent 70%);pointer-events:none}
+.hub-main .container{position:relative;max-width:1040px}
+.hub-head{text-align:center;max-width:680px;margin:0 auto 48px}
+.hub-head .chip{margin-bottom:20px}
+.hub-head h1{font-family:var(--font-display);font-size:clamp(28px,4vw,44px);line-height:1.22;letter-spacing:-.03em}
+.hub-head .h1-en{display:block;font-size:.5em;color:var(--ink-60);letter-spacing:-.01em;margin-top:10px}
+.hub-choose{font:600 12px/1 var(--font-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--teal-deep);margin-top:28px}
+.hub-lead{font-size:16px;line-height:1.7;color:var(--gray);margin-top:14px}
+.mode-cards{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.mode-card{position:relative;display:flex;flex-direction:column;gap:14px;border:1.5px solid var(--line);border-radius:20px;padding:36px;background:var(--white);box-shadow:var(--sh-card);transition:border-color .15s,box-shadow .15s,transform .15s}
+.mode-card.is-hotel{background:var(--ink);border-color:var(--ink);color:var(--white)}
+@media (hover:hover){.mode-card:hover{border-color:var(--teal);box-shadow:var(--sh-card-hover);transform:translateY(-2px)}}
+.mode-card h2{font-family:var(--font-display);font-size:clamp(22px,2.4vw,28px);line-height:1.3}
+.mode-card p{font-size:15px;line-height:1.7;color:var(--gray)}
+.mode-card.is-hotel p,.mode-card.is-hotel li{color:rgba(255,255,255,.72)}
+.mode-card ul li{font-size:14.5px;line-height:1.8;color:var(--ink-80);padding-left:16px;position:relative}
+.mode-card ul li::before{content:'·';position:absolute;left:0;color:var(--teal)}
+.mode-card.is-hotel ul li::before{color:var(--amber)}
+.mode-card .chip{align-self:flex-start}
+.mode-card .chip.on-dark{background:rgba(255,255,255,.1);color:var(--amber)}
+.mode-card-cta{margin-top:auto;display:inline-flex;align-items:center;gap:6px;min-height:44px;font-weight:700;font-size:15px;color:var(--teal-deep)}
+.mode-card.is-hotel .mode-card-cta{color:var(--amber)}
+.mode-card-recent{position:absolute;top:16px;right:16px;font:600 10.5px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:5px;background:var(--amber-soft);color:var(--amber-deep)}
+.mode-card-recent[hidden]{display:none}
+.hub-head h1,.hub-lead,.mode-card h2,.mode-card p{word-break:keep-all}
+.hub-note{text-align:center;font-size:13px;color:var(--gray);margin-top:28px}
+@media (max-width:768px){.hub-main{padding:88px 0 56px}}
+@media (max-width:640px){.mode-cards{grid-template-columns:1fr;gap:16px}.mode-card{padding:24px}}
+
+/* ===== Shared: header additions ===== */
+.site-header.is-solid,html:not(.js-anim) .site-header{background:rgba(255,255,255,.96);border-bottom:1px solid var(--line)}
+.header-right{display:flex;align-items:center;gap:12px}
+.mode-switch{display:inline-flex;border:1.5px solid var(--line);border-radius:999px;background:var(--white);overflow:hidden;flex:0 0 auto}
+.mode-switch a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:0 14px;font:700 13px/1 var(--font-sans);color:var(--gray);white-space:nowrap}
+.mode-switch a[lang=en]{font-family:var(--font-display)}
+.mode-switch a:hover{color:var(--ink);background:var(--bg)}
+.mode-switch a[aria-current],.mode-switch a.is-current{background:var(--ink);color:var(--white)}
+.hdr-cta{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:8px;background:var(--ink);color:var(--white);font:700 13.5px/1 var(--font-sans);white-space:nowrap}
+.hdr-cta:hover{background:var(--teal)}
+.hdr-login{display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:44px;padding:0 8px;font:600 13.5px/1 var(--font-sans);color:var(--ink-60);white-space:nowrap}
+.hdr-login:hover{color:var(--ink)}
+.hdr-login.is-member{color:var(--teal-deep)}
+.nav-menu{display:none}
+.nav-menu summary{list-style:none;display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:1.5px solid var(--line);border-radius:8px;background:var(--white);cursor:pointer}
+.nav-menu summary::-webkit-details-marker{display:none}
+.nav-bars,.nav-bars::before,.nav-bars::after{display:block;width:18px;height:2px;border-radius:1px;background:var(--ink);position:relative;transition:transform .15s}
+.nav-bars::before,.nav-bars::after{content:'';position:absolute;left:0}
+.nav-bars::before{top:-6px}.nav-bars::after{top:6px}
+.nav-menu[open] .nav-bars{background:transparent}
+.nav-menu[open] .nav-bars::before{top:0;transform:rotate(45deg)}
+.nav-menu[open] .nav-bars::after{top:0;transform:rotate(-45deg)}
+.nav-menu-panel{position:absolute;top:100%;left:0;right:0;display:flex;flex-direction:column;background:var(--white);border-bottom:1px solid var(--line);box-shadow:var(--sh-elevated);padding:8px 20px 16px;max-height:calc(100vh - 72px);overflow-y:auto}
+.nav-menu-panel a{display:flex;align-items:center;min-height:48px;border-bottom:1px solid var(--line-dim);font-size:15px;font-weight:600;color:var(--ink)}
+.nav-menu-panel a.nav-menu-cta{justify-content:center;margin-top:12px;border:none;border-radius:8px;background:var(--teal);color:var(--white)}
+.nav-menu-panel a.nav-menu-hub{justify-content:center;border:none;font-size:13px;color:var(--gray)}
+.sr-only{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.footer-links{flex-wrap:wrap;row-gap:10px}
+.footer-modes{display:flex;flex-wrap:wrap;gap:10px 18px;font-size:13px}
+.footer-modes a{color:var(--white)}
+@media (max-width:1200px){.header-nav{gap:24px}}
+@media (max-width:1024px){.header-nav{display:none}.nav-menu{display:block}}
+@media (max-width:768px){.hdr-cta{display:none}.header-right{gap:8px}.nav-menu-panel{padding:8px 16px 16px}.has-mobile-cta .site-footer{padding-bottom:calc(96px + env(safe-area-inset-bottom))}.footer-right{align-items:flex-start}}
+@media (max-width:480px){.brand-tag{display:none}.mode-switch a{padding:0 10px;font-size:12.5px}.hdr-login{padding:0 4px;font-size:12.5px}}
+@media (max-width:400px){.mode-switch a{padding:0 8px}.header-right{gap:4px}.brand-word{font-size:18px}}
+/* ===== /Shared ===== */
+
+</style>
+</head>
+<body>
+<a class="skip-link" href="#hero">본문으로 건너뛰기</a>
+<header class="site-header is-solid" id="siteHeader">
+  <div class="container">
+    <a class="brand" href="index.html" aria-label="MICEGO">
+      <svg class="brand-mark" viewBox="0 0 32 32" role="img" aria-hidden="true">
+        <rect width="32" height="32" rx="9" fill="#0F1E3D"/>
+        <rect x="6.5" y="9" width="14" height="2.6" rx="1.3" fill="#FFFFFF"/>
+        <rect x="6.5" y="14.7" width="11" height="2.6" rx="1.3" fill="#16B5A8"/>
+        <rect x="6.5" y="20.4" width="8" height="2.6" rx="1.3" fill="#FFC24B"/>
+        <circle cx="24.5" cy="16" r="2.6" fill="#FFFFFF"/>
+      </svg>
+      <span class="brand-word">MICE<span class="go">GO</span></span>
+    </a>
+    <div class="header-right">
+      <nav class="mode-switch" aria-label="모드 선택 / Choose mode">
+        <a href="ko/index.html" lang="ko">여행사</a>
+        <a href="en/index.html" lang="en" hreflang="en">Hotels</a>
+      </nav>
+    </div>
+  </div>
+</header>
+<main class="hub-main" id="hero"><div class="container">
+ <div class="hub-head">
+  <span class="chip">OVERSEAS MICE · REVERSE AUCTION</span>
+  <h1><span lang="ko">해외 MICE 호텔 견적, 역경매로</span><span class="h1-en" lang="en">Overseas MICE hotel sourcing, by reverse auction</span></h1>
+  <p class="hub-lead"><span lang="ko">MICEGO(마이스고)는 일정이 확정된 해외 MICE 행사의 요건을 받아, 조건에 맞는 해외 호텔의 제안을 모아 드리는 서비스입니다.</span><br><span lang="en">MICEGO connects Korean MICE organizers with hotels overseas through one standard request brief.</span></p>
+  <p class="hub-choose">이용하실 모드를 선택해 주세요 · <span lang="en">Choose your mode</span></p>
+ </div>
+ <div class="mode-cards">
+  <a class="mode-card" data-mode="ko" href="ko/index.html" lang="ko" hreflang="ko">
+   <span class="mode-card-recent" hidden>최근 방문 · <span lang="en">Last visited</span></span>
+   <span class="chip">한국어 · 여행사 모드</span>
+   <h2>여행사·랜드사·기업 행사 담당자</h2>
+   <p>해외 행사 요건을 한 번 등록하면, 조건에 맞는 해외 호텔의 제안을 모아 영업일 기준 3일 이내에 회신드립니다.</p>
+   <ul><li>일정이 확정된 해외 행사 대상</li><li>회사명·예산은 공급자에게 비공개</li><li>최소 행사 규모 제한 없음</li></ul>
+   <span class="mode-card-cta">여행사 모드로 이동 →</span>
+  </a>
+  <a class="mode-card is-hotel" data-mode="en" href="en/index.html" lang="en" hreflang="en">
+   <span class="mode-card-recent" hidden><span lang="ko">최근 방문</span> · Last visited</span>
+   <span class="chip on-dark">English · Hotel mode</span>
+   <h2>Hotels &amp; resorts</h2>
+   <p>Receive confirmed-date MICE group requests from Korean organizers, in one standard brief.</p>
+   <ul><li>Confirmed-date requests only</li><li>You choose which requests to quote on</li><li>Organizer identity withheld until selection</li></ul>
+   <span class="mode-card-cta">Enter hotel mode →</span>
+  </a>
+ </div>
+ <p class="hub-note"><span lang="ko">상단의 ‘여행사 | Hotels’ 버튼으로 언제든 전환할 수 있습니다.</span> <span lang="en">Switch anytime with the toggle at the top.</span></p>
+</div></main>
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand">
+          <svg class="brand-mark" viewBox="0 0 32 32" role="img" aria-hidden="true">
+            <rect width="32" height="32" rx="9" fill="#1F3266"/>
+            <rect x="6.5" y="9" width="14" height="2.6" rx="1.3" fill="#FFFFFF"/>
+            <rect x="6.5" y="14.7" width="11" height="2.6" rx="1.3" fill="#16B5A8"/>
+            <rect x="6.5" y="20.4" width="8" height="2.6" rx="1.3" fill="#FFC24B"/>
+            <circle cx="24.5" cy="16" r="2.6" fill="#FFFFFF"/>
+          </svg>
+          <span class="brand-word">MICE<span class="go">GO</span></span>
+          <span style="font-size:12px;color:rgba(255,255,255,.5);margin-left:8px">마이스고</span>
+        </div>
+        <p class="footer-desc">해외 MICE 호텔 역경매 · Overseas MICE hotel sourcing</p>
+      </div>
+      <div class="footer-right">
+        <a class="footer-contact" href="mailto:mysteri1984@gmail.com">mysteri1984@gmail.com</a>
+        <div class="footer-links">
+          <a href="ko/privacy.html">개인정보처리방침</a>
+          <a href="ko/contact.html">문의하기</a>
+          <a href="en/contact.html" lang=en>Contact</a>
+          <a href="en/privacy.html" lang=en>Privacy notice</a>
+        </div>
+        
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-notice">해외 MICE 호텔 역경매 · Overseas MICE hotel sourcing</p>
+      <p class="footer-copyright">© 2026 MICEGO. ALL RIGHTS RESERVED.</p><p class="footer-feedback"><a data-mg-feedback-open href="ko/contact.html">의견 보내기</a></p><noscript><p class="footer-feedback-noscript">의견이나 문제 신고는 <a href="ko/contact.html">문의 페이지</a> 또는 <a href="mailto:mysteri1984@gmail.com">이메일</a>로 보내 주세요.</p></noscript>
+    </div>
+  </div>
+</footer>
+<script>(function(){try{var m=localStorage.getItem('micego.mode');var c=m&&document.querySelector('.mode-card[data-mode="'+m+'"]');if(c){var b=c.querySelector('.mode-card-recent');if(b)b.hidden=false;}}catch(e){}})();</script>
+</body>
+</html>

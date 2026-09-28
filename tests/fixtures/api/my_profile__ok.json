@@ -1,0 +1,8 @@
+{
+  "status": 200,
+  "body": {
+    "name": "Test User",
+    "company": "Test Co",
+    "email": "test@example.com"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "status": 422,
+  "body": {
+    "error": {
+      "code": "VALIDATION",
+      "message_ko": "입력 내용을 확인해 주세요.",
+      "fields": [
+        {
+          "name": "email"
+        },
+        {
+          "name": "phone"
+        }
+      ]
+    }
+  }
+}

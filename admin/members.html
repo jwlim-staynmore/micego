@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>회원 | MICEGO 운영 콘솔</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="app"></div>
+<noscript><p class="nojs">이 화면은 JavaScript가 있어야 표시됩니다. 브라우저 설정에서 JavaScript를 켜 주세요.</p></noscript>
+<script src="../assets/config.js"></script>
+<script src="../assets/mg.js"></script>
+<script src="../assets/feedback.js" defer></script>
+<script src="data-adapter.js"></script>
+<script src="admin.js"></script>
+<script src="partner.js"></script>
+<script>
+(function(){
+var A=MICEGO,esc=A.esc;
+A.boot('members','회원',function(main){
+  var q=new URLSearchParams(location.search);
+  var QF={link:{label:'연결 요청 대기',fn:function(m){return A.linkPending().some(function(l){return l.memberId===m.id;});}}};
+  var qf=QF[q.get('filter')]?q.get('filter'):null;
+  var st0=A.MSTATES[q.get('state')]?q.get('state'):'all';
+  var st={quick:qf,seg:qf?'all':st0,q:''};
+  var SEG=[['all','전체'],['active','정상'],['pending_email','이메일 인증 대기'],['pending_phone','휴대전화 인증 대기'],['locked','잠김'],['suspended','이용 정지'],['withdrawn','탈퇴']];
+  function inSeg(m,k){return k==='all'||m.state===k;}
+  function digits(s){return String(s||'').replace(/\D/g,'');}
+  function base(m){
+    if(st.q){
+      var t=(m.name+' '+m.company+' '+m.email).toLowerCase(),ql=st.q.toLowerCase(),qd=digits(st.q);
+      var hit=t.indexOf(ql)>=0||(qd.length>=3&&digits(m.phone).indexOf(qd)>=0);
+      if(!hit)return false;
+    }
+    if(st.quick&&!QF[st.quick].fn(m))return false;
+    return true;
+  }
+  function reqN(m){return A.memberRfps(m).length;}
+  function badges(m){
+    var o='';
+    if(QF.link.fn(m))o+=' <span class="badge amber">연결 요청 대기</span>';
+    if(m.state==='locked')o+=' <span class="badge red">로그인 실패 '+m.fails+'회</span>';
+    return o;
+  }
+  function login(m){return m.lastLoginAt?A.fmtDT(m.lastLoginAt):'<span class="muted">—</span>';}
+  function who(m){return m.state==='withdrawn'?'<span class="muted">탈퇴 회원</span>':esc(m.name);}
+  function table(list){
+    var rows=list.map(function(m){
+      return '<tr data-id="'+m.id+'"><td><a class="hn" href="member.html?id='+m.id+'">'+who(m)+'</a><div class="small muted">'+esc(m.company)+' · '+esc(m.orgType)+'</div>'+badges(m)+'</td><td class="em">'+(m.email?esc(m.email):'<span class="muted">파기됨</span>')+'</td><td class="mono-s">'+A.maskPhone(m.phone)+'</td><td>'+A.mchip(m.state)+'</td><td>'+A.fmtD(m.createdAt)+'</td><td class="num">'+reqN(m)+'건</td><td class="small">'+login(m)+'</td></tr>';
+    }).join('');
+    return '<div class="tbl-wrap mtable"><table><thead><tr><th>이름 · 회사</th><th>이메일</th><th>휴대전화</th><th>상태</th><th>가입일</th><th class="num">요청 수</th><th>마지막 로그인</th></tr></thead><tbody>'+(rows||'<tr><td colspan="7" class="muted">조건에 맞는 회원이 없습니다.</td></tr>')+'</tbody></table></div>';
+  }
+  function cards(list){
+    if(!list.length)return '<div class="mcards"><p class="muted">조건에 맞는 회원이 없습니다.</p></div>';
+    return '<div class="mcards">'+list.map(function(m){
+      var lv=m.state==='locked'?' red':QF.link.fn(m)?' amber':'';
+      return '<a class="mcard'+lv+'" href="member.html?id='+m.id+'" data-id="'+m.id+'"><div class="pc-t"><span class="pc-n">'+who(m)+' · '+esc(m.company)+'</span>'+A.mchip(m.state)+'</div><div class="pc-m">'+(m.email?esc(m.email):'이메일 파기됨')+' · '+A.maskPhone(m.phone)+'</div><div class="pc-m">가입 '+A.fmtD(m.createdAt)+' · 요청 '+reqN(m)+'건 · 마지막 로그인 '+(m.lastLoginAt?A.fmtDT(m.lastLoginAt):'—')+'</div>'+(badges(m)?'<div class="pc-b">'+badges(m)+'</div>':'')+'</a>';
+    }).join('')+'</div>';
+  }
+  function draw(){
+    var pool=A.data().members.filter(base);
+    var list=pool.filter(function(m){return inSeg(m,st.seg);});
+    document.getElementById('res').innerHTML=table(list)+cards(list);
+    document.getElementById('segs').innerHTML=SEG.map(function(s){return '<button type="button" data-s="'+s[0]+'" aria-pressed="'+(st.seg===s[0])+'">'+s[1]+' <b>'+pool.filter(function(m){return inSeg(m,s[0]);}).length+'</b></button>';}).join('');
+    var af=document.getElementById('af');
+    af.innerHTML=st.quick?'<span class="active-filter">필터: '+esc(QF[st.quick].label)+' <button type="button" id="clrq" aria-label="필터 해제">×</button></span>':'';
+    var c=document.getElementById('clrq'); if(c)c.onclick=function(){st.quick=null;history.replaceState(null,'','members.html');draw();};
+    document.getElementById('cnt').textContent=list.length+'명';
+  }
+  main.innerHTML='<div class="page-h"><h1>회원</h1><span class="muted small" id="cnt"></span></div>'+
+    '<p class="small muted" style="margin:-8px 0 14px">여행사·기업 담당자 계정입니다. 호텔은 계정 없이 링크로 응답하므로 여기에 없습니다.</p>'+
+    '<div class="segs" id="segs" role="group" aria-label="상태 구분"></div>'+
+    '<div class="filters"><div class="f" style="max-width:420px;flex-basis:280px"><label for="fq">검색 (이메일 · 휴대전화 · 회사 · 이름)</label><input class="inp" id="fq" type="search" placeholder="hanbit, 010-2345, 한빛투어"></div></div><div id="af"></div><div id="res"></div>';
+  document.getElementById('fq').oninput=function(){st.q=this.value.trim();draw();};
+  document.getElementById('segs').addEventListener('click',function(e){var b=e.target.closest('button');if(!b)return;st.seg=b.getAttribute('data-s');draw();});
+  draw();
+});
+})();
+</script>
+</body>
+</html>

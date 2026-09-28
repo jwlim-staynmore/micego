@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>초대 수락 | MICEGO 운영 콘솔</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div class="ribbon" role="note" id="demoRibbon"><span>DEMO · 예시 화면 · 실제 초대 링크가 아닙니다</span></div>
+<div class="login">
+  <section class="login-brand" aria-label="MICEGO 콘솔 소개">
+    <a class="brand" href="index.html" aria-label="MICEGO"><svg class="brand-mark" viewBox="0 0 32 32" role="img" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0F1E3D"/><rect x="6.5" y="9" width="14" height="2.6" rx="1.3" fill="#FFFFFF"/><rect x="6.5" y="14.7" width="11" height="2.6" rx="1.3" fill="#16B5A8"/><rect x="6.5" y="20.4" width="8" height="2.6" rx="1.3" fill="#FFC24B"/><circle cx="24.5" cy="16" r="2.6" fill="#FFFFFF"/></svg><span class="brand-word">MICE<span class="go">GO</span></span></a>
+    <h1>MICEGO 콘솔 초대</h1>
+    <p>초대받은 계정의 비밀번호를 정하면 바로 콘솔을 쓸 수 있습니다. 링크는 72시간 동안만 유효합니다.</p>
+  </section>
+  <section class="login-form">
+    <form id="af" novalidate>
+      <h2>비밀번호 설정</h2>
+      <p class="muted small" id="who">초대를 확인하는 중…</p>
+      <p class="field-err" id="formErr" role="alert"></p>
+      <label class="lbl" for="pw">새 비밀번호 (10자 이상, 영문·숫자 포함)</label>
+      <input class="inp" id="pw" type="password" autocomplete="new-password" aria-describedby="pw-e">
+      <p class="field-err" id="pw-e" role="alert"></p>
+      <label class="lbl" for="pw2">비밀번호 확인</label>
+      <input class="inp" id="pw2" type="password" autocomplete="new-password" aria-describedby="pw2-e">
+      <p class="field-err" id="pw2-e" role="alert"></p>
+      <label class="chk-row" style="margin-top:12px"><input type="checkbox" id="agree"> 오거나이저·호텔 정보를 견적 성사 목적으로만 쓰고, 열람이 기록된다는 데 동의합니다.</label>
+      <button class="btn primary block" type="submit" style="margin-top:16px" id="afSubmit" disabled>비밀번호 저장하고 시작</button>
+      <p class="demo-note" id="demoNote">DEMO · 실제 인증은 없습니다.</p>
+    </form>
+    <div id="expired" hidden style="padding:8px 0"><h2>초대 링크가 유효하지 않습니다</h2><p class="muted">링크가 만료됐거나 이미 사용됐습니다. 초대한 관리자에게 다시 초대해 달라고 요청해 주세요.</p><a class="btn" href="index.html" style="margin-top:12px">로그인 화면으로</a></div>
+  </section>
+</div>
+<script src="../assets/config.js"></script>
+<script src="../assets/mg.js"></script>
+<script src="../assets/feedback.js" defer></script>
+<script src="data-adapter.js"></script>
+<script>
+(function(){
+  var f=document.getElementById('af'),btn=document.getElementById('afSubmit'),who=document.getElementById('who'),err=document.getElementById('formErr');
+  var client=null,ready=false;
+  function fail(){f.hidden=true;document.getElementById('expired').hidden=false;}
+  function setWho(email){who.textContent=email?email+' 계정의 비밀번호를 정합니다.':'비밀번호를 정합니다.';ready=true;btn.disabled=false;}
+  if(MGA.mode==='api'){
+    var rb=document.getElementById('demoRibbon');if(rb)rb.remove();var dn=document.getElementById('demoNote');if(dn)dn.remove();
+    if(/error=|error_code=/.test(location.hash)){fail();}
+    MG.ready().then(function(c){
+      client=c; if(!c){fail();return;}
+      /* supabase-js 가 초대 링크(#access_token=…&type=invite)를 읽어 세션을 만든다 */
+      var done=false;
+      function check(){c.auth.getSession().then(function(res){var s=res&&res.data&&res.data.session;if(s){done=true;setWho(s.user&&s.user.email);}else if(!done){setTimeout(function(){c.auth.getSession().then(function(r2){var s2=r2&&r2.data&&r2.data.session;if(s2)setWho(s2.user&&s2.user.email);else fail();});},1500);}});}
+      try{c.auth.onAuthStateChange(function(ev,s){if(s&&!done){done=true;setWho(s.user&&s.user.email);}});}catch(e){}
+      check();
+    });
+  } else { setTimeout(function(){setWho('new@tmthai.example');},300); }
+  f.addEventListener('submit',function(e){
+    e.preventDefault(); if(!ready)return;
+    var pw=document.getElementById('pw'),pw2=document.getElementById('pw2'),ok=true;
+    var bad=!(pw.value.length>=10&&/[A-Za-z]/.test(pw.value)&&/[0-9]/.test(pw.value));
+    document.getElementById('pw-e').textContent=bad?'10자 이상, 영문과 숫자를 모두 넣어 주세요':'';pw.classList.toggle('bad',bad);if(bad)ok=false;
+    var bad2=pw2.value!==pw.value;document.getElementById('pw2-e').textContent=bad2?'비밀번호가 서로 다릅니다':'';pw2.classList.toggle('bad',bad2);if(bad2)ok=false;
+    if(!document.getElementById('agree').checked){err.textContent='정보 이용 동의에 체크해 주세요';ok=false;}else err.textContent='';
+    if(!ok)return;
+    btn.disabled=true;
+    if(MGA.mode!=='api'){setTimeout(function(){location.href='dashboard.html?as=partner';},400);return;}
+    client.auth.updateUser({password:pw.value}).then(function(res){
+      if(res.error)throw res.error;
+      return client.auth.getSession();
+    }).then(function(res){
+      var s=res&&res.data&&res.data.session; if(!s)throw new Error('no session');
+      return fetch((MG_CONFIG.supabase.url.replace(/\/$/,''))+'/rest/v1/rpc/console_accept',{method:'POST',headers:{'Content-Type':'application/json',apikey:MG_CONFIG.supabase.anonKey,Authorization:'Bearer '+s.access_token},body:'{}'}).then(function(r){return r.json().then(function(j){if(!r.ok)throw new Error((j&&j.message)||'accept failed');return j;});});
+    }).then(function(){
+      /* 새 app_metadata(role) 가 실린 토큰을 받기 위해 세션을 갱신 */
+      return client.auth.refreshSession().catch(function(){});
+    }).then(function(){location.href='dashboard.html';}).catch(function(e){
+      btn.disabled=false; err.textContent=(e&&e.message)||'저장하지 못했습니다. 링크가 만료됐다면 다시 초대를 요청해 주세요.';
+    });
+  });
+})();
+</script>
+</body>
+</html>

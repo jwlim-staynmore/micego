@@ -1,0 +1,15 @@
+{
+  "status": 409,
+  "body": {
+    "error": {
+      "code": "WITHDRAW_BLOCKED",
+      "blockers": [
+        {
+          "ref": "MG-TEST-014",
+          "track_state": "비딩중",
+          "token": "trk_test_014"
+        }
+      ]
+    }
+  }
+}

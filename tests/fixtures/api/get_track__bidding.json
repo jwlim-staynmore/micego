@@ -1,0 +1,10 @@
+{
+  "status": 200,
+  "body": {
+    "ref": "MG-TEST-014",
+    "state": "bidding",
+    "owner": true,
+    "destination": "Da Nang",
+    "eventType": "Conference"
+  }
+}

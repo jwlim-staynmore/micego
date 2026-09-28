@@ -1,0 +1,15 @@
+{
+  "domain": "",
+  "officialEmail": "",
+  "privacyEmail": "",
+  "operator": {
+    "legalName": "", "brandName": "MICEGO (마이스고)", "representative": "", "bizRegNo": "", "ecommerceRegNo": "",
+    "address": "", "phone": "", "privacyOfficer": {"name": "", "title": "", "email": ""}
+  },
+  "analytics": {"ga4": ""},
+  "siteVerification": {"google": "", "naver": ""},
+  "supabase": {"url": "", "anonKey": "", "functionsUrl": ""},
+  "sms": {"vendor": "solapi", "vendorName": ""},
+  "prod": false,
+  "demo": true
+}

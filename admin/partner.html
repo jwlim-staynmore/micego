@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>파트너 상세 | MICEGO 운영 콘솔</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="app"></div>
+<noscript><p class="nojs">이 화면은 JavaScript가 있어야 표시됩니다. 브라우저 설정에서 JavaScript를 켜 주세요.</p></noscript>
+<script src="../assets/config.js"></script>
+<script src="../assets/mg.js"></script>
+<script src="../assets/feedback.js" defer></script>
+<script src="data-adapter.js"></script>
+<script src="admin.js"></script>
+<script src="partner.js"></script>
+<script>
+(function(){
+var A=MICEGO,esc=A.esc;
+A.boot('partners','파트너 상세',function(main){
+  var id=new URLSearchParams(location.search).get('id')||'';
+  var p,pfTimer=null;
+  function editable(){return p.status==='pending'||p.status==='reviewing';}
+  function header(){
+    var r=A.partnerReview(p);
+    return '<p class="crumb"><a href="partners.html">← 호텔 파트너</a></p><div class="dh"><h1>'+esc(p.name)+'</h1>'+A.pchip(p.status)+(r?'<span class="badge '+(r.level==='ok'?'':r.level)+'">'+r.text+'</span><span class="small muted">심사 기한 '+A.fmtDT(r.due)+'</span>':'')+
+      '<div class="dh-act"><a class="btn" href="partners.html">목록으로</a></div></div>'+
+      (p.riskFlags&&p.riskFlags.length&&A.isPartner()?'<div class="callout warn" style="margin-top:10px"><b>위험 표시가 있는 호텔입니다</b>이 호텔은 본사만 승인할 수 있습니다. 체크리스트를 채워 두면 본사가 검토합니다.</div>':'');
+  }
+  function side(){
+    var al=A.pallowed(p),btns=al.map(function(a){
+      var cls=a==='rejected'||a==='suspended'?'danger':'fwd';
+      return '<button type="button" class="btn '+cls+'" data-to="'+a+'">'+A.pbtnLabel(a,p)+'</button>';
+    }).join('');
+    return '<section class="card" aria-labelledby="h-st"><h2 id="h-st">상태 바꾸기</h2><div class="hint">'+esc(A.PHINT[p.status])+'</div>'+(btns?'<div class="tbtns" id="tbtns">'+btns+'</div>':'<p class="muted small">더 바꿀 수 있는 상태가 없습니다.</p>')+'</section>';
+  }
+  function reqCard(){
+    return '<section class="card" aria-labelledby="h-req"><h2 id="h-req">신청 내용</h2><dl class="kv"><dt>호텔명</dt><dd>'+esc(p.name)+'</dd><dt>소재지</dt><dd>'+esc(p.hotelLocation)+'</dd><dt>단체 수용</dt><dd>'+esc(p.capBand)+'명 (최대 '+A.num(p.cap)+'명)</dd><dt>연회 공간</dt><dd>'+(p.ballroom?'있음':'없음 · 볼룸이 없어도 승인합니다')+'</dd>'+
+      '<dt>담당자</dt><dd>'+esc(p.contactName)+'</dd><dt>이메일</dt><dd>'+esc(p.email)+'</dd><dt>연락처</dt><dd>'+esc(p.contactPhone)+'</dd><dt>소개</dt><dd>'+esc(p.description)+'</dd><dt>신청 일시</dt><dd>'+A.fmtDT(p.appliedAt)+'</dd></dl></section>';
+  }
+  function sumHtml(){
+    var c=A.partnerChecks(p);
+    return '<ul class="chk-list" id="chkList">'+c.items.map(function(x){return '<li><span class="mk '+(x.ok?'ok':'no')+'">'+(x.ok?'✓ 충족':'✕ 미충족')+'</span><span>'+esc(x.label)+'</span></li>';}).join('')+'</ul>'+
+      (c.missing.length?'<p class="ghint" id="chkMiss">승인하려면 필요: '+esc(c.missing.join(', '))+'</p>':'<p class="okline" id="chkMiss">승인 조건을 모두 충족했습니다.</p>');
+  }
+  function chkCard(){
+    var c=p.check,ch=A.partnerChecks(p),dis=editable()?'':' disabled';
+    var domNote=ch.match?'<p class="okline" style="margin-top:0">이메일 도메인이 호텔 도메인과 같습니다.</p>':'<p class="ghint" style="margin-top:0">'+(ch.personal?'개인 메일('+esc(p.email.split('@')[1])+')로 신청했습니다.':'이메일 도메인이 호텔 도메인('+esc(p.hotelDomain)+')과 다릅니다.')+' 소속 확인 방법을 남겨 주세요.</p>';
+    return '<section class="card" aria-labelledby="h-ck"><h2 id="h-ck">심사 체크리스트</h2><p class="sub">승인 조건은 해외 소재 · 단체 50명 이상 · 담당자 연락처 확인입니다. 볼룸이 없어도 승인합니다.</p>'+
+      '<div class="chk-in"><label class="lbl" for="ckUrl" style="margin-top:0">공식 사이트 또는 지도 URL</label><input class="inp" id="ckUrl" data-k="url" type="url" inputmode="url" placeholder="https://" value="'+esc(c.url)+'"'+dis+'>'+
+      '<label class="chk-row"><input type="checkbox" data-k="exists"'+(c.exists?' checked':'')+dis+'> 실재하는 숙박시설임을 확인했습니다</label></div>'+
+      '<div class="chk-in">'+domNote+(ch.match?'':'<label class="lbl" for="ckAff" style="margin-top:0">소속 확인 방법</label><textarea class="inp" id="ckAff" data-k="affil" rows="2" placeholder="예: 호텔 대표번호로 전화해 담당자 재직 확인"'+dis+'>'+esc(c.affil)+'</textarea>')+'</div>'+
+      '<label class="chk-row"><input type="checkbox" data-k="capOk"'+(c.capOk?' checked':'')+dis+'> 단체 수용 규모가 신청서와 일치합니다</label>'+
+      '<label class="chk-row"><input type="checkbox" data-k="contactOk"'+(c.contactOk?' checked':'')+dis+'> 담당자 연락처를 확인했습니다</label>'+
+      '<h3>판정</h3><div id="chkSum">'+sumHtml()+'</div></section>';
+  }
+  function fmtInv(x){return '<tr><td><span class="mono">'+esc(x.rfpId)+'</span>'+(x.live?'':' <span class="badge">과거</span>')+'</td><td>'+x.round+'</td><td>'+A.fmtDT(x.invitedAt)+'</td><td>'+A.invChip(x.status)+(x.inaccurate?' <span class="badge red">부정확</span>':'')+'</td><td>'+(x.submittedAt?A.fmtDT(x.submittedAt):'—')+'</td><td>'+(x.status==='submitted'?'<label class="toggle"><input type="checkbox" data-inacc="'+esc(x.key)+'"'+(x.inaccurate?' checked':'')+'> 부정확</label>':'')+'</td></tr>';}
+  function invCard(){
+    var l=A.partnerInvs(p.id);
+    return '<section class="card" aria-labelledby="h-iv"><h2 id="h-iv">초대 이력</h2>'+(l.length?'<div class="tbl-wrap"><table id="invTable"><thead><tr><th>RFP</th><th>라운드</th><th>초대일</th><th>상태</th><th>제출일</th><th>견적 표시</th></tr></thead><tbody>'+l.map(fmtInv).join('')+'</tbody></table></div>':'<p class="muted small">아직 초대받은 기록이 없습니다.</p>')+'</section>';
+  }
+  function statCard(){
+    var s=A.partnerStats(p.id),fl=A.partnerFlag(p);
+    return '<section class="card" aria-labelledby="h-sc"><h2 id="h-sc">응답 통계</h2>'+
+      (fl.length?'<div class="flagbox" id="flagBox"><b>중지 검토</b>'+esc(fl.join(' · '))+'. 아래 이력을 확인하고 필요하면 상태 바꾸기에서 중지하세요.</div>':'')+
+      (s.n?'<div class="stat-row"><div><div class="v">'+s.n+'</div><div class="k">초대</div></div><div><div class="v">'+s.pSub+'%</div><div class="k">제출 '+s.sub+'건</div></div><div><div class="v">'+s.pDec+'%</div><div class="k">거절 '+s.dec+'건</div></div><div><div class="v">'+s.pExp+'%</div><div class="k">마감(무응답) '+s.exp+'건</div></div></div>':'<p class="muted small">통계는 초대를 받은 뒤부터 쌓입니다.</p>')+
+      '<p class="small muted">중지 검토 표시 기준: 최근 초대 3건 연속 마감, 또는 부정확 견적 2건 이상 (승인 파트너만).</p></section>';
+  }
+  function histCard(){
+    var rows=p.history.slice().sort(function(a,b){return a.t-b.t;}).map(function(h){
+      var tr=h.to?(h.from?A.pchip(h.from)+' → ':'')+A.pchip(h.to):'<span class="muted">메모</span>';
+      return '<tr><td style="white-space:nowrap" class="mono">'+A.fmtDT(h.t)+'</td><td>'+esc(h.actor)+'</td><td style="white-space:nowrap">'+tr+'</td><td>'+esc(h.memo)+'</td></tr>';
+    }).join('');
+    return '<section class="card" aria-labelledby="h-hi"><h2 id="h-hi">이력</h2><div class="tbl-wrap"><table id="histTable"><thead><tr><th>시각</th><th>주체</th><th>상태</th><th>사유 · 메모</th></tr></thead><tbody>'+rows+'</tbody></table></div></section>';
+  }
+  function render(){
+    p=A.partner(id);
+    if(!p){document.title='파트너를 찾을 수 없음 | MICEGO 운영 콘솔';main.innerHTML='<div class="empty card"><h1>해당 파트너를 찾을 수 없습니다</h1><p>파트너 "'+esc(id)+'"에 해당하는 신청이 없습니다.</p><a class="btn primary" href="partners.html">호텔 파트너로 돌아가기</a></div>';return;}
+    document.title=p.name+' | MICEGO 운영 콘솔';
+    main.innerHTML=header()+'<div class="detail" style="margin-top:16px"><aside class="dside" id="dside" aria-label="상태 전이">'+side()+'</aside><div class="dmain stack">'+reqCard()+MICEGO_PTR.hotelCard(p)+chkCard()+statCard()+invCard()+histCard()+'</div></div>';
+  }
+  A.onChange=function(){render();window.scrollTo(0,0);};
+  main.addEventListener('click',function(e){var pb=e.target.closest('button[data-ptr]');if(pb&&p){MICEGO_PTR.handleHotelAction(pb,p,render);return;}var b=e.target.closest('button[data-to]');if(b&&p)A.partnerRequest(p.id,b.getAttribute('data-to'));});
+  function saveField(t){
+    if(!p||!editable())return;var k=t.getAttribute('data-k');if(!k)return;
+    p.check[k]=t.type==='checkbox'?t.checked:t.value;
+    document.getElementById('chkSum').innerHTML=sumHtml();
+    if(!(window.MGA&&MGA.mode==='api')){A.save();return;}
+    var pid=p.id,patch=JSON.parse(JSON.stringify(p.check));
+    if(pfTimer)clearTimeout(pfTimer);
+    pfTimer=setTimeout(function(){A.persist('admin_partner_update',{p_code:pid,p_patch:{check:patch}},function(){});},500);
+  }
+  main.addEventListener('input',function(e){if(e.target.getAttribute('data-k'))saveField(e.target);});
+  main.addEventListener('change',function(e){
+    var t=e.target;
+    if(t.getAttribute('data-k')){saveField(t);return;}
+    var ik=t.getAttribute&&t.getAttribute('data-inacc');
+    if(ik){
+      var checked=t.checked,seg=ik.split('|'),rfpId=seg[0],round=Number(seg[1]),hotelId=seg[2];
+      var r=A.get(rfpId);
+      var invRow=r?r.invitations.filter(function(i){return i.hotelId===hotelId&&i.round===round&&i.status!=='reinvited';})[0]:null;
+      var localFn=function(){A.data().inaccMarks[ik]=checked;};
+      var after=function(ok){if(ok){var y=window.scrollY;render();window.scrollTo(0,y);A.toast(checked?'부정확 견적으로 표시했습니다':'표시를 해제했습니다','ok');}};
+      /* 과거(archived) 이력엔 살아있는 invitation 행이 없어 서버에 반영할 수 없다 -- 로컬만 갱신한다 */
+      if(window.MGA&&MGA.mode==='api'&&!invRow){localFn();A.save();after(true);}
+      else A.persist('admin_invitation_flag',{p_invitation_id:invRow?invRow.id:null,p_inaccurate:checked},localFn).then(after);
+    }
+  });
+  render();
+});
+})();
+</script>
+</body>
+</html>

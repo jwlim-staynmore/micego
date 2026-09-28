@@ -1,0 +1,17 @@
+# Vercel 정적 배포에서 제외 — 소스·스펙·백엔드·시드·빌드 스크립트는 공개 사이트에 올리지 않는다.
+# (admin/, docs/, emails/ 는 콘솔·내부 문서라 현재는 배포되지만 robots 차단만 있음 → DECISIONS.md O-1 에서 접근 제한 방식 결정)
+supabase/
+src/
+legal/
+tests/
+__pycache__/
+shots/
+shots3/
+admin_shots/
+fb_shots/
+*.py
+*.md
+requirements.txt
+.env.example
+.gitignore
+_headers

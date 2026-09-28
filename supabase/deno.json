@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "lib": ["deno.window"],
+    "strict": true
+  },
+  "test": {
+    "include": ["functions/_tests/"]
+  }
+}

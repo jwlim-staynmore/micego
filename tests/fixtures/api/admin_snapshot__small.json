@@ -1,0 +1,92 @@
+{
+  "status": 200,
+  "body": {
+    "tick": 0,
+    "rfps": [
+      {
+        "id": "MG-TEST-001",
+        "token": "trk_1",
+        "state": "verifying",
+        "round": 1,
+        "createdAt": 1758844800000,
+        "verifyingAt": 1758844800000,
+        "destination": "Da Nang",
+        "eventType": "Conference",
+        "headcount": 80,
+        "start": "2026-11-01",
+        "end": "2026-11-03",
+        "twin": 30,
+        "king": 10,
+        "ballroom": "필요 · 개회식",
+        "publicMemo": "",
+        "rawMemo": "",
+        "organizer": {
+          "company": "Test Co",
+          "contact": "Test Contact",
+          "email": "test@example.com",
+          "phone": "010-0000-0000",
+          "budget": "미기재"
+        },
+        "anonReviewed": true,
+        "anonAt": null,
+        "deadline": null,
+        "invitations": [],
+        "quotes": [],
+        "connectDone": false,
+        "history": [],
+        "ownerId": null,
+        "pickOtp": null
+      },
+      {
+        "id": "MG-TEST-002",
+        "token": "trk_2",
+        "state": "open",
+        "round": 1,
+        "createdAt": 1758844800000,
+        "verifyingAt": 1758844800000,
+        "destination": "Bangkok",
+        "eventType": "Incentive",
+        "headcount": 120,
+        "start": "2026-12-01",
+        "end": "2026-12-03",
+        "twin": 40,
+        "king": 20,
+        "ballroom": "불필요",
+        "publicMemo": "",
+        "rawMemo": "",
+        "organizer": {
+          "company": "Test Co 2",
+          "contact": "Test Contact 2",
+          "email": "test2@example.com",
+          "phone": "010-1111-2222",
+          "budget": "미기재"
+        },
+        "anonReviewed": true,
+        "anonAt": 1758844800000,
+        "deadline": null,
+        "invitations": [],
+        "quotes": [],
+        "connectDone": false,
+        "history": [],
+        "ownerId": null,
+        "pickOtp": null
+      }
+    ],
+    "partners": [],
+    "invArchive": [],
+    "inaccMarks": {},
+    "holidays": [],
+    "sendLog": [],
+    "members": [],
+    "shareLinks": [],
+    "linkRequests": [],
+    "memberAudit": [],
+    "memberLog": [],
+    "failures": [],
+    "metrics": {
+      "month": "2026-09",
+      "base": 2,
+      "items": []
+    }
+  }
+}

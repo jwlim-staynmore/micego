@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Playwright 검증 스크립트가 남기는 스크린샷·스크래치 (재생성 가능)
+shots/
+shots3/
+admin_shots/
+fb_shots/
+/tmp/
+
+# Supabase 로컬
+supabase/.temp/
+supabase/.branches/
+.env
+.env.*
+!.env.example
+
+# OS·에디터
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# 압축본은 리포지토리에 넣지 않는다 (배포·전달용은 태그/릴리스로)
+*.zip

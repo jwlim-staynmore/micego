@@ -1,0 +1,7 @@
+{
+  "status": 200,
+  "body": {
+    "state": "confirm",
+    "property": "Test Hotel"
+  }
+}

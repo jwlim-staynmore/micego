@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
+<meta charset="UTF-8">
+<meta name="micego-build" content="2026.09.27-0">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>견적 상세 | MICEGO 운영 콘솔</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%230F1E3D'/%3E%3Crect x='6.5' y='9' width='14' height='2.6' rx='1.3' fill='%23FFFFFF'/%3E%3Crect x='6.5' y='14.7' width='11' height='2.6' rx='1.3' fill='%2316B5A8'/%3E%3Crect x='6.5' y='20.4' width='8' height='2.6' rx='1.3' fill='%23FFC24B'/%3E%3Ccircle cx='24.5' cy='16' r='2.6' fill='%23FFFFFF'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+<div id="app"></div>
+<noscript><p class="nojs">이 화면은 JavaScript가 있어야 표시됩니다. 브라우저 설정에서 JavaScript를 켜 주세요.</p></noscript>
+<script src="../assets/config.js"></script>
+<script src="../assets/mg.js"></script>
+<script src="../assets/feedback.js" defer></script>
+<script src="data-adapter.js"></script>
+<script src="admin.js"></script>
+<script src="partner.js"></script>
+<script>
+(function(){
+var A=MICEGO,esc=A.esc;
+A.boot('rfps','견적 상세',function(main){
+  var id=new URLSearchParams(location.search).get('id')||'';
+  var draftMemo=null;
+
+  /* ---------- 익명화 플래그 ---------- */
+  function flagList(r,text){
+    var out=[];
+    function add(kind,re){var m=text.match(re)||[];m.forEach(function(v){if(!out.some(function(o){return o.v===v;}))out.push({k:kind,v:v});});}
+    var co=(r.organizer.company||'').replace(/\(주\)|주식회사|㈜/g,'').trim();
+    if(co&&text.indexOf(co)>=0)out.push({k:'회사명',v:co});
+    var nm=(r.organizer.contact||'').split(' ')[0];
+    if(nm&&text.indexOf(nm)>=0)out.push({k:'사람 이름',v:nm});
+    add('이메일',/[\w.+-]+@[\w-]+(?:\.[\w-]+)+/g);
+    add('전화번호',/0\d{1,2}-?\d{3,4}-?\d{4}/g);
+    add('금액',/\d[\d,.]*\s?(?:만\s?원|원|USD|KRW|VND|THB|달러)|\$\s?\d[\d,.]*/gi);
+    if(text.indexOf('예산')>=0)out.push({k:'금지어',v:'예산'});
+    return out;
+  }
+  function hl(text,fl){
+    if(!fl.length)return esc(text);
+    var vs=fl.map(function(f){return f.v;}).sort(function(a,b){return b.length-a.length;}).map(function(v){return v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');});
+    var re=new RegExp(vs.join('|'),'g'),o='',last=0,m;
+    while((m=re.exec(text))){o+=esc(text.slice(last,m.index))+'<mark>'+esc(m[0])+'</mark>';last=m.index+m[0].length;if(m[0].length===0)re.lastIndex++;}
+    return o+esc(text.slice(last));
+  }
+  function flagSummary(fl){return fl.length?'<ul class="flaglist">'+fl.map(function(f){return '<li>'+f.k+': '+esc(f.v)+'</li>';}).join('')+'</ul>':'<p class="okline">가려야 할 내용이 발견되지 않았습니다.</p>';}
+
+  /* ---------- 섹션 ---------- */
+  function header(r){
+    var s=A.sla(r),slaH='';
+    if(s)slaH=s.level==='ok'?'<span class="badge">'+esc(s.okText)+'</span>':'<span class="badge '+s.level+'">'+esc(s.text)+'</span>';
+    return '<p class="crumb"><a href="rfps.html">← 견적 관리</a></p><div class="dh"><h1 class="mono">'+r.id+'</h1>'+A.chip(r.state)+'<span class="badge">라운드 '+r.round+'</span>'+slaH+
+      '<div class="dh-act">'+((A.isPartner&&A.isPartner())?'':'<button type="button" class="btn" id="copyTrack">추적 링크 복사</button>')+'<a class="btn" href="rfps.html">목록으로</a></div></div>';
+  }
+  function side(r){
+    var al=A.allowed(r),btns='',hints='';
+    al.forEach(function(a){
+      var cls=(a==='rejected'||a==='cancelled')?'danger':(a==='rebid'||a==='collecting'||(a==='lost'&&r.state==='collecting'))?'':'fwd';
+      btns+='<button type="button" class="btn '+cls+'" data-to="'+a+'">'+A.btnLabel(a)+'</button>';
+      var g=A.guard(r,a);if(g)hints+='<p class="ghint">'+esc(A.btnLabel(a))+': '+esc(g)+'</p>';
+    });
+    var extra='';
+    if(r.state==='bidding'){var ld=A.latestDeadline(r);extra='<p class="small muted" id="autoNote" style="margin-top:12px">초대별 마감이 모두 지났거나 모든 호텔이 응답하면 시스템이 10분 안에 취합중으로 넘깁니다.'+(ld?' 가장 늦은 초대 마감은 <b>'+A.fmtDT(ld)+'</b>입니다.':'')+' 모두 제출됐다면 직접 넘길 수 있습니다.</p>';}
+    return '<section class="card" aria-labelledby="h-tr"><h2 id="h-tr">상태 전이</h2><p class="hint">'+esc(A.hint(r.state))+'</p>'+
+      (al.length?'<div class="tbtns" id="tbtns">'+btns+'</div>'+hints:'<p class="muted small">이 상태에서는 바꿀 수 있는 항목이 없습니다.</p>')+extra+'</section>';
+  }
+  function requestCard(r){
+    return '<section class="card" aria-labelledby="h-req"><h2 id="h-req">요청 내용</h2><dl class="kv">'+
+      '<dt>행사 유형</dt><dd>'+esc(r.eventType)+'</dd><dt>목적지</dt><dd>'+esc(r.destination)+'</dd><dt>행사일</dt><dd>'+A.fmtDay(r.start)+' ~ '+A.fmtDay(r.end)+'</dd>'+
+      '<dt>인원</dt><dd>'+esc(r.headcountLabel||r.headcount+'명')+'</dd><dt>객실</dt><dd>트윈 '+r.twin+'실 · 킹 '+r.king+'실</dd><dt>볼룸·목적</dt><dd>'+esc(r.ballroom)+'</dd><dt>공개 메모</dt><dd>'+esc(r.publicMemo||'—')+'</dd></dl></section>';
+  }
+  function organizerCard(r){
+    var o=r.organizer;
+    if(o&&o.masked){var ic=window.MICEGO_PTR&&MICEGO_PTR.identityCard(r);if(ic)return ic;}
+    return '<section class="card" aria-labelledby="h-org"><h2 id="h-org">오거나이저 정보 <span class="badge red">호텔에 보이지 않음</span></h2><dl class="kv"><dt>회사명</dt><dd>'+esc(o.company)+'</dd><dt>담당자</dt><dd>'+esc(o.contact)+'</dd><dt>이메일</dt><dd>'+esc(o.email)+'</dd><dt>전화</dt><dd>'+esc(o.phone)+'</dd><dt>예산</dt><dd>'+esc(o.budget)+'</dd><dt>원문 메모</dt><dd>'+esc(r.rawMemo)+'</dd></dl></section>';
+  }
+  function ownerCard(r){
+    var m=r.ownerId?A.member(r.ownerId):null,ph=m?m.phone:r.organizer.phone;
+    var own=m?'회원 · <a href="member.html?id='+m.id+'" id="ownerLink">'+esc(A.memberName(m))+'</a> <span class="muted">('+esc(m.company)+')</span>':'비회원 <span class="muted">· 이 요청은 계정 없이 접수됐습니다. 같은 이메일로 가입하면 자동으로 연결됩니다.</span>';
+    var sl=A.data().shareLinks.filter(function(l){return l.rfpId===r.id;});
+    var shr;
+    if(!m)shr='<span class="muted">해당 없음 (공유 링크는 회원만 만듭니다)</span>';
+    else if(!sl.length)shr='<span class="muted">만든 링크 없음</span>';
+    else{var l=sl[sl.length-1],s=A.shareState(l),ex=A.shareExpiry(l);shr=A.shareChip(s)+' <span class="small muted">보기 전용 · 열람 '+l.views+'회 · 만든 시각 '+A.fmtDT(l.createdAt)+(s==='active'?' · '+(ex?'만료 '+A.fmtDT(ex):'종료 후 30일에 만료'):'')+'</span>';}
+    var otp;
+    if(r.state==='won'){
+      var o=r.pickOtp;
+      otp=(o&&!o.operator&&o.at)?'<b>완료</b> '+A.toInput(o.at).replace('T',' ')+' ('+A.maskPhone(o.phone||ph)+')':'<span class="warn-cell">인증 기록 없음</span> <span class="small muted">운영자가 오거나이저의 이메일 선택을 확인하고 성사로 닫았습니다</span>';
+    }else if(r.state==='delivered')otp='<span class="muted">대기 · 오거나이저가 제안을 고르면 등록 휴대전화 '+A.maskPhone(ph)+'(으)로 인증번호(ORG_PICK_OTP)를 보냅니다</span>';
+    else otp='<span class="muted">해당 없음</span>';
+    return '<section class="card" aria-labelledby="h-own"><h2 id="h-own">소유 · 공유 · 선택 인증</h2><dl class="kv" id="ownerBox"><dt>소유자</dt><dd>'+own+'</dd><dt>공유 링크</dt><dd>'+shr+'</dd><dt>선택 인증</dt><dd>'+otp+'</dd></dl></section>';
+  }
+  function anonCard(r){
+    if(r.state!=='verifying'&&r.state!=='open')return '';
+    var text=draftMemo!==null?draftMemo:r.publicMemo,fl=flagList(r,text),rf=flagList(r,r.rawMemo);
+    var done=r.anonReviewed?'<p class="okline" id="anonState">✓ 익명화 검토 완료 · '+A.fmtDT(r.anonAt)+'</p><button type="button" class="btn" id="unmarkAnon" style="margin-top:8px">완료 표시 취소</button>':
+      '<button type="button" class="btn primary" id="markAnon">익명화 검토 완료 표시</button><p class="ghint" id="anonState">아직 검토 완료로 표시되지 않았습니다. 오픈 전에 꼭 눌러 주세요.</p>';
+    return '<section class="card" aria-labelledby="h-an"><h2 id="h-an">익명화 검토</h2><p class="sub">회사명·사람 이름·전화·이메일·금액·"예산"은 공개 메모에 적지 않습니다. 완료 표시는 남은 항목이 없어야 눌립니다.</p><div class="panel-cols"><div><label class="lbl" style="margin-top:0">원문 메모 (운영자만 봄)</label><div class="memo-raw" id="rawMemo">'+hl(r.rawMemo,rf)+'</div></div>'+
+      '<div><label class="lbl" for="memoPub" style="margin-top:0">공개 메모 (호텔에 보임)</label><textarea class="inp" id="memoPub" rows="5">'+esc(text)+'</textarea><div class="memo-raw" id="memoPrev" style="min-height:0;margin-top:8px" aria-live="polite">'+hl(text,fl)+'</div><div id="flagBox">'+flagSummary(fl)+'</div></div></div>'+
+      '<div class="memo-add"><button type="button" class="btn" id="saveMemo">공개 메모 저장</button>'+done+'</div></section>';
+  }
+  function inviteCard(r){
+    if(r.state!=='open'&&r.state!=='bidding')return '';
+    var dl=r.deadline||A.addBusinessDays(A.NOW,r.headcount>=200?5:3);
+    var invitedIds=A.curInv(r).map(function(i){return i.hotelId;});
+    var cands=A.data().partners.filter(function(p){return p.status==='approved'&&p.dest===r.destination&&invitedIds.indexOf(p.id)<0;});
+    var needBall=/^필요/.test(r.ballroom);
+    var list=cands.map(function(p){
+      var tags='';
+      if(p.cap<r.headcount)tags+=' <span class="badge amber">수용 부족</span>';
+      if(needBall&&!p.ballroom)tags+=' <span class="badge amber">볼룸 없음</span>';
+      return '<li><label><input type="checkbox" data-p="'+p.id+'"><span><b>'+esc(p.name)+'</b>'+tags+'<span class="pm" style="display:block">수용 '+p.cap+'명 · 볼룸 '+(p.ballroom?'있음':'없음')+'</span></span></label></li>';
+    }).join('');
+    return '<section class="card" aria-labelledby="h-inv"><h2 id="h-inv">마감 · 초대</h2>'+
+      '<label class="lbl" for="dlInput" style="margin-top:0">견적 마감일시 (KST)</label><div class="memo-add" style="margin-top:0"><input class="inp" style="max-width:260px" type="datetime-local" id="dlInput" value="'+A.toInput(dl)+'"><button type="button" class="btn" id="saveDl">마감 저장</button></div>'+
+      '<p class="small muted" style="margin-top:6px">기본값은 오늘부터 3영업일 후 18:00 KST이고, 200명 이상 대형 행사는 5영업일입니다. 호텔 현지 주말은 피하세요. 지금 저장된 마감: <b id="dlNow">'+(r.deadline?A.fmtDT(r.deadline):'미설정')+'</b>. 초대를 보내면 그 시점에 저장된 마감이 초대에 기록됩니다.</p>'+
+      '<h3>승인 파트너 · '+esc(r.destination)+'</h3>'+(cands.length?'<ul class="plist" id="plist">'+list+'</ul>':'<p class="muted small">초대할 수 있는 승인 파트너가 더 없습니다.</p>')+
+      '<p class="ghint" id="invWarn" role="status"></p><div class="memo-add"><button type="button" class="btn primary" id="sendInv"'+(cands.length?'':' disabled')+'>초대 보내기</button></div></section>';
+  }
+  function invTable(r){
+    var rows=A.roundInv(r),del=r.state==='delivered',fin=(r.state==='won'||r.state==='lost');
+    if(!rows.length)return '<section class="card" aria-labelledby="h-it"><h2 id="h-it">초대 현황</h2><p class="muted small">아직 초대한 호텔이 없습니다.</p></section>';
+    var body=rows.map(function(i){
+      var act='';
+      if(A.followup(r)&&(i.status==='invited'||i.status==='viewed'))act+='<span class="badge amber">팔로업 필요</span> <a class="btn sm" href="mailto:'+esc(i.email)+'?subject='+encodeURIComponent('['+r.id+'] 견적 제출 안내')+'">팔로업 메일</a>';
+      if(r.state==='bidding'&&(i.status==='invited'||i.status==='viewed'||i.status==='expired')&&r.deadline&&i.deadline!==r.deadline)act+=(act?' ':'')+'<button type="button" class="btn sm" data-reinvite="'+i.id+'" aria-label="'+esc(i.hotel)+' 재초대">재초대</button>';
+      if(del&&i.status==='submitted')act='<div class="sel-btns"><button type="button" class="btn sm'+(i.sel==='selected'?' primary':'')+'" data-sel="selected" data-inv="'+i.id+'" aria-pressed="'+(i.sel==='selected')+'">선정</button><button type="button" class="btn sm'+(i.sel==='notselected'?' primary':'')+'" data-sel="notselected" data-inv="'+i.id+'" aria-pressed="'+(i.sel==='notselected')+'">미선정</button></div>';
+      else if((del||fin)&&i.sel)act+=(i.sel==='selected'?'<span class="badge teal">선정</span>':'<span class="badge">미선정</span>');
+      if(window.MICEGO_PTR){var pc=MICEGO_PTR.proxyCell(r,i);if(pc)act+=(act?' ':'')+pc;}
+      var dl=i.deadline?A.fmtDT(i.deadline):'—';
+      if(i.status==='reinvited')dl+='<div class="small muted">새 초대로 대체</div>';
+      return '<tr'+(i.sel==='selected'?' class="selected-row"':'')+(i.status==='reinvited'?' class="hist-row"':'')+'><td><b>'+esc(i.hotel)+'</b>'+(i.note?'<div class="small muted">'+esc(i.note)+'</div>':'')+'</td><td>'+A.invChip(i.status)+'</td><td class="mono" style="white-space:nowrap">'+dl+'</td><td>'+A.fmtDT(i.viewedAt)+'</td><td>'+A.fmtDT(i.submittedAt)+'</td><td>R'+i.round+'</td><td>'+(act||'—')+'</td></tr>';
+    }).join('');
+    var sel=A.curInv(r).filter(function(i){return i.sel==='selected';})[0],conn='';
+    if((del||r.state==='won')&&sel){
+      var o=r.organizer;
+      if(r.state==='won'){
+        var body2='안녕하세요. MICEGO를 통해 견적을 주신 '+sel.hotel+' 담당자님께 오거나이저를 연결해 드립니다.\n\n요청번호: '+r.id+'\n회사명: '+o.company+'\n담당자: '+o.contact+'\n이메일: '+o.email+'\n전화: '+o.phone+'\n\n이후 세부 협의는 오거나이저와 직접 진행해 주세요.';
+        var href='mailto:'+sel.email+'?cc='+encodeURIComponent(o.email)+'&subject='+encodeURIComponent('['+r.id+'] 오거나이저 연결 안내')+'&body='+encodeURIComponent(body2);
+        conn='<div class="callout ok" id="connBox"><b>✓ 연결 메일을 자동으로 보냈습니다 · '+esc(sel.hotel)+'</b>오거나이저 회사명·담당자·이메일·전화 포함, 오거나이저 참조. <span class="small">발송 기록은 설정 &gt; 알림에서 볼 수 있습니다.</span></div><p class="small muted" style="margin-top:8px"><a id="mailDraft" href="'+href+'">필요하면 직접 다시 보내기</a></p>';
+      }else{
+        conn='<div class="callout" id="connBox"><b>연결 메일은 성사로 닫을 때 자동으로 나갑니다</b>선정 호텔 '+esc(sel.hotel)+'에 오거나이저 회사명·담당자·이메일·전화를 담아 보내고, 오거나이저를 참조로 넣습니다.</div>';
+      }
+    }
+    return '<section class="card" aria-labelledby="h-it"><h2 id="h-it">초대 현황 · 라운드 '+r.round+'</h2><div class="tbl-wrap"><table id="invTable"><thead><tr><th>호텔</th><th>상태</th><th>마감</th><th>열람</th><th>제출</th><th>라운드</th><th>'+((del||fin)?'선정 · 팔로업':'팔로업 · 재초대')+'</th></tr></thead><tbody>'+body+'</tbody></table></div>'+conn+'</section>';
+  }
+  function quoteRow(x,lbl,invMap,multi,edit,r){
+    var w=[],miss=[];
+    if(!x.currency)miss.push('통화');if(x.twin==null)miss.push('트윈');if(x.king==null)miss.push('킹');if(!x.tax)miss.push('세금');if(!x.breakfast)miss.push('조식');if(!x.validUntil)miss.push('유효기한');if(!x.cancel)miss.push('취소규정');
+    if(x.twin!=null&&x.king!=null&&x.twin>x.king)w.push('트윈 요금이 킹보다 높습니다');
+    if(x.validUntil&&x.validUntil<r.start)w.push('유효기한('+x.validUntil+')이 행사일(' + r.start + ')보다 먼저 끝납니다');
+    if(miss.length)w.push('누락 항목: '+miss.join(', '));
+    var usd=multi?(edit?'<td><input class="qin" type="number" min="0" step="0.01" data-q="'+x.id+'" data-f="usdRef" value="'+esc(x.usdRef)+'" aria-label="제안 '+lbl+' USD 참고(트윈)"></td><td><input class="qin" style="width:150px" type="date" data-q="'+x.id+'" data-f="usdDate" value="'+esc(x.usdDate)+'" aria-label="제안 '+lbl+' 환율 기준일"></td>':'<td class="num">'+(x.usdRef?A.num(x.usdRef):'—')+'</td><td>'+esc(x.usdDate||'—')+'</td>'):'';
+    var row='<tr><td><span class="qhead">'+lbl+'</span></td><td>'+esc(invMap[x.invId]||'')+'</td><td>'+esc(x.currency)+'</td><td class="num'+(x.twin!=null&&x.king!=null&&x.twin>x.king?' warn-cell':'')+'">'+A.num(x.twin)+'</td><td class="num">'+A.num(x.king)+'</td><td>'+(x.tax?esc(x.tax):'<span class="warn-cell">누락</span>')+'</td><td>'+(x.breakfast?esc(x.breakfast):'<span class="warn-cell">누락</span>')+'</td><td'+(x.validUntil&&x.validUntil<r.start?' class="warn-cell"':'')+'>'+(x.validUntil?esc(x.validUntil):'<span class="warn-cell">누락</span>')+'</td><td>'+(x.cancel?esc(x.cancel):'<span class="warn-cell">누락</span>')+'</td>'+usd+'</tr>';
+    return {row:row,warn:w.map(function(t){return '제안 '+lbl+': '+t;})};
+  }
+  function compareCard(r){
+    var st=['collecting','delivered','won','lost'];
+    if(st.indexOf(r.state)<0&&!(r.state==='cancelled'&&A.curQuotes(r).length))return '';
+    var qs=A.curQuotes(r),lab=A.labelQuotes(r,r.round),invMap={};
+    r.invitations.forEach(function(i){invMap[i.id]=i.hotel;});
+    var multi=A.currencies(r).length>1,edit=r.state==='collecting';
+    qs.sort(function(a,b){return lab[a.invId]<lab[b.invId]?-1:1;});
+    var rows='',warns=[];
+    qs.forEach(function(x){var o=quoteRow(x,lab[x.invId],invMap,multi,edit,r);rows+=o.row;warns=warns.concat(o.warn);});
+    var head='<th>제안</th><th>호텔</th><th>통화</th><th class="num">트윈</th><th class="num">킹</th><th>세금</th><th>조식</th><th>유효기한</th><th>취소규정</th>'+(multi?'<th>USD 참고(트윈)</th><th>기준일</th>':'');
+    var zero='';
+    if(r.state==='collecting'&&qs.length===0){
+      zero=r.round>=2?'<div class="callout warn" id="zeroBox" style="margin-bottom:12px"><b>제출된 견적이 0건입니다 (라운드 '+r.round+')</b>두 번째 라운드에도 제안이 없습니다. 미성사(으)로 닫고 오거나이저에게 사유를 알리세요.</div>':
+        '<div class="callout warn" id="zeroBox" style="margin-bottom:12px"><b>제출된 견적이 0건입니다</b>오거나이저에게 현황과 재소싱 예상일을 먼저 회신하세요. 그다음 "조건 변경 → 새 라운드"로 비딩중을 다시 열어 다른 호텔을 초대합니다.</div>';
+    }
+    var multiNote=multi?'<p class="small" id="multiNote" style="margin-bottom:10px"><b>통화가 '+A.currencies(r).join('·')+' '+A.currencies(r).length+'종입니다.</b> 전달하려면 모든 견적에 USD 참고(트윈)와 환율 기준일이 필요합니다. <span id="usdMiss" class="'+(A.usdMissing(r)?'warn-cell':'')+'">'+(A.usdMissing(r)?'미입력 '+A.usdMissing(r)+'건':'모두 입력됨')+'</span><br><span class="muted" id="usdHint">USD 참고는 호텔이 제출한 금액 그대로 환산합니다(세금 보정 없음). 세금이 별도인 제안은 세금 열에 그대로 표시됩니다.</span></p>':'';
+    var prev='';
+    for(var k=1;k<r.round;k++){
+      var pl=A.labelQuotes(r,k),pq=r.quotes.filter(function(x){return x.round===k;});
+      prev+='<details class="prev"><summary>이전 라운드 · 라운드 '+k+' (견적 '+pq.length+'건)</summary>'+(pq.length?'<div class="tbl-wrap"><table><thead><tr><th>제안</th><th>호텔</th><th>통화</th><th class="num">트윈</th><th class="num">킹</th><th>세금</th><th>조식</th></tr></thead><tbody>'+pq.map(function(x){return '<tr><td><span class="qhead">'+(pl[x.invId]||'')+'</span></td><td>'+esc(invMap[x.invId]||'')+'</td><td>'+x.currency+'</td><td class="num">'+A.num(x.twin)+'</td><td class="num">'+A.num(x.king)+'</td><td>'+esc(x.tax)+'</td><td>'+esc(x.breakfast)+'</td></tr>';}).join('')+'</tbody></table></div>':'<p class="muted small" style="padding-bottom:10px">제출된 견적이 없었습니다.</p>')+'</details>';
+    }
+    return '<section class="card" aria-labelledby="h-cmp"><h2 id="h-cmp">비교표</h2><p class="sub">제안은 도착 순서대로 A, B, C로 표시합니다.</p>'+zero+multiNote+
+      (qs.length?'<div class="tbl-wrap"><table id="cmpTable"><thead><tr>'+head+'</tr></thead><tbody>'+rows+'</tbody></table></div>':'')+
+      (warns.length?'<div class="callout warn" style="margin-top:12px"><b>확인이 필요한 항목</b><ul style="margin:4px 0 0;padding-left:18px">'+warns.map(function(t){return '<li>'+esc(t)+'</li>';}).join('')+'</ul></div>':'')+prev+'</section>';
+  }
+  function prevOnly(r){
+    if(r.round<2||['collecting','delivered','won','lost'].indexOf(r.state)>=0)return '';
+    var invMap={};r.invitations.forEach(function(i){invMap[i.id]=i.hotel;});var prev='';
+    for(var k=1;k<r.round;k++){
+      var pl=A.labelQuotes(r,k),pq=r.quotes.filter(function(x){return x.round===k;});
+      prev+='<details class="prev"><summary>이전 라운드 · 라운드 '+k+' (견적 '+pq.length+'건)</summary><div class="tbl-wrap"><table><thead><tr><th>제안</th><th>호텔</th><th>통화</th><th class="num">트윈</th><th class="num">킹</th><th>세금</th><th>조식</th></tr></thead><tbody>'+pq.map(function(x){return '<tr><td><span class="qhead">'+(pl[x.invId]||'')+'</span></td><td>'+esc(invMap[x.invId]||'')+'</td><td>'+x.currency+'</td><td class="num">'+A.num(x.twin)+'</td><td class="num">'+A.num(x.king)+'</td><td>'+esc(x.tax)+'</td><td>'+esc(x.breakfast)+'</td></tr>';}).join('')+'</tbody></table></div></details>';
+    }
+    return '<section class="card" aria-labelledby="h-pv"><h2 id="h-pv">이전 라운드 견적</h2><p class="sub">조건 변경 전에 받은 견적은 이력으로 남습니다.</p>'+prev+'</section>';
+  }
+  function histCard(r){
+    var rows=r.history.slice().sort(function(a,b){return a.t-b.t;}).map(function(h){
+      var tr=h.to?(h.from?A.chip(h.from)+' → ':'')+A.chip(h.to):'<span class="muted">메모</span>';
+      return '<tr><td style="white-space:nowrap" class="mono">'+A.fmtDT(h.t)+'</td><td>'+esc(h.actor)+'</td><td style="white-space:nowrap">'+tr+'</td><td>'+esc(h.memo)+'</td></tr>';
+    }).join('');
+    return '<section class="card" aria-labelledby="h-hi"><h2 id="h-hi">이력</h2><div class="tbl-wrap"><table id="histTable"><thead><tr><th>시각</th><th>주체</th><th>상태</th><th>사유 · 메모</th></tr></thead><tbody>'+rows+'</tbody></table></div><div class="memo-add"><label class="sr" for="noteIn">이력 메모</label><input class="inp" id="noteIn" placeholder="이력에 남길 메모"><button type="button" class="btn" id="addNote">메모 추가</button></div></section>';
+  }
+
+  var rfp;
+  function render(){
+    var r=A.get(id); rfp=r;
+    if(!r){
+      document.title='견적을 찾을 수 없음 | MICEGO 운영 콘솔';
+      main.innerHTML='<div class="empty card"><h1>해당 견적을 찾을 수 없습니다</h1><p>요청번호 "'+esc(id)+'"에 해당하는 견적이 없습니다. 주소를 확인하거나 목록에서 다시 골라 주세요.</p><a class="btn primary" href="rfps.html">견적 관리로 돌아가기</a></div>';return;
+    }
+    document.title=r.id+' | MICEGO 운영 콘솔';
+    main.innerHTML=header(r)+'<div class="detail" style="margin-top:16px"><aside class="dside" id="dside" aria-label="상태 전이">'+side(r)+'</aside><div class="dmain stack">'+
+      (r.state==='collecting'&&A.submittedCount(r)===0?'':'')+
+      (window.MICEGO_PTR?MICEGO_PTR.assignCard(r):'')+requestCard(r)+organizerCard(r)+(A.isPartner&&A.isPartner()?'':ownerCard(r))+anonCard(r)+inviteCard(r)+invTable(r)+compareCard(r)+prevOnly(r)+histCard(r)+'</div></div>';
+  }
+  A.onChange=function(){draftMemo=null;render();window.scrollTo(0,0);};
+
+  function updateWarn(){
+    var w=document.getElementById('invWarn');if(!w||!rfp)return;
+    var n=document.querySelectorAll('#plist input:checked').length,tot=A.curInv(rfp).length+n;
+    w.textContent=(n&&(tot<2||tot>5))?'초대 대상이 총 '+tot+'곳입니다. SOP 권장은 3–5곳입니다.':'';
+  }
+  function refreshFlags(){
+    var ta=document.getElementById('memoPub');if(!ta)return;
+    draftMemo=ta.value;var fl=flagList(rfp,ta.value);
+    document.getElementById('memoPrev').innerHTML=hl(ta.value,fl);document.getElementById('flagBox').innerHTML=flagSummary(fl);
+  }
+  function refreshSide(){document.getElementById('dside').innerHTML=side(rfp);}
+
+  async function saveDeadline(){
+    var ms=A.fromInput(document.getElementById('dlInput').value);
+    if(!ms){A.toast('마감일시를 입력해 주세요','error');return;}
+    if(ms<=A.NOW){A.toast('마감은 현재 시각 이후여야 합니다','error');return;}
+    if(rfp.deadline&&ms!==rfp.deadline&&A.curInv(rfp).length){
+      var ok=await A.confirm('이미 보낸 초대의 마감은 바뀌지 않습니다. 새 마감으로 받으려면 해당 호텔을 다시 초대하세요.','새 마감으로 저장');
+      if(!ok)return;
+    }
+    var id0=rfp.id;
+    var okP=await A.persist('admin_rfp_update',{p_ref:id0,p_patch:{deadline:new Date(ms).toISOString()}},function(){rfp.deadline=ms;A.log(rfp,'운영자',null,null,'견적 마감 설정 '+A.fmtDT(ms));});
+    if(!okP)return;
+    render();A.toast('마감을 '+A.fmtDT(ms)+'(으)로 저장했습니다','ok');
+  }
+  main.addEventListener('click',function(e){
+    var t=e.target.closest('button,a');if(!t||!rfp)return;
+    if(t.hasAttribute('data-ptr')){MICEGO_PTR.handleRfpAction(t,rfp,render);return;}
+    if(t.hasAttribute('data-to')){A.request(rfp.id,t.getAttribute('data-to'));return;}
+    if(t.id==='copyTrack'){
+      var link=new URL('../ko/track.html?t='+rfp.token,location.href).href;
+      var done=function(){A.toast('추적 링크를 복사했습니다: '+link,'ok');};
+      try{navigator.clipboard.writeText(link).then(done,function(){A.toast('복사하지 못했습니다. 링크: '+link,'info');});}catch(err){A.toast('링크: '+link,'info');}
+      return;
+    }
+    if(t.id==='saveMemo'){
+      var v=document.getElementById('memoPub').value,ref=rfp.id;
+      A.persist('admin_rfp_update',{p_ref:ref,p_patch:{publicMemo:v}},function(){
+        if(v!==rfp.publicMemo){rfp.publicMemo=v;A.log(rfp,'운영자',null,null,'공개 메모 수정'+(rfp.anonReviewed?' (익명화 검토 완료 표시 해제)':''));rfp.anonReviewed=false;rfp.anonAt=null;}
+      }).then(function(ok){draftMemo=null;if(ok){render();A.toast('공개 메모를 저장했습니다','ok');}});
+      return;
+    }
+    if(t.id==='markAnon'){
+      var v2=document.getElementById('memoPub').value,fl=flagList(rfp,v2),ref2=rfp.id;
+      if(fl.length){A.toast('공개 메모에 가려야 할 내용이 남아 있습니다: '+fl.map(function(f){return f.v;}).join(', '),'error');return;}
+      A.persist('admin_rfp_update',{p_ref:ref2,p_patch:{publicMemo:v2,anonReviewed:true}},function(){
+        rfp.publicMemo=v2;rfp.anonReviewed=true;rfp.anonAt=A.log(rfp,'운영자',null,null,'익명화 검토 완료 표시');
+      }).then(function(ok){draftMemo=null;if(ok){render();A.toast('익명화 검토 완료로 표시했습니다','ok');}});
+      return;
+    }
+    if(t.id==='unmarkAnon'){
+      var ref3=rfp.id;
+      A.persist('admin_rfp_update',{p_ref:ref3,p_patch:{anonReviewed:false}},function(){
+        rfp.anonReviewed=false;rfp.anonAt=null;A.log(rfp,'운영자',null,null,'익명화 검토 완료 표시 취소');
+      }).then(function(ok){if(ok)render();});
+      return;
+    }
+    if(t.id==='saveDl'){saveDeadline();return;}
+    if(t.hasAttribute('data-reinvite')){
+      var ri=rfp.invitations.filter(function(i){return i.id===t.getAttribute('data-reinvite');})[0];
+      var dl0=rfp.deadline,hot0=ri.hotel;
+      A.reinvite(rfp,ri.id).then(function(ok){if(ok){render();A.toast(hot0+'에 새 마감 '+A.fmtDT(dl0)+'(으)로 다시 초대했습니다','ok');}});
+      return;
+    }
+    if(t.id==='sendInv'){
+      var ids=[].map.call(document.querySelectorAll('#plist input:checked'),function(i){return i.getAttribute('data-p');});
+      if(!ids.length){A.toast('초대할 호텔을 선택해 주세요','error');return;}
+      if(!rfp.deadline){A.toast('먼저 마감을 저장해 주세요. 초대에는 저장된 마감이 함께 기록됩니다','error');return;}
+      A.invite(rfp,ids).then(function(ok){if(ok){render();A.toast('호텔 '+ids.length+'곳에 초대를 보냈습니다','ok');}});
+      return;
+    }
+    if(t.hasAttribute('data-sel')){
+      var inv=rfp.invitations.filter(function(i){return i.id===t.getAttribute('data-inv');})[0],to=t.getAttribute('data-sel'),ref4=rfp.id;
+      var willBe=to==='selected'?(inv.sel==='selected'?null:'selected'):(inv.sel==='notselected'?null:'notselected');
+      A.persist('admin_mark_selection',{p_ref:ref4,p_invitation_id:inv.id,p_sel:willBe},function(){
+        if(to==='selected'){var was=inv.sel==='selected';A.curInv(rfp).forEach(function(i){if(i.sel==='selected')i.sel=null;});inv.sel=was?null:'selected';}
+        else inv.sel=inv.sel==='notselected'?null:'notselected';
+        A.log(rfp,'운영자',null,null,inv.hotel+' '+(inv.sel==='selected'?'선정':inv.sel==='notselected'?'미선정':'표시 해제'));
+      }).then(function(ok){if(ok)render();});
+      return;
+    }
+    if(t.id==='addNote'){
+      var n=document.getElementById('noteIn').value.trim();if(!n){A.toast('메모 내용을 입력해 주세요','error');return;}
+      var ref5=rfp.id;
+      A.persist('admin_add_note',{p_ref:ref5,p_memo:n},function(){A.log(rfp,'운영자',null,null,n);}).then(function(ok){if(ok){render();A.toast('이력에 메모를 남겼습니다','ok');}});
+      return;
+    }
+  });
+  var qTimers={};
+  main.addEventListener('input',function(e){
+    var t=e.target;
+    if(t.id==='memoPub'){refreshFlags();return;}
+    if(t.hasAttribute&&t.hasAttribute('data-q')){
+      var qid=t.getAttribute('data-q'),field=t.getAttribute('data-f'),val=t.value;
+      var x=rfp.quotes.filter(function(q){return q.id===qid;})[0];x[field]=val;
+      var m=document.getElementById('usdMiss');if(m){var n=A.usdMissing(rfp);m.textContent=n?'미입력 '+n+'건':'모두 입력됨';m.className=n?'warn-cell':'';}
+      refreshSide();
+      if(!(window.MGA&&MGA.mode==='api')){A.save();return;}
+      /* api 모드: 키 입력마다 호출하지 않도록 500ms 디바운스 후 저장 */
+      var key=qid+'|'+field;
+      if(qTimers[key])clearTimeout(qTimers[key]);
+      qTimers[key]=setTimeout(function(){
+        var patch={};patch[field]=val;
+        A.persist('admin_quote_update',{p_quote_id:qid,p_patch:patch},function(){});
+      },500);
+    }
+  });
+  main.addEventListener('change',function(e){
+    var t=e.target;
+    if(t.hasAttribute('data-p'))updateWarn();
+  });
+  render();
+});
+})();
+
+</script>
+</body>
+</html>

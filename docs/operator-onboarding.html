@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>MICEGO 운영자 온보딩</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{--teal:#0B8F86;--teal-soft:#E3F5F2;--amber:#FFC24B;--amber-soft:#FFF3D6;--navy:#0F1E3D;--bg:#F6F8FB;--line:#E4E8F0;--gray:#6B7794;--error:#EF4444;--card:#fff;
+--sans:'Pretendard Variable',Pretendard,-apple-system,'Segoe UI','Noto Sans CJK KR','Noto Sans KR','Malgun Gothic',sans-serif;
+--disp:'Archivo','Pretendard Variable',Pretendard,'Noto Sans CJK KR',sans-serif;
+--mono:'JetBrains Mono',ui-monospace,'SFMono-Regular',Menlo,Consolas,'Noto Sans Mono CJK KR','Noto Sans CJK KR',monospace}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--navy);font-family:var(--sans);font-size:15px;line-height:1.7;word-break:keep-all;overflow-wrap:break-word}
+.wrap{max-width:960px;margin:0 auto;padding:0 16px 56px}
+header.top{padding:40px 0 20px}
+.brand{font-family:var(--disp);font-weight:800;font-size:15px;letter-spacing:.02em;color:var(--navy)}
+.brand b{color:var(--teal)}
+h1{font-size:clamp(26px,5vw,36px);line-height:1.25;margin:10px 0 6px;letter-spacing:-.02em}
+.ver{font-family:var(--mono);font-size:13px;color:var(--gray);margin:0 0 14px}
+.note{background:var(--amber-soft);border-left:4px solid var(--amber);padding:12px 14px;border-radius:0 8px 8px 0;font-size:14px;margin:0}
+nav.toc{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:18px 0 8px}
+nav.toc b{font-size:13px;color:var(--gray);letter-spacing:.04em}
+nav.toc ol{margin:8px 0 0;padding:0;list-style:none;display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:2px 16px;counter-reset:t}
+nav.toc li{counter-increment:t}
+nav.toc a{display:block;padding:5px 0;color:var(--navy);text-decoration:none;font-size:14px}
+nav.toc a::before{content:counter(t)".";font-family:var(--mono);color:var(--teal);margin-right:6px}
+nav.toc a:hover{color:var(--teal);text-decoration:underline}
+section{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px 20px;margin-top:18px;scroll-margin-top:12px}
+h2{font-size:20px;margin:0 0 4px;letter-spacing:-.01em}
+h2 .n{font-family:var(--mono);color:var(--teal);font-size:15px;margin-right:8px}
+p.lead{color:var(--gray);margin:0 0 14px;font-size:14px}
+h3{font-size:15px;margin:20px 0 6px}
+.tw{overflow-x:auto;-webkit-overflow-scrolling:touch;border:1px solid var(--line);border-radius:10px;margin:10px 0}
+table{border-collapse:collapse;width:100%;min-width:640px;font-size:13.5px;line-height:1.55}
+th,td{padding:9px 11px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+th{background:#EEF2F8;font-size:12.5px;color:var(--navy);white-space:nowrap}
+tr:last-child td{border-bottom:0}
+td.nw{white-space:nowrap}
+code,.slug{font-family:var(--mono);font-size:12px;background:#EEF2F8;border-radius:5px;padding:1px 6px;white-space:nowrap}
+.tag{display:inline-block;font-size:12px;font-weight:600;padding:1px 8px;border-radius:99px;white-space:nowrap;border:1px solid transparent}
+.op{background:var(--teal-soft);color:#076B64;border-color:#B5E3DD}
+.sys{background:var(--amber-soft);color:#8A5A00;border-color:#F3D48F}
+.org{background:#EEF0F5;color:#4A5570;border-color:#D5DAE5}
+.hot{background:#FDECEC;color:#B42323;border-color:#F6C4C4}
+.arrow{font-family:var(--mono);color:var(--gray)}
+.diagram{overflow-x:auto;border:1px solid var(--line);border-radius:10px;background:#fff;padding:8px}
+.diagram svg{display:block;width:100%;min-width:720px;height:auto}
+.legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin:12px 0 0;font-size:13px;color:var(--gray)}
+.legend span{display:inline-flex;align-items:center;gap:7px}
+.legend i{display:inline-block;width:26px;height:0;border-top:3px solid}
+.legend i.dash{border-top-style:dashed}
+.small{font-size:13px;color:var(--gray)}
+.callout{background:var(--teal-soft);border-radius:8px;padding:11px 14px;font-size:14px;margin:12px 0 0}
+ul.tight{margin:6px 0;padding-left:20px}
+ul.tight li{margin:2px 0}
+footer{margin-top:22px;padding:18px 4px;color:var(--gray);font-size:13px;border-top:1px solid var(--line)}
+@media (max-width:520px){section{padding:18px 14px}body{font-size:14.5px}.kv2{grid-template-columns:1fr;gap:2px 0}.kv2 dt{margin-top:8px}}
+@media print{
+@page{size:A4;margin:12mm}
+html,body{background:#fff}
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+nav.toc{display:none}
+.wrap{max-width:none;padding:0}
+section{border-radius:0;box-shadow:none;padding:12px 0;border-left:0;border-right:0;margin-top:10px}
+.tw,.diagram{overflow:visible;border-radius:0}
+table{min-width:0;font-size:10.5px}
+th,td{padding:5px 6px}
+tr,thead{break-inside:avoid;page-break-inside:avoid}
+thead{display:table-header-group}
+h2,h3{break-after:avoid}
+.diagram svg{min-width:0;width:100%}
+.diagram,.callout,.note{break-inside:avoid}
+body{font-size:11.5px}
+}
+/* -- additions for docs/launch-checklist.html, docs/incident-runbook.html, docs/operator-onboarding.html -- */
+.stop{background:#FDECEC;border-left:4px solid var(--error);padding:14px 16px;border-radius:0 8px 8px 0;font-size:14px;margin:14px 0 0}
+.stop b{color:#B42323}
+.warnbox{background:var(--amber-soft);border-left:4px solid var(--amber);padding:12px 14px;border-radius:0 8px 8px 0;font-size:14px;margin:12px 0 0}
+.kv2{margin:10px 0 0;display:grid;grid-template-columns:132px minmax(0,1fr);gap:7px 14px}
+.kv2 dt{font-weight:700;font-size:12.5px;color:var(--gray);align-self:start;padding-top:1px;white-space:nowrap}
+.kv2 dd{margin:0;font-size:13.5px;min-width:0}
+.kv2 code,ol.steps code,.callout code,.warnbox code,.stop code,.donot code,.note code{white-space:normal;word-break:break-all;overflow-wrap:anywhere}
+.card-inc{border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin-top:14px;background:#FBFCFE}
+.card-inc h3{margin:0 0 2px;font-size:16px;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.card-inc h3 .num{font-family:var(--mono);color:var(--gray);font-size:12.5px;font-weight:500}
+dl.gloss{margin:8px 0 0}
+dl.gloss dt{font-weight:700;margin-top:11px;font-size:14px;color:var(--navy)}
+dl.gloss dd{margin:2px 0 0 0;font-size:13.5px;color:#39435E}
+ol.steps{margin:8px 0 0;padding-left:22px}
+ol.steps li{margin:6px 0}
+ol.steps b{color:var(--navy)}
+.donot{background:#FDECEC;border-radius:10px;padding:14px 16px;margin:8px 0 0;border:1px solid #F6C4C4}
+.donot li{margin:6px 0}
+.donot b{color:#B42323}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header class="top">
+<div class="brand">MICE<b>GO</b></div>
+<h1>MICEGO 운영자 온보딩</h1>
+<p class="ver">v1.0 · 2026-09-27 · 상태전이표 v1.7 · VOC SOP v2 · 운영 콘솔(admin/*.html) 기준</p>
+<p class="note">첫 주에 콘솔을 쓰기 시작하는 운영자를 위한 문서입니다. 화면 이름·버튼 문구는 실제 코드(admin/*.html·admin.js) 그대로이며, VOC 응대 규칙은 프로젝트 문서 <code>micego-voc-sop-cx-v1</code>을 요약했습니다.</p>
+
+</header>
+<nav class="toc" aria-label="목차">
+<b>목차</b>
+<ol>
+<li><a href="#account">계정 발급 절차</a></li>
+<li><a href="#tour">콘솔 둘러보기</a></li>
+<li><a href="#daily">하루 루틴</a></li>
+<li><a href="#weekly">주간 루틴</a></li>
+<li><a href="#donot">절대 하지 말 것</a></li>
+<li><a href="#tasks">자주 하는 작업 7가지</a></li>
+<li><a href="#glossary">용어집</a></li>
+<li><a href="#notify-who">알림이 언제 누구에게 가는지</a></li>
+<li><a href="#voc">문의 응대 원칙</a></li>
+<li><a href="#help">도움 요청 경로</a></li>
+</ol>
+</nav>
+<section id="account">
+<h2><span class="n">1</span>계정 발급 절차</h2>
+<p class="lead">운영 콘솔(<code>admin/*.html</code>)은 Supabase Auth 계정 + <code>app_metadata.role = &quot;operator&quot;</code>로만 들어갈 수 있습니다. 콘솔 화면 자체에는 계정을 추가·삭제하는 기능이 없습니다(<code>settings.html#ops</code>는 조회 전용).</p>
+<ol class="steps">
+<li>기존 운영자나 개발 담당에게 <b>이메일 주소</b>를 알려 계정 생성을 요청합니다.</li>
+<li>Supabase 대시보드(또는 개발 담당의 Admin REST 호출)로 계정이 만들어지고, <code>app_metadata.role = &quot;operator&quot;</code>가 부여됩니다. 이 값이 없으면 로그인은 되어도 <b>&quot;운영자 권한이 있는 계정으로 로그인해 주세요&quot;</b> 메시지와 함께 즉시 로그아웃됩니다.</li>
+<li>임시 비밀번호(또는 초대 메일)를 전달받아 <code>admin/index.html</code>에서 첫 로그인을 합니다.</li>
+<li>로그인 직후 <code>dashboard.html</code> 상단의 &quot;기준 시각&quot;이 지금 시각과 맞는지 한 번 확인합니다 — 실제 서비스 계정이라면 데모 고정 시각(2026-10-08 19:30)이 아니라 현재 시각이 보입니다.</li>
+<li>비밀번호를 본인만 아는 값으로 바꿉니다(계정 설정 경로는 회원용 <code>ko/account.html</code>과 별개로, 운영자 비밀번호 변경은 Supabase Auth 표준 절차를 따릅니다).</li>
+</ol>
+<div class="callout">콘솔 접근 권한과 별개로, 실제 응대(이메일 발신, 전화)에 쓸 <b>운영 대표 메일 주소</b>와 VOC 접수함 접근 권한도 이 시점에 함께 받아 둡니다.</div>
+</section>
+<section id="tour"><h2><span class="n">2</span>콘솔 둘러보기</h2><p class="lead">좌측 메뉴 순서 그대로입니다. 처음 며칠은 이 순서대로 한 번씩 눌러 보는 것을 권합니다.</p><div class="tw"><table><thead><tr><th>메뉴</th><th>무엇을 하는 화면인가</th><th>한 줄 요약</th></tr></thead><tbody><tr><td class="nw"><b>대시보드</b></td><td>오늘 할 일 목록(SLA 초과·임박, 새 접수, 마감 임박, 취합중 검토, 파트너 심사 지연, 발송 실패)과 상태 분포, 회원 카드, 최근 이력을 한 화면에 모아 보여줍니다.</td><td class="small">하루의 시작은 항상 여기입니다.</td></tr><tr><td class="nw"><b>견적 요청 목록/상세</b></td><td>전체 요청을 리스트·칸반으로 보고, 상세 화면에서 상태 전이·초대·재초대·라운드·선정·이력을 다룹니다.</td><td class="small">실제 업무 시간의 대부분을 쓰는 화면입니다.</td></tr><tr><td class="nw"><b>호텔 파트너 목록/상세</b></td><td>파트너 신청 심사(승인·거절·중지·재승인)와 초대 이력, 응답 통계를 봅니다.</td><td class="small">신청 후 5영업일 기한을 여기서 관리합니다.</td></tr><tr><td class="nw"><b>회원 목록/상세</b></td><td>여행사·기업 담당자 계정 상태를 보고 잠금 해제·정지·이관·연결 요청 승인·탈퇴 처리를 합니다.</td><td class="small">모든 조치에 사유를 남겨야 합니다.</td></tr><tr><td class="nw"><b>피드백</b></td><td>의견 보내기·문의 폼으로 들어온 VOC를 분류·배정·상태 전이하고 메모를 남깁니다.</td><td class="small">일일 트리아지(10:00·16:00)를 여기서 합니다.</td></tr><tr><td class="nw"><b>설정</b></td><td>영업일·공휴일, 기본 규칙(읽기 전용), 알림 템플릿·발송 로그, 운영자 계정, 시스템 상태(크론·시크릿), 전제 조건 체크리스트 6개 탭입니다.</td><td class="small">공휴일 입력을 잊으면 SLA 계산이 틀어집니다.</td></tr></tbody></table></div></section>
+<section id="daily">
+<h2><span class="n">3</span>하루 루틴</h2>
+<p class="lead">대시보드의 &quot;오늘 할 일&quot; 카드 순서를 그대로 하루 흐름으로 씁니다(<code>admin.js</code>의 <code>A.todo()</code> 정의 순서).</p>
+<ol class="steps">
+<li><b>오전 · 대시보드 확인</b> — 로그인하면 바로 보이는 화면입니다. 위에서 아래로 훑습니다.</li>
+<li><b>SLA·초대 기한 초과 (빨강)</b> — 있으면 최우선. 오늘 안에 오거나이저에게 진행 상황을 회신합니다.</li>
+<li><b>SLA·초대 기한 임박 (1영업일 이내, 노랑)</b> — 검증중이면 오늘 오픈까지, 오픈 상태면 오늘 초대까지 끝냅니다.</li>
+<li><b>새 접수</b> — 받은 당일 검증중으로 넘깁니다. 이 전이가 SLA 기산점이므로 미루면 안 됩니다.</li>
+<li><b>마감 24시간 이내 · 제출 0건</b> — 미응답 호텔에 전화나 개인 메일로 팔로업합니다.</li>
+<li><b>피드백 트리아지 10:00</b> — <code>admin/feedback.html</code>에서 신규 건에 우선순위·하위 코드를 매깁니다(VOC SOP).</li>
+<li><b>취합중 검토</b> — 마감된 요청의 비교표를 확인하고 당일 전달합니다. 통화가 섞였으면 USD 참고환산부터 확인합니다.</li>
+<li><b>초대·재초대</b> — 오픈 상태 요청에 파트너를 초대하거나, 마감이 바뀐 초대를 재초대합니다.</li>
+<li><b>파트너 심사 지연</b> — 5영업일이 지난 신청을 오늘 심사합니다.</li>
+<li><b>발송 실패</b> — 수신 주소를 확인하고 직접 메일로 대신 보낸 뒤 &quot;직접 보냄&quot;으로 표시합니다.</li>
+<li><b>피드백 트리아지 16:00</b> — 오후에 들어온 건을 다시 한번 분류합니다(일일 2회 트리아지).</li>
+</ol>
+</section>
+<section id="weekly">
+<h2><span class="n">4</span>주간 루틴</h2>
+<ul class="tight">
+<li><b>월요일 11:00 · 주간 정리</b> — <code>admin/feedback.html</code> 주간 정리 프리셋으로 <code>on_hold</code> 건과 오래된 미분류 건을 다시 봅니다(VOC SOP).</li>
+<li><b>파트너 응답 통계 점검</b> — <code>admin/partners.html</code>에서 초대 3회 연속 무응답이거나 견적이 반복 부정확한 파트너가 있는지 확인하고, 있으면 중지를 검토합니다.</li>
+<li><b>발송 로그 주간 점검</b> — <code>settings.html#notify</code>에서 알림톡 실패율(LMS 대체 비율)이 특정 채널·통신사에 몰려 있는지 확인합니다.</li>
+<li><b>회원 잠금·연결 요청 확인</b> — 대시보드 &quot;회원 계정&quot; 카드의 잠긴 계정·연결 요청 대기 건을 정리합니다.</li>
+</ul>
+</section>
+<section id="donot">
+<h2><span class="n">5</span>절대 하지 말 것</h2>
+<div class="donot"><ul class="tight">
+<li><b>공유 링크로 선정 처리하기</b> — 공유 링크(<code>?s=</code>)는 보기 전용입니다. 서버가 선택 요청 자체를 거부하므로 시도해도 안 되지만, 오거나이저에게 &quot;공유 링크로도 고를 수 있다&quot;고 안내하지 않습니다. 선택은 요청 소유 회원(또는 비회원 접수자) 본인만, 본인 연락처로 받은 추적 링크에서만 할 수 있습니다.</li>
+<li><b>인증 없이 성사 처리하고 넘어가기</b> — 백엔드 연결 전 과도기에 운영자가 오거나이저의 이메일 회신만 보고 콘솔에서 대신 닫는 경우, <b>인증 기록이 없다는 사실이 요청 상세에 그대로 남습니다.</b> 확인 없이 습관적으로 대신 닫지 않습니다 — 반드시 오거나이저 본인 확인(전화 등) 후 처리합니다.</li>
+<li><b>예산을 호텔에 노출하기</b> — 오거나이저 정보(회사명·담당자·연락처·예산)는 &quot;호텔에 보이지 않음&quot; 배지가 붙은 영역입니다. 요건서 메모나 안내 메일에 예산·회사명·개인 이름을 옮겨 적지 않습니다(익명화 검토 항목).</li>
+<li><b>호텔 직접 연락처를 오거나이저에게(또는 그 반대로) 미리 전달하기</b> — 연락처 교환은 <b>성사 시점의 연결 메일(HTL_SELECTED_CONNECT)</b>로만 이루어집니다. 진행 중에 &quot;미리 연결해 달라&quot;는 요청이 와도 콘솔 밖에서 개별적으로 연락처를 넘기지 않습니다.</li>
+<li><b>상태를 되돌리거나 SQL로 직접 바꾸기</b> — 종료 상태(반려됨·성사·미성사·취소)에서 나가는 전이는 없고, 콘솔에 없는 버튼을 DB로 우회해 만들지 않습니다. 실수는 되돌리기가 아니라 뒤이은 절차(설명·이관·사람 개입)로 수습합니다 — <a href="incident-runbook.html">장애 대응 runbook</a> #12 참고.</li>
+</ul></div>
+</section>
+<section id="tasks"><h2><span class="n">6</span>자주 하는 작업 7가지</h2><p class="lead">화면 이름과 버튼 문구는 실제 콘솔 그대로입니다.</p><h3>1. 새 접수를 검증중으로 넘기기</h3><ol class="steps"><li><b>대시보드</b> → &quot;새 접수&quot; 카드 클릭 (또는 <b>견적 요청 목록</b>에서 <code>received</code> 필터)</li><li>해당 요청을 열어 <b>견적 요청 상세</b>로 이동</li><li>&quot;상태 전이&quot; 섹션에서 <b>「검증중(으)로」</b> 클릭 — 가드 조건 없음, 이 순간이 SLA 기산점입니다</li></ol><h3>2. 검증 후 오픈으로 전이하기(익명화 검토)</h3><ol class="steps"><li><b>견적 요청 상세</b> → &quot;익명화 검토&quot; 섹션에서 원문 메모 중 회사명·사람 이름·전화·이메일·금액·&quot;예산&quot; 표현이 없는지 확인</li><li>문제 없으면 <b>「익명화 검토 완료 표시」</b> 클릭</li><li>&quot;상태 전이&quot;에서 <b>「오픈(으)로」</b> 클릭 — 완료 표시가 없으면 버튼이 막힙니다</li></ol><h3>3. 호텔 초대해서 비딩 시작하기</h3><ol class="steps"><li><b>견적 요청 상세</b> → &quot;마감 · 초대&quot; 섹션에서 마감일시를 정하고 승인 파트너 목록에서 초대할 호텔을 고름</li><li><b>「초대 보내기」</b> 클릭 — 초대가 2곳 미만이면 &quot;오거나이저에게 미리 알리셨나요?&quot; 확인 창이 뜹니다</li><li>&quot;상태 전이&quot;에서 <b>「비딩중(으)로」</b> 클릭 (마감·초대 1곳 이상이 이미 충족되어 있으면 자동으로 넘어가는 화면 흐름을 따릅니다)</li></ol><h3>4. 마감이 바뀐 호텔을 재초대하기</h3><ol class="steps"><li>요청 마감을 바꾸면 &quot;이미 보낸 초대의 마감은 바뀌지 않습니다&quot; 확인 창이 뜹니다 — 확인</li><li>&quot;초대 현황&quot; 표에서 마감이 요청 마감과 달라진 행에 나타난 <b>「재초대」</b> 클릭</li><li>이전 초대 행은 <b>재초대됨</b>으로 이력에 남고, 새 마감의 새 초대 행이 생깁니다</li></ol><h3>5. 취합중 요청을 비교표로 정리해 전달하기</h3><ol class="steps"><li><b>견적 요청 상세</b> → &quot;비교표&quot; 섹션에서 제안 A·B·C를 확인</li><li>통화가 2종 이상 섞였으면 모든 견적에 USD 참고(트윈)와 기준일을 입력</li><li>&quot;상태 전이&quot;에서 <b>「전달됨(으)로」</b> 클릭 — 제출 견적 1건 이상이 조건입니다</li></ol><h3>6. 호텔 파트너 신청 심사하기</h3><ol class="steps"><li><b>호텔 파트너 목록</b>에서 <code>pending</code>(신청) 또는 지연 배지가 붙은 건을 열기</li><li>&quot;심사 체크리스트&quot;로 해외 소재·단체 50명 이상 수용·담당자 연락처 확인 여부를 봄(볼룸 유무는 승인 조건이 아님)</li><li>조건 충족 시 <b>「승인」</b>, 미충족 시 사유를 적고 <b>「거절」</b> — 결과 메일은 시스템이 자동 발송합니다</li></ol><h3>7. 회원 연결 요청을 확인해 승인하기</h3><ol class="steps"><li><b>회원 상세</b> → &quot;연결 요청&quot; 섹션에서 대기 중인 건 확인(휴대전화만 같아 자동 연결되지 않은 경우)</li><li>같은 회원이 맞는지 확인 후 <b>「승인」</b> 또는 <b>「거절」</b> 클릭</li><li>승인하면 <code>ACC_LINKED</code>가 발송되고 비회원 요청이 이 회원 소유로 연결됩니다</li></ol></section>
+<section id="glossary"><h2><span class="n">7</span>용어집</h2><p class="lead">오거나이저·호텔·콘솔 화면에서 같은 개념을 다르게 부르는 경우가 있어, 콘솔 기준 용어로 통일했습니다.</p><dl class="gloss"><dt>요청 (RFP)</dt><dd>오거나이저가 접수한 견적 요청 1건. 접수됨부터 성사·미성사·반려됨·취소까지의 생애주기를 가집니다.</dd><dt>요건서</dt><dd>요청 내용을 정리해 호텔에 보여 주는 문서 형태. 오거나이저 정보(회사명·예산 등)는 빠진 익명화된 버전입니다.</dd><dt>제안</dt><dd>호텔이 제출한 견적 1건. 비교표에는 도착 순서대로 A, B, C로 표시됩니다.</dd><dt>라운드</dt><dd>같은 요청 안에서 조건을 바꿔 다시 비딩하는 차수. 처음은 라운드 1이고, &quot;조건 변경 → 새 라운드&quot;를 쓸 때마다 1씩 올라갑니다.</dd><dt>초대</dt><dd>호텔 한 곳이 한 라운드에서 받는 요청 단위. 초대·열람·제출·거절·마감·재초대됨 상태를 가집니다.</dd><dt>재초대</dt><dd>새 마감으로 같은 호텔을 다시 초대하는 것. 이전 초대는 재초대됨으로 이력에 남고 새 링크가 발급됩니다.</dd><dt>선정</dt><dd>전달됨 상태에서 오거나이저가 고른 호텔 1곳에 붙는 표시. 성사 전이의 조건(정확히 1곳)입니다.</dd><dt>연결</dt><dd>성사 시점에 선정 호텔과 오거나이저의 연락처가 서로 전달되는 것(HTL_SELECTED_CONNECT 메일).</dd><dt>공유 링크</dt><dd>요청 소유 회원이 동료에게 보내는 보기 전용 링크(<code>?s=</code>). 진행 상황과 비교표만 보이고 선택·조건 변경은 할 수 없습니다.</dd><dt>성사</dt><dd>선정 호텔 1곳이 정해져 요청이 닫힌 종료 상태.</dd><dt>미성사</dt><dd>선택하지 않음·유효기한 경과·두 차례 요청에도 제안 없음으로 요청이 닫힌 종료 상태.</dd></dl></section>
+<section id="notify-who"><h2><span class="n">8</span>알림이 언제 누구에게 가는지</h2><p class="lead">전체 문안·변수는 <a href="notification-library.html">알림 라이브러리</a>에 있습니다. 여기서는 &quot;누가 받는지&quot;만 빠르게 찾을 수 있게 정리했습니다.</p><div class="tw"><table style="min-width:820px"><thead><tr><th>알림</th><th>ID</th><th>받는 사람</th><th>채널</th><th>자동/수동</th></tr></thead><tbody><tr><td>접수 확인</td><td><code>ORG_RECEIVED</code></td><td>오거나이저</td><td>알림톡+이메일</td><td>자동</td></tr><tr><td>반려 안내</td><td><code>ORG_REJECTED</code></td><td>오거나이저</td><td>알림톡+이메일</td><td>자동</td></tr><tr><td>호텔 요청 안내</td><td><code>ORG_BIDDING</code></td><td>오거나이저</td><td>알림톡+이메일</td><td>자동</td></tr><tr><td>재요청 안내(새 라운드)</td><td><code>ORG_REBID</code></td><td>오거나이저</td><td>알림톡+이메일</td><td>자동</td></tr><tr><td>견적 도착</td><td><code>ORG_DELIVERED</code></td><td>오거나이저</td><td>알림톡+이메일</td><td>자동</td></tr><tr><td>성사 안내</td><td><code>ORG_WON</code></td><td>오거나이저</td><td>알림톡+이메일</td><td>자동</td></tr><tr><td>미성사 안내</td><td><code>ORG_LOST</code></td><td>오거나이저</td><td>알림톡+이메일</td><td>자동</td></tr><tr><td>취소 확인</td><td><code>ORG_CANCELLED</code></td><td>오거나이저</td><td>알림톡+이메일</td><td>자동</td></tr><tr><td>제안 선택 인증번호</td><td><code>ORG_PICK_OTP</code></td><td>오거나이저(등록 휴대전화)</td><td>SMS 전용</td><td>자동</td></tr><tr><td>견적 초대</td><td><code>HTL_INVITE</code></td><td>초대 호텔</td><td>이메일</td><td>자동</td></tr><tr><td>마감 리마인더(24시간 전)</td><td><code>HTL_REMINDER</code></td><td>초대 호텔</td><td>이메일</td><td>자동</td></tr><tr><td>견적 접수 확인</td><td><code>HTL_QUOTE_RECEIVED</code></td><td>제출 호텔</td><td>이메일</td><td>자동</td></tr><tr><td>선정 연결 메일</td><td><code>HTL_SELECTED_CONNECT</code></td><td>선정 호텔(오거나이저 참조)</td><td>이메일</td><td>자동</td></tr><tr><td>미선정 안내</td><td><code>HTL_NOT_SELECTED</code></td><td>제출한 나머지 호텔</td><td>이메일</td><td>자동</td></tr><tr><td>파트너 신청·승인·거절·재승인</td><td><code>PTN_*</code></td><td>파트너 신청자</td><td>이메일</td><td>자동</td></tr><tr><td>회원 가입·인증·잠금·탈퇴 등</td><td><code>ACC_*</code></td><td>회원</td><td>이메일(SMS는 인증번호만)</td><td>자동</td></tr><tr><td>진행 상황·정보 요청·지연 안내 등</td><td><code>OPS_ORG_*</code></td><td>오거나이저</td><td>이메일</td><td>수동(운영자)</td></tr><tr><td>호텔 후속 문의·취소 안내 등</td><td><code>OPS_HTL_*</code></td><td>호텔</td><td>이메일</td><td>수동(운영자)</td></tr><tr><td>파트너 중지·도메인 확인</td><td><code>OPS_PTN_*</code></td><td>해당 호텔</td><td>이메일</td><td>수동(운영자)</td></tr><tr><td>연결 요청 확인·요청 이관</td><td><code>OPS_ACC_* · OPS_RFP_TRANSFER</code></td><td>회원</td><td>이메일</td><td>수동(운영자)</td></tr><tr><td>피드백 접수 알림</td><td><code>FB_OPS_ALERT</code></td><td>운영팀</td><td>이메일</td><td>자동</td></tr><tr><td>피드백 접수 확인</td><td><code>FB_ACK</code></td><td>접수자(회신 이메일·동의 시)</td><td>이메일</td><td>자동</td></tr></tbody></table></div></section>
+<section id="voc">
+<h2><span class="n">9</span>문의 응대 원칙</h2>
+<p class="lead">VOC SOP(프로젝트 문서 <code>micego-voc-sop-cx-v1</code>) 요약입니다. 전체 템플릿 문구는 원본 문서를 봅니다.</p>
+<div class="tw"><table><thead><tr><th>구분</th><th>기준</th></tr></thead><tbody>
+<tr><td class="nw"><b>일일 트리아지</b></td><td>영업일 10:00, 16:00 — 신규(<code>new</code>) 건을 분류(<code>triaged</code>)합니다.</td></tr>
+<tr><td class="nw"><b>주간 정리</b></td><td>월요일 11:00 — 보류(<code>on_hold</code>)와 오래된 건을 다시 봅니다.</td></tr>
+<tr><td class="nw"><b>착수 기한</b></td><td>P1은 접수 4영업시간 안, P2는 1영업일 안에 착수(<code>in_progress</code>)합니다.</td></tr>
+<tr><td class="nw"><b>분류 기한</b></td><td>신규 건은 1영업일 안에 분류합니다. 넘기면 콘솔에 &quot;분류 지연&quot; 배지가 붙습니다.</td></tr>
+<tr><td class="nw"><b>답변 템플릿</b></td><td>1차 답변(②), 처리 완료 안내(③), 반영 안 함 안내(④) 세 종류가 있고, 원본 알림 메일에 그대로 답장해 접수번호(<code>FB-YYMMDD-XXXX</code>)를 유지합니다.</td></tr>
+</tbody></table></div>
+<h3>템플릿 위치</h3>
+<p>템플릿 문구는 콘솔 안이 아니라 VOC SOP 문서(프로젝트 문서함의 <code>micego-voc-sop-cx-v1</code>) §9.7에 있습니다. 콘솔의 <code>admin/feedback-detail.html</code>은 분류·상태·메모만 다루고, 실제 답장은 운영팀 메일함(<code>FEEDBACK_INBOX</code>)에서 알림 메일에 직접 답장하는 방식입니다.</p>
+<div class="callout">우선순위와 하위 코드를 매기지 않으면(ETC 제외) 상태를 <b>분류됨</b>으로 넘길 수 없습니다(<code>GUARD_TRIAGE_FIELDS</code>). 보류로 돌릴 때도 사유 메모가 필수입니다(<code>GUARD_HOLD_NOTE</code>).</div>
+</section>
+<section id="help">
+<h2><span class="n">10</span>도움 요청 경로</h2>
+<ul class="tight">
+<li><b>콘솔 사용법이 헷갈릴 때</b> — 이 문서와 <a href="state-transitions.html">상태전이표 v1.7</a>을 먼저 확인합니다. 화면 문구·가드 조건은 상태전이표 §2~§5-4에 전부 있습니다.</li>
+<li><b>화면이 안 되거나 오류가 뜰 때</b> — <a href="incident-runbook.html">장애 대응 runbook</a>의 심각도 정의부터 확인하고, 판단이 서면 해당 시나리오 카드를 따라갑니다. 애매하면 낮추지 말고 개발 담당에게 바로 공유합니다.</li>
+<li><b>사유·조건이 기억 안 나는 조치</b>(사유 필수인 전이 등) — <code>admin/settings.html</code> &quot;기본 규칙&quot;·&quot;회원 인증 규칙&quot; 탭이 읽기 전용 참고표입니다.</li>
+<li><b>그래도 모르겠을 때</b> — 계정을 발급해 준 운영자나 개발 담당에게 요청번호·회원 ID·화면 캡처와 함께 물어봅니다. 혼자 SQL로 고치려 하지 않습니다(<a href="#donot">절대 하지 말 것</a> 참고).</li>
+</ul>
+</section>
+<footer>
+<b>연관 문서</b> · <a href="state-transitions.html">상태전이표 v1.7</a> · <a href="notification-library.html">알림 라이브러리</a> · <a href="launch-checklist.html">오픈 당일 체크리스트</a> · <a href="incident-runbook.html">장애 대응 runbook</a> · 프로젝트 문서 micego-voc-sop-cx-v1
+</footer>
+</div>
+</body>
+</html>

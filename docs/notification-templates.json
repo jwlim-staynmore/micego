@@ -1,0 +1,4098 @@
+{
+ "version": "1.1",
+ "generated_by": "build_notify.py",
+ "base_url": "https://micego.example",
+ "base_url_note": "도메인 미정 (BASE_URL 한 곳에서 변경)",
+ "channel_name": "MICEGO",
+ "conventions": {
+  "email_placeholder": "{{VAR}}",
+  "alimtalk_placeholder": "#{변수}",
+  "alimtalk_body_limit_chars": 1000,
+  "lms_title_limit_bytes": 40,
+  "lms_body_limit_bytes": 2000,
+  "button_name_limit_chars": 14,
+  "sms_body_limit_bytes": 90
+ },
+ "templates": [
+  {
+   "id": "ORG_RECEIVED",
+   "name": "접수 확인",
+   "recipient": "org",
+   "recipient_label": "오거나이저",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "#0 접수 폼 제출 → 접수됨",
+   "transitions": [
+    "0"
+   ],
+   "states": "접수됨",
+   "channels": {
+    "email": true,
+    "alimtalk": true,
+    "lms": true,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ORG_RECEIVED.html",
+    "subject": "[MICEGO] 견적 요청이 접수되었습니다 · {{RFP_ID}}",
+    "subject_sample": "[MICEGO] 견적 요청이 접수되었습니다 · MG-2610-014",
+    "preheader": "요청번호 {{RFP_ID}} · {{DESTINATION}} {{EVENT_TYPE}} · 3영업일 안에 진행 상황을 알려 드립니다.",
+    "preheader_sample": "요청번호 MG-2610-014 · 다낭 인센티브 · 3영업일 안에 진행 상황을 알려 드립니다.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": [
+     "REGIONAL_PARTNER"
+    ]
+   },
+   "alimtalk": {
+    "code": "micego_org_received",
+    "emphasize_title": "",
+    "body": "[MICEGO] 견적 요청을 접수했습니다.\n\n{{ORG_CONTACT_NAME}}님, 요청이 정상적으로 접수되었습니다. 접수된 영업일에 확인을 시작해 3영업일 안에 진행 상황과 다음 일정을 알려 드립니다.\n\n■ 요청번호: {{RFP_ID}}\n■ 접수일시: {{RECEIVED_AT}}\n■ 행사: {{DESTINATION}} {{EVENT_TYPE}} · {{PAX}}\n\n진행 상황은 아래 버튼에서 언제든 확인하실 수 있습니다. 개인 링크이므로 외부에 전달하지 말아 주세요.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons": [
+     {
+      "name": "진행 상황 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t={{TRACK_TOKEN}}"
+     }
+    ],
+    "fallback_title": "[MICEGO] 접수 확인",
+    "fallback_body": "[MICEGO] 견적 요청을 접수했습니다.\n\n{{ORG_CONTACT_NAME}}님, 요청이 정상적으로 접수되었습니다. 접수된 영업일에 확인을 시작해 3영업일 안에 진행 상황과 다음 일정을 알려 드립니다.\n\n■ 요청번호: {{RFP_ID}}\n■ 접수일시: {{RECEIVED_AT}}\n■ 행사: {{DESTINATION}} {{EVENT_TYPE}} · {{PAX}}\n\n진행 상황은 아래 버튼에서 언제든 확인하실 수 있습니다. 개인 링크이므로 외부에 전달하지 말아 주세요.\n\n▶ 진행 상황: https://micego.example/ko/track.html?t={{TRACK_TOKEN}}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "body_kr": "[MICEGO] 견적 요청을 접수했습니다.\n\n#{담당자명}님, 요청이 정상적으로 접수되었습니다. 접수된 영업일에 확인을 시작해 3영업일 안에 진행 상황과 다음 일정을 알려 드립니다.\n\n■ 요청번호: #{요청번호}\n■ 접수일시: #{접수일시}\n■ 행사: #{목적지} #{행사유형} · #{인원}\n\n진행 상황은 아래 버튼에서 언제든 확인하실 수 있습니다. 개인 링크이므로 외부에 전달하지 말아 주세요.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "fallback_body_kr": "[MICEGO] 견적 요청을 접수했습니다.\n\n#{담당자명}님, 요청이 정상적으로 접수되었습니다. 접수된 영업일에 확인을 시작해 3영업일 안에 진행 상황과 다음 일정을 알려 드립니다.\n\n■ 요청번호: #{요청번호}\n■ 접수일시: #{접수일시}\n■ 행사: #{목적지} #{행사유형} · #{인원}\n\n진행 상황은 아래 버튼에서 언제든 확인하실 수 있습니다. 개인 링크이므로 외부에 전달하지 말아 주세요.\n\n▶ 진행 상황: https://micego.example/ko/track.html?t=#{추적토큰}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons_kr": [
+     {
+      "name": "진행 상황 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t=#{추적토큰}"
+     }
+    ],
+    "body_chars_sample": 264,
+    "body_chars_max": 311,
+    "fallback_bytes_sample": 482,
+    "fallback_bytes_max": 681,
+    "fallback_title_bytes": 18,
+    "keys": [
+     "ORG_CONTACT_NAME",
+     "RFP_ID",
+     "RECEIVED_AT",
+     "DESTINATION",
+     "EVENT_TYPE",
+     "PAX",
+     "TRACK_TOKEN"
+    ]
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "다낭",
+     "maxLen": 20
+    },
+    {
+     "key": "EVENT_TYPE",
+     "kr_name": "행사유형",
+     "description": "행사 유형",
+     "sample": "인센티브",
+     "maxLen": 12
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "RECEIVED_AT",
+     "kr_name": "접수일시",
+     "description": "접수 시각 (KST)",
+     "sample": "2026-09-26 14:32",
+     "maxLen": 16
+    },
+    {
+     "key": "PAX",
+     "kr_name": "인원",
+     "description": "예상 인원",
+     "sample": "150–199명",
+     "maxLen": 14
+    },
+    {
+     "key": "PARTNER_PUBLIC_NAME",
+     "kr_name": "지역파트너",
+     "description": "호텔에 보이는 지역 파트너 이름",
+     "sample": "MICEGO Thailand",
+     "maxLen": 40
+    },
+    {
+     "key": "TRACK_URL",
+     "kr_name": "추적링크",
+     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "sample": "https://micego.example/ko/track.html?t=demo-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    },
+    {
+     "key": "TRACK_TOKEN",
+     "kr_name": "추적토큰",
+     "description": "추적 링크 토큰 (알림톡 버튼·LMS용, URL 끝 변수)",
+     "sample": "demo-2610",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ORG_REJECTED",
+   "name": "반려 안내",
+   "recipient": "org",
+   "recipient_label": "오거나이저",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "#2 검증중 → 반려됨",
+   "transitions": [
+    "2"
+   ],
+   "states": "검증중 → 반려됨",
+   "channels": {
+    "email": true,
+    "alimtalk": true,
+    "lms": true,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ORG_REJECTED.html",
+    "subject": "[MICEGO] 이번 요청은 진행하기 어렵습니다 · {{RFP_ID}}",
+    "subject_sample": "[MICEGO] 이번 요청은 진행하기 어렵습니다 · MG-2610-014",
+    "preheader": "요청번호 {{RFP_ID}} · 사유를 안내드립니다. 조건이 갖춰지면 새로 요청해 주세요.",
+    "preheader_sample": "요청번호 MG-2610-014 · 사유를 안내드립니다. 조건이 갖춰지면 새로 요청해 주세요.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "alimtalk": {
+    "code": "micego_org_rejected",
+    "emphasize_title": "",
+    "body": "[MICEGO] 이번 요청은 진행하기 어렵습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청을 검토했지만 이번에는 호텔에 요청을 보내지 못했습니다.\n\n■ 사유: {{REJECT_REASON}}\n\n사유가 해결되면 아래 버튼에서 새로 요청해 주세요. 접수하신 내용은 호텔에 전달되지 않았습니다.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons": [
+     {
+      "name": "새로 요청하기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/#register"
+     }
+    ],
+    "fallback_title": "[MICEGO] 요청 반려 안내",
+    "fallback_body": "[MICEGO] 이번 요청은 진행하기 어렵습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청을 검토했지만 이번에는 호텔에 요청을 보내지 못했습니다.\n\n■ 사유: {{REJECT_REASON}}\n\n사유가 해결되면 아래 버튼에서 새로 요청해 주세요. 접수하신 내용은 호텔에 전달되지 않았습니다.\n\n▶ 새로 요청하기: https://micego.example/ko/#register\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "body_kr": "[MICEGO] 이번 요청은 진행하기 어렵습니다.\n\n#{담당자명}님, #{요청번호} 요청을 검토했지만 이번에는 호텔에 요청을 보내지 못했습니다.\n\n■ 사유: #{반려사유}\n\n사유가 해결되면 아래 버튼에서 새로 요청해 주세요. 접수하신 내용은 호텔에 전달되지 않았습니다.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "fallback_body_kr": "[MICEGO] 이번 요청은 진행하기 어렵습니다.\n\n#{담당자명}님, #{요청번호} 요청을 검토했지만 이번에는 호텔에 요청을 보내지 못했습니다.\n\n■ 사유: #{반려사유}\n\n사유가 해결되면 아래 버튼에서 새로 요청해 주세요. 접수하신 내용은 호텔에 전달되지 않았습니다.\n\n▶ 새로 요청하기: https://micego.example/ko/#register\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons_kr": [
+     {
+      "name": "새로 요청하기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/#register"
+     }
+    ],
+    "body_chars_sample": 214,
+    "body_chars_max": 255,
+    "fallback_bytes_sample": 408,
+    "fallback_bytes_max": 510,
+    "fallback_title_bytes": 23,
+    "keys": [
+     "ORG_CONTACT_NAME",
+     "RFP_ID",
+     "REJECT_REASON"
+    ]
+   },
+   "fixed_phrasings": {
+    "variable": "REJECT_REASON",
+    "options": [
+     {
+      "label": "국내 행사",
+      "text": "MICEGO는 해외에서 열리는 행사만 다루고 있어, 국내 행사는 진행하기 어렵습니다."
+     },
+     {
+      "label": "일정 미확정",
+      "text": "행사 시작일이 확정되지 않아 호텔에 요청을 보내지 못했습니다."
+     },
+     {
+      "label": "필수 정보 부족",
+      "text": "행사 유형·인원·객실 수 등 필수 정보를 확인하지 못해 호텔에 요청을 보내지 못했습니다."
+     }
+    ]
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "RECEIVED_AT",
+     "kr_name": "접수일시",
+     "description": "접수 시각 (KST)",
+     "sample": "2026-09-26 14:32",
+     "maxLen": 16
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "다낭",
+     "maxLen": 20
+    },
+    {
+     "key": "REJECT_REASON",
+     "kr_name": "반려사유",
+     "description": "반려 사유 문장 (고정 3종 중 택1, 아래 표)",
+     "sample": "행사 시작일이 확정되지 않아 호텔에 요청을 보내지 못했습니다.",
+     "maxLen": 60
+    },
+    {
+     "key": "REGISTER_URL",
+     "kr_name": "신규요청URL",
+     "description": "랜딩 접수 폼 링크",
+     "sample": "https://micego.example/ko/#register",
+     "maxLen": 60
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ORG_BIDDING",
+   "name": "비딩중 진입",
+   "recipient": "org",
+   "recipient_label": "오거나이저",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "#4 오픈 → 비딩중 (초대 발송 시점)",
+   "transitions": [
+    "4"
+   ],
+   "states": "오픈 → 비딩중",
+   "channels": {
+    "email": true,
+    "alimtalk": true,
+    "lms": true,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ORG_BIDDING.html",
+    "subject": "[MICEGO] 호텔에 견적을 요청했습니다 · {{RFP_ID}}",
+    "subject_sample": "[MICEGO] 호텔에 견적을 요청했습니다 · MG-2610-014",
+    "preheader": "요청번호 {{RFP_ID}} · 견적 마감 {{DEADLINE_KST}} · 비교표는 {{COMPARE_DATE}}까지 전달합니다.",
+    "preheader_sample": "요청번호 MG-2610-014 · 견적 마감 2026-10-08(목) 18:00 KST · 비교표는 2026-10-12(월)까지 전달합니다.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": [
+     "REGIONAL_PARTNER"
+    ]
+   },
+   "alimtalk": {
+    "code": "micego_org_bidding",
+    "emphasize_title": "",
+    "body": "[MICEGO] 호텔에 견적을 요청했습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청의 검토를 마치고 조건에 맞는 해외 호텔 몇 곳에 요청을 보냈습니다.\n\n■ 호텔 견적 마감: {{DEADLINE_KST}}\n■ 비교표 전달 예정일: {{COMPARE_DATE}}\n\n마감 후 받은 제안을 비교표로 정리해 다시 알려 드립니다. 진행 상황은 아래 버튼에서 확인하실 수 있습니다.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons": [
+     {
+      "name": "진행 상황 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t={{TRACK_TOKEN}}"
+     }
+    ],
+    "fallback_title": "[MICEGO] 호텔 견적 요청 안내",
+    "fallback_body": "[MICEGO] 호텔에 견적을 요청했습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청의 검토를 마치고 조건에 맞는 해외 호텔 몇 곳에 요청을 보냈습니다.\n\n■ 호텔 견적 마감: {{DEADLINE_KST}}\n■ 비교표 전달 예정일: {{COMPARE_DATE}}\n\n마감 후 받은 제안을 비교표로 정리해 다시 알려 드립니다. 진행 상황은 아래 버튼에서 확인하실 수 있습니다.\n\n▶ 진행 상황: https://micego.example/ko/track.html?t={{TRACK_TOKEN}}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "body_kr": "[MICEGO] 호텔에 견적을 요청했습니다.\n\n#{담당자명}님, #{요청번호} 요청의 검토를 마치고 조건에 맞는 해외 호텔 몇 곳에 요청을 보냈습니다.\n\n■ 호텔 견적 마감: #{견적마감}\n■ 비교표 전달 예정일: #{비교표예정일}\n\n마감 후 받은 제안을 비교표로 정리해 다시 알려 드립니다. 진행 상황은 아래 버튼에서 확인하실 수 있습니다.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "fallback_body_kr": "[MICEGO] 호텔에 견적을 요청했습니다.\n\n#{담당자명}님, #{요청번호} 요청의 검토를 마치고 조건에 맞는 해외 호텔 몇 곳에 요청을 보냈습니다.\n\n■ 호텔 견적 마감: #{견적마감}\n■ 비교표 전달 예정일: #{비교표예정일}\n\n마감 후 받은 제안을 비교표로 정리해 다시 알려 드립니다. 진행 상황은 아래 버튼에서 확인하실 수 있습니다.\n\n▶ 진행 상황: https://micego.example/ko/track.html?t=#{추적토큰}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons_kr": [
+     {
+      "name": "진행 상황 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t=#{추적토큰}"
+     }
+    ],
+    "body_chars_sample": 248,
+    "body_chars_max": 267,
+    "fallback_bytes_sample": 444,
+    "fallback_bytes_max": 599,
+    "fallback_title_bytes": 28,
+    "keys": [
+     "ORG_CONTACT_NAME",
+     "RFP_ID",
+     "DEADLINE_KST",
+     "COMPARE_DATE",
+     "TRACK_TOKEN"
+    ]
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "DEADLINE_KST",
+     "kr_name": "견적마감",
+     "description": "호텔 견적 마감 (KST)",
+     "sample": "2026-10-08(목) 18:00 KST",
+     "maxLen": 26
+    },
+    {
+     "key": "COMPARE_DATE",
+     "kr_name": "비교표예정일",
+     "description": "비교표 전달 예정일",
+     "sample": "2026-10-12(월)",
+     "maxLen": 14
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "다낭",
+     "maxLen": 20
+    },
+    {
+     "key": "EVENT_TYPE",
+     "kr_name": "행사유형",
+     "description": "행사 유형",
+     "sample": "인센티브",
+     "maxLen": 12
+    },
+    {
+     "key": "PAX",
+     "kr_name": "인원",
+     "description": "예상 인원",
+     "sample": "150–199명",
+     "maxLen": 14
+    },
+    {
+     "key": "EVENT_DATES",
+     "kr_name": "행사일정",
+     "description": "행사 기간",
+     "sample": "2027-03-15~18",
+     "maxLen": 20
+    },
+    {
+     "key": "PARTNER_PUBLIC_NAME",
+     "kr_name": "지역파트너",
+     "description": "호텔에 보이는 지역 파트너 이름",
+     "sample": "MICEGO Thailand",
+     "maxLen": 40
+    },
+    {
+     "key": "TRACK_URL",
+     "kr_name": "추적링크",
+     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "sample": "https://micego.example/ko/track.html?t=demo-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    },
+    {
+     "key": "TRACK_TOKEN",
+     "kr_name": "추적토큰",
+     "description": "추적 링크 토큰 (알림톡 버튼·LMS용, URL 끝 변수)",
+     "sample": "demo-2610",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ORG_REBID",
+   "name": "새 라운드 (조건 변경)",
+   "recipient": "org",
+   "recipient_label": "오거나이저",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "#7 취합중 → 비딩중 · #9 전달됨 → 비딩중 (라운드 ≥ 2)",
+   "transitions": [
+    "7",
+    "9"
+   ],
+   "states": "취합중·전달됨 → 비딩중 (라운드 2 이상)",
+   "channels": {
+    "email": true,
+    "alimtalk": true,
+    "lms": true,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ORG_REBID.html",
+    "subject": "[MICEGO] 바뀐 조건으로 호텔에 다시 요청했습니다 · {{RFP_ID}}",
+    "subject_sample": "[MICEGO] 바뀐 조건으로 호텔에 다시 요청했습니다 · MG-2610-014",
+    "preheader": "요청번호 {{RFP_ID}} · 새 견적 마감 {{DEADLINE_KST}} · 비교표는 {{COMPARE_DATE}}까지.",
+    "preheader_sample": "요청번호 MG-2610-014 · 새 견적 마감 2026-10-08(목) 18:00 KST · 비교표는 2026-10-12(월)까지.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "alimtalk": {
+    "code": "micego_org_rebid",
+    "emphasize_title": "",
+    "body": "[MICEGO] 바뀐 조건으로 호텔에 다시 요청했습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청의 조건이 바뀌어 {{ROUND}}차로 호텔에 다시 요청을 보냈습니다.\n\n■ 변경 내용: {{CHANGE_SUMMARY}}\n■ 새 견적 마감: {{DEADLINE_KST}}\n■ 새 비교표 예정일: {{COMPARE_DATE}}\n\n이전에 받은 제안은 기록으로 보관됩니다. 진행 상황은 아래 버튼에서 확인하실 수 있습니다.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons": [
+     {
+      "name": "진행 상황 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t={{TRACK_TOKEN}}"
+     }
+    ],
+    "fallback_title": "[MICEGO] 호텔 재요청 안내",
+    "fallback_body": "[MICEGO] 바뀐 조건으로 호텔에 다시 요청했습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청의 조건이 바뀌어 {{ROUND}}차로 호텔에 다시 요청을 보냈습니다.\n\n■ 변경 내용: {{CHANGE_SUMMARY}}\n■ 새 견적 마감: {{DEADLINE_KST}}\n■ 새 비교표 예정일: {{COMPARE_DATE}}\n\n이전에 받은 제안은 기록으로 보관됩니다. 진행 상황은 아래 버튼에서 확인하실 수 있습니다.\n\n▶ 진행 상황: https://micego.example/ko/track.html?t={{TRACK_TOKEN}}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "body_kr": "[MICEGO] 바뀐 조건으로 호텔에 다시 요청했습니다.\n\n#{담당자명}님, #{요청번호} 요청의 조건이 바뀌어 #{라운드}차로 호텔에 다시 요청을 보냈습니다.\n\n■ 변경 내용: #{변경내용}\n■ 새 견적 마감: #{견적마감}\n■ 새 비교표 예정일: #{비교표예정일}\n\n이전에 받은 제안은 기록으로 보관됩니다. 진행 상황은 아래 버튼에서 확인하실 수 있습니다.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "fallback_body_kr": "[MICEGO] 바뀐 조건으로 호텔에 다시 요청했습니다.\n\n#{담당자명}님, #{요청번호} 요청의 조건이 바뀌어 #{라운드}차로 호텔에 다시 요청을 보냈습니다.\n\n■ 변경 내용: #{변경내용}\n■ 새 견적 마감: #{견적마감}\n■ 새 비교표 예정일: #{비교표예정일}\n\n이전에 받은 제안은 기록으로 보관됩니다. 진행 상황은 아래 버튼에서 확인하실 수 있습니다.\n\n▶ 진행 상황: https://micego.example/ko/track.html?t=#{추적토큰}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons_kr": [
+     {
+      "name": "진행 상황 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t=#{추적토큰}"
+     }
+    ],
+    "body_chars_sample": 287,
+    "body_chars_max": 326,
+    "fallback_bytes_sample": 490,
+    "fallback_bytes_max": 717,
+    "fallback_title_bytes": 25,
+    "keys": [
+     "ORG_CONTACT_NAME",
+     "RFP_ID",
+     "ROUND",
+     "CHANGE_SUMMARY",
+     "DEADLINE_KST",
+     "COMPARE_DATE",
+     "TRACK_TOKEN"
+    ]
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "DEADLINE_KST",
+     "kr_name": "견적마감",
+     "description": "호텔 견적 마감 (KST)",
+     "sample": "2026-10-08(목) 18:00 KST",
+     "maxLen": 26
+    },
+    {
+     "key": "COMPARE_DATE",
+     "kr_name": "비교표예정일",
+     "description": "비교표 전달 예정일",
+     "sample": "2026-10-12(월)",
+     "maxLen": 14
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "ROUND",
+     "kr_name": "라운드",
+     "description": "요청 라운드 (2 이상)",
+     "sample": "2",
+     "maxLen": 2
+    },
+    {
+     "key": "CHANGE_SUMMARY",
+     "kr_name": "변경내용",
+     "description": "바뀐 조건 요약 한 줄",
+     "sample": "인원 150–199명 → 200–250명, 행사일 2027-03-22~25",
+     "maxLen": 60
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "다낭",
+     "maxLen": 20
+    },
+    {
+     "key": "EVENT_TYPE",
+     "kr_name": "행사유형",
+     "description": "행사 유형",
+     "sample": "인센티브",
+     "maxLen": 12
+    },
+    {
+     "key": "TRACK_URL",
+     "kr_name": "추적링크",
+     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "sample": "https://micego.example/ko/track.html?t=demo-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    },
+    {
+     "key": "TRACK_TOKEN",
+     "kr_name": "추적토큰",
+     "description": "추적 링크 토큰 (알림톡 버튼·LMS용, URL 끝 변수)",
+     "sample": "demo-2610",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ORG_DELIVERED",
+   "name": "견적 도착 (전달됨)",
+   "recipient": "org",
+   "recipient_label": "오거나이저",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "#6 취합중 → 전달됨",
+   "transitions": [
+    "6"
+   ],
+   "states": "취합중 → 전달됨",
+   "channels": {
+    "email": true,
+    "alimtalk": true,
+    "lms": true,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ORG_DELIVERED.html",
+    "subject": "[MICEGO] 받은 제안을 비교표로 전달드립니다 · {{RFP_ID}}",
+    "subject_sample": "[MICEGO] 받은 제안을 비교표로 전달드립니다 · MG-2610-014",
+    "preheader": "요청번호 {{RFP_ID}} · 제안 {{PROPOSAL_COUNT}}건 · 가장 빠른 견적 유효기한 {{VALID_UNTIL_MIN}}",
+    "preheader_sample": "요청번호 MG-2610-014 · 제안 3건 · 가장 빠른 견적 유효기한 2026-12-15",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "alimtalk": {
+    "code": "micego_org_delivered",
+    "emphasize_title": "비교표가 도착했습니다",
+    "body": "[MICEGO] 받은 제안을 비교표로 전달드립니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청에 호텔 제안이 도착해 비교표로 정리했습니다.\n\n■ 받은 제안: {{PROPOSAL_COUNT}}건\n■ 가장 빠른 견적 유효기한: {{VALID_UNTIL_MIN}}\n\n비교표는 아래 버튼에서 보실 수 있고, 호텔 이름은 선택 전까지 제안 A·B·C로 표시됩니다. 고르신 제안은 페이지의 「제안 선택하기」 버튼으로 메일 초안을 열거나, MICEGO에서 받은 이메일에 회신해 알려 주세요.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons": [
+     {
+      "name": "비교표 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t={{TRACK_TOKEN}}"
+     }
+    ],
+    "fallback_title": "[MICEGO] 비교표 도착",
+    "fallback_body": "[MICEGO] 받은 제안을 비교표로 전달드립니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청에 호텔 제안이 도착해 비교표로 정리했습니다.\n\n■ 받은 제안: {{PROPOSAL_COUNT}}건\n■ 가장 빠른 견적 유효기한: {{VALID_UNTIL_MIN}}\n\n비교표는 아래 버튼에서 보실 수 있고, 호텔 이름은 선택 전까지 제안 A·B·C로 표시됩니다. 고르신 제안은 페이지의 「제안 선택하기」 버튼으로 메일 초안을 열거나, MICEGO에서 받은 이메일에 회신해 알려 주세요.\n\n▶ 비교표 보기: https://micego.example/ko/track.html?t={{TRACK_TOKEN}}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "body_kr": "[MICEGO] 받은 제안을 비교표로 전달드립니다.\n\n#{담당자명}님, #{요청번호} 요청에 호텔 제안이 도착해 비교표로 정리했습니다.\n\n■ 받은 제안: #{제안건수}건\n■ 가장 빠른 견적 유효기한: #{유효기한}\n\n비교표는 아래 버튼에서 보실 수 있고, 호텔 이름은 선택 전까지 제안 A·B·C로 표시됩니다. 고르신 제안은 페이지의 「제안 선택하기」 버튼으로 메일 초안을 열거나, MICEGO에서 받은 이메일에 회신해 알려 주세요.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "fallback_body_kr": "[MICEGO] 받은 제안을 비교표로 전달드립니다.\n\n#{담당자명}님, #{요청번호} 요청에 호텔 제안이 도착해 비교표로 정리했습니다.\n\n■ 받은 제안: #{제안건수}건\n■ 가장 빠른 견적 유효기한: #{유효기한}\n\n비교표는 아래 버튼에서 보실 수 있고, 호텔 이름은 선택 전까지 제안 A·B·C로 표시됩니다. 고르신 제안은 페이지의 「제안 선택하기」 버튼으로 메일 초안을 열거나, MICEGO에서 받은 이메일에 회신해 알려 주세요.\n\n▶ 비교표 보기: https://micego.example/ko/track.html?t=#{추적토큰}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons_kr": [
+     {
+      "name": "비교표 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t=#{추적토큰}"
+     }
+    ],
+    "body_chars_sample": 276,
+    "body_chars_max": 292,
+    "fallback_bytes_sample": 506,
+    "fallback_bytes_max": 632,
+    "fallback_title_bytes": 20,
+    "keys": [
+     "ORG_CONTACT_NAME",
+     "RFP_ID",
+     "PROPOSAL_COUNT",
+     "VALID_UNTIL_MIN",
+     "TRACK_TOKEN"
+    ]
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "PROPOSAL_COUNT",
+     "kr_name": "제안건수",
+     "description": "받은 제안 수",
+     "sample": "3",
+     "maxLen": 2
+    },
+    {
+     "key": "VALID_UNTIL_MIN",
+     "kr_name": "유효기한",
+     "description": "제안 중 가장 빠른 견적 유효기한",
+     "sample": "2026-12-15",
+     "maxLen": 10
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "TRACK_URL",
+     "kr_name": "추적링크",
+     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "sample": "https://micego.example/ko/track.html?t=demo-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    },
+    {
+     "key": "TRACK_TOKEN",
+     "kr_name": "추적토큰",
+     "description": "추적 링크 토큰 (알림톡 버튼·LMS용, URL 끝 변수)",
+     "sample": "demo-2610",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ORG_WON",
+   "name": "성사 (호텔 선정·연결)",
+   "recipient": "org",
+   "recipient_label": "오거나이저",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "#10 전달됨 → 성사",
+   "transitions": [
+    "10"
+   ],
+   "states": "전달됨 → 성사",
+   "channels": {
+    "email": true,
+    "alimtalk": true,
+    "lms": true,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ORG_WON.html",
+    "subject": "[MICEGO] 선정하신 호텔과 연결해 드렸습니다 · {{RFP_ID}}",
+    "subject_sample": "[MICEGO] 선정하신 호텔과 연결해 드렸습니다 · MG-2610-014",
+    "preheader": "요청번호 {{RFP_ID}} · {{SELECTED_HOTEL}} 담당자에게 연결 메일을 보냈고 참조로 넣었습니다.",
+    "preheader_sample": "요청번호 MG-2610-014 · Ocean Pearl Resort Da Nang 담당자에게 연결 메일을 보냈고 참조로 넣었습니다.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "alimtalk": {
+    "code": "micego_org_won",
+    "emphasize_title": "선정 호텔과 연결했습니다",
+    "body": "[MICEGO] 선정하신 호텔과 연결해 드렸습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청의 선정 호텔은 {{SELECTED_HOTEL}}입니다.\n\n호텔 담당자에게 연결 메일을 보냈고 담당자님을 참조로 넣었습니다. 호텔에는 회사명({{ORG_COMPANY}})과 담당자 연락처(이메일·전화)가 전달되었습니다.\n\n계약과 결제는 호텔과 직접 진행하시면 됩니다. 주최 측 수수료는 없습니다.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons": [
+     {
+      "name": "진행 상황 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t={{TRACK_TOKEN}}"
+     }
+    ],
+    "fallback_title": "[MICEGO] 호텔 선정·연결 안내",
+    "fallback_body": "[MICEGO] 선정하신 호텔과 연결해 드렸습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청의 선정 호텔은 {{SELECTED_HOTEL}}입니다.\n\n호텔 담당자에게 연결 메일을 보냈고 담당자님을 참조로 넣었습니다. 호텔에는 회사명({{ORG_COMPANY}})과 담당자 연락처(이메일·전화)가 전달되었습니다.\n\n계약과 결제는 호텔과 직접 진행하시면 됩니다. 주최 측 수수료는 없습니다.\n\n▶ 진행 상황: https://micego.example/ko/track.html?t={{TRACK_TOKEN}}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "body_kr": "[MICEGO] 선정하신 호텔과 연결해 드렸습니다.\n\n#{담당자명}님, #{요청번호} 요청의 선정 호텔은 #{선정호텔}입니다.\n\n호텔 담당자에게 연결 메일을 보냈고 담당자님을 참조로 넣었습니다. 호텔에는 회사명(#{회사명})과 담당자 연락처(이메일·전화)가 전달되었습니다.\n\n계약과 결제는 호텔과 직접 진행하시면 됩니다. 주최 측 수수료는 없습니다.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "fallback_body_kr": "[MICEGO] 선정하신 호텔과 연결해 드렸습니다.\n\n#{담당자명}님, #{요청번호} 요청의 선정 호텔은 #{선정호텔}입니다.\n\n호텔 담당자에게 연결 메일을 보냈고 담당자님을 참조로 넣었습니다. 호텔에는 회사명(#{회사명})과 담당자 연락처(이메일·전화)가 전달되었습니다.\n\n계약과 결제는 호텔과 직접 진행하시면 됩니다. 주최 측 수수료는 없습니다.\n\n▶ 진행 상황: https://micego.example/ko/track.html?t=#{추적토큰}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons_kr": [
+     {
+      "name": "진행 상황 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t=#{추적토큰}"
+     }
+    ],
+    "body_chars_sample": 252,
+    "body_chars_max": 314,
+    "fallback_bytes_sample": 463,
+    "fallback_bytes_max": 698,
+    "fallback_title_bytes": 29,
+    "keys": [
+     "ORG_CONTACT_NAME",
+     "RFP_ID",
+     "SELECTED_HOTEL",
+     "ORG_COMPANY",
+     "TRACK_TOKEN"
+    ]
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "SELECTED_HOTEL",
+     "kr_name": "선정호텔",
+     "description": "선정된 호텔명",
+     "sample": "Ocean Pearl Resort Da Nang",
+     "maxLen": 50
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "TRACK_URL",
+     "kr_name": "추적링크",
+     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "sample": "https://micego.example/ko/track.html?t=demo-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    },
+    {
+     "key": "ORG_COMPANY",
+     "kr_name": "회사명",
+     "description": "오거나이저 회사명",
+     "sample": "한빛투어(주)",
+     "maxLen": 30
+    },
+    {
+     "key": "TRACK_TOKEN",
+     "kr_name": "추적토큰",
+     "description": "추적 링크 토큰 (알림톡 버튼·LMS용, URL 끝 변수)",
+     "sample": "demo-2610",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ORG_LOST",
+   "name": "미성사 종료",
+   "recipient": "org",
+   "recipient_label": "오거나이저",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "#11 전달됨 → 미성사 · #8 취합중 → 미성사",
+   "transitions": [
+    "11",
+    "8"
+   ],
+   "states": "전달됨·취합중 → 미성사",
+   "channels": {
+    "email": true,
+    "alimtalk": true,
+    "lms": true,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ORG_LOST.html",
+    "subject": "[MICEGO] 이번 요청은 성사 없이 종료되었습니다 · {{RFP_ID}}",
+    "subject_sample": "[MICEGO] 이번 요청은 성사 없이 종료되었습니다 · MG-2610-014",
+    "preheader": "요청번호 {{RFP_ID}} · 종료 사유와 이후 안내를 드립니다. 새 요청은 언제든 가능합니다.",
+    "preheader_sample": "요청번호 MG-2610-014 · 종료 사유와 이후 안내를 드립니다. 새 요청은 언제든 가능합니다.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "alimtalk": {
+    "code": "micego_org_lost",
+    "emphasize_title": "",
+    "body": "[MICEGO] 이번 요청은 성사 없이 종료되었습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청을 종료했습니다.\n\n■ 사유: {{LOST_REASON}}\n\n호텔에는 종료 결과만 전달되며, 회사명과 담당자 연락처는 전달되지 않았습니다. 조건이 정해지면 새로 요청해 주세요.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons": [
+     {
+      "name": "진행 상황 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t={{TRACK_TOKEN}}"
+     }
+    ],
+    "fallback_title": "[MICEGO] 요청 종료 안내",
+    "fallback_body": "[MICEGO] 이번 요청은 성사 없이 종료되었습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청을 종료했습니다.\n\n■ 사유: {{LOST_REASON}}\n\n호텔에는 종료 결과만 전달되며, 회사명과 담당자 연락처는 전달되지 않았습니다. 조건이 정해지면 새로 요청해 주세요.\n\n▶ 진행 상황: https://micego.example/ko/track.html?t={{TRACK_TOKEN}}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "body_kr": "[MICEGO] 이번 요청은 성사 없이 종료되었습니다.\n\n#{담당자명}님, #{요청번호} 요청을 종료했습니다.\n\n■ 사유: #{미성사사유}\n\n호텔에는 종료 결과만 전달되며, 회사명과 담당자 연락처는 전달되지 않았습니다. 조건이 정해지면 새로 요청해 주세요.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "fallback_body_kr": "[MICEGO] 이번 요청은 성사 없이 종료되었습니다.\n\n#{담당자명}님, #{요청번호} 요청을 종료했습니다.\n\n■ 사유: #{미성사사유}\n\n호텔에는 종료 결과만 전달되며, 회사명과 담당자 연락처는 전달되지 않았습니다. 조건이 정해지면 새로 요청해 주세요.\n\n▶ 진행 상황: https://micego.example/ko/track.html?t=#{추적토큰}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons_kr": [
+     {
+      "name": "진행 상황 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t=#{추적토큰}"
+     }
+    ],
+    "body_chars_sample": 198,
+    "body_chars_max": 232,
+    "fallback_bytes_sample": 388,
+    "fallback_bytes_max": 545,
+    "fallback_title_bytes": 23,
+    "keys": [
+     "ORG_CONTACT_NAME",
+     "RFP_ID",
+     "LOST_REASON",
+     "TRACK_TOKEN"
+    ]
+   },
+   "fixed_phrasings": {
+    "variable": "LOST_REASON",
+    "options": [
+     {
+      "label": "선택하지 않음",
+      "text": "받으신 제안 중 선택하지 않으셔서 종료했습니다."
+     },
+     {
+      "label": "유효기한 경과",
+      "text": "견적 유효기한이 지나도록 선택 회신이 없어 종료했습니다."
+     },
+     {
+      "label": "두 차례 요청에도 제안 없음",
+      "text": "두 차례 요청했지만 호텔의 제안을 받지 못해 종료했습니다."
+     }
+    ]
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "다낭",
+     "maxLen": 20
+    },
+    {
+     "key": "EVENT_TYPE",
+     "kr_name": "행사유형",
+     "description": "행사 유형",
+     "sample": "인센티브",
+     "maxLen": 12
+    },
+    {
+     "key": "PAX",
+     "kr_name": "인원",
+     "description": "예상 인원",
+     "sample": "150–199명",
+     "maxLen": 14
+    },
+    {
+     "key": "LOST_REASON",
+     "kr_name": "미성사사유",
+     "description": "미성사 사유 문장 (고정 3종 중 택1, 아래 표)",
+     "sample": "받으신 제안 중 선택하지 않으셔서 종료했습니다.",
+     "maxLen": 45
+    },
+    {
+     "key": "TRACK_URL",
+     "kr_name": "추적링크",
+     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "sample": "https://micego.example/ko/track.html?t=demo-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    },
+    {
+     "key": "TRACK_TOKEN",
+     "kr_name": "추적토큰",
+     "description": "추적 링크 토큰 (알림톡 버튼·LMS용, URL 끝 변수)",
+     "sample": "demo-2610",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ORG_CANCELLED",
+   "name": "취소 확인",
+   "recipient": "org",
+   "recipient_label": "오거나이저",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "#12 종료 전 어느 상태 → 취소",
+   "transitions": [
+    "12"
+   ],
+   "states": "접수됨~전달됨 → 취소",
+   "channels": {
+    "email": true,
+    "alimtalk": true,
+    "lms": true,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ORG_CANCELLED.html",
+    "subject": "[MICEGO] 요청이 취소되었습니다 · {{RFP_ID}}",
+    "subject_sample": "[MICEGO] 요청이 취소되었습니다 · MG-2610-014",
+    "preheader": "요청번호 {{RFP_ID}} · 취소를 확인했습니다. 회사명과 연락처는 어느 호텔에도 전달되지 않았습니다.",
+    "preheader_sample": "요청번호 MG-2610-014 · 취소를 확인했습니다. 회사명과 연락처는 어느 호텔에도 전달되지 않았습니다.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "alimtalk": {
+    "code": "micego_org_cancelled",
+    "emphasize_title": "",
+    "body": "[MICEGO] 요청이 취소되었습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청의 취소를 확인했습니다.\n\n■ 행사: {{DESTINATION}} {{EVENT_TYPE}}\n■ 취소일시: {{CANCELLED_AT}}\n\n회사명과 담당자 연락처는 어느 호텔에도 전달되지 않았습니다. 다시 진행하실 때는 새로 요청해 주세요.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons": [
+     {
+      "name": "진행 상황 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t={{TRACK_TOKEN}}"
+     }
+    ],
+    "fallback_title": "[MICEGO] 요청 취소 확인",
+    "fallback_body": "[MICEGO] 요청이 취소되었습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청의 취소를 확인했습니다.\n\n■ 행사: {{DESTINATION}} {{EVENT_TYPE}}\n■ 취소일시: {{CANCELLED_AT}}\n\n회사명과 담당자 연락처는 어느 호텔에도 전달되지 않았습니다. 다시 진행하실 때는 새로 요청해 주세요.\n\n▶ 진행 상황: https://micego.example/ko/track.html?t={{TRACK_TOKEN}}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "body_kr": "[MICEGO] 요청이 취소되었습니다.\n\n#{담당자명}님, #{요청번호} 요청의 취소를 확인했습니다.\n\n■ 행사: #{목적지} #{행사유형}\n■ 취소일시: #{취소일시}\n\n회사명과 담당자 연락처는 어느 호텔에도 전달되지 않았습니다. 다시 진행하실 때는 새로 요청해 주세요.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "fallback_body_kr": "[MICEGO] 요청이 취소되었습니다.\n\n#{담당자명}님, #{요청번호} 요청의 취소를 확인했습니다.\n\n■ 행사: #{목적지} #{행사유형}\n■ 취소일시: #{취소일시}\n\n회사명과 담당자 연락처는 어느 호텔에도 전달되지 않았습니다. 다시 진행하실 때는 새로 요청해 주세요.\n\n▶ 진행 상황: https://micego.example/ko/track.html?t=#{추적토큰}\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
+    "buttons_kr": [
+     {
+      "name": "진행 상황 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/track.html?t=#{추적토큰}"
+     }
+    ],
+    "body_chars_sample": 191,
+    "body_chars_max": 232,
+    "fallback_bytes_sample": 363,
+    "fallback_bytes_max": 544,
+    "fallback_title_bytes": 23,
+    "keys": [
+     "ORG_CONTACT_NAME",
+     "RFP_ID",
+     "DESTINATION",
+     "EVENT_TYPE",
+     "CANCELLED_AT",
+     "TRACK_TOKEN"
+    ]
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "다낭",
+     "maxLen": 20
+    },
+    {
+     "key": "EVENT_TYPE",
+     "kr_name": "행사유형",
+     "description": "행사 유형",
+     "sample": "인센티브",
+     "maxLen": 12
+    },
+    {
+     "key": "CANCELLED_AT",
+     "kr_name": "취소일시",
+     "description": "취소 처리 시각 (KST)",
+     "sample": "2026-09-28 10:05",
+     "maxLen": 16
+    },
+    {
+     "key": "TRACK_URL",
+     "kr_name": "추적링크",
+     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "sample": "https://micego.example/ko/track.html?t=demo-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    },
+    {
+     "key": "TRACK_TOKEN",
+     "kr_name": "추적토큰",
+     "description": "추적 링크 토큰 (알림톡 버튼·LMS용, URL 끝 변수)",
+     "sample": "demo-2610",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ORG_PICK_OTP",
+   "name": "제안 선택 인증번호 (문자)",
+   "recipient": "org",
+   "recipient_label": "오거나이저",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "제안 선택 확인 (회원·비회원 모두, 요청에 등록된 휴대전화로 발송) · 공유 링크로는 발송되지 않음",
+   "transitions": [],
+   "states": "전달됨 (선택 확인 단계)",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": true
+   },
+   "sms": {
+    "body": "[MICEGO] {{RFP_ID}} 제안 선택 인증번호 [{{CODE}}] (3분). 요청하지 않았다면 무시하세요.",
+    "body_sample": "[MICEGO] MG-2610-014 제안 선택 인증번호 [123456] (3분). 요청하지 않았다면 무시하세요.",
+    "body_kr": "[MICEGO] #{요청번호} 제안 선택 인증번호 [#{인증번호}] (3분). 요청하지 않았다면 무시하세요.",
+    "bytes_sample": 85,
+    "bytes_max": 86,
+    "limit_bytes": 90,
+    "note": "알림톡 대신 문자로만 보냅니다. 유효 3분, 재발송 60초, 5회 틀리면 10분 잠금."
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "CODE",
+     "kr_name": "인증번호",
+     "description": "6자리 인증번호 (숫자)",
+     "sample": "123456",
+     "maxLen": 6
+    }
+   ]
+  },
+  {
+   "id": "HTL_INVITE",
+   "name": "Bid invitation",
+   "recipient": "htl",
+   "recipient_label": "호텔",
+   "mode": "auto",
+   "language": "en",
+   "trigger": "#4 오픈 → 비딩중 · 비딩중 추가 초대 · 재초대 (라운드 ≥ 2)",
+   "transitions": [
+    "4",
+    "7",
+    "9"
+   ],
+   "states": "초대 생성 (invited)",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/HTL_INVITE.html",
+    "subject": "[MICEGO] New group request · REF {{RFP_ID}} · quotes by {{DEADLINE_KST}}",
+    "subject_sample": "[MICEGO] New group request · REF MG-2610-014 · quotes by Thu 8 Oct 2026, 18:00 KST",
+    "preheader": "Ref {{RFP_ID}} · {{DESTINATION}} · Quotes due {{DEADLINE_KST}}.",
+    "preheader_sample": "Ref MG-2610-014 · Da Nang, Vietnam · Quotes due Thu 8 Oct 2026, 18:00 KST.",
+    "cc": "",
+    "unsubscribe_link": true,
+    "optional_blocks": [
+     "REINVITE"
+    ],
+    "subject_round2": "[MICEGO] Updated request, new deadline · REF {{RFP_ID}} · quotes by {{DEADLINE_KST}}"
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "DEADLINE_KST",
+     "kr_name": "견적마감",
+     "description": "호텔 견적 마감 (KST)",
+     "sample": "Thu 8 Oct 2026, 18:00 KST",
+     "maxLen": 26
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "Da Nang, Vietnam",
+     "maxLen": 20
+    },
+    {
+     "key": "HOTEL_BID_URL",
+     "kr_name": "호텔링크",
+     "description": "호텔 개인 견적 링크 전체",
+     "sample": "https://micego.example/en/bid.html?t=demo-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "EVENT_TYPE",
+     "kr_name": "행사유형",
+     "description": "행사 유형",
+     "sample": "Incentive program",
+     "maxLen": 12
+    },
+    {
+     "key": "EVENT_DATES",
+     "kr_name": "행사일정",
+     "description": "행사 기간",
+     "sample": "Mon 15 – Thu 18 Mar 2027 (3 nights)",
+     "maxLen": 20
+    },
+    {
+     "key": "PAX",
+     "kr_name": "인원",
+     "description": "예상 인원",
+     "sample": "150–199 attendees",
+     "maxLen": 14
+    },
+    {
+     "key": "ROOMS",
+     "kr_name": "객실",
+     "description": "필요 객실 구성",
+     "sample": "Twin 60 / King 20 (240 room-nights)",
+     "maxLen": 20
+    },
+    {
+     "key": "EVENT_SPACE",
+     "kr_name": "연회장",
+     "description": "연회장 사용 (호텔 공개 요건)",
+     "sample": "Gala dinner · Night 3 (Wed 17 Mar 2027)",
+     "maxLen": 60
+    },
+    {
+     "key": "PUBLIC_NOTE",
+     "kr_name": "공개메모",
+     "description": "운영자가 검토한 공개 메모",
+     "sample": "Full details are on the request page.",
+     "maxLen": 200
+    },
+    {
+     "key": "ROUND",
+     "kr_name": "라운드",
+     "description": "요청 라운드 (2 이상)",
+     "sample": "2",
+     "maxLen": 2
+    },
+    {
+     "key": "CHANGE_SUMMARY",
+     "kr_name": "변경내용",
+     "description": "바뀐 조건 요약 한 줄",
+     "sample": "Attendees 150–199 → 200–250; dates now 22–25 Mar 2027",
+     "maxLen": 60
+    },
+    {
+     "key": "PREV_DEADLINE",
+     "kr_name": "이전마감",
+     "description": "이전 라운드 마감",
+     "sample": "Thu 8 Oct 2026, 18:00 KST",
+     "maxLen": 30
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    },
+    {
+     "key": "UNSUBSCRIBE_URL",
+     "kr_name": "수신거부URL",
+     "description": "초대 메일 수신거부 링크",
+     "sample": "https://micego.example/en/unsubscribe.html?t=demo-2610",
+     "maxLen": 90
+    }
+   ]
+  },
+  {
+   "id": "HTL_REMINDER",
+   "name": "Deadline reminder (24h)",
+   "recipient": "htl",
+   "recipient_label": "호텔",
+   "mode": "auto",
+   "language": "en",
+   "trigger": "마감 24시간 전 · 미제출·미거절 초대 (cron 1분)",
+   "transitions": [],
+   "states": "비딩중 · 초대 invited/viewed",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/HTL_REMINDER.html",
+    "subject": "[MICEGO] Reminder: quotes close in 24 hours · REF {{RFP_ID}} · quotes by {{DEADLINE_KST}}",
+    "subject_sample": "[MICEGO] Reminder: quotes close in 24 hours · REF MG-2610-014 · quotes by Thu 8 Oct 2026, 18:00 KST",
+    "preheader": "Ref {{RFP_ID}} · {{PAX}} · Quotes close {{DEADLINE_KST}}.",
+    "preheader_sample": "Ref MG-2610-014 · 150–199 attendees · Quotes close Thu 8 Oct 2026, 18:00 KST.",
+    "cc": "",
+    "unsubscribe_link": true,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "DEADLINE_KST",
+     "kr_name": "견적마감",
+     "description": "호텔 견적 마감 (KST)",
+     "sample": "Thu 8 Oct 2026, 18:00 KST",
+     "maxLen": 26
+    },
+    {
+     "key": "PAX",
+     "kr_name": "인원",
+     "description": "예상 인원",
+     "sample": "150–199 attendees",
+     "maxLen": 14
+    },
+    {
+     "key": "HOTEL_BID_URL",
+     "kr_name": "호텔링크",
+     "description": "호텔 개인 견적 링크 전체",
+     "sample": "https://micego.example/en/bid.html?t=demo-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "Da Nang, Vietnam",
+     "maxLen": 20
+    },
+    {
+     "key": "EVENT_DATES",
+     "kr_name": "행사일정",
+     "description": "행사 기간",
+     "sample": "Mon 15 – Thu 18 Mar 2027 (3 nights)",
+     "maxLen": 20
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    },
+    {
+     "key": "UNSUBSCRIBE_URL",
+     "kr_name": "수신거부URL",
+     "description": "초대 메일 수신거부 링크",
+     "sample": "https://micego.example/en/unsubscribe.html?t=demo-2610",
+     "maxLen": 90
+    }
+   ]
+  },
+  {
+   "id": "HTL_QUOTE_RECEIVED",
+   "name": "Quote received",
+   "recipient": "htl",
+   "recipient_label": "호텔",
+   "mode": "auto",
+   "language": "en",
+   "trigger": "호텔 견적 제출·수정 (초대 상태 submitted, 호텔 액션)",
+   "transitions": [],
+   "states": "비딩중 · 초대 submitted",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/HTL_QUOTE_RECEIVED.html",
+    "subject": "[MICEGO] Quote received · REF {{RFP_ID}}",
+    "subject_sample": "[MICEGO] Quote received · REF MG-2610-014",
+    "preheader": "Ref {{RFP_ID}} · Quote received ({{CURRENCY}}). Revise until {{DEADLINE_KST}}.",
+    "preheader_sample": "Ref MG-2610-014 · Quote received (USD). Revise until Thu 8 Oct 2026, 18:00 KST.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "CURRENCY",
+     "kr_name": "통화",
+     "description": "제출 통화",
+     "sample": "USD",
+     "maxLen": 3
+    },
+    {
+     "key": "DEADLINE_KST",
+     "kr_name": "견적마감",
+     "description": "호텔 견적 마감 (KST)",
+     "sample": "Thu 8 Oct 2026, 18:00 KST",
+     "maxLen": 26
+    },
+    {
+     "key": "HOTEL_CONTACT_NAME",
+     "kr_name": "호텔담당자",
+     "description": "호텔 담당자 이름",
+     "sample": "Ms. Linh",
+     "maxLen": 30
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "Da Nang, Vietnam",
+     "maxLen": 20
+    },
+    {
+     "key": "PAX",
+     "kr_name": "인원",
+     "description": "예상 인원",
+     "sample": "150–199 attendees",
+     "maxLen": 14
+    },
+    {
+     "key": "SUBMITTED_AT",
+     "kr_name": "제출일시",
+     "description": "견적 제출·수정 시각",
+     "sample": "Wed 7 Oct 2026, 15:42 KST",
+     "maxLen": 30
+    },
+    {
+     "key": "HOTEL_BID_URL",
+     "kr_name": "호텔링크",
+     "description": "호텔 개인 견적 링크 전체",
+     "sample": "https://micego.example/en/bid.html?t=demo-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "HTL_SELECTED_CONNECT",
+   "name": "Selected + organizer introduction",
+   "recipient": "htl",
+   "recipient_label": "호텔",
+   "mode": "auto",
+   "language": "en",
+   "trigger": "#10 전달됨 → 성사 (선정 호텔 1곳, 오거나이저 참조)",
+   "transitions": [
+    "10"
+   ],
+   "states": "전달됨 → 성사 · 초대 selected",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/HTL_SELECTED_CONNECT.html",
+    "subject": "[MICEGO] Your proposal was selected · REF {{RFP_ID}}",
+    "subject_sample": "[MICEGO] Your proposal was selected · REF MG-2610-014",
+    "preheader": "Ref {{RFP_ID}} · The organizer selected your proposal. Their contact details are below.",
+    "preheader_sample": "Ref MG-2610-014 · The organizer selected your proposal. Their contact details are below.",
+    "cc": "{{ORG_EMAIL}}",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "HOTEL_NAME",
+     "kr_name": "호텔명",
+     "description": "수신 호텔(숙박시설)명",
+     "sample": "Ocean Pearl Resort Da Nang",
+     "maxLen": 50
+    },
+    {
+     "key": "ORG_EMAIL",
+     "kr_name": "이메일",
+     "description": "오거나이저 담당자 이메일",
+     "sample": "jieun.kim@hanbit-tour.example",
+     "maxLen": 50
+    },
+    {
+     "key": "ORG_COMPANY",
+     "kr_name": "회사명",
+     "description": "오거나이저 회사명",
+     "sample": "Hanbit Tour Co., Ltd.",
+     "maxLen": 30
+    },
+    {
+     "key": "ORG_CONTACT_FULL",
+     "kr_name": "담당자",
+     "description": "오거나이저 담당자 (호텔에 전달)",
+     "sample": "Jieun Kim (Manager)",
+     "maxLen": 30
+    },
+    {
+     "key": "ORG_PHONE",
+     "kr_name": "연락처",
+     "description": "오거나이저 담당자 전화",
+     "sample": "010-0000-0014",
+     "maxLen": 16
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "Da Nang, Vietnam",
+     "maxLen": 20
+    },
+    {
+     "key": "PAX",
+     "kr_name": "인원",
+     "description": "예상 인원",
+     "sample": "150–199 attendees",
+     "maxLen": 14
+    },
+    {
+     "key": "EVENT_DATES",
+     "kr_name": "행사일정",
+     "description": "행사 기간",
+     "sample": "Mon 15 – Thu 18 Mar 2027 (3 nights)",
+     "maxLen": 20
+    },
+    {
+     "key": "HOTEL_BID_URL",
+     "kr_name": "호텔링크",
+     "description": "호텔 개인 견적 링크 전체",
+     "sample": "https://micego.example/en/bid.html?t=demo-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "HTL_NOT_SELECTED",
+   "name": "Not selected",
+   "recipient": "htl",
+   "recipient_label": "호텔",
+   "mode": "auto",
+   "language": "en",
+   "trigger": "#10 전달됨 → 성사 (선정되지 않은 제출 호텔)",
+   "transitions": [
+    "10"
+   ],
+   "states": "전달됨 → 성사 · 초대 not_selected",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/HTL_NOT_SELECTED.html",
+    "subject": "[MICEGO] Result: not selected this time · REF {{RFP_ID}}",
+    "subject_sample": "[MICEGO] Result: not selected this time · REF MG-2610-014",
+    "preheader": "Ref {{RFP_ID}} · The organizer chose another proposal. Your details were not shared.",
+    "preheader_sample": "Ref MG-2610-014 · The organizer chose another proposal. Your details were not shared.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "HOTEL_CONTACT_NAME",
+     "kr_name": "호텔담당자",
+     "description": "호텔 담당자 이름",
+     "sample": "Ms. Linh",
+     "maxLen": 30
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "Da Nang, Vietnam",
+     "maxLen": 20
+    },
+    {
+     "key": "PAX",
+     "kr_name": "인원",
+     "description": "예상 인원",
+     "sample": "150–199 attendees",
+     "maxLen": 14
+    },
+    {
+     "key": "EVENT_DATES",
+     "kr_name": "행사일정",
+     "description": "행사 기간",
+     "sample": "Mon 15 – Thu 18 Mar 2027 (3 nights)",
+     "maxLen": 20
+    },
+    {
+     "key": "HOTEL_BID_URL",
+     "kr_name": "호텔링크",
+     "description": "호텔 개인 견적 링크 전체",
+     "sample": "https://micego.example/en/bid.html?t=demo-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "HTL_CONFIRM",
+   "name": "Confirm quote entered on your behalf",
+   "recipient": "htl",
+   "recipient_label": "호텔",
+   "mode": "auto",
+   "language": "en",
+   "trigger": "파트너 대리 입력(partner_quote_proxy_enter) · 재발송(partner_quote_proxy_resend)",
+   "transitions": [],
+   "states": "비딩중 · 초대 proxy_entered",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/HTL_CONFIRM.html",
+    "subject": "[MICEGO] Please confirm the quote entered for your property · REF {{RFP_ID}}",
+    "subject_sample": "[MICEGO] Please confirm the quote entered for your property · REF MG-2610-014",
+    "preheader": "Ref {{RFP_ID}} · A quote was entered for you. Confirm within {{EXPIRES_HOURS}} hours.",
+    "preheader_sample": "Ref MG-2610-014 · A quote was entered for you. Confirm within 72 hours.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "EXPIRES_HOURS",
+     "kr_name": "유효시간",
+     "description": "확인 링크 유효 시간(시간)",
+     "sample": "72",
+     "maxLen": 4
+    },
+    {
+     "key": "HOTEL_CONTACT_NAME",
+     "kr_name": "호텔담당자",
+     "description": "호텔 담당자 이름",
+     "sample": "Ms. Linh",
+     "maxLen": 30
+    },
+    {
+     "key": "PARTNER_PUBLIC_NAME",
+     "kr_name": "지역파트너",
+     "description": "호텔에 보이는 지역 파트너 이름",
+     "sample": "MICEGO Thailand",
+     "maxLen": 40
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "Da Nang, Vietnam",
+     "maxLen": 20
+    },
+    {
+     "key": "PAX",
+     "kr_name": "인원",
+     "description": "예상 인원",
+     "sample": "150–199 attendees",
+     "maxLen": 14
+    },
+    {
+     "key": "EVENT_DATES",
+     "kr_name": "행사일정",
+     "description": "행사 기간",
+     "sample": "Mon 15 – Thu 18 Mar 2027 (3 nights)",
+     "maxLen": 20
+    },
+    {
+     "key": "ROUND",
+     "kr_name": "라운드",
+     "description": "요청 라운드 (2 이상)",
+     "sample": "2",
+     "maxLen": 2
+    },
+    {
+     "key": "CONFIRM_URL",
+     "kr_name": "확인링크",
+     "description": "대리 입력 견적 확인 링크 (1회용·72h)",
+     "sample": "https://micego.example/en/confirm.html?t=demo-confirm-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "CONSOLE_NOTICE",
+   "name": "콘솔 내부 알림 (지역 파트너 · 본사)",
+   "recipient": "ptr",
+   "recipient_label": "지역 파트너·본사 콘솔",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "파트너 배정·인계·반려, 호텔 확인·이의, 정산 단계 변경 등 (private.enqueue_if_template 의 공통 대체 템플릿)",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/CONSOLE_NOTICE.html",
+    "subject": "[MICEGO 콘솔] {{NOTICE_TITLE}}",
+    "subject_sample": "[MICEGO 콘솔] 파트너 배정 · MG-2610-014",
+    "preheader": "{{NOTICE_TITLE}} · 지역 파트너 콘솔 알림입니다. 자세한 내용은 콘솔에서 확인하세요.",
+    "preheader_sample": "파트너 배정 · MG-2610-014 · 지역 파트너 콘솔 알림입니다. 자세한 내용은 콘솔에서 확인하세요.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "NOTICE_TITLE",
+     "kr_name": "알림제목",
+     "description": "콘솔 내부 알림 제목",
+     "sample": "파트너 배정 · MG-2610-014",
+     "maxLen": 60
+    },
+    {
+     "key": "NOTICE_BODY",
+     "kr_name": "알림내용",
+     "description": "콘솔 내부 알림 본문",
+     "sample": "태국 요청 MG-2610-014이(가) 티엠타이(Tmthai)에 배정되었습니다.",
+     "maxLen": 400
+    },
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "CONSOLE_URL",
+     "kr_name": "콘솔링크",
+     "description": "콘솔 해당 화면 링크",
+     "sample": "https://micego.example/admin/rfp.html?id=MG-2610-014",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "PTN_APPLIED",
+   "name": "Partner application received",
+   "recipient": "ptn",
+   "recipient_label": "파트너 신청자",
+   "mode": "auto",
+   "language": "en",
+   "trigger": "파트너 신청 접수 (상태 pending 생성)",
+   "transitions": [],
+   "states": "신청 (pending)",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/PTN_APPLIED.html",
+    "subject": "[MICEGO] Partner application received · REF {{PARTNER_ID}}",
+    "subject_sample": "[MICEGO] Partner application received · REF PT-2609-007",
+    "preheader": "Ref {{PARTNER_ID}} · We received your application and will reply within 5 business days.",
+    "preheader_sample": "Ref PT-2609-007 · We received your application and will reply within 5 business days.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "PARTNER_ID",
+     "kr_name": "신청번호",
+     "description": "파트너 신청 번호",
+     "sample": "PT-2609-007",
+     "maxLen": 12
+    },
+    {
+     "key": "APPLICANT_NAME",
+     "kr_name": "신청자",
+     "description": "파트너 신청 담당자 이름",
+     "sample": "Putri Wijaya",
+     "maxLen": 30
+    },
+    {
+     "key": "PROPERTY_NAME",
+     "kr_name": "시설명",
+     "description": "파트너 신청 숙박시설명",
+     "sample": "Sanur Lagoon Resort",
+     "maxLen": 50
+    },
+    {
+     "key": "PROPERTY_LOCATION",
+     "kr_name": "소재지",
+     "description": "숙박시설 소재지",
+     "sample": "Sanur, Bali, Indonesia",
+     "maxLen": 40
+    },
+    {
+     "key": "APPLIED_AT",
+     "kr_name": "신청일시",
+     "description": "파트너 신청 시각",
+     "sample": "Tue 6 Oct 2026, 10:12 KST",
+     "maxLen": 30
+    },
+    {
+     "key": "REVIEW_BY",
+     "kr_name": "회신기한",
+     "description": "파트너 심사 회신 기한 (5영업일)",
+     "sample": "Tue 13 Oct 2026, 18:00 KST",
+     "maxLen": 30
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "PTN_APPROVED",
+   "name": "Partner approved",
+   "recipient": "ptn",
+   "recipient_label": "파트너 신청자",
+   "mode": "auto",
+   "language": "en",
+   "trigger": "신청·심사중 → 승인",
+   "transitions": [],
+   "states": "파트너 승인 (approved)",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/PTN_APPROVED.html",
+    "subject": "[MICEGO] Partner application approved · REF {{PARTNER_ID}}",
+    "subject_sample": "[MICEGO] Partner application approved · REF PT-2609-007",
+    "preheader": "Ref {{PARTNER_ID}} · You're approved. Invitations arrive by email; here is how it works.",
+    "preheader_sample": "Ref PT-2609-007 · You're approved. Invitations arrive by email; here is how it works.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "PARTNER_ID",
+     "kr_name": "신청번호",
+     "description": "파트너 신청 번호",
+     "sample": "PT-2609-007",
+     "maxLen": 12
+    },
+    {
+     "key": "PROPERTY_NAME",
+     "kr_name": "시설명",
+     "description": "파트너 신청 숙박시설명",
+     "sample": "Sanur Lagoon Resort",
+     "maxLen": 50
+    },
+    {
+     "key": "PROPERTY_LOCATION",
+     "kr_name": "소재지",
+     "description": "숙박시설 소재지",
+     "sample": "Sanur, Bali, Indonesia",
+     "maxLen": 40
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "PTN_REJECTED",
+   "name": "Partner not approved",
+   "recipient": "ptn",
+   "recipient_label": "파트너 신청자",
+   "mode": "auto",
+   "language": "en",
+   "trigger": "신청·심사중 → 거절 (사유 필수)",
+   "transitions": [],
+   "states": "파트너 거절 (rejected)",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/PTN_REJECTED.html",
+    "subject": "[MICEGO] Partner application update · REF {{PARTNER_ID}}",
+    "subject_sample": "[MICEGO] Partner application update · REF PT-2609-007",
+    "preheader": "Ref {{PARTNER_ID}} · We can't approve this application right now. The reason is inside.",
+    "preheader_sample": "Ref PT-2609-007 · We can't approve this application right now. The reason is inside.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "fixed_phrasings": {
+    "variable": "PTN_REJECT_REASON",
+    "options": [
+     {
+      "label": "해외 소재 요건",
+      "text": "MICEGO currently works only with properties located outside Korea."
+     },
+     {
+      "label": "단체 수용 50명 미만",
+      "text": "Our organizers' groups start at 50 attendees, and the group capacity you listed is below that."
+     },
+     {
+      "label": "담당자 연락처 확인 불가",
+      "text": "We couldn't verify the contact details you provided."
+     },
+     {
+      "label": "시설 확인 불가",
+      "text": "We couldn't verify the property from the information provided."
+     },
+     {
+      "label": "기타",
+      "text": "Your application doesn't meet our current partner requirements."
+     }
+    ]
+   },
+   "variables": [
+    {
+     "key": "PARTNER_ID",
+     "kr_name": "신청번호",
+     "description": "파트너 신청 번호",
+     "sample": "PT-2609-007",
+     "maxLen": 12
+    },
+    {
+     "key": "APPLICANT_NAME",
+     "kr_name": "신청자",
+     "description": "파트너 신청 담당자 이름",
+     "sample": "Nattapong S.",
+     "maxLen": 30
+    },
+    {
+     "key": "PROPERTY_NAME",
+     "kr_name": "시설명",
+     "description": "파트너 신청 숙박시설명",
+     "sample": "Patong Sands Hotel",
+     "maxLen": 50
+    },
+    {
+     "key": "PROPERTY_LOCATION",
+     "kr_name": "소재지",
+     "description": "숙박시설 소재지",
+     "sample": "Patong, Phuket, Thailand",
+     "maxLen": 40
+    },
+    {
+     "key": "PTN_REJECT_REASON",
+     "kr_name": "거절사유",
+     "description": "파트너 거절 사유 문장 (고정 5종 중 택1, 아래 표)",
+     "sample": "Our organizers' groups start at 50 attendees, and the group capacity you listed is below that.",
+     "maxLen": 120
+    },
+    {
+     "key": "PARTNER_APPLY_URL",
+     "kr_name": "파트너신청URL",
+     "description": "파트너 신청 페이지 링크",
+     "sample": "https://micego.example/en/index.html#register",
+     "maxLen": 60
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "PTN_REINSTATED",
+   "name": "Partner reinstated",
+   "recipient": "ptn",
+   "recipient_label": "파트너 신청자",
+   "mode": "auto",
+   "language": "en",
+   "trigger": "중지 → 승인 (재승인)",
+   "transitions": [],
+   "states": "파트너 재승인 (suspended → approved)",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/PTN_REINSTATED.html",
+    "subject": "[MICEGO] Your listing is active again · REF {{PARTNER_ID}}",
+    "subject_sample": "[MICEGO] Your listing is active again · REF PT-2609-007",
+    "preheader": "Ref {{PARTNER_ID}} · Thanks for getting back to us. Invitations will resume.",
+    "preheader_sample": "Ref PT-2609-007 · Thanks for getting back to us. Invitations will resume.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "PARTNER_ID",
+     "kr_name": "신청번호",
+     "description": "파트너 신청 번호",
+     "sample": "PT-2609-007",
+     "maxLen": 12
+    },
+    {
+     "key": "PROPERTY_NAME",
+     "kr_name": "시설명",
+     "description": "파트너 신청 숙박시설명",
+     "sample": "Sanur Lagoon Resort",
+     "maxLen": 50
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ACC_EMAIL_CODE",
+   "name": "이메일 인증번호",
+   "recipient": "mem",
+   "recipient_label": "회원",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "회원 가입 · 이메일 변경 중 이메일 인증 단계 (재발송 포함)",
+   "transitions": [],
+   "states": "가입 진행 (pending_email) · 이메일 변경",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ACC_EMAIL_CODE.html",
+    "subject": "[MICEGO] 이메일 인증번호를 보내드립니다",
+    "subject_sample": "[MICEGO] 이메일 인증번호를 보내드립니다",
+    "preheader": "{{PURPOSE}} 화면에 아래 6자리 인증번호를 입력해 주세요. 유효 시간은 {{EXPIRES_MIN}}분입니다.",
+    "preheader_sample": "회원 가입 화면에 아래 6자리 인증번호를 입력해 주세요. 유효 시간은 10분입니다.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "PURPOSE",
+     "kr_name": "인증목적",
+     "description": "이메일 인증 목적 (회원 가입 · 이메일 변경 중 택1)",
+     "sample": "회원 가입",
+     "maxLen": 8
+    },
+    {
+     "key": "EXPIRES_MIN",
+     "kr_name": "유효시간",
+     "description": "인증번호·링크 유효 시간 (분)",
+     "sample": "10",
+     "maxLen": 2
+    },
+    {
+     "key": "CODE",
+     "kr_name": "인증번호",
+     "description": "6자리 인증번호 (숫자)",
+     "sample": "123456",
+     "maxLen": 6
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ACC_EMAIL_EXISTS",
+   "name": "이미 가입된 이메일 안내",
+   "recipient": "mem",
+   "recipient_label": "회원",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "이미 회원인 이메일로 가입을 시도 (가입 화면에는 티 내지 않고 이 메일로만 알림)",
+   "transitions": [],
+   "states": "가입 시도 (기존 회원)",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ACC_EMAIL_EXISTS.html",
+    "subject": "[MICEGO] 이미 가입된 이메일입니다",
+    "subject_sample": "[MICEGO] 이미 가입된 이메일입니다",
+    "preheader": "방금 이 주소로 회원 가입이 시도되었습니다. 이미 계정이 있어 새로 만들지 않았고, 로그인 방법을 안내드립니다.",
+    "preheader_sample": "방금 이 주소로 회원 가입이 시도되었습니다. 이미 계정이 있어 새로 만들지 않았고, 로그인 방법을 안내드립니다.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "RESET_URL",
+     "kr_name": "재설정URL",
+     "description": "비밀번호 재설정 링크 (1회용 토큰 포함)",
+     "sample": "https://micego.example/ko/reset.html?k=demo-reset-token",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "LOGIN_URL",
+     "kr_name": "로그인URL",
+     "description": "회원 로그인 페이지 링크",
+     "sample": "https://micego.example/ko/login.html",
+     "maxLen": 60
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ACC_WELCOME",
+   "name": "가입 완료 안내",
+   "recipient": "mem",
+   "recipient_label": "회원",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "휴대전화 인증 완료 → 정상(active) 전환",
+   "transitions": [],
+   "states": "pending_phone → active",
+   "channels": {
+    "email": true,
+    "alimtalk": true,
+    "lms": true,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ACC_WELCOME.html",
+    "subject": "[MICEGO] 회원 가입을 마쳤습니다",
+    "subject_sample": "[MICEGO] 회원 가입을 마쳤습니다",
+    "preheader": "{{CONTACT_NAME}}님, 가입해 주셔서 감사합니다. 이제 견적 요청을 「내 견적 요청」에서 한곳에 볼 수 있습니다.",
+    "preheader_sample": "김지은님, 가입해 주셔서 감사합니다. 이제 견적 요청을 「내 견적 요청」에서 한곳에 볼 수 있습니다.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "alimtalk": {
+    "code": "micego_acc_welcome",
+    "emphasize_title": "",
+    "body": "[MICEGO] 회원 가입을 마쳤습니다.\n\n{{CONTACT_NAME}}님, 가입해 주셔서 감사합니다. 이제 견적 요청 현황을 「내 견적 요청」에서 한곳에 확인하실 수 있습니다.\n\n■ 연결한 이전 요청: {{LINKED_COUNT}}건\n\n동료에게는 요청별 보기 전용 링크를 보내 함께 볼 수 있습니다. 제안 선택은 요청하신 분만 할 수 있습니다.\n\n※ 이 메시지는 MICEGO 회원 가입을 마치신 분께 발송되는 안내입니다.",
+    "buttons": [
+     {
+      "name": "내 견적 요청 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/my.html"
+     }
+    ],
+    "fallback_title": "[MICEGO] 회원 가입 완료",
+    "fallback_body": "[MICEGO] 회원 가입을 마쳤습니다.\n\n{{CONTACT_NAME}}님, 가입해 주셔서 감사합니다. 이제 견적 요청 현황을 「내 견적 요청」에서 한곳에 확인하실 수 있습니다.\n\n■ 연결한 이전 요청: {{LINKED_COUNT}}건\n\n동료에게는 요청별 보기 전용 링크를 보내 함께 볼 수 있습니다. 제안 선택은 요청하신 분만 할 수 있습니다.\n\n▶ 내 견적 요청: https://micego.example/ko/my.html\n\n※ 이 메시지는 MICEGO 회원 가입을 마치신 분께 발송되는 안내입니다.",
+    "body_kr": "[MICEGO] 회원 가입을 마쳤습니다.\n\n#{가입자명}님, 가입해 주셔서 감사합니다. 이제 견적 요청 현황을 「내 견적 요청」에서 한곳에 확인하실 수 있습니다.\n\n■ 연결한 이전 요청: #{연결건수}건\n\n동료에게는 요청별 보기 전용 링크를 보내 함께 볼 수 있습니다. 제안 선택은 요청하신 분만 할 수 있습니다.\n\n※ 이 메시지는 MICEGO 회원 가입을 마치신 분께 발송되는 안내입니다.",
+    "fallback_body_kr": "[MICEGO] 회원 가입을 마쳤습니다.\n\n#{가입자명}님, 가입해 주셔서 감사합니다. 이제 견적 요청 현황을 「내 견적 요청」에서 한곳에 확인하실 수 있습니다.\n\n■ 연결한 이전 요청: #{연결건수}건\n\n동료에게는 요청별 보기 전용 링크를 보내 함께 볼 수 있습니다. 제안 선택은 요청하신 분만 할 수 있습니다.\n\n▶ 내 견적 요청: https://micego.example/ko/my.html\n\n※ 이 메시지는 MICEGO 회원 가입을 마치신 분께 발송되는 안내입니다.",
+    "buttons_kr": [
+     {
+      "name": "내 견적 요청 보기",
+      "type": "웹링크(WL)",
+      "url": "https://micego.example/ko/my.html"
+     }
+    ],
+    "body_chars_sample": 208,
+    "body_chars_max": 226,
+    "fallback_bytes_sample": 391,
+    "fallback_bytes_max": 428,
+    "fallback_title_bytes": 23,
+    "keys": [
+     "CONTACT_NAME",
+     "LINKED_COUNT"
+    ]
+   },
+   "variables": [
+    {
+     "key": "CONTACT_NAME",
+     "kr_name": "가입자명",
+     "description": "회원 이름",
+     "sample": "김지은",
+     "maxLen": 20
+    },
+    {
+     "key": "LINKED_COUNT",
+     "kr_name": "연결건수",
+     "description": "계정에 연결한 이전 요청 수",
+     "sample": "1",
+     "maxLen": 2
+    },
+    {
+     "key": "MY_URL",
+     "kr_name": "내요청URL",
+     "description": "내 견적 요청 페이지 링크",
+     "sample": "https://micego.example/ko/my.html",
+     "maxLen": 60
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ACC_LINKED",
+   "name": "이전 요청 연결 안내",
+   "recipient": "mem",
+   "recipient_label": "회원",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "비회원 요청 자동 연결 (같은 이메일) · 운영자 연결 승인 (휴대전화만 일치)",
+   "transitions": [],
+   "states": "비회원 요청 → 회원 요청",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ACC_LINKED.html",
+    "subject": "[MICEGO] 이전 요청을 계정에 연결했습니다",
+    "subject_sample": "[MICEGO] 이전 요청을 계정에 연결했습니다",
+    "preheader": "비회원으로 접수하신 요청 {{LINKED_COUNT}}건이 「내 견적 요청」에 추가되었습니다. 요청번호를 확인해 주세요.",
+    "preheader_sample": "비회원으로 접수하신 요청 1건이 「내 견적 요청」에 추가되었습니다. 요청번호를 확인해 주세요.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "LINKED_COUNT",
+     "kr_name": "연결건수",
+     "description": "계정에 연결한 이전 요청 수",
+     "sample": "1",
+     "maxLen": 2
+    },
+    {
+     "key": "RFP_REFS",
+     "kr_name": "연결요청번호",
+     "description": "연결한 요청번호 목록 (줄바꿈으로 구분)",
+     "sample": "MG-2609-011",
+     "maxLen": 60
+    },
+    {
+     "key": "MY_URL",
+     "kr_name": "내요청URL",
+     "description": "내 견적 요청 페이지 링크",
+     "sample": "https://micego.example/ko/my.html",
+     "maxLen": 60
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ACC_PW_RESET",
+   "name": "비밀번호 재설정 링크",
+   "recipient": "mem",
+   "recipient_label": "회원",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "비밀번호 재설정 요청 (가입된 이메일일 때만 실제 발송, 화면 응답은 동일)",
+   "transitions": [],
+   "states": "재설정 요청",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ACC_PW_RESET.html",
+    "subject": "[MICEGO] 비밀번호 재설정 링크를 보내드립니다",
+    "subject_sample": "[MICEGO] 비밀번호 재설정 링크를 보내드립니다",
+    "preheader": "아래 버튼으로 새 비밀번호를 정해 주세요. 링크는 {{EXPIRES_MIN}}분 동안 한 번만 쓸 수 있습니다.",
+    "preheader_sample": "아래 버튼으로 새 비밀번호를 정해 주세요. 링크는 30분 동안 한 번만 쓸 수 있습니다.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "EXPIRES_MIN",
+     "kr_name": "유효시간",
+     "description": "인증번호·링크 유효 시간 (분)",
+     "sample": "30",
+     "maxLen": 2
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "RESET_URL",
+     "kr_name": "재설정URL",
+     "description": "비밀번호 재설정 링크 (1회용 토큰 포함)",
+     "sample": "https://micego.example/ko/reset.html?k=demo-reset-token",
+     "maxLen": 90
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ACC_PW_CHANGED",
+   "name": "비밀번호 변경 완료",
+   "recipient": "mem",
+   "recipient_label": "회원",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "비밀번호 변경 · 재설정 완료",
+   "transitions": [],
+   "states": "비밀번호 변경",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ACC_PW_CHANGED.html",
+    "subject": "[MICEGO] 비밀번호가 변경되었습니다",
+    "subject_sample": "[MICEGO] 비밀번호가 변경되었습니다",
+    "preheader": "{{CHANGED_AT}}에 계정 비밀번호가 바뀌었고 다른 기기는 모두 로그아웃되었습니다. 본인이 아니라면 바로 확인해 주세요.",
+    "preheader_sample": "2026-10-08 19:30에 계정 비밀번호가 바뀌었고 다른 기기는 모두 로그아웃되었습니다. 본인이 아니라면 바로 확인해 주세요.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "CHANGED_AT",
+     "kr_name": "변경일시",
+     "description": "변경·처리 시각 (KST)",
+     "sample": "2026-10-08 19:30",
+     "maxLen": 16
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "RESET_URL",
+     "kr_name": "재설정URL",
+     "description": "비밀번호 재설정 링크 (1회용 토큰 포함)",
+     "sample": "https://micego.example/ko/reset.html?k=demo-reset-token",
+     "maxLen": 90
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ACC_EMAIL_CHANGED",
+   "name": "이메일 변경 완료 (이전 주소)",
+   "recipient": "mem",
+   "recipient_label": "회원",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "로그인 이메일 변경 완료 → 변경 전 주소로 발송",
+   "transitions": [],
+   "states": "이메일 변경",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ACC_EMAIL_CHANGED.html",
+    "subject": "[MICEGO] 로그인 이메일이 변경되었습니다",
+    "subject_sample": "[MICEGO] 로그인 이메일이 변경되었습니다",
+    "preheader": "이 계정의 로그인 이메일이 {{NEW_EMAIL_MASKED}}(으)로 바뀌었습니다. 본인이 아니라면 바로 알려 주세요.",
+    "preheader_sample": "이 계정의 로그인 이메일이 ha****@hanbit-tour.example(으)로 바뀌었습니다. 본인이 아니라면 바로 알려 주세요.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "NEW_EMAIL_MASKED",
+     "kr_name": "새이메일",
+     "description": "마스킹한 새 로그인 이메일",
+     "sample": "ha****@hanbit-tour.example",
+     "maxLen": 40
+    },
+    {
+     "key": "CHANGED_AT",
+     "kr_name": "변경일시",
+     "description": "변경·처리 시각 (KST)",
+     "sample": "2026-10-08 19:30",
+     "maxLen": 16
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ACC_PHONE_CHANGED",
+   "name": "휴대전화 변경 완료",
+   "recipient": "mem",
+   "recipient_label": "회원",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "계정 휴대전화 변경 완료 (새 번호 인증 후)",
+   "transitions": [],
+   "states": "휴대전화 변경",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ACC_PHONE_CHANGED.html",
+    "subject": "[MICEGO] 휴대전화 번호가 변경되었습니다",
+    "subject_sample": "[MICEGO] 휴대전화 번호가 변경되었습니다",
+    "preheader": "계정의 휴대전화가 {{NEW_PHONE_MASKED}}(으)로 바뀌었습니다. 본인이 아니라면 바로 알려 주세요.",
+    "preheader_sample": "계정의 휴대전화가 010-****-5678(으)로 바뀌었습니다. 본인이 아니라면 바로 알려 주세요.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "NEW_PHONE_MASKED",
+     "kr_name": "새번호",
+     "description": "마스킹한 새 휴대전화 (가운데 4자리 가림)",
+     "sample": "010-****-5678",
+     "maxLen": 13
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "CHANGED_AT",
+     "kr_name": "변경일시",
+     "description": "변경·처리 시각 (KST)",
+     "sample": "2026-10-08 19:30",
+     "maxLen": 16
+    },
+    {
+     "key": "RESET_URL",
+     "kr_name": "재설정URL",
+     "description": "비밀번호 재설정 링크 (1회용 토큰 포함)",
+     "sample": "https://micego.example/ko/reset.html?k=demo-reset-token",
+     "maxLen": 90
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ACC_LOCKED",
+   "name": "계정 잠금 안내",
+   "recipient": "mem",
+   "recipient_label": "회원",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "1시간 안에 로그인 10회 실패 → 잠금",
+   "transitions": [],
+   "states": "active → locked",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ACC_LOCKED.html",
+    "subject": "[MICEGO] 로그인 실패가 반복되어 계정을 잠갔습니다",
+    "subject_sample": "[MICEGO] 로그인 실패가 반복되어 계정을 잠갔습니다",
+    "preheader": "{{LOCKED_AT}}에 로그인 실패가 10회 이어져 계정을 보호하려고 잠갔습니다. 비밀번호를 재설정하면 풀립니다.",
+    "preheader_sample": "2026-10-08 17:42에 로그인 실패가 10회 이어져 계정을 보호하려고 잠갔습니다. 비밀번호를 재설정하면 풀립니다.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "LOCKED_AT",
+     "kr_name": "잠금일시",
+     "description": "계정 잠금 시각 (KST)",
+     "sample": "2026-10-08 17:42",
+     "maxLen": 16
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "RESET_URL",
+     "kr_name": "재설정URL",
+     "description": "비밀번호 재설정 링크 (1회용 토큰 포함)",
+     "sample": "https://micego.example/ko/reset.html?k=demo-reset-token",
+     "maxLen": 90
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ACC_WITHDRAWN",
+   "name": "탈퇴 완료 안내",
+   "recipient": "mem",
+   "recipient_label": "회원",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "회원 탈퇴 완료 (본인 요청 · 운영자 처리 포함)",
+   "transitions": [],
+   "states": "active → withdrawn",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/ACC_WITHDRAWN.html",
+    "subject": "[MICEGO] 회원 탈퇴를 마쳤습니다",
+    "subject_sample": "[MICEGO] 회원 탈퇴를 마쳤습니다",
+    "preheader": "계정과 연락처를 파기하고 공유 링크를 모두 중지했습니다. 성사 기록은 3년간 보관합니다.",
+    "preheader_sample": "계정과 연락처를 파기하고 공유 링크를 모두 중지했습니다. 성사 기록은 3년간 보관합니다.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "WITHDRAWN_AT",
+     "kr_name": "탈퇴일시",
+     "description": "탈퇴 처리 시각 (KST)",
+     "sample": "2026-10-08 19:30",
+     "maxLen": 16
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "FB_OPS_ALERT",
+   "name": "피드백 운영 알림",
+   "recipient": "fbk",
+   "recipient_label": "피드백",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "feedback-submit 접수 성공 (DEMO·의심·일일 상한 초과는 제외) → FEEDBACK_INBOX",
+   "transitions": [],
+   "states": "feedback new",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/FB_OPS_ALERT.html",
+    "subject": "[MICEGO 피드백] {{FB_REF}} · {{FB_CATEGORY}} · {{FB_USER_TYPE}}",
+    "subject_sample": "[MICEGO 피드백] FB-261008-7KQ3 · 화면·기능 문제 · 비회원 요청자",
+    "preheader": "{{FB_PAGE}} · 이 메일에 답장하면 접수자에게 바로 전달됩니다.",
+    "preheader_sample": "/ko/track.html · delivered · 이 메일에 답장하면 접수자에게 바로 전달됩니다.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "FB_REF",
+     "kr_name": "접수번호",
+     "description": "피드백 접수번호 (FB-YYMMDD-XXXX, KST 날짜)",
+     "sample": "FB-261008-7KQ3",
+     "maxLen": 16
+    },
+    {
+     "key": "FB_CATEGORY",
+     "kr_name": "피드백유형",
+     "description": "대분류 라벨 (화면·기능 문제 / 견적·운영 문의 / 기타)",
+     "sample": "화면·기능 문제",
+     "maxLen": 20
+    },
+    {
+     "key": "FB_USER_TYPE",
+     "kr_name": "보낸사람",
+     "description": "유저 유형 라벨 (여행사 회원 · 비회원 요청자 · 호텔 · 운영자 · 방문자)",
+     "sample": "비회원 요청자",
+     "maxLen": 12
+    },
+    {
+     "key": "FB_PAGE",
+     "kr_name": "페이지",
+     "description": "page_path · 화면 상태",
+     "sample": "/ko/track.html · delivered",
+     "maxLen": 60
+    },
+    {
+     "key": "FB_RECEIVED_AT",
+     "kr_name": "접수시각",
+     "description": "접수 시각 (KST)",
+     "sample": "2026-10-08 19:30",
+     "maxLen": 16
+    },
+    {
+     "key": "FB_REPLY_EMAIL",
+     "kr_name": "회신주소",
+     "description": "접수자가 남긴 회신 이메일 (없으면 '회신 없음')",
+     "sample": "jieun.kim@hanbit-tour.example",
+     "maxLen": 60
+    },
+    {
+     "key": "FB_UA",
+     "kr_name": "브라우저",
+     "description": "OS · 브라우저 · 인앱 요약",
+     "sample": "Android 14 · Chrome 128 · KakaoTalk",
+     "maxLen": 60
+    },
+    {
+     "key": "FB_CONTENT",
+     "kr_name": "내용",
+     "description": "접수자가 쓴 본문 (원문, 이스케이프)",
+     "sample": "비교표에서 제안 B의 취소 규정이 두 줄로 겹쳐 보입니다. 갤럭시 S24, 카카오톡에서 열었습니다.",
+     "maxLen": 2000
+    },
+    {
+     "key": "FB_CONSOLE_URL",
+     "kr_name": "콘솔링크",
+     "description": "운영 콘솔 상세 URL",
+     "sample": "https://micego.example/admin/feedback-detail.html?id=…",
+     "maxLen": 120
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "FB_ACK",
+   "name": "피드백 접수 확인",
+   "recipient": "fbk",
+   "recipient_label": "피드백",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "회신 이메일 + 수집 동의가 있는 접수 (DEMO·의심 제외, 같은 주소 하루 3건까지)",
+   "transitions": [],
+   "states": "feedback new",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/FB_ACK.html",
+    "subject": "[MICEGO] 보내 주신 의견을 접수했습니다 ({{FB_REF}})",
+    "subject_sample": "[MICEGO] 보내 주신 의견을 접수했습니다 (FB-261008-7KQ3)",
+    "preheader": "접수번호 {{FB_REF}} · 답변이 필요한 내용이면 이 주소로 회신드립니다.",
+    "preheader_sample": "접수번호 FB-261008-7KQ3 · 답변이 필요한 내용이면 이 주소로 회신드립니다.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "FB_REF",
+     "kr_name": "접수번호",
+     "description": "피드백 접수번호 (FB-YYMMDD-XXXX, KST 날짜)",
+     "sample": "FB-261008-7KQ3",
+     "maxLen": 16
+    },
+    {
+     "key": "FB_CATEGORY",
+     "kr_name": "피드백유형",
+     "description": "대분류 라벨 (화면·기능 문제 / 견적·운영 문의 / 기타)",
+     "sample": "화면·기능 문제",
+     "maxLen": 20
+    },
+    {
+     "key": "FB_RECEIVED_AT",
+     "kr_name": "접수시각",
+     "description": "접수 시각 (KST)",
+     "sample": "2026-10-08 19:30",
+     "maxLen": 16
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "ACC_SMS_OTP",
+   "name": "휴대전화 인증번호 (문자)",
+   "recipient": "mem",
+   "recipient_label": "회원",
+   "mode": "auto",
+   "language": "ko",
+   "trigger": "회원 가입 · 휴대전화 변경 중 휴대전화 인증 단계 (이메일 인증 후에만 발송)",
+   "transitions": [],
+   "states": "가입 진행 (pending_phone) · 휴대전화 변경",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": true
+   },
+   "sms": {
+    "body": "[MICEGO] 인증번호 [{{CODE}}]를 {{EXPIRES_MIN}}분 안에 입력해 주세요. 타인에게 알려주지 마세요.",
+    "body_sample": "[MICEGO] 인증번호 [123456]를 3분 안에 입력해 주세요. 타인에게 알려주지 마세요.",
+    "body_kr": "[MICEGO] 인증번호 [#{인증번호}]를 #{유효시간}분 안에 입력해 주세요. 타인에게 알려주지 마세요.",
+    "bytes_sample": 78,
+    "bytes_max": 79,
+    "limit_bytes": 90,
+    "note": "알림톡 대신 문자로만 보냅니다. 유효 3분, 재발송 60초, 하루 5회(번호당), 5회 틀리면 10분 잠금."
+   },
+   "variables": [
+    {
+     "key": "CODE",
+     "kr_name": "인증번호",
+     "description": "6자리 인증번호 (숫자)",
+     "sample": "123456",
+     "maxLen": 6
+    },
+    {
+     "key": "EXPIRES_MIN",
+     "kr_name": "유효시간",
+     "description": "인증번호·링크 유효 시간 (분)",
+     "sample": "3",
+     "maxLen": 2
+    }
+   ]
+  },
+  {
+   "id": "OPS_ORG_PROGRESS",
+   "name": "진행 상황 회신 (SLA)",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "ko",
+   "trigger": "SLA 임박·초과 카드 (콘솔 적색/황색 바) — 진행 상황 + 예상일 안내",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] 진행 상황을 알려 드립니다 · {{RFP_ID}}",
+    "body": "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}}({{DESTINATION}} {{EVENT_TYPE}}) 요청의 진행 상황을 알려 드립니다.\n\n- 현재 단계: {{CURRENT_STEP}}\n- 진행 내용: {{PROGRESS_NOTE}}\n- 다음 일정: {{NEXT_DATE}}에 {{NEXT_ACTION}}\n\n궁금하신 점은 이 메일에 회신해 주세요.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
+    "note": "SOP B-4: 진행 상황 + 예상일이면 회신으로 인정."
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "다낭",
+     "maxLen": 20
+    },
+    {
+     "key": "EVENT_TYPE",
+     "kr_name": "행사유형",
+     "description": "행사 유형",
+     "sample": "인센티브",
+     "maxLen": 12
+    },
+    {
+     "key": "CURRENT_STEP",
+     "kr_name": "현재단계",
+     "description": "현재 진행 단계",
+     "sample": "호텔 견적 취합 중",
+     "maxLen": 30
+    },
+    {
+     "key": "PROGRESS_NOTE",
+     "kr_name": "진행내용",
+     "description": "지금까지 한 일 한두 문장",
+     "sample": "조건에 맞는 호텔에 요청을 보냈고, 마감까지 제안을 받고 있습니다.",
+     "maxLen": 100
+    },
+    {
+     "key": "NEXT_DATE",
+     "kr_name": "다음일정",
+     "description": "다음 안내 예정일",
+     "sample": "2026-10-12(월)",
+     "maxLen": 14
+    },
+    {
+     "key": "NEXT_ACTION",
+     "kr_name": "다음조치",
+     "description": "그날 하는 일",
+     "sample": "비교표를 전달드리겠습니다",
+     "maxLen": 40
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "OPS_ORG_INFO",
+   "name": "정보 보완 요청",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "ko",
+   "trigger": "검증중 · 필수 정보 부족·모순 (반려 전 1회 확인)",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] 요청 내용 확인을 부탁드립니다 · {{RFP_ID}}",
+    "body": "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청을 검토하다가 아래 내용을 확인해야 호텔에 요청을 보낼 수 있어 문의드립니다.\n\n{{MISSING_ITEMS}}\n\n{{REPLY_BY}}까지 알려 주시면 바로 이어서 진행하겠습니다. 그때까지 확인이 어려우면 이번 요청은 진행하지 못할 수 있으니, 그 경우 알려 주세요.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
+    "note": "정보 부족은 3영업일 무응답이면 반려(사유: 필수 정보 부족)."
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "MISSING_ITEMS",
+     "kr_name": "확인항목",
+     "description": "확인이 필요한 항목 목록",
+     "sample": "- 트윈·킹 객실 수\n- 연회장 사용 여부와 목적",
+     "maxLen": 120
+    },
+    {
+     "key": "REPLY_BY",
+     "kr_name": "회신기한",
+     "description": "회신 요청 기한",
+     "sample": "2026-10-01(목) 18:00",
+     "maxLen": 24
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "OPS_ORG_DATE",
+   "name": "일정 확정 확인",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "ko",
+   "trigger": "검증중 · 일정 미확정 의심 (자유 기재란의 '미정·예정·대략')",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] 행사 일정이 확정인지 확인 부탁드립니다 · {{RFP_ID}}",
+    "body": "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청에 적어 주신 행사 일정({{DATE_ASKED}})이 확정된 일정인지 확인하고 싶습니다. MICEGO는 시작일이 확정된 요청만 호텔에 보내고 있습니다.\n\n확정이라면 「확정」이라고만 회신해 주세요. 아직 정해지지 않았다면, 확정되는 대로 새로 요청해 주시면 됩니다.\n\n{{REPLY_BY}}까지 회신이 없으면 이번 요청은 일정 미확정으로 종료합니다.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
+    "note": "1영업일 내 확정 답이 없으면 반려(사유: 일정 미확정)."
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "DATE_ASKED",
+     "kr_name": "확인일정",
+     "description": "확정 여부를 묻는 일정 표기",
+     "sample": "2027-03-15~18",
+     "maxLen": 20
+    },
+    {
+     "key": "REPLY_BY",
+     "kr_name": "회신기한",
+     "description": "회신 요청 기한",
+     "sample": "2026-10-01(목) 18:00",
+     "maxLen": 24
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "OPS_ORG_NOQUOTE",
+   "name": "취합중 0건 현황 + 재요청 예정일",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "ko",
+   "trigger": "취합중 · 제출 견적 0건",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] 받은 제안 현황과 다음 일정 안내 · {{RFP_ID}}",
+    "body": "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청은 견적 마감({{DEADLINE_KST}})까지 호텔의 제안을 받지 못했습니다. 기다려 주셔서 감사하고, 결과를 바로 알려 드리지 못해 죄송합니다.\n\n다른 호텔에 {{REBID_DATE}}까지 다시 요청을 보낼 예정입니다. 새 마감과 비교표 예정일은 요청을 보낸 뒤 바로 알려 드리겠습니다. 조건을 조정하실 수 있다면 알려 주세요.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
+    "note": "두 라운드에도 0건이면 미성사로 닫고 사유를 알린다."
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "DEADLINE_KST",
+     "kr_name": "견적마감",
+     "description": "호텔 견적 마감 (KST)",
+     "sample": "2026-10-08(목) 18:00 KST",
+     "maxLen": 26
+    },
+    {
+     "key": "REBID_DATE",
+     "kr_name": "재요청예정일",
+     "description": "다른 호텔로 다시 요청할 예정일",
+     "sample": "2026-10-13(화)",
+     "maxLen": 14
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "OPS_ORG_CLOSE_CHECK",
+   "name": "미성사 닫기 전 확인",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "ko",
+   "trigger": "전달됨 · 선택 회신 없음 / 유효기한 임박 (닫기 전 1회 확인)",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] 제안 선택 여부를 확인드립니다 · {{RFP_ID}}",
+    "body": "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청의 비교표를 전달드린 뒤 아직 선택 소식이 없어 확인드립니다. 제안 중 가장 빠른 견적 유효기한은 {{VALID_UNTIL_MIN}}입니다.\n\n- 진행하실 제안이 있다면 고르신 제안(A·B·C)을 회신해 주세요.\n- 이번에는 선택하지 않으신다면 그렇게만 알려 주셔도 됩니다.\n\n{{REPLY_BY}}까지 회신이 없으면 이번 요청은 성사 없이 종료합니다. 종료 후에도 새로 요청하실 수 있습니다.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
+    "note": "닫기 전 반드시 1회 이메일로 묻는다 (SOP 6)."
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "VALID_UNTIL_MIN",
+     "kr_name": "유효기한",
+     "description": "제안 중 가장 빠른 견적 유효기한",
+     "sample": "2026-12-15",
+     "maxLen": 10
+    },
+    {
+     "key": "REPLY_BY",
+     "kr_name": "회신기한",
+     "description": "회신 요청 기한",
+     "sample": "2026-10-01(목) 18:00",
+     "maxLen": 24
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "OPS_ORG_FEW_HOTELS",
+   "name": "초대 가능 호텔 2곳 미만 사전 안내",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "ko",
+   "trigger": "오픈 → 비딩중 전환 확인 창 (초대 2곳 미만)",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] 받으실 제안이 적을 수 있어 미리 안내드립니다 · {{RFP_ID}}",
+    "body": "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청은 검토를 마쳤습니다. 다만 요청하신 조건에 맞는 호텔이 많지 않아, 받으시는 제안이 적을 수 있어 미리 알려 드립니다.\n\n{{OPTION_NOTE}}\n\n조건을 조정하실지, 지금 조건 그대로 진행할지 {{REPLY_BY}}까지 알려 주세요. 별도 회신이 없으면 지금 조건으로 요청을 보내겠습니다.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
+    "note": "호텔 수는 숫자로 적지 않는다."
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "OPTION_NOTE",
+     "kr_name": "조정방안",
+     "description": "조건을 조정할 수 있는 항목",
+     "sample": "행사 규모나 일정을 유연하게 조정하시면 요청을 보낼 수 있는 호텔이 늘어납니다.",
+     "maxLen": 100
+    },
+    {
+     "key": "REPLY_BY",
+     "kr_name": "회신기한",
+     "description": "회신 요청 기한",
+     "sample": "2026-10-01(목) 18:00",
+     "maxLen": 24
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "OPS_ORG_ANON_INCIDENT",
+   "name": "익명화 누락 고지",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "ko",
+   "trigger": "예외: 공개 메모에 회사명 등 노출 발견 (이미 열람한 호텔이 있을 때 당일)",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] 요건서 정보 노출 관련 안내 · {{RFP_ID}}",
+    "body": "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청과 관련해 알려 드릴 일이 있습니다.\n\n- 사실: {{INCIDENT_FACT}}\n- 범위: {{INCIDENT_SCOPE}}\n- 조치: {{INCIDENT_ACTION}}\n\n확인이 늦지 않도록 발견한 당일 알려 드립니다. 저희 검토 과정에서 생긴 일이며, 불편과 우려를 드려 죄송합니다. 더 궁금하신 점은 이 메일에 회신해 주세요.\n\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
+    "note": "약관 제7조 3항과 별개로 알린다. 이력에 메모를 남긴다. 사실·범위·조치만 적고 사유를 꾸미지 않는다."
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "ORG_CONTACT_NAME",
+     "kr_name": "담당자명",
+     "description": "오거나이저 담당자 이름·직함",
+     "sample": "김지은 과장",
+     "maxLen": 20
+    },
+    {
+     "key": "INCIDENT_FACT",
+     "kr_name": "노출사실",
+     "description": "무엇이 어떻게 노출됐는지",
+     "sample": "호텔에 공개되는 요건서 메모에 회사명이 한 차례 기재되어 있었습니다.",
+     "maxLen": 100
+    },
+    {
+     "key": "INCIDENT_SCOPE",
+     "kr_name": "노출범위",
+     "description": "노출 시각·열람한 호텔 범위",
+     "sample": "2026-09-30 11:20부터 14:05까지, 그 사이 요건서를 연 호텔은 1곳입니다.",
+     "maxLen": 100
+    },
+    {
+     "key": "INCIDENT_ACTION",
+     "kr_name": "조치내용",
+     "description": "수정·재발 방지 조치",
+     "sample": "메모를 수정해 회사명을 삭제했고, 공개 메모 검토 절차를 한 단계 늘렸습니다.",
+     "maxLen": 100
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "OPS_HTL_FOLLOWUP",
+   "name": "Deadline follow-up (no reply)",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "en",
+   "trigger": "비딩중 · 마감 24시간 이내 제출 0건 (자동 리마인더 이후)",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] Quick check before the deadline · REF {{RFP_ID}}",
+    "body": "Hello {{HOTEL_CONTACT_NAME}},\n\nA quick note on request {{RFP_ID}} ({{DESTINATION}}, {{PAX}}, {{EVENT_DATES}}). Quotes close {{DEADLINE_KST}}, and we haven't received one from {{HOTEL_NAME}} yet.\n\nIf you're planning to quote, the request page has everything you need: {{HOTEL_BID_URL}}\nIf this one isn't a fit, a quick decline there is just as helpful, and it never counts against you.\n\nThanks,\nMICEGO\n{{SUPPORT_EMAIL}}",
+    "note": "전화·개인 메일로 보낸 경우도 이력에 남긴다."
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "HOTEL_CONTACT_NAME",
+     "kr_name": "호텔담당자",
+     "description": "호텔 담당자 이름",
+     "sample": "Ms. Linh",
+     "maxLen": 30
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "Da Nang, Vietnam",
+     "maxLen": 20
+    },
+    {
+     "key": "PAX",
+     "kr_name": "인원",
+     "description": "예상 인원",
+     "sample": "150–199 attendees",
+     "maxLen": 14
+    },
+    {
+     "key": "EVENT_DATES",
+     "kr_name": "행사일정",
+     "description": "행사 기간",
+     "sample": "Mon 15 – Thu 18 Mar 2027 (3 nights)",
+     "maxLen": 20
+    },
+    {
+     "key": "DEADLINE_KST",
+     "kr_name": "견적마감",
+     "description": "호텔 견적 마감 (KST)",
+     "sample": "Thu 8 Oct 2026, 18:00 KST",
+     "maxLen": 26
+    },
+    {
+     "key": "HOTEL_NAME",
+     "kr_name": "호텔명",
+     "description": "수신 호텔(숙박시설)명",
+     "sample": "Ocean Pearl Resort Da Nang",
+     "maxLen": 50
+    },
+    {
+     "key": "HOTEL_BID_URL",
+     "kr_name": "호텔링크",
+     "description": "호텔 개인 견적 링크 전체",
+     "sample": "https://micego.example/en/bid.html?t=demo-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "OPS_HTL_QUOTE_CHECK",
+   "name": "Quote check (blank fields / outliers)",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "en",
+   "trigger": "취합중 · 비교표에 빈 항목·이상치 (트윈>킹, 유효기한이 행사일 전)",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] A quick check on your quote · REF {{RFP_ID}}",
+    "body": "Hello {{HOTEL_CONTACT_NAME}},\n\nThank you for your quote on {{RFP_ID}}. Before we pass it on, could you confirm the following?\n\n{{QUOTE_ISSUES}}\n\nPlease reply by {{REPLY_BY}} with the correct figures or a short confirmation. If we don't hear back, we'll send the quote as submitted.\n\nThanks,\nMICEGO\n{{SUPPORT_EMAIL}}",
+    "note": "마감 후에는 웹 수정이 닫히므로 답장으로 확인한다."
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "HOTEL_CONTACT_NAME",
+     "kr_name": "호텔담당자",
+     "description": "호텔 담당자 이름",
+     "sample": "Ms. Linh",
+     "maxLen": 30
+    },
+    {
+     "key": "QUOTE_ISSUES",
+     "kr_name": "확인사항",
+     "description": "견적에서 확인할 항목 목록",
+     "sample": "- Twin rate is higher than the King rate\n- Validity ends before the event dates (15 Mar 2027)",
+     "maxLen": 200
+    },
+    {
+     "key": "REPLY_BY",
+     "kr_name": "회신기한",
+     "description": "회신 요청 기한",
+     "sample": "Tue 6 Oct 2026, 18:00 KST",
+     "maxLen": 24
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "OPS_HTL_CANCELLED",
+   "name": "Request cancelled (during bidding)",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "en",
+   "trigger": "#12 비딩중 취소 — SOP상 자동 알림 없음",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] Request cancelled · REF {{RFP_ID}}",
+    "body": "Hello {{HOTEL_CONTACT_NAME}},\n\nThe organizer has cancelled request {{RFP_ID}} ({{DESTINATION}}, {{EVENT_DATES}}), so we're no longer collecting quotes. Your personal link now shows the cancellation.\n\nThank you for the time you spent on it. This doesn't affect your listing, and we'll invite you to matching requests as they open.\n\nMICEGO\n{{SUPPORT_EMAIL}}",
+    "note": "취소 사유(오거나이저 사정)는 자세히 적지 않는다."
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "HOTEL_CONTACT_NAME",
+     "kr_name": "호텔담당자",
+     "description": "호텔 담당자 이름",
+     "sample": "Ms. Linh",
+     "maxLen": 30
+    },
+    {
+     "key": "DESTINATION",
+     "kr_name": "목적지",
+     "description": "행사 목적지",
+     "sample": "Da Nang, Vietnam",
+     "maxLen": 20
+    },
+    {
+     "key": "EVENT_DATES",
+     "kr_name": "행사일정",
+     "description": "행사 기간",
+     "sample": "Mon 15 – Thu 18 Mar 2027 (3 nights)",
+     "maxLen": 20
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "OPS_PTN_SUSPEND",
+   "name": "Listing paused + how to reinstate",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "en",
+   "trigger": "파트너 승인 → 중지 (3회 연속 무응답 또는 견적 부정확 반복)",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] Your listing is paused · REF {{PARTNER_ID}}",
+    "body": "Hello {{APPLICANT_NAME}},\n\nWe've paused {{PROPERTY_NAME}} in the MICEGO Partner Network because {{SUSPEND_REASON}}. While paused, you won't receive new invitations.\n\nTo reinstate the listing, just reply to this email and confirm that {{HOTEL_CONTACT_EMAIL}} is still the right address for requests. We'll approve it again once we hear from you.\n\nThanks,\nMICEGO\n{{SUPPORT_EMAIL}}",
+    "note": "답이 오면 콘솔에서 재승인 → PTN_REINSTATED 자동 발송."
+   },
+   "variables": [
+    {
+     "key": "PARTNER_ID",
+     "kr_name": "신청번호",
+     "description": "파트너 신청 번호",
+     "sample": "PT-2609-007",
+     "maxLen": 12
+    },
+    {
+     "key": "APPLICANT_NAME",
+     "kr_name": "신청자",
+     "description": "파트너 신청 담당자 이름",
+     "sample": "Putri Wijaya",
+     "maxLen": 30
+    },
+    {
+     "key": "PROPERTY_NAME",
+     "kr_name": "시설명",
+     "description": "파트너 신청 숙박시설명",
+     "sample": "Sanur Lagoon Resort",
+     "maxLen": 50
+    },
+    {
+     "key": "SUSPEND_REASON",
+     "kr_name": "중지사유",
+     "description": "중지 사유",
+     "sample": "the last three invitations went unanswered",
+     "maxLen": 80
+    },
+    {
+     "key": "HOTEL_CONTACT_EMAIL",
+     "kr_name": "호텔이메일",
+     "description": "호텔 담당자 이메일 (수신 주소)",
+     "sample": "sales@oceanpearl.example",
+     "maxLen": 50
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "OPS_PTN_DOMAIN_CHECK",
+   "name": "Affiliation check (personal email)",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "en",
+   "trigger": "파트너 심사중 · 담당자 이메일이 개인 메일 (호텔 도메인 아님)",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] Confirming your affiliation · REF {{PARTNER_ID}}",
+    "body": "Hello {{APPLICANT_NAME}},\n\nThank you for applying with {{PROPERTY_NAME}}. Your application uses a personal email address, so we'd like to confirm your affiliation with the property before approving.\n\nCould you reply with one of the following?\n- A message from an email address on the property's own domain, or\n- The property's official website page that lists you (or the sales team) as a contact.\n\nWe'll continue the review as soon as we hear from you, within our 5 business day window.\n\nThanks,\nMICEGO\n{{SUPPORT_EMAIL}}",
+    "note": "심사 기한(5영업일)은 계속 흐른다. 확인이 필요하면 심사중으로 두고 상황을 남긴다."
+   },
+   "variables": [
+    {
+     "key": "PARTNER_ID",
+     "kr_name": "신청번호",
+     "description": "파트너 신청 번호",
+     "sample": "PT-2609-007",
+     "maxLen": 12
+    },
+    {
+     "key": "APPLICANT_NAME",
+     "kr_name": "신청자",
+     "description": "파트너 신청 담당자 이름",
+     "sample": "Putri Wijaya",
+     "maxLen": 30
+    },
+    {
+     "key": "PROPERTY_NAME",
+     "kr_name": "시설명",
+     "description": "파트너 신청 숙박시설명",
+     "sample": "Sanur Lagoon Resort",
+     "maxLen": 50
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "OPS_ACC_LINK",
+   "name": "회원 연결 요청 확인 (휴대전화 일치)",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "ko",
+   "trigger": "회원 상세 · 연결 요청 대기 (비회원 요청의 휴대전화가 회원과 같지만 이메일은 다름) — 승인 전 본인 확인",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] 이전 요청을 계정에 연결할지 확인드립니다 · {{RFP_ID}}",
+    "body": "{{CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청이 회원님과 같은 휴대전화 번호로 접수되어 있어 확인드립니다. 회원님이 직접 접수하신 요청이 맞으면 「맞습니다」라고 회신해 주세요. 확인되면 {{MEMBER_EMAIL}} 계정의 「내 견적 요청」에 연결하고, 연결 안내 메일이 자동으로 나갑니다.\n\n본인이 접수한 요청이 아니라면 그렇게만 알려 주세요. 연결하지 않고 그대로 두겠습니다. {{REPLY_BY}}까지 회신이 없으면 연결하지 않습니다.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
+    "note": "요청의 회사명·행사 내용은 적지 않는다(요청번호만). 승인은 콘솔 회원 상세에서 사유와 함께 처리한다."
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "CONTACT_NAME",
+     "kr_name": "가입자명",
+     "description": "회원 이름",
+     "sample": "김지은",
+     "maxLen": 20
+    },
+    {
+     "key": "MEMBER_EMAIL",
+     "kr_name": "회원이메일",
+     "description": "회원 로그인 이메일 (운영자 화면 기준)",
+     "sample": "jieun.kim@hanbit-tour.example",
+     "maxLen": 50
+    },
+    {
+     "key": "REPLY_BY",
+     "kr_name": "회신기한",
+     "description": "회신 요청 기한",
+     "sample": "2026-10-01(목) 18:00",
+     "maxLen": 24
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "OPS_RFP_TRANSFER",
+   "name": "요청 이관 안내 (양쪽 회원)",
+   "recipient": "ops",
+   "recipient_label": "운영자 수동",
+   "mode": "manual",
+   "language": "ko",
+   "trigger": "회원 상세 · 요청 이관 처리 직후 — 이전·새 담당 회원 두 분께 같은 내용을 보낸다 (자동 발송 없음)",
+   "transitions": [],
+   "states": "",
+   "channels": {
+    "email": false,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "text": {
+    "subject": "[MICEGO] 요청 담당자가 변경되었습니다 · {{RFP_ID}}",
+    "body": "안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청의 담당 회원이 {{FROM_NAME}}님에서 {{TO_NAME}}님으로 변경되었습니다. 이 안내는 두 분께 같은 내용으로 보냅니다.\n\n- {{TO_NAME}}님은 「내 견적 요청」에서 이 요청을 확인하고 제안을 선택하실 수 있습니다.\n- {{FROM_NAME}}님이 만드셨던 공유 링크는 꺼졌고, 이 요청은 더 이상 목록에 보이지 않습니다.\n- 이미 호텔에 보낸 요청서 내용은 바뀌지 않았습니다.\n\n본인이 요청하지 않았거나 다르게 알고 계신 부분이 있다면 이 메일에 회신해 주세요.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
+    "note": "이관 사유와 결과는 회원 상세 감사 로그에 남는다. 두 회원 각각에게 보내고 발송 기록은 콘솔에서 '직접 발송 필요'로 표시된다."
+   },
+   "variables": [
+    {
+     "key": "RFP_ID",
+     "kr_name": "요청번호",
+     "description": "견적 요청 번호",
+     "sample": "MG-2610-014",
+     "maxLen": 12
+    },
+    {
+     "key": "FROM_NAME",
+     "kr_name": "이전담당자",
+     "description": "요청을 넘기는 회원 (이름과 회사)",
+     "sample": "김지은 (한빛투어)",
+     "maxLen": 30
+    },
+    {
+     "key": "TO_NAME",
+     "kr_name": "새담당자",
+     "description": "요청을 받는 회원 (이름과 회사)",
+     "sample": "이서준 (한빛투어)",
+     "maxLen": 30
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    }
+   ]
+  }
+ ],
+ "console_template_map": [
+  {
+   "console_name": "접수 확인",
+   "recipient": "오거나이저",
+   "new_ids": "ORG_RECEIVED",
+   "note": "알림톡·LMS 추가"
+  },
+  {
+   "console_name": "반려",
+   "recipient": "오거나이저",
+   "new_ids": "ORG_REJECTED",
+   "note": "사유 3종 변수화, 알림톡·LMS 추가"
+  },
+  {
+   "console_name": "(신규) 비딩중 진입",
+   "recipient": "오거나이저",
+   "new_ids": "ORG_BIDDING",
+   "note": "콘솔 목록에 없던 알림. 추가 필요"
+  },
+  {
+   "console_name": "(신규) 새 라운드",
+   "recipient": "오거나이저",
+   "new_ids": "ORG_REBID",
+   "note": "콘솔 목록에 없던 알림. 추가 필요"
+  },
+  {
+   "console_name": "견적 도착",
+   "recipient": "오거나이저",
+   "new_ids": "ORG_DELIVERED",
+   "note": "알림톡(강조표기)·LMS 추가"
+  },
+  {
+   "console_name": "(신규) 성사 확인",
+   "recipient": "오거나이저",
+   "new_ids": "ORG_WON",
+   "note": "연결 메일 참조 수신 + 알림톡. 콘솔 목록에 없던 알림"
+  },
+  {
+   "console_name": "(신규) 미성사 종료",
+   "recipient": "오거나이저",
+   "new_ids": "ORG_LOST",
+   "note": "콘솔 목록에 없던 알림. 추가 필요"
+  },
+  {
+   "console_name": "(신규) 취소 확인",
+   "recipient": "오거나이저",
+   "new_ids": "ORG_CANCELLED",
+   "note": "콘솔 목록에 없던 알림. 추가 필요"
+  },
+  {
+   "console_name": "초대",
+   "recipient": "호텔",
+   "new_ids": "HTL_INVITE",
+   "note": "라운드 2 이상 재초대 블록 포함"
+  },
+  {
+   "console_name": "리마인더",
+   "recipient": "호텔",
+   "new_ids": "HTL_REMINDER",
+   "note": ""
+  },
+  {
+   "console_name": "(신규) 견적 수신 확인",
+   "recipient": "호텔",
+   "new_ids": "HTL_QUOTE_RECEIVED",
+   "note": "콘솔 목록에 없던 알림. 추가 필요"
+  },
+  {
+   "console_name": "선정 · 미선정 결과",
+   "recipient": "호텔",
+   "new_ids": "HTL_NOT_SELECTED",
+   "note": "미선정 결과는 이 템플릿. 선정 결과는 아래 연결 메일에 통합"
+  },
+  {
+   "console_name": "선정 연결 메일",
+   "recipient": "선정 호텔 (오거나이저 참조)",
+   "new_ids": "HTL_SELECTED_CONNECT",
+   "note": "선정 결과와 연결 메일을 한 통으로 통합"
+  },
+  {
+   "console_name": "(신규) 파트너 신청 접수",
+   "recipient": "호텔 담당자",
+   "new_ids": "PTN_APPLIED",
+   "note": "콘솔 목록에 없던 알림. 추가 필요"
+  },
+  {
+   "console_name": "파트너 심사 결과",
+   "recipient": "호텔 담당자",
+   "new_ids": "PTN_APPROVED · PTN_REJECTED",
+   "note": "승인/거절 2개로 분리"
+  },
+  {
+   "console_name": "(신규) 파트너 재승인",
+   "recipient": "호텔 담당자",
+   "new_ids": "PTN_REINSTATED",
+   "note": "콘솔 목록에 없던 알림. 추가 필요"
+  },
+  {
+   "console_name": "취소 시 호텔 안내",
+   "recipient": "초대 호텔",
+   "new_ids": "OPS_HTL_CANCELLED",
+   "note": "수동 유지"
+  },
+  {
+   "console_name": "파트너 중지 안내",
+   "recipient": "호텔 담당자",
+   "new_ids": "OPS_PTN_SUSPEND",
+   "note": "수동 유지"
+  },
+  {
+   "console_name": "(신규) 제안 선택 인증번호",
+   "recipient": "오거나이저 (회원·비회원)",
+   "new_ids": "ORG_PICK_OTP",
+   "note": "문자(SMS) 전용, 알림톡 미사용"
+  },
+  {
+   "console_name": "(신규) 회원 가입·인증",
+   "recipient": "회원",
+   "new_ids": "ACC_EMAIL_CODE · ACC_EMAIL_EXISTS · ACC_SMS_OTP · ACC_WELCOME",
+   "note": "회원제 v1. 이메일 3종 + 문자 1종(ACC_SMS_OTP)"
+  },
+  {
+   "console_name": "(신규) 요청 연결",
+   "recipient": "회원",
+   "new_ids": "ACC_LINKED · OPS_ACC_LINK",
+   "note": "자동 연결은 ACC_LINKED, 휴대전화만 일치하면 운영자가 OPS_ACC_LINK로 확인"
+  },
+  {
+   "console_name": "(신규) 계정 보안 알림",
+   "recipient": "회원",
+   "new_ids": "ACC_PW_RESET · ACC_PW_CHANGED · ACC_EMAIL_CHANGED · ACC_PHONE_CHANGED · ACC_LOCKED · ACC_WITHDRAWN",
+   "note": "모두 「본인이 요청하지 않았다면」 안내로 끝남"
+  },
+  {
+   "console_name": "(신규) 요청 이관",
+   "recipient": "회원 (양쪽)",
+   "new_ids": "OPS_RFP_TRANSFER",
+   "note": "수동. 콘솔 회원 상세 · 요청 이관 뒤 직접 발송"
+  },
+  {
+   "console_name": "(신규) 피드백·VOC",
+   "recipient": "운영팀 / 접수자",
+   "new_ids": "FB_OPS_ALERT · FB_ACK",
+   "note": "feedback-submit 함수가 직접 발송 (Resend, 멱등 키). 운영자 답변은 메일함에서 알림 메일에 답장"
+  }
+ ],
+ "needs_confirmation": [
+  "카카오 알림톡 발송에는 카카오톡 채널 개설, 발신프로필 등록, 비즈니스 인증(사업자 확인)과 발송 대행사(딜러) 계약이 필요한 것으로 알려져 있습니다. 실제 요건은 카카오 비즈니스와 대행사 안내로 확인이 필요합니다.",
+  "템플릿 검수에 걸리는 시간은 대행사·시기에 따라 다르며, 반려되면 문구를 고쳐 다시 제출해야 합니다. 일정을 잡기 전에 확인이 필요합니다.",
+  "버튼 URL에 변수(#{추적토큰})를 넣는 방식이 검수에서 허용되는지: 변수 URL 허용 여부 검수 확인 필요. 도메인 뒤쪽(쿼리 값)에만 변수를 쓰는 형태로 작성했습니다.",
+  "정보성 메시지가 맞는지: 「새로 요청하기」 버튼이 있는 반려 안내(ORG_REJECTED)는 광고성으로 분류될 여지가 있어 검수 확인이 필요합니다. 어렵다면 버튼을 빼고 문구만 남깁니다.",
+  "강조표기 제목의 글자 수 제한과 사용 조건(ORG_DELIVERED, ORG_WON에만 사용)은 검수 안내로 확인이 필요합니다.",
+  "야간 발송: 정보성 메시지는 법정 야간 제한(광고성 정보 21시–08시) 대상이 아닌 것으로 알려져 있으나 확인이 필요합니다. 운영 기준으로 리마인더성 문구는 08–21시 발송을 권장합니다. 현재 알림톡 8종은 상태 변경 즉시 발송이며 리마인더성은 없습니다.",
+  "LMS 대체발송은 알림톡 수신 불가(카카오톡 미사용·차단 등) 시에만 나가도록 대행사 설정을 확인해야 합니다. 제목 40byte, 본문 2,000byte(EUC-KR 기준, 한글 2 · 영문·숫자·공백 1)로 계산했으며 특수문자(·, –, →)는 2byte로 보수적으로 셌습니다.",
+  "도메인(micego.example)과 발신 주소(FROM_ADDRESS), 문의 메일(SUPPORT_EMAIL)은 미정입니다. 모든 링크·주소는 변수이며 도메인이 정해지면 BASE_URL 하나만 바꿔 다시 생성합니다.",
+  "이메일 발송 도구는 Resend(SOP v2) 기준입니다. 파트너 신청번호(PARTNER_ID) 형식(PT-YYMM-NNN)과 제목의 REF 표기는 잠정안입니다.",
+  "상태전이표 §7 알림 트리거표에는 아직 ORG_BIDDING, ORG_REBID, ORG_WON, ORG_LOST, ORG_CANCELLED, HTL_QUOTE_RECEIVED, PTN_APPLIED, PTN_REINSTATED 행이 없습니다. 이 표를 기준으로 갱신이 필요합니다.",
+  "HTL_SELECTED_CONNECT는 수신 호텔에 오거나이저 회사명·연락처를 담습니다(약관 제7조). 수수료 관련 문구는 넣지 않았습니다.",
+  "ORG_* 메일에 회원이면 MY_URL 링크 추가(조건부 변수) — 백엔드 템플릿 엔진 결정 후.",
+  "문자(SMS) 발송: 국내 SMS 대행사와 발신번호 사전 등록이 필요하며 아직 정해지지 않았습니다(설정 > 전제 조건). 90byte를 넘으면 LMS로 분류되어 요금과 표시가 달라지므로 문구는 변수 최대 길이 기준으로 90byte 이내로 썼습니다. 통신사가 붙이는 발신 표기의 바이트 포함 여부는 대행사 확인이 필요합니다.",
+  "인증번호(ORG_PICK_OTP, ACC_SMS_OTP)를 알림톡이 아닌 문자로만 보내는 결정은 검수 소요 기간과 카카오톡 미사용자 대체 발송 지연을 고려한 것입니다. 인증 문자가 정보성으로 분류되는지는 대행사 확인이 필요합니다.",
+  "ACC_WELCOME 알림톡은 본문에 「내 견적 요청」 링크만 있는 정보성 안내로 작성했습니다. 마케팅 수신 동의를 받은 소식 안내와는 섞지 않으며, 검수 확인이 필요합니다.",
+  "ACC_WITHDRAWN의 3년 보관 문구는 법무 검토 전 초안입니다(TODO: legal). 성사 연결 기록의 보관 기간이 확정되면 문구를 맞춥니다."
+ ]
+}

@@ -1,0 +1,12 @@
+{
+  "status": 200,
+  "body": {
+    "access_token": "tok_test",
+    "refresh_token": "rtok_test",
+    "expires_at": "2026-09-27T00:00:00Z",
+    "member": {
+      "name": "Test User",
+      "state": "pending_phone"
+    }
+  }
+}
