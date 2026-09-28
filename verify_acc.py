@@ -20,7 +20,8 @@ for p in ('ko/faq.html','ko/privacy.html','ko/index.html','ko/terms.html'):
     if 'terms.html' not in open(p,encoding='utf-8').read() and p!='ko/terms.html': F('footer terms '+p)
 for k in ('회원','제안을 선택할 때 왜 인증번호'):
     if k not in open('ko/faq.html',encoding='utf-8').read(): F('faq '+k)
-if '7. 회원 계정' not in open('ko/privacy.html',encoding='utf-8').read(): F('privacy member')
+_pv=open('ko/privacy.html',encoding='utf-8').read()
+if not ('회원' in _pv and '처리하는 개인정보 항목과 수집 방법' in _pv and '보유·이용 기간' in _pv): F('privacy member')  # 2026-09-27: 전문(legal/privacy_ko.json) 렌더링으로 절 제목 변경
 with sync_playwright() as pw:
     b=pw.chromium.launch()
     def page(w=1280,js=True):

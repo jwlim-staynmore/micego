@@ -10,6 +10,7 @@
   "siteVerification": {"google": "", "naver": ""},
   "supabase": {"url": "", "anonKey": "", "functionsUrl": ""},
   "sms": {"vendor": "solapi", "vendorName": ""},
+  "legal": {"effectiveDate": "", "reviewed": false},
   "prod": false,
   "demo": true
 }

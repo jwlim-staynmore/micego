@@ -4,13 +4,15 @@
 
 Single data definition -> emails/*.html, docs/notification-templates.json,
 docs/alimtalk-templates.csv, docs/notification-library.html.
-Run:  python3 /tmp/site/build_notify.py
+Run:  python3 build_notify.py   (cwd = micego-site/)
 Placeholders: write {{KEY}} everywhere. Emails keep {{KEY}}; 알림톡 turns it into #{한글변수}.
 """
 import csv, html, json, os, re, io
+import os as _os_
+_SITE_DIR = _os_.environ.get('MG_SITE_DIR') or _os_.path.dirname(_os_.path.abspath(__file__))
 
 ROOT = os.getcwd()  # WP2: outputs stay relative to the cwd so a build can run inside a copied directory
-exec(open('/tmp/site/site_config.py', encoding='utf-8').read())  # CFG/SITE_BASE/MAIL/PMAIL (WP2)
+exec(open(_os_.path.join(_SITE_DIR, 'site_config.py'), encoding='utf-8').read())  # CFG/SITE_BASE/MAIL/PMAIL (WP2)
 BASE_URL = SITE_BASE or "https://micego.example"  # site.config.json domain, else the placeholder (TODO: domain TBD)
 PH = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
 

@@ -4,6 +4,14 @@
 
 ---
 
+## 0. 먼저 읽을 것 — 이 문서의 기준 스냅샷과 같은 날 합류한 작업
+
+이 문서와 `SPEC_LAUNCH.md`의 수치(마이그레이션 9 · Edge Function 28 · 이메일 29 · 테이블 29)는 **2026-09-27 10:24 스냅샷** 기준이다. 같은 날 오후 **별도 세션이 지역 파트너 콘솔을 구현해 폴더에 합류**시켰다(`docs/partner-console-impl-v1.md`, 설계서 '지역파트너 콘솔 기술설계서 v1'): 마이그레이션 **0010~0016**(지역·파트너 조직·콘솔 계정·위임·대리 입력·정산·초대 수락·알림), Edge Function **`partner_invite`·`quote_confirm`**(총 30), `admin/partner.js`와 신규 콘솔 페이지 5개(`settlements`·`settlement`·`partner-orgs`·`my-org`·`accept`), `en/confirm.html`(`build_confirm.py`), `verify_admin_partner.py`, `tests/sql/06_partner_console.sql`, 이메일 2종 추가(31). 이 작업은 **D-29(파트너=담당 지역 RFP 전체)·D-30(콘솔 초대)을 이미 구현한 것**이므로 §12·O-5의 "미결"은 그 문서 기준으로 다시 읽어야 한다.
+
+⚠️ **K-12 동시 편집 사고**: 두 세션이 같은 폴더에 동시에 쓰면서 이 핸드오프 패키지의 복사가 파트너 콘솔 세션이 고친 기존 파일(`admin/admin.js`·`data-adapter.js`·`rfp.html` 등, `supabase/functions/_shared/deps.ts`·`errors.ts`·`templates.gen.ts`, `build2.py`·`build_acc*.py`·`build_launch.py`·`verify_launch.py`, `build_notify.py`·`emails/`·`docs/notification-*`)을 10:24 버전으로 되돌린 상태다. **인수 전 반드시 파트너 콘솔 세션의 산출물을 다시 쓰고(그 세션의 작업 사본이 정본), 그 위에 `_handoff_patch_2026-09-27/`의 파일을 적용한 뒤 검증 전체를 다시 돌려야 한다.** 절차는 그 폴더의 `APPLY.md`.
+
+✅ **2026-09-28 해소(git 이관)**: 저장소 첫 커밋이 PC 폴더 원본 그대로이고, 두 번째 커밋에서 `APPLY.md` 절차를 끝냈다 — 파트너 콘솔 산출물(0010~0016·`isPartner`·`inviteUserByEmail`)은 폴더에 이미 살아 있었고, 되돌려진 것은 약관 전문 훅(`build2.py`의 `build_legal.py` 호출·`site.config.json` `legal` 블록·`build_sitemap.py` v1.3)과 경로 하드코딩(`build_notify.py`·`build_legal.py`)뿐이어서 이를 복원했다. 검증 11종 0 FAILS, `supabase/tests/run.sh` PASS=13. 패치 원본은 `knowledge/archive/handoff-patch-2026-09-27/`. 이제 동시 편집은 브랜치로 분리한다(D-36).
+
 ## 1. 서비스 한 장 요약
 
 - **무엇**: 한국 오거나이저(여행사·랜드사·기업)가 확정 일정의 해외 MICE 행사 요건(RFP)을 등록 → MICEGO가 회사명·예산을 뺀 요청서를 해외 파트너 호텔에 토큰 링크로 보냄 → 호텔이 견적 제출 → 운영자가 비교표로 전달 → 오거나이저가 휴대전화 OTP로 제안 선정 → 선정 호텔에만 신원 공개(성사).
@@ -31,11 +39,11 @@
 
 ## 3. 리포지토리 지도와 규모
 
-`micego-site/` 약 290 파일. Python 8.4k줄(생성기·검증) · TypeScript 5.9k줄(Edge, 생성물 `templates.gen.ts` 2.9k 제외) · SQL 3.1k줄 · JS 3.3k줄(프론트·콘솔). 자세한 폴더 구조는 `README.md`.
+`micego-site/` 약 305 파일. Python 8.4k줄(생성기·검증) · TypeScript 5.9k줄(Edge, 생성물 `templates.gen.ts` 2.9k 제외) · SQL 3.1k줄 · JS 3.3k줄(프론트·콘솔). 자세한 폴더 구조는 `README.md`.
 
 **생성물 vs 원본** — 가장 자주 하는 실수:
 - 생성물(손대지 말 것): `ko/*`, `en/*`, `index.html`, `404.html`, `sitemap.xml`, `robots.txt`, `assets/config.js`, `_headers`, `vercel.json`, `emails/*`, `docs/notification-*`, `docs/sitemap.*`, `supabase/functions/_shared/templates.gen.ts`.
-- 원본: `build*.py`, `src/*.html`(디자인 원천), `site.config.json`, `assets/mg.js`, `assets/feedback.js`, `admin/*`, `supabase/**`(templates.gen.ts 제외), `docs/state-transitions.html`(직접 편집).
+- 원본: `build*.py`, `legal_render.py`, `src/*.html`(디자인 원천), **`legal/*.json`(약관·방침 전문 — HTML이 아니라 여기를 고침)**, `site.config.json`, `assets/mg.js`, `assets/feedback.js`, `admin/*`, `supabase/**`(templates.gen.ts 제외), `docs/state-transitions.html`·`docs/{launch-checklist,incident-runbook,operator-onboarding}.md`(직접 편집; .html은 그 md에서 만든 사본).
 - 주의: `docs/notification-templates.json`도 생성물이다. 알림 문안은 `build_notify.py`에서 고친 뒤 `sync_templates.py`까지 다시 돌린다.
 
 ## 4. 스펙 인덱스 — 코드 주석의 `§`가 가리키는 곳
@@ -47,6 +55,8 @@
 | `SPEC_FEEDBACK.md` | 피드백(VOC) 시스템 설계서 전체(§0 D1~D7 결정, §2 DB, §3 Edge, §4 위젯, §5 콘솔, §6 보안 S1~S19) | `SPEC_FEEDBACK.md §3.9`, `D1/D2`, `S12` |
 | `SPEC_FEEDBACK_ADDENDUM.md` | 피드백 구현 확정(§A), 작업 패키지 WP-F1~F3(§B), 검증(§C) | `SPEC_FEEDBACK_ADDENDUM.md §B` |
 | `docs/state-transitions.html` v1.7 | RFP·초대·파트너·회원·공유링크·피드백 상태 머신 + 알림 ID | — |
+| `legal/*.json` + `legal/REVIEW_NOTES.md` | 이용약관(23조)·Partner Terms(20조)·개인정보처리방침(16조)·Privacy Notice(12항) 전문과 법무 검토 쟁점 18곳 | — |
+| `docs/launch-checklist.md` · `incident-runbook.md` · `operator-onboarding.md` | 오픈 당일 체크리스트 · 장애 대응(13 시나리오) · 운영자 온보딩 | — |
 
 ⚠️ `SPEC_LAUNCH.md`와 `SPEC_FEEDBACK_ADDENDUM.md`는 원본 유실 후 **2026-09-27 코드에서 역추출한 v1.0**이다(D-31). 스펙과 구현이 다르면 구현이 맞다. 두 문서에서 "(비인용)"·"재구성" 표시 부분은 추정을 포함한다.
 
@@ -91,7 +101,7 @@
 
 정적 사이트: `site.config.json`을 복사해 `site.config.prod.json`(domain·메일·사업자·supabase 키·`prod:true`·`demo:false`)을 만들고 `MG_SITE_CONFIG=site.config.prod.json python3 build2.py` → 산출물이 **같은 폴더에 덮어써지므로** 배포용 브랜치/작업 트리에서 빌드한다. Vercel에는 이 폴더를 올리되 `.vercelignore`가 `supabase/`·`src/`·`*.py`·`*.md`·시드를 제외한다(없으면 소스·데모 시드·내부 결정 문서가 공개됨). `admin/`·`docs/`·`emails/`는 아직 배포에 포함되므로 O-1 결정 전까지 접근 제한 없음에 유의. 롤백: DB는 down 마이그레이션 없음 → PITR, Edge는 이전 커밋 재배포.
 
-**오픈 전 사용자(jwlim) 몫**: 도메인·공식 메일, 사업자 정보, 약관 전문(TODO(legal) 14곳: ko/privacy 6 · en/privacy 2 · ko/terms 2 · en/terms 1 · ko/index 2 · ko/withdraw 1 — 전부 `build2.py`·`build_acc.py` 문구), Solapi/Resend 심사, 실기기 QA(카카오 인앱·삼성 인터넷·iOS Safari).
+**오픈 전 사용자(jwlim) 몫**: 도메인·공식 메일, 사업자 정보, 약관 전문 확정 — `legal/*.json`의 `[법무 검토]` 표시 18곳(`legal/REVIEW_NOTES.md`가 항목별 쟁점 정리)을 법무와 확정한 뒤 `site.config.json.legal.reviewed=true`·`effectiveDate` 기재. 그 밖에 `TODO(legal)` 3곳(ko/index 1 · ko/withdraw 1 · en/terms 1), Solapi/Resend 심사, 실기기 QA(카카오 인앱·삼성 인터넷·iOS Safari).
 
 ## 10. 검증 방법
 
@@ -112,6 +122,7 @@
 | K-9 | 콘솔 mock의 데모 시계·예시 데이터(REF MG-2610-014, 김지은 등)가 prod 빌드 검사에 NOTE로 남음(verify_launch) | api 모드 전환 후 잔여분 제거 |
 | K-10 | 저장소 밖 PC 폴더 `_archive/초기시안/`의 프로토타입 2종에 미채택 가격 카피(10% 커미션 등)가 남아 있음. 빌드 원천은 저장소 안 `src/`이며 내용이 다름(그리드 수정은 같고 카피만 사이트 기준) | 개발자는 `_archive`를 받지 않아도 됨. 참고용으로만 취급 |
 | K-11 | git 이력 없음 — 이 스냅샷이 최초 커밋 | 첫 커밋을 `v0.9.0-prelaunch` 태그로 |
+| K-12 | **동시 편집 사고(09-27)**: 클로드 세션 두 개가 같은 PC 폴더에 동시에 쓰다가 한쪽(약관 전문·운영 문서 작업)의 `build2.py`·`site.config.json`·`build_sitemap.py`·약관 페이지 변경이 다른 쪽 복사로 덮어써짐. 남은 산출물(`legal/`, `build_legal.py`, 루트 sitemap md)로 복원해 `docs/sitemap.md`가 바이트 동일하게 재생성됨을 확인 | git 도입 후에는 브랜치로 분리. git 전까지는 **한 번에 한 세션만** 폴더에 쓰기 |
 
 ## 12. 미결 결정 (개발자와 함께)
 
@@ -129,6 +140,7 @@
 ## 14. 연락·문서
 
 - 의사결정: jwlim@staynmore.com. 정책·카피 변경은 `DECISIONS.md`에 먼저 기록.
+- 운영 문서(개발자도 읽을 것): `docs/launch-checklist.md`(오픈 당일), `docs/incident-runbook.md`(장애 대응 13 시나리오), `docs/operator-onboarding.md`(운영자 온보딩), 프로젝트 문서 'VOC SOP·CX v1'.
 - 클로드 프로젝트 문서: 진행 현황 · 배포 런북 v1 · 회원제 설계서 v1 · 피드백 시스템 설계서 v1 · VOC SOP·CX v1 · 사이트맵·오픈 전 점검 v1 · 이 문서.
 - 운영 SOP v2.1(상태전이 기준): https://claude.ai/code/artifact/f5dfc914-3da2-45c5-aa28-f37bdb9094be
 - 사업 기획안 v1.1: https://claude.ai/artifact/Ts2bis69dniWjaFAyLh9k2 · 지역 파트너 모델: https://claude.ai/artifact/V42LwLd12kVbYupL3L7B6b

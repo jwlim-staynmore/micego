@@ -13,6 +13,7 @@ interface RfpRow {
   created_at: string; verifying_at: string | null; deadline: string | null; bidding_at: string | null;
   delivered_at: string | null; closed_at: string | null; close_reason: string | null; change_summary: string | null;
   contact_email: string; contact_phone: string; pick_otp: Record<string, unknown> | null;
+  partner_org_id?: string | null; delegation?: string | null; // 0010_regional_partners
 }
 
 function nightsBetween(start: string | null, end: string | null): number | null {
@@ -78,8 +79,8 @@ export async function handle(req: Request, deps: Deps): Promise<unknown> {
 
   if (["rejected", "lost", "cancelled"].includes(stateRaw) && r.close_reason) view.reason = { text: r.close_reason };
   // 지역 운영 파트너 고지(결정 2026-09-27): 파트너가 위임받아 진행 중이면 오거나이저에게 파트너 이름을 보여 준다
-  if ((r as Record<string, unknown>).partner_org_id && (r as Record<string, unknown>).delegation === "delegated") {
-    const po = await deps.db.query<{ public_name: string; country_code: string }>(`select public_name, country_code from partner_org where id=$1`, [(r as Record<string, unknown>).partner_org_id]);
+  if (r.partner_org_id && r.delegation === "delegated") {
+    const po = await deps.db.query<{ public_name: string; country_code: string }>(`select public_name, country_code from partner_org where id=$1`, [r.partner_org_id]);
     if (po.length) view.regional_partner = { name: po[0].public_name, country: po[0].country_code };
   }
   if (r.change_summary) view.change_summary = r.change_summary;

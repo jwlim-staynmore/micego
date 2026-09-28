@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## [0.9.1-prelaunch] — 2026-09-28 (Git 이관 · K-12 병합 완료)
+
+### 병합
+- `_handoff_patch_2026-09-27/APPLY.md` 절차 완료. 약관 전문 렌더링 훅 복원: `build2.py`가 `build_legal.py`를 다시 실행(→ ko/en terms·privacy 전문), `site.config.json`에 `legal` 블록, `build_sitemap.py` v1.3(페이지 41). 재생성한 `docs/sitemap.md`가 PC 폴더의 `micego-sitemap-launch-gaps - 클로드.md`와 날짜 외 동일.
+- `build_notify.py`·`build_legal.py`의 `/tmp/site` 하드코딩 제거(`MG_SITE_DIR` 또는 스크립트 위치). 이제 `build_legal.py` 단독 실행은 불가(`build2.py`가 exec).
+- `verify2.py`·`verify_acc.py` 기대치를 약관 전문 렌더링 기준으로(패치본), `.vercelignore`에 `legal/`·`knowledge/`.
+
+### 수정
+- `verify_admin_members.py`: 파트너 콘솔이 추가한 메뉴(정산·지역 파트너) 때문에 실패하던 NAV 순서 검사를 상대 순서 검사로 완화.
+- `supabase/functions/get_track/handle.ts`: `RfpRow`에 `partner_org_id`·`delegation`을 선언해 `as Record` 캐스팅 3곳 제거(deno check TS2352).
+- `supabase/functions/_tests/mock_deps.ts`: `AuthAdminClient.inviteUserByEmail` mock 추가(deno check TS2322). → `supabase/tests/run.sh` PASS=13 FAIL=0.
+
+### 이관
+- 저장소 루트 = 옛 `micego-site/`. 사업·운영 문서는 `knowledge/`(클로드 프로젝트 문서 13종, 발행 아티팩트, PC 폴더 노트, 초기 시안·기획 문서 아카이브). `CLAUDE.md` 추가.
+
 ## [0.9.0-prelaunch] — 2026-09-27 (개발자 핸드오프 스냅샷)
 
 ### 추가
@@ -14,6 +29,11 @@
 - `supabase/README.md`: 마이그레이션 0001..0009, 함수 28개, 템플릿 실측치로 정정. **`app.settings.feedback_cron_secret` GUC 등록 절차 추가**(누락돼 있었음).
 - `supabase/functions/_shared/templates.gen.ts`: `sync_templates.py`로 재생성(43→45 템플릿, FB_OPS_ALERT·FB_ACK 포함).
 - `.vercelignore` 신설 — 소스·백엔드·스펙·시드가 정적 배포에 실리지 않도록.
+
+### 병합(다른 세션 작업, 같은 날)
+- `legal/` 약관·개인정보 전문 JSON 4종 + `REVIEW_NOTES.md`, `build_legal.py`, `legal_render.py` → ko/en terms·privacy 전문 렌더링. `site.config.json`에 `legal` 블록.
+- `docs/launch-checklist`·`incident-runbook`·`operator-onboarding`(md+html). 사이트맵 v1.3.
+- 동시 편집으로 덮어써졌던 `build2.py` 훅·`build_sitemap.py`·`site.config.json` 변경을 복원(K-12). `verify2`·`verify_acc` 기대치 2건을 전문 렌더링에 맞게 갱신.
 
 ### 상태
 - 프론트·콘솔·백엔드 코드 완료, 배포 전. 검증 10종 0 FAILS, 백엔드 테스트 PASS=12(Deno 단위 테스트 91개 포함).

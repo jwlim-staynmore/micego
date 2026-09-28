@@ -12,7 +12,7 @@
 #   [legal review] tag in the JSON renders as a visible chip (prod build warns). reviewed true → tags removed.
 import json as _json, os as _os, sys as _sys, importlib.util as _ilu
 
-_spec = _ilu.spec_from_file_location('legal_render', '/tmp/site/legal_render.py')
+_spec = _ilu.spec_from_file_location('legal_render', _os.path.join(_SITE_DIR, 'legal_render.py'))
 _LR = _ilu.module_from_spec(_spec); _spec.loader.exec_module(_LR)
 
 _LEGAL = CFG.get('legal') or {}
@@ -26,7 +26,7 @@ if PROD and not _EFF:
 
 
 def _load(name):
-    with open(_os.path.join('/tmp/site/legal', name), encoding='utf-8') as f:
+    with open(_os.path.join(_SITE_DIR, 'legal', name), encoding='utf-8') as f:
         return _json.load(f)
 
 

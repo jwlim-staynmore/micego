@@ -39,7 +39,7 @@ for p in pages:
     if p not in ('en/bid.html','ko/track.html') and 'noindex' in txt[p] and p!='en/sample-request.html': F(p+': unexpected noindex')
 apps={p:re.search(r'/\* ===== App: components.*?/\* ===== /App ===== \*/',t,re.S).group(0) for p,t in txt.items() if 'App: components' in t}
 if len(set(apps.values()))!=1: F('App block differs')
-if len(apps)!=7: F('App block pages %d'%len(apps))
+if len(apps)!=9: F('App block pages %d'%len(apps))  # 7 → 9 (2026-09-27): ko/privacy·en/privacy 가 legal/*.json 전문 렌더링(App CSS 사용)으로 바뀜
 from urllib.parse import quote
 if os.path.exists('ko/compare.html'): F('stale compare.html')
 FORBID=[r'예비',r'동의하신 경우에만',r'backup',r'ref-krw',r'≈\s*[\d,]+\s*원',r'12:00 KST',r'compare\.html',r'Notes from organizer',r'No minimum property size',r"Ignore the ones"]

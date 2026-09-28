@@ -12,9 +12,10 @@
 | 운영 콘솔 | `admin/` 11p | 직접 편집하는 HTML/JS(생성기 아님), mock/api 이중 모드 |
 | 백엔드 | `supabase/` | Postgres 마이그레이션 9개(테이블 29), Edge Function 28개(Deno), pg_cron, RLS |
 | 알림 템플릿 | `emails/` 29 + `docs/notification-templates.json` | 이메일 29·알림톡 9·SMS 2 |
-| 문서 | `docs/` | 상태전이표 v1.7, 알림 라이브러리, 사이트맵·오픈 전 점검 |
+| 문서 | `docs/` | 상태전이표 v1.7, 알림 라이브러리, 사이트맵·오픈 전 점검 v1.3, 오픈 체크리스트·장애 runbook·운영자 온보딩 |
 | 설계 스펙 | `SPEC_LAUNCH.md` `SPEC_ACCOUNTS.md` `SPEC_FEEDBACK.md` `SPEC_FEEDBACK_ADDENDUM.md` | 코드 주석이 `§N`으로 인용 |
 | 디자인 원천 | `src/` 3 HTML | `build.py`가 CSS·마크업 조각을 여기서 추출 |
+| 약관·개인정보 전문 | `legal/` 4 JSON | `build_legal.py`가 ko/en terms·privacy 4페이지로 렌더링. `[법무 검토]` 표시는 `site.config.json.legal.reviewed=true`로 제거 |
 
 상태(2026-09-27): 프론트·콘솔·백엔드 **코드 완료, 배포 전**. 검증 스위트 10개 + 백엔드 테스트 모두 0 FAILS.
 
@@ -40,7 +41,7 @@ bash supabase/tests/run.sh # 백엔드: pglast + PostgreSQL 16(root·postgres OS
 
 ## 반드시 알아야 할 규칙
 
-1. **`ko/`·`en/`·`index.html`·`404.html`·`assets/config.js`는 생성물이다.** 손으로 고치면 다음 빌드에서 덮어써진다. `build*.py`(또는 `src/`의 원천 프로토타입)를 고치고 재빌드한다. `admin/`은 반대로 직접 편집한다.
+1. **`ko/`·`en/`·`index.html`·`404.html`·`assets/config.js`는 생성물이다.** 약관·개인정보 4페이지는 `legal/*.json`에서 나온다. 손으로 고치면 다음 빌드에서 덮어써진다. `build*.py`(또는 `src/`의 원천 프로토타입)를 고치고 재빌드한다. `admin/`은 반대로 직접 편집한다.
 2. **모드 전환은 설정 파일 하나로 한다.** `site.config.json`의 `supabase.url`이 비어 있으면 프론트는 `mailto`/`mock` 모드(백엔드 없이 동작), 채워지면 `api` 모드. `prod:true`면 DEMO 띠·상태 스위처·예시 데이터가 제거된다. 환경별 설정은 `MG_SITE_CONFIG=<파일> python3 build2.py`.
 3. **빌드 스크립트는 자기 파일이 있는 폴더를 기준으로 다른 스크립트와 `src/`를 찾는다**(`MG_SITE_DIR`로 바꿀 수 있음). 산출물과 `site.config.json` 읽기는 현재 작업 폴더 기준이므로, 빌드·검증은 항상 `micego-site/` 안에서 실행한다.
 4. **비밀 값은 `.env.example`의 키 목록만 커밋한다.** 실제 값은 `supabase secrets set`으로만 올린다.
@@ -58,6 +59,7 @@ micego-site/
 ├─ build.py            공통 조각(헤더·푸터·CSS)과 랜딩 2종 — src/ 프로토타입에서 추출
 ├─ build2.py           진입점. site_config → build → 앱 페이지(track/bid) → build_acc → build_launch 순서로 exec
 ├─ build_acc.py/_acc2  회원 페이지(signup/login/reset/my/account/withdraw/terms)
+├─ build_legal.py      legal/*.json → ko/en terms·privacy (legal_render.py 사용)
 ├─ build_launch.py     오픈 자산(404, sitemap.xml, robots, 아이콘, _headers/vercel.json, config.js, prod 정리)
 ├─ build_notify.py     emails/*.html, docs/notification-*.json/csv, notification-library.html
 ├─ build_sitemap.py    docs/sitemap.html·sitemap.md
@@ -66,7 +68,7 @@ micego-site/
 ├─ assets/             config.js(생성) · mg.js(API 클라이언트) · feedback.js(VOC 위젯)
 ├─ admin/              운영 콘솔. data-adapter.js가 mock-data.js 또는 Supabase 선택
 ├─ supabase/           migrations/ functions/ scripts/ tests/ seed*.sql config.toml README.md
-├─ docs/  emails/  og/  src/  tests/fixtures/
+├─ docs/  emails/  og/  src/  legal/  tests/fixtures/
 └─ SPEC_*.md  DECISIONS.md  HANDOFF.md  CHANGELOG.md
 ```
 

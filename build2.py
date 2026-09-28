@@ -1528,6 +1528,7 @@ def contact_page(ko):
 wr('ko/contact.html', contact_page(True)); wr('en/contact.html', contact_page(False))
 print('build2 ok')
 exec(open(_os_.path.join(_SITE_DIR, 'build_acc.py'), encoding='utf-8').read(), globals())   # member-account pages (signup/login/reset/my/account/withdraw/terms)
+exec(open(_os_.path.join(_SITE_DIR, 'build_legal.py'), encoding='utf-8').read(), globals())  # legal pages (ko/en terms·privacy) rendered from legal/*.json — overwrites the summary versions above
 
 # ---- og:image post-processing (idempotent) ----
 import re as _re, os as _os

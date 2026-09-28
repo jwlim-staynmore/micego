@@ -26,7 +26,7 @@ with sync_playwright() as p:
     def state(pg): return pg.evaluate("JSON.parse(sessionStorage.getItem('micego_admin_state_v1'))")
     ctx,pg=newpage(); login(pg)
     # nav + dashboard
-    nav=pg.eval_on_selector_all('.side nav a','e=>e.map(x=>x.getAttribute("href"))'); ok('nav order partners,members,feedback,settings',nav[-4:]==['partners.html','members.html','feedback.html','settings.html'],nav)
+    nav=pg.eval_on_selector_all('.side nav a','e=>e.map(x=>x.getAttribute("href"))'); ok('nav order partners,members,feedback,settings',[h for h in nav if h in ('partners.html','members.html','feedback.html','settings.html')]==['partners.html','members.html','feedback.html','settings.html'] and nav[-1]=='settings.html',nav)  # 2026-09-28: 파트너 콘솔이 settlements·partner-orgs 메뉴를 사이에 추가 → 상대 순서만 검사
     ok('members badge 1',pg.inner_text('.side a[href="members.html"] .nav-badge')=='1')
     ok('dashboard acc card','연결 요청 대기 1건' in pg.inner_text('#accSum') and '잠긴 계정 1건' in pg.inner_text('#accSum'),pg.inner_text('#accSum'))
     pg.click('#accSum [data-key=linkreq]'); pg.wait_for_url('**/members.html?filter=link'); ok('dash link -> filter',ids(pg)==['m1'],ids(pg))

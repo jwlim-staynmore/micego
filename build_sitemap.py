@@ -2,7 +2,7 @@
 """docs/sitemap.html — 전체 사이트맵 + 서비스 오픈 전 프론트엔드 미구현 항목 (v1.0)"""
 import html, os, re, json
 ROOT = os.getcwd()  # WP2: outputs stay relative to the cwd so a build can run inside a copied directory
-VER = 'v1.2'; DATE = '2026-09-27'
+VER = 'v1.3'; DATE = '2026-09-27'
 
 def e(s): return html.escape(s, quote=False)
 
@@ -18,8 +18,8 @@ SITE = [
   ('ko/about.html', '서비스 소개', '운영 방식·정책·운영사 소개', 'pub', '색인', '—', '없음'),
   ('ko/faq.html', '자주 묻는 질문', '이용 조건·진행·회원 그룹', 'pub', '색인', '—', '없음'),
   ('ko/contact.html', '문의하기', '문의 폼 + 메일 주소', 'pub', '색인', '—', '폼 제출 API'),
-  ('ko/terms.html', '이용약관(초안)', '10개 조항 요약. 전문은 법무 검토 후 교체', 'pub', '색인', '—', '없음'),
-  ('ko/privacy.html', '개인정보처리방침', '수집 항목·목적·보유 기간·제3자 제공·회원 항목', 'pub', '색인', '—', '없음'),
+  ('ko/terms.html', '이용약관(전문 초안)', 'legal/terms_ko.json 7장 23조 렌더링. 법무 검토 표시 18곳 중 7곳', 'pub', '색인', '—', '없음'),
+  ('ko/privacy.html', '개인정보처리방침(전문 초안)', 'legal/privacy_ko.json 16조 렌더링. 보유 기간·제3자 제공·위탁·국외 이전·브라우저 저장 표', 'pub', '색인', '—', '없음'),
   ('ko/track.html?t=…', '견적 진행 상황(요청자 전용)', '접수→비교표→선정까지 상태별 화면, 제안 비교, 제안 선택(휴대전화 인증), 조건 변경, 동료 공유 링크 발급', 'tok', 'noindex', '11 상태 + 공유 보기(?s=)', '토큰별 데이터, 선택 RPC, OTP, 공유 링크'),
   ('ko/signup.html', '회원가입', '기본 정보 → 이메일 인증번호 → 휴대전화 인증번호 3단계', 'pub', '색인', '12 상태', '가입·인증 API'),
   ('ko/login.html', '로그인', '이메일·비밀번호, 로그인 유지, ?next= 복귀', 'pub', '색인', '6 상태', '인증 API'),
@@ -34,7 +34,7 @@ SITE = [
   ('en/bid.html?t=…', 'Request & quote(초대 호텔 전용)', '요건서 열람, 견적 제출, 거절, 결과 확인', 'tok', 'noindex', '8 상태', '토큰별 데이터, 견적 제출·거절 RPC'),
   ('en/faq.html', 'Hotel FAQ', '파트너 조건·비딩·선정 결과', 'pub', '색인', '—', '없음'),
   ('en/contact.html', 'Contact', '문의 폼 + 메일 주소', 'pub', '색인', '—', '폼 제출 API'),
-  ('en/privacy.html', 'Privacy notice', '호텔 파트너·담당자 정보 처리', 'pub', '색인', '—', '없음'),
+  ('en/privacy.html', 'Privacy notice(전문 초안)', 'legal/privacy_en.json 12항 렌더링. 호텔 파트너·주최 측 정보 처리', 'pub', '색인', '—', '없음'),
  ]),
  ('운영 콘솔 (admin/, 한국어 · 운영자 전용)', [
   ('admin/index.html', '로그인', '운영자 로그인(현재 데모: 값만 있으면 통과)', 'ops', 'robots 차단', '—', 'Supabase Auth + role'),
@@ -53,6 +53,9 @@ SITE = [
   ('docs/state-transitions.html', '상태전이표 v1.7', 'RFP·초대·파트너·회원·공유 링크·피드백 상태 머신과 알림 ID', 'int', 'noindex', '—', '—'),
   ('docs/notification-library.html', '알림 라이브러리', '이메일 29종·알림톡 9종·SMS 2종·운영자 수동 문안, JSON·CSV 동봉', 'int', 'noindex', '—', '—'),
   ('docs/sitemap.html', '사이트맵 · 오픈 전 점검(이 문서)', '전체 페이지 목록과 미구현 항목', 'int', 'noindex', '—', '—'),
+  ('docs/launch-checklist.html', '오픈 당일 체크리스트', 'D-7 · D-1 · D-day · 오픈 직후 1시간 · D+1 · 첫 주 확인 항목과 오픈 중단 기준', 'int', 'noindex', '—', '—'),
+  ('docs/incident-runbook.html', '장애 대응 runbook', '심각도 정의·최초 대응 15분·시나리오 13종·에스컬레이션·사후 기록 템플릿', 'int', 'noindex', '—', '—'),
+  ('docs/operator-onboarding.html', '운영자 온보딩', '계정 발급·콘솔 둘러보기·하루/주간 루틴·자주 하는 작업·용어집·VOC 응대 원칙', 'int', 'noindex', '—', '—'),
   ('emails/*.html (29)', '이메일 템플릿', 'ORG 8 · HTL 5 · PTN 4 · ACC 10 · FB 2 — {{변수}} 치환 전 원본', 'int', 'robots 차단', '—', '템플릿 엔진 + 발송'),
  ]),
  ('시스템 파일', [
@@ -109,8 +112,8 @@ GAPS = [
   ('네이버 서치어드바이저·구글 서치콘솔 인증', '없음', '도메인 확정 후 메타 태그 삽입', 'B', '운영'),
  ]),
  ('법무 · 사업자 정보', [
-  ('이용약관 전문', 'ko/terms.html은 10개 조항 요약 초안', '전문 작성·법무 검토 후 교체(TODO(legal))', 'A', '법무'),
-  ('개인정보처리방침 확정', 'TODO(legal) 5건 — 제3자 제공·국외 이전 고지 항목, 보관 기간, SMS 수탁사, 개정일', '법무 검토 후 문구 확정, en/privacy.html 동기화', 'A', '법무'),
+  ('이용약관 전문', 'legal/terms_ko.json(23조)·partner_terms_en.json(20조) 초안 렌더링 완료. [법무 검토] 12곳', '법무 검토 → legal/REVIEW_NOTES.md 항목 확정 → site.config.json legal.reviewed=true·effectiveDate 기재', 'A', '법무'),
+  ('개인정보처리방침 확정', 'legal/privacy_ko.json·privacy_en.json 초안 렌더링 완료(이전 TODO(legal) 5건 모두 반영). [법무 검토] 6곳 + 결정 대기: 비회원 요청 30일 파기, 운영자 대리 확정 동의, Supabase 리전', '법무 검토 + 운영 결정 → 파기 작업(system_tick) 추가 → legal.reviewed=true', 'A', '법무+BE'),
   ('사업자 정보', '상호·대표자·사업자등록번호·주소·개인정보 보호책임자 미기재(TODO(operator) — about·privacy·terms)', '확정 후 푸터·약관·방침에 기재', 'A', '운영'),
   ('휴대전화 인증 범위 표기', '소유 확인이며 본인확인 아님 — 약관·방침에 반영됨', '법무 확인만', 'B', '법무'),
  ]),
@@ -157,7 +160,7 @@ STATUS = {
   # 도메인·SEO·메타
   '도메인 확정': ST_DONE, '분석 도구': ST_DONE, '네이버 서치어드바이저·구글 서치콘솔 인증': ST_DONE,
   # 법무·사업자 정보
-  '이용약관 전문': ST_EXT, '개인정보처리방침 확정': ST_EXT, '사업자 정보': ST_DONE, '휴대전화 인증 범위 표기': ST_EXT,
+  '이용약관 전문': ST_PART, '개인정보처리방침 확정': ST_PART, '사업자 정보': ST_DONE, '휴대전화 인증 범위 표기': ST_EXT,
   # 품질·호환·보안
   '카카오톡 인앱 브라우저 검증': ST_EXT,
   '의견 보내기 위젯 + 문의 폼 통합': ST_BE, '피드백 운영 콘솔': ST_BE, 'VOC 처리 SOP·CX 응대': ST_DONE, '보안 헤더': ST_DONE, '토큰·상태 검증': ST_BE, '브라우저 매트릭스': ST_EXT,
@@ -229,7 +232,7 @@ for a_, b_, c_ in [
     body += '<tr><td><b>%s</b></td><td class="nw">%s</td><td>%s</td></tr>' % (e(a_), e(b_), e(c_))
 body += '</tbody></table></div></section>'
 body += '<section id="s11"><h2><span class="n">11</span>오픈 순서 제안</h2><p class="lead">비회원 견적 흐름을 먼저 열고, 회원 기능은 그 위에 얹는 순서입니다.</p><div class="tw"><table><thead><tr><th>단계</th><th>할 일</th><th>설명</th></tr></thead><tbody>' + ''.join('<tr><td class="nw"><code>%s</code></td><td><b>%s</b></td><td>%s</td></tr>' % (a, e(b), e(c)) for a, b, c in ORDER) + '</tbody></table></div></section>'
-body += '<p class="small" style="margin-top:22px">개정 이력 · %s %s 최초 작성(회원제 v1 반영 시점) · v1.1 2026-09-26 A·B 제작 결과 반영(상태 배지, 남은 일) · v1.2 2026-09-27 피드백·VOC 창구 추가.</p></div>' % (VER, DATE)
+body += '<p class="small" style="margin-top:22px">개정 이력 · %s %s 최초 작성(회원제 v1 반영 시점) · v1.1 2026-09-26 A·B 제작 결과 반영(상태 배지, 남은 일) · v1.2 2026-09-27 피드백·VOC 창구 추가 · v1.3 2026-09-27 약관·개인정보처리방침 전문(legal/) 렌더링, 운영 문서 3종 추가.</p></div>' % (VER, DATE)
 
 EXTRA = '''
 .tree{font-family:var(--mono);font-size:13px;line-height:1.7;background:#F6F8FB;border:1px solid var(--line);border-radius:10px;padding:14px 16px;overflow-x:auto;margin:0;white-space:pre}

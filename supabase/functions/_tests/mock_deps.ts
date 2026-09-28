@@ -30,6 +30,7 @@ export function makeMockDb(handler: QueryHandler = () => undefined): DbClient {
 export function makeMockAuthAdmin(overrides: Partial<AuthAdminClient> = {}): AuthAdminClient {
   return {
     createUser: async () => ({ id: "mock-user-id" }),
+    inviteUserByEmail: async () => ({ id: "mock-invited-id", existed: false }),
     updateUserById: async () => {},
     deleteUser: async () => {},
     generateRecoveryLink: async () => ({ hashed_token: "mock-hashed-token" }),

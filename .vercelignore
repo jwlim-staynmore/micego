@@ -2,6 +2,7 @@
 # (admin/, docs/, emails/ 는 콘솔·내부 문서라 현재는 배포되지만 robots 차단만 있음 → DECISIONS.md O-1 에서 접근 제한 방식 결정)
 supabase/
 src/
+legal/
 tests/
 __pycache__/
 shots/
