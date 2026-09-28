@@ -40,7 +40,7 @@ MG_PGBIN=/usr/lib/postgresql/16/bin MG_DENO_BIN=$(which deno) bash supabase/test
 ## 편집 규칙
 
 1. **`ko/`·`en/`·`index.html`·`404.html`·`assets/config.js`·`emails/`·`docs/sitemap.*`·`docs/notification-*`는 생성물** — 손으로 고치지 말고 `build*.py`·`src/`를 고친 뒤 재생성.
-2. **약관·개인정보처리방침 원문은 `legal/*.json`뿐**. HTML이 아니라 JSON(또는 `site.config.json`의 `operator`·`legal`·`sms` 블록)을 고친다. `[법무 검토]` 표시 18곳은 `legal/REVIEW_NOTES.md`.
+2. **약관·개인정보처리방침 원문은 `legal/*.json`뿐**. HTML이 아니라 JSON(또는 `site.config.json`의 `operator`·`legal`·`sms` 블록)을 고친다. 검토 쟁점 18곳은 `legal/REVIEW_NOTES.md`(본문 표시는 한국어 `[법무 검토]`, 영어 `[legal review]`).
 3. **운영 콘솔 `admin/*.html`·`admin/*.js`는 직접 편집**(생성기 아님). mock/api 이중 모드 — `?as=partner`로 파트너 화면 시연.
 4. `site.config.json`이 도메인·공식 메일·사업자 정보·Supabase 키·GA4를 채우는 **유일한 설정 파일**. 실제 키·시크릿은 커밋하지 않는다(시크릿은 `supabase secrets`, 예시는 `.env.example`).
 5. 마이그레이션은 번호 순서(`supabase/migrations/00NN_*.sql`). 이미 적용된 파일은 고치지 말고 새 번호로 추가. enum 값 추가는 단독 파일.

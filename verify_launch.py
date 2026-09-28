@@ -458,9 +458,11 @@ if _run_build(C, os.path.join(C, 'site.config.json')):
     terms = rd(os.path.join(C, 'en', 'terms.html'))
     if 'DRAFT' not in terms:
         F('(c) en/terms.html missing the DRAFT badge')
-    if 'TODO(legal)' not in terms:
-        F('(c) en/terms.html missing a TODO(legal) marker')
-    if 'DRAFT' in terms and 'TODO(legal)' in terms:
+    # 2026-09-28: 전문 렌더링(legal/partner_terms_en.json)에서는 TODO(legal) 대신 [legal review] 칩이 검토 표시다
+    _legal_mark = ('TODO(legal)' in terms) or ('legal review' in terms)
+    if not _legal_mark:
+        F('(c) en/terms.html missing a TODO(legal) / [legal review] marker')
+    if 'DRAFT' in terms and _legal_mark:
         ok('(c) en/terms.html has the DRAFT badge and a TODO(legal) marker')
 
     # -- en/unsubscribe.html: 5 states --

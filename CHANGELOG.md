@@ -12,6 +12,8 @@
 - `supabase/functions/get_track/handle.ts`: `RfpRow`에 `partner_org_id`·`delegation`을 선언해 `as Record` 캐스팅 3곳 제거(deno check TS2352).
 - `supabase/functions/_tests/mock_deps.ts`: `AuthAdminClient.inviteUserByEmail` mock 추가(deno check TS2322). → `supabase/tests/run.sh` PASS=13 FAIL=0.
 
+- `build_launch.py`: `legal/partner_terms_en.json`이 있으면 `en/terms.html`을 요약 초안으로 덮어쓰지 않음(K-12 때 유실된 가드). 이 때문에 Partner Terms 전문이 렌더링되지 않고, 요약본의 "MICEGO charges no commission to either side"(D-32·REVIEW_NOTES §2-7 위반)가 노출되고 있었음. `verify_launch.py`는 `[legal review]` 표시도 검토 표시로 인정.
+
 ### 이관
 - 저장소 루트 = 옛 `micego-site/`. 사업·운영 문서는 `knowledge/`(클로드 프로젝트 문서 13종, 발행 아티팩트, PC 폴더 노트, 초기 시안·기획 문서 아카이브). `CLAUDE.md` 추가.
 

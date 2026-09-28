@@ -131,9 +131,11 @@ TERMS_EN_BODY = (
   '<h2>10. Contact</h2><p>Questions about these terms: <a href="mailto:mysteri1984@gmail.com">mysteri1984@gmail.com</a>.</p>'
   '<!-- TODO(operator): legal entity name, representative, business registration number, address, privacy officer -- fill in once confirmed -->'
   '</div></div>')
-wr('en/terms.html', app_page('en', 'Partner terms (draft) | MICEGO Partner',
-    'Draft partner terms for MICEGO hotel and resort partners, pending legal review.', 'en/terms.html', TERMS_EN_BODY,
-    nav=PUB_NAV_EN, cur='en', ko_href='../ko/terms.html', en_href='index.html', cur_page='terms.html'))
+# 2026-09-28: legal/partner_terms_en.json 이 있으면 build_legal.py 가 이미 전문을 렌더링했으므로 요약 초안으로 덮어쓰지 않는다(K-12 때 유실된 가드 복원)
+if not os.path.exists(os.path.join(_SITE_DIR, 'legal', 'partner_terms_en.json')):
+  wr('en/terms.html', app_page('en', 'Partner terms (draft) | MICEGO Partner',
+      'Draft partner terms for MICEGO hotel and resort partners, pending legal review.', 'en/terms.html', TERMS_EN_BODY,
+      nav=PUB_NAV_EN, cur='en', ko_href='../ko/terms.html', en_href='index.html', cur_page='terms.html'))
 
 # footer links: add the new terms page across EN sub-pages (contact/faq/privacy/sample-request/terms/bid)
 FL_EN_SUB2 = FL_EN_SUB + [('terms.html', 'Partner terms', '')]
