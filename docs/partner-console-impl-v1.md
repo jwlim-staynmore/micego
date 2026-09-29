@@ -66,3 +66,6 @@
 ## 개선 이력
 - 2026-09-27 · jwlim@staynmore.com(클로드) · v1.1 — 오거나이저 고지 결정(고지) 반영: 메일 블록·추적 화면·약관/방침 6곳, 확인된 대리 견적 상태를 submitted로 통일, get_track/pick_send_otp 보완.
 - 2026-09-27 · jwlim@staynmore.com(클로드) · v1 최초 작성 — 백엔드(0010~0016)·Edge Function 2종·콘솔 5개 신규 화면·호텔 확인 페이지·알림 템플릿 2종 구현, 테스트 통과, PC micego-site에 저장.
+
+## 추가 — 0017 호텔 커미션 (2026-09-29)
+`supabase/migrations/0017_hotel_commission.sql`이 이 문서의 `admin_partner_transition`·`admin_partner_update`·`admin_invite`·`admin_reinvite`·`partner_to_json`·`settlement_create`·`settlement_action`·`console_notice_text`를 다시 정의한다. 지역 파트너 관리자는 호텔 승인 때 `commission_rate_range` 안의 요율을 정하고, 호텔이 `en/commission.html`에서 동의해야 초대가 나간다. 설계서 `docs/hotel-commission-design-v1 - 클로드.md`, 결정 D-37~D-43.

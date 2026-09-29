@@ -1,5 +1,20 @@
 # CHANGELOG
 
+## [0.10.0-prelaunch] — 2026-09-29 (호텔 커미션)
+
+### 추가
+- 호텔별 고정 커미션율(D-37~D-43, 설계서 `docs/hotel-commission-design-v1 - 클로드.md`). 마이그레이션 `0017_hotel_commission.sql`: `partners` 요율·동의·토큰 컬럼, `partner_commission_event`(추가 전용), 초대·정산 요율 스냅샷, 승인 시 요율 필수·범위 가드, 동의 전 호텔 초대 제외(`MG:COMMISSION_NOT_AGREED`), 정산 요율 프리필·편차 플래그.
+- Edge Function `partner_commission_accept`(조회·동의), 호텔 동의 페이지 `en/commission.html`(`build_commission.py`, `build_launch.py`가 실행 — `build_confirm.py`도 이제 `build2.py` 한 번으로 생성).
+- 알림 `PTN_COMMISSION_TERMS` 신규, `PTN_APPROVED`에 요율·동의 버튼, `HTL_INVITE`·비딩 화면에 합의 요율 한 줄.
+- 운영 콘솔: 승인 시 요율 입력, 호텔 상세 커미션 카드(변경 제안·동의 링크 재발송·이력), "요율 합의 필요"·"동의 대기" 배지, 초대 카드에서 미합의 호텔 비활성, 정산 요율 잠금.
+- 테스트: `supabase/tests/sql/07_hotel_commission.sql`(9 시나리오), Deno 단위 테스트, `verify_admin_partner.py` 78항목, `verify2`·`verify_api` 요율 노출 검사. 백엔드 PASS=14.
+
+### 변경
+- Partner Terms 5조(5.2~5.7) 커미션 조항, 이용약관 제4조③⑤·제21조⑤, `legal/REVIEW_NOTES.md` 21곳. 카피 "수수료 없음" → "주최 측 수수료 없음"(푸터·FAQ·통계 라벨), 호텔 FAQ에 커미션 안내.
+
+### 배포 시 주의
+- 배포 직후 기존 승인 호텔은 전부 "요율 합의 필요" 상태라 초대되지 않는다. 오픈 전에 `partners where state='approved' and commission_accepted_at is null` 대상에 요율을 제안하고 동의를 받는다.
+
 ## [0.9.1-prelaunch] — 2026-09-28 (Git 이관 · K-12 병합 완료)
 
 ### 병합
