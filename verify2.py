@@ -32,7 +32,17 @@ for p in ['en/index.html','en/sample-request.html','en/privacy.html','en/bid.htm
     for m in re.finditer(r'free|commission',nc,re.I):
         ctx=nc[max(0,m.start()-30):m.end()+20]
         if 'Free cancellation' not in ctx and 'listing fee' not in nc[max(0,m.start()-60):m.end()+40].lower(): print('note',p,ctx.replace('\n',' '))
-        if p in ('en/bid.html','en/faq.html','en/contact.html') and re.search(r'free of charge|commission|forever|always free',nc,re.I): F(p+': forbidden commercial phrase')
+        if p in ('en/bid.html','en/faq.html','en/contact.html') and re.search(r'free of charge|forever|always free|no commission|commission[- ]free',nc,re.I): F(p+': forbidden commercial phrase')
+    # hotel-side pages may mention the commission only in the approved phrasings (design D8/§5); anything else fails
+    ncs=re.sub(r'<script.*?</script>','',nc,flags=re.S)  # script code (resp.commission …) is covered by verify_api's rendered-note check
+    for m in re.finditer(r'commission',ncs,re.I):
+        ctx_=ncs[max(0,m.start()-40):m.end()+60]
+        if not re.search(r'Protection Commission|a commission on confirmed bookings|earns a commission|net booking value',ctx_): F(p+': commission mentioned outside the allowed hotel-side phrasing: '+ctx_.replace('\n',' '))
+# organizer side (ko/* and the mode-select hub) must never mention the hotel commission or a rate; "주최 측 수수료 없음" is the only fee wording
+for p in sorted(glob.glob('ko/*.html'))+['index.html']:
+    nc=re.sub(r'<!--.*?-->','',open(p,encoding='utf-8').read(),flags=re.S)
+    if re.search(r'commission|커미션|net booking value|합의 요율|agreed rate',nc,re.I): F(p+': organizer side mentions commission/rate')
+    if re.search(r'(수수료|요율)\s*[:：]?\s*\d',nc): F(p+': organizer side shows a fee rate')
 for p in ('en/bid.html','ko/track.html'):
     if 'noindex,nofollow' not in txt[p] or 'no-referrer' not in txt[p]: F(p+': noindex/referrer')
 for p in pages:

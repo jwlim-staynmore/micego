@@ -46,6 +46,9 @@ window.MG = (function () {
     NOT_ACTIVE: { status: 403, ko: "가입 인증이 남아 있습니다.", en: "Signup verification is not complete." },
     PHONE_TAKEN: { status: 409, ko: "다른 계정에서 쓰는 번호입니다. 문의해 주세요.", en: "This number is already used by another account." },
     WITHDRAW_BLOCKED: { status: 409, ko: "진행 중인 요청이 있어 지금은 탈퇴할 수 없습니다.", en: "You have requests in progress, so you can't withdraw right now." },
+    COMMISSION_NOT_AGREED: { status: 409, ko: "커미션 요율에 동의한 호텔이 없어 초대할 수 없습니다. 호텔의 동의를 먼저 받아 주세요.", en: "No invited hotel has agreed to its commission rate yet." },
+    COMMISSION_OUT_OF_RANGE: { status: 422, ko: "허용 범위를 벗어난 커미션 요율입니다. 본사에 요청해 주세요.", en: "This commission rate is outside the allowed range. Please ask HQ." },
+    COMMISSION_RATE_REQUIRED: { status: 422, ko: "승인하려면 커미션 요율을 입력해 주세요.", en: "Enter a commission rate to approve." },
     FORBIDDEN: { status: 403, ko: "권한이 없습니다.", en: "You don't have permission." },
     NOT_FOUND: { status: 404, ko: "찾을 수 없습니다.", en: "Not found." },
     INTERNAL: { status: 500, ko: "일시적인 오류입니다. 잠시 후 다시 시도해 주세요.", en: "Temporary error. Please try again." }
@@ -207,7 +210,7 @@ window.MG = (function () {
   // ---------------- api.* (SPEC_LAUNCH.md §3/§5) ----------------
   var EDGE_NAMES = [
     'submit_rfp', 'get_track', 'request_change', 'ask_question', 'create_share_link', 'revoke_share_link',
-    'pick_send_otp', 'pick_verify', 'register_partner', 'get_bid', 'submit_quote', 'decline_bid', 'unsubscribe', 'quote_confirm',
+    'pick_send_otp', 'pick_verify', 'register_partner', 'get_bid', 'submit_quote', 'decline_bid', 'unsubscribe', 'quote_confirm', 'partner_commission_accept',
     'contact', 'signup_start', 'resend_email_code', 'verify_email', 'send_phone_otp', 'verify_phone_otp',
     'password_reset_request', 'password_reset_complete', 'account_update', 'withdraw'
   ];

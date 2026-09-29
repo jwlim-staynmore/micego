@@ -61,8 +61,12 @@
      "title": "Fees and commercial terms",
      "paras": [
       "5.1 There is no fee to register your Property or to receive requests.",
-      "5.2 Commercial terms for a confirmed booking are agreed between you and MICEGO before confirmation. Our partnerships manager explains them when we are in touch, and no such terms apply unless you have agreed to them.",
-      "5.3 Any booking contract, deposit and payment terms are agreed directly between you and the organizer. MICEGO is not a party to that contract and does not collect, hold or process payments between you and the organizer."
+      "5.2 MICEGO charges a commission on each booking that results from a selection made through MICEGO. The commission rate for your Property is set when we approve it and is shown to you, with a link to accept it, in our approval email (the “Agreed Rate”). The Agreed Rate takes effect only when you accept it by pressing the accept button on that page; MICEGO records the time of acceptance and the version of these terms. We do not send you Invitations until you have accepted an Agreed Rate. The Agreed Rate applies to every booking that results from your quote on an Invitation sent while that rate was in effect. [legal review]",
+      "5.3 The commission is the Agreed Rate applied to the net contract value of the booking. Net contract value is the total agreed contract amount for guest rooms and for banquet, meeting and food-and-beverage services, excluding taxes and service charges. If the booking is reduced or cancelled, the commission is calculated on the amount finally payable to you under your contract with the organizer. [legal review]",
+      "5.4 We may propose a different rate for your Property. A new rate takes effect only after you accept it through a new link we email to you, and it applies only to Invitations sent after you accept it. Invitations already sent, and the bookings that result from them, keep the rate that applied when the Invitation was sent.",
+      "5.5 After the event has ended, MICEGO issues you an invoice for the commission, based on the final contract value. You pay the invoice within 30 days of the invoice date. [legal review]",
+      "5.6 Your Agreed Rate is confidential between you and MICEGO. It is not shown to organizers and does not affect how your quote is displayed or compared, and you must not disclose it to organizers or to other Properties.",
+      "5.7 Any booking contract, deposit and payment terms are agreed directly between you and the organizer. MICEGO is not a party to that contract and does not collect, hold or process payments between you and the organizer."
      ]
     }
    ]
@@ -156,7 +160,7 @@
      "no": 14,
      "title": "Non-circumvention",
      "paras": [
-      "14.1 For 12 months after MICEGO introduces an organizer to you, you must not directly solicit that organizer, or accept a booking from it, for the event in the request — or for an event MICEGO first presented to you — in order to avoid the commercial terms agreed under Article 5.2. [legal review]",
+      "14.1 For 12 months after MICEGO introduces an organizer to you, you must not directly solicit that organizer, or accept a booking from it, for the event in the request — or for an event MICEGO first presented to you — in order to avoid the commission payable under Articles 5.2 to 5.5. [legal review]",
       "14.2 This article does not restrict bookings with an organizer who was already your client before the introduction, or who approaches you independently of MICEGO for an unrelated event."
      ]
     },
@@ -182,7 +186,7 @@
      "paras": [
       "16.1 Every Invitation contains an unsubscribe link. Unsubscribing stops Invitation emails for your Property; selection results for quotes you already submitted are still sent. To receive Invitations again, contact us.",
       "16.2 You may end your partnership at any time by emailing {{OFFICIAL_EMAIL}}. We will stop sending Invitations and handle your contacts' data as described in our Privacy Notice.",
-      "16.3 Articles 5.3, 13, 14, 18 and 19 continue to apply after the partnership ends, for as long as they are relevant."
+      "16.3 Articles 5.2 to 5.7, 13, 14, 18 and 19 continue to apply after the partnership ends, for as long as they are relevant."
      ]
     },
     {
@@ -205,7 +209,7 @@
       "18.1 You are responsible for your quotes and for the booking contract, services and facilities you provide to the organizer. MICEGO does not guarantee that any request will result in a selection or a booking.",
       "18.2 MICEGO provides the service with reasonable care. It is not responsible for the organizer's decisions, for the performance of any contract between you and the organizer, or for exchange-rate movements.",
       "18.3 Neither party is liable to the other for indirect or consequential loss, or for loss of profit, arising from these terms. [legal review]",
-      "18.4 Each party's total liability to the other under these terms in any 12-month period is limited to the greater of (a) the amounts paid or payable by you to MICEGO under Article 5.2 in that period and (b) USD 1,000. [legal review]",
+      "18.4 Each party's total liability to the other under these terms in any 12-month period is limited to the greater of (a) the commission paid or payable by you to MICEGO under Articles 5.2 to 5.5 in that period and (b) USD 1,000. [legal review]",
       "18.5 Articles 18.3 and 18.4 do not limit liability for wilful misconduct or gross negligence, for breach of Articles 13 or 14, or any liability that cannot be limited by law.",
       "18.6 Neither party is liable for failure to perform caused by events beyond its reasonable control, such as natural disasters, war, epidemics, government action or network failures."
      ]

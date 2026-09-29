@@ -1242,6 +1242,13 @@
      "maxLen": 90
     },
     {
+     "key": "COMMISSION_NOTE",
+     "kr_name": "커미션안내",
+     "description": "초대 시점 합의 요율 한 줄 (합의 요율이 있을 때만, 없으면 빈 값)",
+     "sample": "Your agreed commission: 10% of net booking value.",
+     "maxLen": 70
+    },
+    {
      "key": "EVENT_TYPE",
      "kr_name": "행사유형",
      "description": "행사 유형",
@@ -2006,7 +2013,9 @@
     "preheader_sample": "Ref PT-2609-007 · You're approved. Invitations arrive by email; here is how it works.",
     "cc": "",
     "unsubscribe_link": false,
-    "optional_blocks": []
+    "optional_blocks": [
+     "COMMISSION_TERMS"
+    ]
    },
    "variables": [
     {
@@ -2024,11 +2033,124 @@
      "maxLen": 50
     },
     {
+     "key": "COMMISSION_RATE",
+     "kr_name": "커미션율",
+     "description": "호텔별 합의 커미션율 (% 숫자만, 예: 10)",
+     "sample": "10",
+     "maxLen": 5
+    },
+    {
      "key": "PROPERTY_LOCATION",
      "kr_name": "소재지",
      "description": "숙박시설 소재지",
      "sample": "Sanur, Bali, Indonesia",
      "maxLen": 40
+    },
+    {
+     "key": "TERMS_VERSION",
+     "kr_name": "약관버전",
+     "description": "호텔 파트너 약관 버전",
+     "sample": "PT-2026-10",
+     "maxLen": 16
+    },
+    {
+     "key": "EXPIRES_HOURS",
+     "kr_name": "유효시간",
+     "description": "확인 링크 유효 시간(시간)",
+     "sample": "72",
+     "maxLen": 4
+    },
+    {
+     "key": "COMMISSION_URL",
+     "kr_name": "커미션동의URL",
+     "description": "호텔 커미션 동의 링크 (1회용 토큰)",
+     "sample": "https://micego.example/en/commission.html?t=demo-commission-2610",
+     "maxLen": 90
+    },
+    {
+     "key": "SUPPORT_EMAIL",
+     "kr_name": "문의메일",
+     "description": "문의 수신 주소 (운영 메일, 미확정)",
+     "sample": "mysteri1984@gmail.com",
+     "maxLen": 40
+    },
+    {
+     "key": "FROM_ADDRESS",
+     "kr_name": "발신주소",
+     "description": "발신 주소 (Resend 인증 도메인, 미확정)",
+     "sample": "notify@micego.example",
+     "maxLen": 40
+    }
+   ]
+  },
+  {
+   "id": "PTN_COMMISSION_TERMS",
+   "name": "Commission terms to accept",
+   "recipient": "ptn",
+   "recipient_label": "파트너 신청자",
+   "mode": "auto",
+   "language": "en",
+   "trigger": "호텔 파트너 요율 변경 제안 · 요율 동의 링크 재발송 (admin_partner_update · partner_commission_resend)",
+   "transitions": [],
+   "states": "파트너 approved · 요율 동의 대기",
+   "channels": {
+    "email": true,
+    "alimtalk": false,
+    "lms": false,
+    "sms": false
+   },
+   "email": {
+    "file": "emails/PTN_COMMISSION_TERMS.html",
+    "subject": "[MICEGO] Please accept your commission terms · REF {{PARTNER_ID}}",
+    "subject_sample": "[MICEGO] Please accept your commission terms · REF PT-2609-007",
+    "preheader": "Ref {{PARTNER_ID}} · {{COMMISSION_RATE}}% of net booking value. Accept to start receiving invitations.",
+    "preheader_sample": "Ref PT-2609-007 · 10% of net booking value. Accept to start receiving invitations.",
+    "cc": "",
+    "unsubscribe_link": false,
+    "optional_blocks": []
+   },
+   "variables": [
+    {
+     "key": "PARTNER_ID",
+     "kr_name": "신청번호",
+     "description": "파트너 신청 번호",
+     "sample": "PT-2609-007",
+     "maxLen": 12
+    },
+    {
+     "key": "COMMISSION_RATE",
+     "kr_name": "커미션율",
+     "description": "호텔별 합의 커미션율 (% 숫자만, 예: 10)",
+     "sample": "10",
+     "maxLen": 5
+    },
+    {
+     "key": "PROPERTY_NAME",
+     "kr_name": "시설명",
+     "description": "파트너 신청 숙박시설명",
+     "sample": "Sanur Lagoon Resort",
+     "maxLen": 50
+    },
+    {
+     "key": "TERMS_VERSION",
+     "kr_name": "약관버전",
+     "description": "호텔 파트너 약관 버전",
+     "sample": "PT-2026-10",
+     "maxLen": 16
+    },
+    {
+     "key": "EXPIRES_HOURS",
+     "kr_name": "유효시간",
+     "description": "확인 링크 유효 시간(시간)",
+     "sample": "72",
+     "maxLen": 4
+    },
+    {
+     "key": "COMMISSION_URL",
+     "kr_name": "커미션동의URL",
+     "description": "호텔 커미션 동의 링크 (1회용 토큰)",
+     "sample": "https://micego.example/en/commission.html?t=demo-commission-2610",
+     "maxLen": 90
     },
     {
      "key": "SUPPORT_EMAIL",
@@ -4020,7 +4142,13 @@
    "console_name": "파트너 심사 결과",
    "recipient": "호텔 담당자",
    "new_ids": "PTN_APPROVED · PTN_REJECTED",
-   "note": "승인/거절 2개로 분리"
+   "note": "승인/거절 2개로 분리. 승인 메일에 요율 동의 블록(COMMISSION_TERMS) 포함"
+  },
+  {
+   "console_name": "(신규) 커미션 요율 동의",
+   "recipient": "호텔 담당자",
+   "new_ids": "PTN_COMMISSION_TERMS",
+   "note": "승인 후 요율 변경 제안·동의 링크 재발송. 1회용 링크에서 동의(POST)"
   },
   {
    "console_name": "(신규) 파트너 재승인",

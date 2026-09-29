@@ -9,6 +9,8 @@ Disallow: /ko/withdraw.html
 Disallow: /ko/reset.html
 Disallow: /en/bid.html
 Disallow: /en/unsubscribe.html
+Disallow: /en/confirm.html
+Disallow: /en/commission.html
 Disallow: /404.html
 # TODO(domain): add "Sitemap: https://<domain>/sitemap.xml" once the domain is confirmed.
 # This file only works when micego-site is served from the domain root.

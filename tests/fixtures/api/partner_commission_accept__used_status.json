@@ -1,0 +1,11 @@
+{
+  "status": 200,
+  "body": {
+    "hotel": "Test Hotel",
+    "ratePct": 12.5,
+    "basis": "rooms_fnb_net",
+    "termsVersion": "PT-2026-10",
+    "expiresAt": "2026-10-06T09:00:00Z",
+    "status": "used"
+  }
+}

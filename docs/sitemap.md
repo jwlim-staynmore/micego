@@ -1,6 +1,6 @@
 # MICEGO 사이트맵 · 서비스 오픈 전 프론트엔드 점검 - 클로드
 
-v1.3 · 2026-09-27 · 페이지 41개 · 미구현 항목 47개 (A 오픈 차단 19 · B 오픈 전 필수 18 · C 오픈 직후 5 · D 결정 필요 5)
+v1.3 · 2026-09-27 · 페이지 42개 · 미구현 항목 47개 (A 오픈 차단 19 · B 오픈 전 필수 18 · C 오픈 직후 5 · D 결정 필요 5)
 
 ## 1. 페이지 목록
 
@@ -18,7 +18,7 @@ v1.3 · 2026-09-27 · 페이지 41개 · 미구현 항목 47개 (A 오픈 차단
 | `ko/about.html` | 서비스 소개 — 운영 방식·정책·운영사 소개 | 공개 | 색인 | — | 없음 |
 | `ko/faq.html` | 자주 묻는 질문 — 이용 조건·진행·회원 그룹 | 공개 | 색인 | — | 없음 |
 | `ko/contact.html` | 문의하기 — 문의 폼 + 메일 주소 | 공개 | 색인 | — | 폼 제출 API |
-| `ko/terms.html` | 이용약관(전문 초안) — legal/terms_ko.json 7장 23조 렌더링. 법무 검토 표시 18곳 중 7곳 | 공개 | 색인 | — | 없음 |
+| `ko/terms.html` | 이용약관(전문 초안) — legal/terms_ko.json 7장 23조 렌더링. 법무 검토 표시 21곳 중 7곳 | 공개 | 색인 | — | 없음 |
 | `ko/privacy.html` | 개인정보처리방침(전문 초안) — legal/privacy_ko.json 16조 렌더링. 보유 기간·제3자 제공·위탁·국외 이전·브라우저 저장 표 | 공개 | 색인 | — | 없음 |
 | `ko/track.html?t=…` | 견적 진행 상황(요청자 전용) — 접수→비교표→선정까지 상태별 화면, 제안 비교, 제안 선택(휴대전화 인증), 조건 변경, 동료 공유 링크 발급 | 토큰 링크 | noindex | 11 상태 + 공유 보기(?s=) | 토큰별 데이터, 선택 RPC, OTP, 공유 링크 |
 | `ko/signup.html` | 회원가입 — 기본 정보 → 이메일 인증번호 → 휴대전화 인증번호 3단계 | 공개 | 색인 | 12 상태 | 가입·인증 API |
@@ -35,6 +35,7 @@ v1.3 · 2026-09-27 · 페이지 41개 · 미구현 항목 47개 (A 오픈 차단
 | `en/index.html` | Partner landing + Register — Why partner·How it works·Sample·Partner terms(#terms)·FAQ, #register 파트너 등록 폼 | 공개 | 색인 | — | 폼 제출 API |
 | `en/sample-request.html` | Sample request — 호텔이 받게 될 요건서·견적 폼 예시 | 공개 | 색인 | — | 없음 |
 | `en/bid.html?t=…` | Request & quote(초대 호텔 전용) — 요건서 열람, 견적 제출, 거절, 결과 확인 | 토큰 링크 | noindex | 8 상태 | 토큰별 데이터, 견적 제출·거절 RPC |
+| `en/commission.html?t=…` | Accept commission terms(승인 호텔 전용) — 승인 메일의 1회용 링크. 합의 요율·산정 기준 확인 후 클릭 동의(POST). 동의 전에는 초대 불가 | 토큰 링크 | noindex | 5 상태 | 토큰별 lookup·동의 API(partner_commission_accept) |
 | `en/faq.html` | Hotel FAQ — 파트너 조건·비딩·선정 결과 | 공개 | 색인 | — | 없음 |
 | `en/contact.html` | Contact — 문의 폼 + 메일 주소 | 공개 | 색인 | — | 폼 제출 API |
 | `en/privacy.html` | Privacy notice(전문 초안) — legal/privacy_en.json 12항 렌더링. 호텔 파트너·주최 측 정보 처리 | 공개 | 색인 | — | 없음 |
