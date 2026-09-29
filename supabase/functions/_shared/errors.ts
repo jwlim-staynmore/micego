@@ -41,6 +41,9 @@ export const ERRORS: Record<string, ErrorSpec> = {
   PARTNER_SUSPENDED: { status: 403, ko: "파트너 조직이 정지 상태라 처리할 수 없습니다.", en: "The partner organization is suspended." },
   ACCOUNT_LIMIT: { status: 409, ko: "조직의 계정 수 상한에 도달했습니다.", en: "Account limit reached for this organization." },
   DUPLICATE: { status: 409, ko: "이미 등록된 항목입니다.", en: "Already registered." },
+  COMMISSION_NOT_AGREED: { status: 409, ko: "커미션 요율에 동의한 호텔이 없어 초대할 수 없습니다. 호텔의 동의를 먼저 받아 주세요.", en: "No invited hotel has agreed to its commission rate yet." },
+  COMMISSION_OUT_OF_RANGE: { status: 422, ko: "허용 범위를 벗어난 커미션 요율입니다. 본사에 요청해 주세요.", en: "This commission rate is outside the allowed range. Please ask HQ." },
+  COMMISSION_RATE_REQUIRED: { status: 422, ko: "승인하려면 커미션 요율을 입력해 주세요.", en: "Enter a commission rate to approve." },
   INTERNAL: { status: 500, ko: "일시적인 오류입니다. 잠시 후 다시 시도해 주세요.", en: "Temporary error. Please try again." },
 };
 

@@ -91,6 +91,8 @@ export async function handle(req: Request, deps: Deps): Promise<unknown> {
   if (["proxy_entered", "hotel_confirmed", "proxy_disputed", "proxy_expired"].includes(String(inv.status)) || (qrows[0] && qrows[0].entered_by === "partner")) {
     view.proxy = { status: qrows[0]?.confirmed_at ? "hotel_confirmed" : inv.status, entered_by: "partner", confirmed_at: qrows[0]?.confirmed_at ?? null };
   }
+  // 호텔 합의 요율(초대 시점 스냅샷). 호텔 전용 화면에만 내려가며 오거나이저 응답에는 없다.
+  view.commission = inv.commission_rate_pct != null ? { rate_pct: Number(inv.commission_rate_pct), basis: inv.commission_basis_scope ?? "rooms_fnb_net" } : null;
   if (state === "selected") {
     view.organizer = { company: r.company, contact_name: r.contact_name, email: r.contact_email, phone: r.contact_phone };
   }

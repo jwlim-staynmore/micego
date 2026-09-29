@@ -450,3 +450,18 @@ begin
   -- #13 을 실제로 12개월 보관기한 초과분으로 익명화한다(다른 데모 행은 전부 최근 데이터라 영향 없음).
   perform feedback_anonymize(now() - interval '12 months');
 end $$;
+
+-- ---------- 호텔 커미션 백필(0017) — 데모 전용. 운영 데이터는 백필하지 않는다(설계 D7) ----------
+-- 승인·중지 호텔은 10% 합의 완료로 채우되, 'Ubud Rice Terrace Resort'(PT-2606-011)는 합의 전으로 남겨 "요율 합의 필요" 화면을 시연한다.
+do $$
+declare x record;
+begin
+  for x in select id from partners where state in ('approved','suspended') and code <> 'PT-2606-011' and commission_accepted_at is null loop
+    update partners set commission_rate_pct = 10, commission_accepted_at = now() - interval '60 days', commission_terms_version = 'DEMO',
+      commission_set_by_role = 'operator', commission_set_at = now() - interval '60 days' where id = x.id;
+    insert into partner_commission_event (partner_id, action, rate_pct, basis_scope, terms_version, actor_role, reason, at)
+    values (x.id, 'backfilled', 10, 'rooms_fnb_net', 'DEMO', 'operator', '데모 데이터 백필', now() - interval '60 days');
+  end loop;
+  update invitations i set commission_rate_pct = p.commission_rate_pct, commission_basis_scope = p.commission_basis_scope, commission_terms_version = p.commission_terms_version
+    from partners p where p.id = i.partner_id and p.commission_accepted_at is not null and i.commission_rate_pct is null;
+end $$;

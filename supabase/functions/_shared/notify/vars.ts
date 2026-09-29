@@ -19,6 +19,14 @@ export async function buildVars(db: DbClient, base: string, log: Record<string, 
   vars.SUPPORT_EMAIL = Deno.env.get("SUPPORT_EMAIL") ?? "support@micego.example";
   // 지역 파트너 콘솔: 대리 입력 견적 확인 링크(1회용 토큰은 enqueue 시 vars 로 전달) · 콘솔 알림 링크
   if (typeof vars.CONFIRM_TOKEN === "string" && vars.CONFIRM_TOKEN) { vars.CONFIRM_URL = `${base}/en/confirm.html?t=${vars.CONFIRM_TOKEN}`; delete vars.CONFIRM_TOKEN; }
+  // 호텔 커미션 동의 링크(1회용 토큰) — 승인 메일(PTN_APPROVED)에서는 COMMISSION_TERMS 블록을 함께 켠다
+  if (typeof vars.COMMISSION_TOKEN === "string" && vars.COMMISSION_TOKEN) {
+    vars.COMMISSION_URL = `${base}/en/commission.html?t=${vars.COMMISSION_TOKEN}`; vars.__block_COMMISSION_TERMS = true; delete vars.COMMISSION_TOKEN;
+  }
+  if (!("COMMISSION_RATE" in vars)) vars.COMMISSION_RATE = "";
+  if (!("TERMS_VERSION" in vars)) vars.TERMS_VERSION = "";
+  if (!("COMMISSION_URL" in vars)) vars.COMMISSION_URL = "";
+  if (!("COMMISSION_NOTE" in vars)) vars.COMMISSION_NOTE = "";
   if (typeof vars.CONSOLE_PATH === "string" && vars.CONSOLE_PATH) vars.CONSOLE_URL = `${base}${vars.CONSOLE_PATH}`;
   if (!("EXPIRES_HOURS" in vars)) vars.EXPIRES_HOURS = 72;
   if (!("PARTNER_PUBLIC_NAME" in vars)) vars.PARTNER_PUBLIC_NAME = "MICEGO";
@@ -72,6 +80,8 @@ export async function buildVars(db: DbClient, base: string, log: Record<string, 
       vars.HOTEL_CONTACT_EMAIL = i.hotel_contact_email ?? "";
       vars.SELECTED_HOTEL = i.hotel_name ?? "";
       vars.PROPERTY_NAME = i.hotel_name ?? "";
+      // 호텔 합의 요율 고지(설계 D8): 초대 시점 스냅샷이 있을 때만. 오거나이저 메일에는 넣지 않는다.
+      if (i.commission_rate_pct != null && !vars.COMMISSION_NOTE) vars.COMMISSION_NOTE = `Your agreed commission: ${Number(i.commission_rate_pct)}% of net booking value.`;
       if (i.deadline) vars.DEADLINE_KST = fmtKstDateTime(i.deadline as string);
     }
   }
