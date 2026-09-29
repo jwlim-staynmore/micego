@@ -9,8 +9,12 @@
 - 운영 콘솔: 승인 시 요율 입력, 호텔 상세 커미션 카드(변경 제안·동의 링크 재발송·이력), "요율 합의 필요"·"동의 대기" 배지, 초대 카드에서 미합의 호텔 비활성, 정산 요율 잠금.
 - 테스트: `supabase/tests/sql/07_hotel_commission.sql`(9 시나리오), Deno 단위 테스트, `verify_admin_partner.py` 78항목, `verify2`·`verify_api` 요율 노출 검사. 백엔드 PASS=14.
 
+### 검토 반영 (4단계)
+- `0017`: `partners`의 동의 토큰·IP 해시·제안 사유 컬럼을 콘솔 직접 조회(PostgREST)에서 차단(테이블 SELECT 회수 후 민감 컬럼 제외 재부여). 정지된 조직의 요율 제안 차단, 재개 알림 1통(요율 없음 PTN_REINSTATED / 새 요율 PTN_COMMISSION_TERMS), 분쟁 해소로 금액을 덮어쓰면 `rate_deviation` 플래그. SQL 테스트 확장(`07_hotel_commission.sql`).
+- Partner Terms 5.5 인보이스 주체에 지역 운영 파트너 반영, `REVIEW_NOTES.md`·CLAUDE.md·사이트맵 검토 표시 수를 실제 태그 기준 31곳으로 정정, 호텔 랜딩 파트너 조건에 커미션 안내 한 줄, 여행사 랜딩 제목·배지 등 단독 문구를 "주최 측 수수료 없음"으로.
+
 ### 변경
-- Partner Terms 5조(5.2~5.7) 커미션 조항, 이용약관 제4조③⑤·제21조⑤, `legal/REVIEW_NOTES.md` 21곳. 카피 "수수료 없음" → "주최 측 수수료 없음"(푸터·FAQ·통계 라벨), 호텔 FAQ에 커미션 안내.
+- Partner Terms 5조(5.2~5.7) 커미션 조항, 이용약관 제4조③⑤·제21조⑤, `legal/REVIEW_NOTES.md` 31곳(실제 태그 기준 재집계). 카피 "수수료 없음" → "주최 측 수수료 없음"(푸터·FAQ·통계 라벨), 호텔 FAQ에 커미션 안내.
 
 ### 배포 시 주의
 - 배포 직후 기존 승인 호텔은 전부 "요율 합의 필요" 상태라 초대되지 않는다. 오픈 전에 `partners where state='approved' and commission_accepted_at is null` 대상에 요율을 제안하고 동의를 받는다.

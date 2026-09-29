@@ -228,19 +228,20 @@ begin
   begin perform partner_commission_resend('PT-CM-001'); raise exception 'other org must not resend'; exception when others then if sqlerrm not like 'MG:NOT_FOUND%' then raise; end if; end;
 end $$;
 reset role; reset request.jwt.claims;
+select set_config('t.old_hash', commission_token_sha256, false) from partners where code = 'PT-CM-001';
 select set_config('request.jwt.claims', json_build_object('role','authenticated','sub', user_id::text)::text, false) from console_user where email = 'pa@cm.example';
 set role authenticated;
 do $$
-declare j jsonb; old_hash text;
+declare j jsonb;
 begin
   -- 대기 중인 제안이 없으면(PT-CM-002 는 동의 완료) 재발송 불가
   begin perform partner_commission_resend('PT-CM-002'); raise exception 'resend without pending must fail'; exception when others then if sqlerrm not like 'MG:STATE_CONFLICT%' then raise; end if; end;
   -- 대기 중(PT-CM-001)이면 새 토큰 발급, 이전 링크는 무효
-  select commission_token_sha256 into old_hash from partners where code = 'PT-CM-001';
   j := partner_commission_resend('PT-CM-001');
-  if (j->'commission'->>'sendCount')::int <> 2 or (select commission_token_sha256 from partners where code = 'PT-CM-001') = old_hash then raise exception 'resend must rotate token: %', j->'commission'; end if;
+  if (j->'commission'->>'sendCount')::int <> 2 then raise exception 'resend count wrong: %', j->'commission'; end if;
 end $$;
 reset role; reset request.jwt.claims;
+do $$ begin if (select commission_token_sha256 from partners where code = 'PT-CM-001') = current_setting('t.old_hash') then raise exception 'resend must rotate token'; end if; end $$;
 update partners set commission_token_send_count = 5 where code = 'PT-CM-001';
 select set_config('request.jwt.claims', json_build_object('role','authenticated','sub', user_id::text)::text, false) from console_user where email = 'pa@cm.example';
 set role authenticated;
@@ -249,5 +250,83 @@ begin
   -- 최대 5회
   begin perform partner_commission_resend('PT-CM-001'); raise exception 'resend cap must fail'; exception when others then if sqlerrm not like 'MG:RATE_LIMITED%' then raise; end if; end;
   raise notice 'PASS permissions + resend rules';
+end $$;
+reset role; reset request.jwt.claims;
+
+-- 10) 검토 반영: 민감 컬럼 권한 · 정지 조직 요율 제안 · 재개 알림 1통 · 분쟁 해소 편차 플래그
+select set_config('request.jwt.claims', json_build_object('role','authenticated','sub', user_id::text)::text, false) from console_user where email = 'pa@cm.example';
+set role authenticated;
+do $$
+declare n int; c text;
+begin
+  select count(*) into n from partners where code like 'PT-CM-%';
+  if n <> 5 then raise exception 'partner admin must still read own-region hotels, saw %', n; end if;
+  foreach c in array array['commission_token_sha256','commission_accept_ip_hash','commission_pending_reason','commission_token_expires_at'] loop
+    begin execute format('select %I from partners limit 1', c); raise exception 'column % must be denied', c;
+    exception when insufficient_privilege then null; end;
+  end loop;
+  begin execute 'select * from partners limit 1'; raise exception 'select * must be denied on partners';
+  exception when insufficient_privilege then null; end;
+  perform commission_rate_pct, commission_pending_rate_pct from partners limit 1;
+  raise notice 'PASS sensitive partner columns denied';
+end $$;
+reset role; reset request.jwt.claims;
+select set_config('request.jwt.claims', json_build_object('role','authenticated','sub', user_id::text)::text, false) from console_user where email = 'pm@cm.example';
+set role authenticated;
+do $$
+begin
+  begin perform commission_token_sha256 from partners limit 1; raise exception 'member must be denied token hash'; exception when insufficient_privilege then null; end;
+end $$;
+reset role; reset request.jwt.claims;
+
+-- 정지된 조직의 관리자는 요율을 제안할 수 없다
+update partner_org set status = 'suspended' where code = 'CMORG';
+select set_config('request.jwt.claims', json_build_object('role','authenticated','sub', user_id::text)::text, false) from console_user where email = 'pa@cm.example';
+set role authenticated;
+do $$
+begin
+  begin perform admin_partner_update('PT-CM-002', '{"commissionRatePct": 12}'::jsonb); raise exception 'suspended org must not propose'; exception when others then if sqlerrm not like 'MG:PARTNER_SUSPENDED%' then raise; end if; end;
+  raise notice 'PASS suspended org cannot propose';
+end $$;
+reset role; reset request.jwt.claims;
+update partner_org set status = 'active' where code = 'CMORG';
+
+-- 재개: 요율 변경 없으면 PTN_REINSTATED 한 통, 새 요율이면 PTN_COMMISSION_TERMS 한 통(PTN_APPROVED·PTN_REINSTATED 없음)
+select set_config('request.jwt.claims', json_build_object('role','authenticated','sub', user_id::text)::text, false) from console_user where email = 'ops@cm.example';
+set role authenticated;
+do $$
+declare m1 int; m2 int; a_before int; pid uuid;
+begin
+  select id into pid from partners where code = 'PT-CM-002';
+  select count(*) into a_before from notification_log where partner_id = pid and template_id = 'PTN_APPROVED';
+  perform admin_partner_transition('PT-CM-002', 'suspended', '테스트 정지');
+  perform admin_partner_transition('PT-CM-002', 'approved');
+  select count(*) into m1 from notification_log where partner_id = pid and template_id = 'PTN_REINSTATED';
+  if m1 <> 1 or (select count(*) from notification_log where partner_id = pid and template_id = 'PTN_APPROVED') <> a_before then raise exception 'reinstate w/o rate must send only PTN_REINSTATED (reinstated %, approved delta %)', m1, (select count(*) from notification_log where partner_id = pid and template_id = 'PTN_APPROVED') - a_before; end if;
+  perform admin_partner_transition('PT-CM-002', 'suspended', '테스트 정지 2');
+  select count(*) into m2 from notification_log where partner_id = pid and template_id = 'PTN_COMMISSION_TERMS';
+  perform admin_partner_transition('PT-CM-002', 'approved', null, null, null, 12);
+  if (select count(*) from notification_log where partner_id = pid and template_id = 'PTN_COMMISSION_TERMS') <> m2 + 1 then raise exception 'reinstate with rate must send PTN_COMMISSION_TERMS'; end if;
+  if (select count(*) from notification_log where partner_id = pid and template_id = 'PTN_REINSTATED') <> m1 or (select count(*) from notification_log where partner_id = pid and template_id = 'PTN_APPROVED') <> a_before then raise exception 'reinstate with rate must not also send APPROVED/REINSTATED'; end if;
+  raise notice 'PASS reinstate sends a single notification';
+end $$;
+reset role; reset request.jwt.claims;
+
+-- 분쟁 해소로 금액을 덮어쓰면 합의 요율과 다를 때 rate_deviation 플래그
+do $$
+declare sref text;
+begin
+  select st.ref into sref from settlements st join rfps r on r.id = st.rfp_id where r.state = 'won' and r.ref not like 'MG-TEST%' order by st.created_at limit 1;
+  update settlements set status = 'disputed', status_before_dispute = 'commission_submitted', flags = array_remove(flags, 'rate_deviation') where ref = sref;
+end $$;
+select set_config('request.jwt.claims', json_build_object('role','authenticated','sub', user_id::text)::text, false) from console_user where email = 'ops@cm.example';
+set role authenticated;
+do $$
+declare sref text; j jsonb;
+begin
+  select st.ref into sref from settlements st join rfps r on r.id = st.rfp_id where r.state = 'won' and r.ref not like 'MG-TEST%' order by st.created_at limit 1;
+  j := settlement_action(sref, 'resolve_dispute', jsonb_build_object('commissionAmount', 130000), '조정 합의');
+  if not ((j->'flags') ? 'rate_deviation') or j->>'commissionBasis' <> 'fixed' then raise exception 'resolve override must flag deviation: %', j; end if;
+  raise notice 'PASS resolve_dispute override flags deviation';
 end $$;
 reset role; reset request.jwt.claims;

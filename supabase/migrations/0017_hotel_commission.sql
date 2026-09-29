@@ -29,6 +29,21 @@ alter table partners
 alter table partners drop constraint if exists partners_commission_accepted_has_rate;
 alter table partners add constraint partners_commission_accepted_has_rate check (commission_accepted_at is null or commission_rate_pct is not null);
 
+-- ---------- 민감 컬럼 보호: 콘솔 직접 조회(PostgREST)로 동의 토큰 해시·IP 해시·제안 사유를 못 읽게 한다 ----------
+-- 0006 이 partners 에 테이블 전체 SELECT 를 authenticated 에 줬으므로, 테이블 권한을 회수하고 민감 컬럼을 뺀 나머지 컬럼만 다시 부여한다.
+-- 콘솔은 SECURITY DEFINER RPC(partner_to_json 등)로만 읽고, Edge Function 은 service_role 이라 영향 없다.
+-- 이 마이그레이션 이후 partners 에 컬럼을 추가하면 그 마이그레이션에서 직접 grant select(컬럼) 해야 한다.
+do $$
+declare cols text;
+begin
+  select string_agg(quote_ident(column_name), ', ' order by ordinal_position) into cols
+    from information_schema.columns
+   where table_schema = 'public' and table_name = 'partners'
+     and column_name not in ('commission_token_sha256','commission_token_expires_at','commission_token_used_at','commission_token_sent_at','commission_token_send_count','commission_accept_ip_hash','commission_pending_reason');
+  execute 'revoke select on public.partners from authenticated';
+  execute 'grant select (' || cols || ') on public.partners to authenticated';
+end $$;
+
 -- ---------- 이력(append-only): RLS 켜고 정책은 두지 않는다 — 콘솔은 partner_to_json 으로만 읽는다 ----------
 create table if not exists partner_commission_event (
   id bigserial primary key,
@@ -291,7 +306,14 @@ begin
     hq_reviewed_by = case when p_action = 'approved' and me.role = 'operator' then me.user_id else hq_reviewed_by end,
     updated_at = t0 where id = p.id;
   if p_action = 'approved' then
-    if v_rate is not null then
+    -- 알림은 한 통만: 신규 승인 = PTN_APPROVED(요율 있으면 동의 토큰 포함), 재개 = 요율 변경 없으면 PTN_REINSTATED, 새 요율이면 PTN_COMMISSION_TERMS(토큰 포함)
+    if p.state = 'suspended' then
+      if v_rate is not null then
+        perform private.partner_commission_propose(p.id, me, v_rate, p_commission_reason, 'PTN_COMMISSION_TERMS');
+      else
+        perform private.enqueue('PTN_REINSTATED', 'PTN_REINSTATED:' || p.id || ':' || extract(epoch from t0), jsonb_build_object('partner_id', p.id, 'to_email', p.contact_email, 'recipient_kind','ptn'), '{}'::jsonb, t0);
+      end if;
+    elsif v_rate is not null then
       perform private.partner_commission_propose(p.id, me, v_rate, p_commission_reason, 'PTN_APPROVED');
     else
       perform private.enqueue('PTN_APPROVED', 'PTN_APPROVED:' || p.id || ':' || extract(epoch from t0), jsonb_build_object('partner_id', p.id, 'to_email', p.contact_email, 'recipient_kind','ptn'), '{}'::jsonb, t0);
@@ -299,9 +321,6 @@ begin
     if me.role <> 'operator' then perform private.notify_hq('HQ_HOTEL_APPROVED_BY_PARTNER', 'HQ_HOTEL_APPROVED_BY_PARTNER:' || p.id, null, jsonb_build_object('HOTEL', p.name, 'PARTNER', (select display_name from partner_org where id = me.partner_id))); end if;
   elsif p_action = 'rejected' then
     perform private.enqueue('PTN_REJECTED', 'PTN_REJECTED:' || p.id, jsonb_build_object('partner_id', p.id, 'to_email', p.contact_email, 'recipient_kind','ptn'), jsonb_build_object('REASON', memo), t0);
-  end if;
-  if p_action = 'approved' and p.state = 'suspended' then
-    perform private.enqueue('PTN_REINSTATED', 'PTN_REINSTATED:' || p.id || ':' || extract(epoch from t0), jsonb_build_object('partner_id', p.id, 'to_email', p.contact_email, 'recipient_kind','ptn'), '{}'::jsonb, t0);
   end if;
   perform private.audit('hotel', p.code, 'transition:' || p_action, jsonb_build_object('state', p.state), jsonb_build_object('state', p_action, 'commissionRatePct', v_rate), null, false, p_reason);
   return private.partner_to_json(p.id);
@@ -321,6 +340,7 @@ begin
   -- 요율 변경 제안(호텔 재동의 필요): 담당자(partner_member)는 불가
   if p_patch ? 'commissionRatePct' then
     if me.role = 'partner_member' then raise exception using errcode='P0001', message='MG:FORBIDDEN'; end if;
+    if me.role = 'partner_admin' and (select status from partner_org where id = me.partner_id) <> 'active' then raise exception using errcode='P0001', message='MG:PARTNER_SUSPENDED'; end if;
     if p.state not in ('approved','suspended') then raise exception using errcode='P0001', message='MG:STATE_CONFLICT'; end if;
     v_rate := nullif(p_patch->>'commissionRatePct','')::numeric;
   end if;
@@ -550,7 +570,13 @@ begin
     if to_st in ('disputed','completed') then raise exception using errcode='P0001', message='MG:VALIDATION'; end if;
     if p ? 'commissionAmount' then
       amt := nullif(p->>'commissionAmount','')::numeric;
-      update settlements set commission_amount = amt, commission_basis = coalesce(commission_basis, 'fixed'), commission_rate_pct = null where id = s.id;
+      -- 금액을 직접 덮어쓰면 정액이 되므로, 합의 요율이 있는 건은 요율 편차 플래그를 남긴다(요율로 환산해 합의 요율과 같으면 제외)
+      update settlements set commission_amount = amt, commission_basis = 'fixed', commission_rate_pct = null,
+        flags = case when s.agreed_rate_pct is not null
+                      and (s.contract_amount is null or s.contract_amount <= 0 or round(amt * 100 / s.contract_amount, 2) is distinct from s.agreed_rate_pct)
+                     then array_append(array_remove(flags, 'rate_deviation'), 'rate_deviation')
+                     else array_remove(flags, 'rate_deviation') end
+      where id = s.id;
     end if;
     update settlements set status = to_st, status_before_dispute = null, dispute_resolution = p_note, row_version = row_version + 1, updated_at = t0 where id = s.id;
     if s.partner_org_id is not null then perform private.notify_partner(s.partner_org_id, 'PTR_SETTLEMENT_RESOLVED', 'PTR_SETTLEMENT_RESOLVED:' || s.id || ':' || s.row_version, s.rfp_id, jsonb_build_object('SETTLEMENT_REF', s.ref, 'RESOLUTION', p_note)); end if;

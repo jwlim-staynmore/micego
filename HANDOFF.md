@@ -55,7 +55,7 @@
 | `SPEC_FEEDBACK.md` | 피드백(VOC) 시스템 설계서 전체(§0 D1~D7 결정, §2 DB, §3 Edge, §4 위젯, §5 콘솔, §6 보안 S1~S19) | `SPEC_FEEDBACK.md §3.9`, `D1/D2`, `S12` |
 | `SPEC_FEEDBACK_ADDENDUM.md` | 피드백 구현 확정(§A), 작업 패키지 WP-F1~F3(§B), 검증(§C) | `SPEC_FEEDBACK_ADDENDUM.md §B` |
 | `docs/state-transitions.html` v1.7 | RFP·초대·파트너·회원·공유링크·피드백 상태 머신 + 알림 ID | — |
-| `legal/*.json` + `legal/REVIEW_NOTES.md` | 이용약관(23조)·Partner Terms(20조)·개인정보처리방침(16조)·Privacy Notice(12항) 전문과 법무 검토 쟁점 18곳 | — |
+| `legal/*.json` + `legal/REVIEW_NOTES.md` | 이용약관(23조)·Partner Terms(20조)·개인정보처리방침(16조)·Privacy Notice(12항) 전문과 법무 검토 쟁점 31곳 | — |
 | `docs/launch-checklist.md` · `incident-runbook.md` · `operator-onboarding.md` | 오픈 당일 체크리스트 · 장애 대응(13 시나리오) · 운영자 온보딩 | — |
 
 ⚠️ `SPEC_LAUNCH.md`와 `SPEC_FEEDBACK_ADDENDUM.md`는 원본 유실 후 **2026-09-27 코드에서 역추출한 v1.0**이다(D-31). 스펙과 구현이 다르면 구현이 맞다. 두 문서에서 "(비인용)"·"재구성" 표시 부분은 추정을 포함한다.
@@ -101,7 +101,7 @@
 
 정적 사이트: `site.config.json`을 복사해 `site.config.prod.json`(domain·메일·사업자·supabase 키·`prod:true`·`demo:false`)을 만들고 `MG_SITE_CONFIG=site.config.prod.json python3 build2.py` → 산출물이 **같은 폴더에 덮어써지므로** 배포용 브랜치/작업 트리에서 빌드한다. Vercel에는 이 폴더를 올리되 `.vercelignore`가 `supabase/`·`src/`·`*.py`·`*.md`·시드를 제외한다(없으면 소스·데모 시드·내부 결정 문서가 공개됨). `admin/`·`docs/`·`emails/`는 아직 배포에 포함되므로 O-1 결정 전까지 접근 제한 없음에 유의. 롤백: DB는 down 마이그레이션 없음 → PITR, Edge는 이전 커밋 재배포.
 
-**오픈 전 사용자(jwlim) 몫**: 도메인·공식 메일, 사업자 정보, 약관 전문 확정 — `legal/*.json`의 `[법무 검토]` 표시 18곳(`legal/REVIEW_NOTES.md`가 항목별 쟁점 정리)을 법무와 확정한 뒤 `site.config.json.legal.reviewed=true`·`effectiveDate` 기재. 그 밖에 `TODO(legal)` 3곳(ko/index 1 · ko/withdraw 1 · en/terms 1), Solapi/Resend 심사, 실기기 QA(카카오 인앱·삼성 인터넷·iOS Safari).
+**오픈 전 사용자(jwlim) 몫**: 도메인·공식 메일, 사업자 정보, 약관 전문 확정 — `legal/*.json`의 `[법무 검토]` 표시 31곳(`legal/REVIEW_NOTES.md`가 항목별 쟁점 정리)을 법무와 확정한 뒤 `site.config.json.legal.reviewed=true`·`effectiveDate` 기재. 그 밖에 `TODO(legal)` 3곳(ko/index 1 · ko/withdraw 1 · en/terms 1), Solapi/Resend 심사, 실기기 QA(카카오 인앱·삼성 인터넷·iOS Safari).
 
 ## 10. 검증 방법
 
