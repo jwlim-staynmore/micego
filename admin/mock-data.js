@@ -66,6 +66,27 @@
   partners.filter(function (p) { return p.id === 'p18'; })[0].hotelLocation = '인도네시아 · 발리';
   /* p19 는 신청 이력에서 이미 심사중, 체크리스트는 비어 있음 */
 
+  /* 호텔 커미션(설계서 hotel-commission-design-v1). 승인·중지 호텔은 10% 합의 완료(데모 백필),
+   * p11(Ubud Rice Terrace Resort, PT-2606-011)은 합의 전 → "요율 합의 필요", 견적 초대 불가.
+   * p14 는 10%에 합의했고 12%로 올리는 요율 변경 제안이 동의 대기 중이다(합의 요율은 동의 전까지 10%). */
+  function cmNone() { return { ratePct: null, basis: 'rooms_fnb_net', acceptedAt: null, termsVersion: null, pendingRatePct: null, pendingReason: null, setByRole: null, setAt: null, tokenSentAt: null, tokenExpiresAt: null, tokenUsedAt: null, sendCount: 0, status: 'none', history: [] }; }
+  function cmAgreed(rate) {
+    var at = T('2026-09-30 10:00');
+    var c = cmNone(); c.ratePct = rate; c.acceptedAt = at; c.termsVersion = 'DEMO'; c.setByRole = 'operator'; c.setAt = at; c.tokenSentAt = at; c.tokenExpiresAt = at + 168 * 36e5; c.tokenUsedAt = at; c.sendCount = 1; c.status = 'agreed';
+    c.history = [{ t: at, action: 'backfilled', ratePct: rate, prevRatePct: null, basis: 'rooms_fnb_net', termsVersion: 'DEMO', actorRole: null, reason: null, hqOverride: false }];
+    return c;
+  }
+  partners.forEach(function (p) {
+    if (p.status !== 'approved' && p.status !== 'suspended') { p.commission = cmNone(); return; }
+    if (p.id === 'p11') { p.commission = cmNone(); return; }
+    p.commission = cmAgreed(10);
+    if (p.id === 'p14') {
+      var c = p.commission, at = T('2026-10-07 10:00');
+      c.pendingRatePct = 12; c.pendingReason = null; c.setByRole = 'operator'; c.setAt = at; c.tokenSentAt = at; c.tokenExpiresAt = at + 168 * 36e5; c.tokenUsedAt = null; c.sendCount = 1; c.status = 'pending';
+      c.history.push({ t: at, action: 'proposed', ratePct: 12, prevRatePct: 10, basis: 'rooms_fnb_net', termsVersion: 'PT-2026-10', actorRole: 'operator', reason: null, hqOverride: false });
+    }
+  });
+
   /* 종료된 과거 RFP 초대 기록 (콘솔에 없는 8~9월 요청, 가상) */
   var invArchive = [
     { rfpId: 'MG-2608-014', round: 1, hotelId: 'p9', invitedAt: T('2026-08-19 15:00'), status: 'expired', submittedAt: null },

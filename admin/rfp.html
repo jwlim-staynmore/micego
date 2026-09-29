@@ -116,13 +116,15 @@ A.boot('rfps','견적 상세',function(main){
       var tags='';
       if(p.cap<r.headcount)tags+=' <span class="badge amber">수용 부족</span>';
       if(needBall&&!p.ballroom)tags+=' <span class="badge amber">볼룸 없음</span>';
-      return '<li><label><input type="checkbox" data-p="'+p.id+'"><span><b>'+esc(p.name)+'</b>'+tags+'<span class="pm" style="display:block">수용 '+p.cap+'명 · 볼룸 '+(p.ballroom?'있음':'없음')+'</span></span></label></li>';
+      var un=!A.commissionAgreed(p);
+      if(un)tags+=' '+A.commissionBadgeHtml(p);
+      return '<li'+(un?' class="plist-off"':'')+'><label><input type="checkbox" data-p="'+p.id+'"'+(un?' disabled aria-describedby="cmOff"':'')+'><span><b>'+esc(p.name)+'</b>'+tags+'<span class="pm" style="display:block">수용 '+p.cap+'명 · 볼룸 '+(p.ballroom?'있음':'없음')+'</span></span></label></li>';
     }).join('');
     return '<section class="card" aria-labelledby="h-inv"><h2 id="h-inv">마감 · 초대</h2>'+
       '<label class="lbl" for="dlInput" style="margin-top:0">견적 마감일시 (KST)</label><div class="memo-add" style="margin-top:0"><input class="inp" style="max-width:260px" type="datetime-local" id="dlInput" value="'+A.toInput(dl)+'"><button type="button" class="btn" id="saveDl">마감 저장</button></div>'+
       '<p class="small muted" style="margin-top:6px">기본값은 오늘부터 3영업일 후 18:00 KST이고, 200명 이상 대형 행사는 5영업일입니다. 호텔 현지 주말은 피하세요. 지금 저장된 마감: <b id="dlNow">'+(r.deadline?A.fmtDT(r.deadline):'미설정')+'</b>. 초대를 보내면 그 시점에 저장된 마감이 초대에 기록됩니다.</p>'+
-      '<h3>승인 파트너 · '+esc(r.destination)+'</h3>'+(cands.length?'<ul class="plist" id="plist">'+list+'</ul>':'<p class="muted small">초대할 수 있는 승인 파트너가 더 없습니다.</p>')+
-      '<p class="ghint" id="invWarn" role="status"></p><div class="memo-add"><button type="button" class="btn primary" id="sendInv"'+(cands.length?'':' disabled')+'>초대 보내기</button></div></section>';
+      '<h3>승인 파트너 · '+esc(r.destination)+'</h3>'+(cands.length?'<ul class="plist" id="plist">'+list+'</ul>'+(cands.some(function(p){return !A.commissionAgreed(p);})?'<p class="small muted" id="cmOff">요율에 합의하지 않은 호텔은 고를 수 없습니다. 호텔 상세에서 요율 동의 상태를 확인하세요.</p>':''):'<p class="muted small">초대할 수 있는 승인 파트너가 더 없습니다.</p>')+
+      '<p class="ghint" id="invWarn" role="status"></p><div class="memo-add"><button type="button" class="btn primary" id="sendInv"'+(cands.some(function(p){return A.commissionAgreed(p);})?'':' disabled')+'>초대 보내기</button></div></section>';
   }
   function invTable(r){
     var rows=A.roundInv(r),del=r.state==='delivered',fin=(r.state==='won'||r.state==='lost');
@@ -282,7 +284,7 @@ A.boot('rfps','견적 상세',function(main){
       return;
     }
     if(t.id==='sendInv'){
-      var ids=[].map.call(document.querySelectorAll('#plist input:checked'),function(i){return i.getAttribute('data-p');});
+      var ids=[].map.call(document.querySelectorAll('#plist input:checked:not(:disabled)'),function(i){return i.getAttribute('data-p');});
       if(!ids.length){A.toast('초대할 호텔을 선택해 주세요','error');return;}
       if(!rfp.deadline){A.toast('먼저 마감을 저장해 주세요. 초대에는 저장된 마감이 함께 기록됩니다','error');return;}
       A.invite(rfp,ids).then(function(ok){if(ok){render();A.toast('호텔 '+ids.length+'곳에 초대를 보냈습니다','ok');}});

@@ -211,6 +211,8 @@ mark{background:#FFD9D6;color:var(--error-deep);border-radius:3px;padding:0 2px;
 .plist li:last-child label{border-bottom:0}
 .plist input{width:22px;height:22px;accent-color:var(--teal-deep);margin-top:1px;flex:0 0 auto}
 .plist .pm{font-size:12.5px;color:var(--gray)}
+.plist-off label{opacity:.65;cursor:not-allowed}
+.plist-off input{cursor:not-allowed}
 .plist.chk label{cursor:pointer}
 .qhead{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:#fff;font-weight:800;font-size:13px;margin-right:6px}
 .qin{width:120px;min-height:44px;padding:6px 8px;border:1px solid #C9D1E0;border-radius:8px}

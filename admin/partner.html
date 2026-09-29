@@ -31,7 +31,7 @@ A.boot('partners','파트너 상세',function(main){
   function editable(){return p.status==='pending'||p.status==='reviewing';}
   function header(){
     var r=A.partnerReview(p);
-    return '<p class="crumb"><a href="partners.html">← 호텔 파트너</a></p><div class="dh"><h1>'+esc(p.name)+'</h1>'+A.pchip(p.status)+(r?'<span class="badge '+(r.level==='ok'?'':r.level)+'">'+r.text+'</span><span class="small muted">심사 기한 '+A.fmtDT(r.due)+'</span>':'')+
+    return '<p class="crumb"><a href="partners.html">← 호텔 파트너</a></p><div class="dh"><h1>'+esc(p.name)+'</h1>'+A.pchip(p.status)+A.commissionBadgeHtml(p)+(r?'<span class="badge '+(r.level==='ok'?'':r.level)+'">'+r.text+'</span><span class="small muted">심사 기한 '+A.fmtDT(r.due)+'</span>':'')+
       '<div class="dh-act"><a class="btn" href="partners.html">목록으로</a></div></div>'+
       (p.riskFlags&&p.riskFlags.length&&A.isPartner()?'<div class="callout warn" style="margin-top:10px"><b>위험 표시가 있는 호텔입니다</b>이 호텔은 본사만 승인할 수 있습니다. 체크리스트를 채워 두면 본사가 검토합니다.</div>':'');
   }
@@ -85,7 +85,7 @@ A.boot('partners','파트너 상세',function(main){
     p=A.partner(id);
     if(!p){document.title='파트너를 찾을 수 없음 | MICEGO 운영 콘솔';main.innerHTML='<div class="empty card"><h1>해당 파트너를 찾을 수 없습니다</h1><p>파트너 "'+esc(id)+'"에 해당하는 신청이 없습니다.</p><a class="btn primary" href="partners.html">호텔 파트너로 돌아가기</a></div>';return;}
     document.title=p.name+' | MICEGO 운영 콘솔';
-    main.innerHTML=header()+'<div class="detail" style="margin-top:16px"><aside class="dside" id="dside" aria-label="상태 전이">'+side()+'</aside><div class="dmain stack">'+reqCard()+MICEGO_PTR.hotelCard(p)+chkCard()+statCard()+invCard()+histCard()+'</div></div>';
+    main.innerHTML=header()+'<div class="detail" style="margin-top:16px"><aside class="dside" id="dside" aria-label="상태 전이">'+side()+'</aside><div class="dmain stack">'+reqCard()+MICEGO_PTR.hotelCard(p)+MICEGO_PTR.commissionSection(p)+chkCard()+statCard()+invCard()+histCard()+'</div></div>';
   }
   A.onChange=function(){render();window.scrollTo(0,0);};
   main.addEventListener('click',function(e){var pb=e.target.closest('button[data-ptr]');if(pb&&p){MICEGO_PTR.handleHotelAction(pb,p,render);return;}var b=e.target.closest('button[data-to]');if(b&&p)A.partnerRequest(p.id,b.getAttribute('data-to'));});

@@ -78,11 +78,13 @@ window.MICEGO_PTR = (function () {
     if (!S.settlements.length) {
       S.rfps.filter(function (r) { return r.state === 'won'; }).forEach(function (r, k) {
         var sel = A.curInv(r).filter(function (i) { return i.sel === 'selected'; })[0] || A.curInv(r)[0]; var q = sel ? r.quotes.filter(function (x) { return x.invId === sel.id; })[0] : null;
+        var hpt = sel ? S.partners.filter(function (x) { return x.id === sel.hotelId; })[0] : null, agr = hpt && hpt.commission && hpt.commission.ratePct != null ? hpt.commission.ratePct : null; /* 성사 시점의 합의 요율 스냅샷 */
         var th = (r.regionCode && r.regionCode.slice(0, 2) === 'TH') || k === 0; /* 시연: 첫 성사 건은 태국 파트너 건으로 */
         S.settlements.push({ id: 'st-' + k, ref: 'ST-2610-' + ['K7QD', 'M3PX', 'R9AB'][k % 3], rfpId: r.id, destination: r.destination, eventType: r.eventType, partner: th ? { code: 'TMTHAI', name: '티엠타이(Tmthai)' } : null,
           hotel: sel ? sel.hotel : '—', hotelCode: sel ? sel.hotelId : null, status: k === 0 ? 'commission_submitted' : 'pending_commission', wonAt: r.closedAt || A.NOW - 5 * 86400e3, eventEnd: r.end, collectDue: r.end, remitDue: null,
+          agreedRatePct: agr, commissionBasisScope: 'rooms_fnb_net', commissionTermsVersion: agr != null ? 'DEMO' : null,
           hotelCurrency: q ? q.currency : 'USD', contractAmount: k === 0 ? 39500 : null, commissionBasis: k === 0 ? 'rate' : null, commissionRatePct: k === 0 ? 10 : null, commissionAmount: k === 0 ? 3950 : null,
-          partnerSharePct: th ? 70 : 0, partnerShareAmount: k === 0 ? 2765 : null, micegoShareAmount: k === 0 ? 1185 : null, remitCurrency: 'USD', fxRate: null, remitExpected: null, flags: [], attachments: [], rowVersion: 1, createdAt: r.closedAt || A.NOW - 5 * 86400e3,
+          partnerSharePct: th ? 70 : 0, partnerShareAmount: k === 0 ? 2765 : null, micegoShareAmount: k === 0 ? 1185 : null, remitCurrency: 'USD', fxRate: null, remitExpected: null, flags: agr == null ? ['no_agreed_rate'] : [], attachments: [], rowVersion: 1, createdAt: r.closedAt || A.NOW - 5 * 86400e3,
           events: [{ t: r.closedAt || A.NOW - 5 * 86400e3, action: 'created', from: null, to: 'pending_commission', actor: '시스템', note: null }].concat(k === 0 ? [{ t: A.NOW - 2 * 86400e3, action: 'submit_commission', from: 'pending_commission', to: 'commission_submitted', actor: '김태국', actorRole: 'partner_admin', note: null }] : []) });
       });
     }
@@ -261,9 +263,23 @@ window.MICEGO_PTR = (function () {
   P.dlgSettlement = function (s, action) {
     var T = { submit_commission: '커미션 입력', approve_commission: '커미션 승인', reject_commission: '커미션 반려', record_collection: '수금 기록', record_remittance: '송금 기록', confirm_receipt: '입금 확인', open_dispute: '분쟁 제기', resolve_dispute: '분쟁 해소', void: '무효 처리' }[action];
     var body = '', collect;
+    var agreed = (action === 'submit_commission' && s.agreedRatePct != null) ? Number(s.agreedRatePct) : null;
     if (action === 'submit_commission') {
-      body = '<label class="lbl" for="st-contract">호텔 계약 금액 (' + esc(s.hotelCurrency) + ')</label><input id="st-contract" class="inp" type="number" min="0" step="0.01" value="' + esc(s.contractAmount || '') + '"><label class="lbl" for="st-basis">커미션 기준</label><select id="st-basis" class="inp"><option value="rate">요율(%)</option><option value="fixed">고정 금액</option></select><label class="lbl" for="st-rate">요율 % (요율 기준일 때)</label><input id="st-rate" class="inp" type="number" min="0" max="50" step="0.1" value="' + esc(s.commissionRatePct || 10) + '"><label class="lbl" for="st-amt">커미션 금액 (고정 금액일 때)</label><input id="st-amt" class="inp" type="number" min="0" step="0.01"><label class="lbl" for="st-note">메모 (요율이 5~20% 밖이거나 계약가가 견적보다 크게 낮으면 필수)</label><input id="st-note" class="inp">';
-      collect = function (d) { var g = function (i) { return d.querySelector('#' + i).value.trim(); }; var basis = g('st-basis'); var p = { contractAmount: Number(g('st-contract')), commissionBasis: basis }; if (basis === 'rate') p.commissionRatePct = Number(g('st-rate')); else p.commissionAmount = Number(g('st-amt')); if (!(p.contractAmount > 0)) return '계약 금액을 입력해 주세요'; if (basis === 'rate' && !(p.commissionRatePct > 0)) return '요율을 입력해 주세요'; if (basis === 'fixed' && !(p.commissionAmount >= 0)) return '커미션 금액을 입력해 주세요'; return { p: p, note: g('st-note') }; };
+      body = (agreed != null ? '<p class="note-box">이 호텔과 합의한 요율은 <b>' + esc(agreed) + '%</b>입니다. 합의 요율을 그대로 쓰면 요율은 바꿀 수 없습니다.</p>' : '<p class="note-box">합의 요율이 기록되지 않은 건입니다. 요율과 근거를 메모에 남겨 주세요.</p>') +
+        '<label class="lbl" for="st-contract">호텔 계약 금액 (순액: 세금·봉사료 제외) · ' + esc(s.hotelCurrency) + '</label><input id="st-contract" class="inp" type="number" min="0" step="0.01" value="' + esc(s.contractAmount || '') + '">' +
+        (agreed != null ? '<label class="chk-row"><input type="checkbox" id="st-dev"> 합의 요율과 다르게 입력</label>' : '') +
+        '<label class="lbl" for="st-basis">커미션 기준</label><select id="st-basis" class="inp"' + (agreed != null ? ' disabled' : '') + '><option value="rate">요율(%)</option><option value="fixed">고정 금액</option></select>' +
+        '<label class="lbl" for="st-rate">요율 % (요율 기준일 때)</label><input id="st-rate" class="inp" type="number" min="0" max="50" step="0.1"' + (agreed != null ? ' readonly' : '') + ' value="' + esc(agreed != null ? agreed : (s.commissionRatePct || 10)) + '">' +
+        '<label class="lbl" for="st-amt">커미션 금액 (고정 금액일 때)</label><input id="st-amt" class="inp" type="number" min="0" step="0.01">' +
+        '<label class="lbl" for="st-note" id="st-note-l">' + (agreed != null ? '메모 (합의 요율과 다르게 입력하면 필수, 계약가가 견적보다 크게 낮아도 필수)' : '메모 (요율이 5~20% 밖이거나 계약가가 견적보다 크게 낮으면 필수)') + '</label><input id="st-note" class="inp">';
+      collect = function (d) {
+        var g = function (i) { return d.querySelector('#' + i).value.trim(); }; var dev = agreed != null && d.querySelector('#st-dev').checked;
+        var basis = agreed != null && !dev ? 'rate' : g('st-basis'); var p = { contractAmount: Number(g('st-contract')), commissionBasis: basis };
+        if (basis === 'rate') p.commissionRatePct = agreed != null && !dev ? agreed : Number(g('st-rate')); else p.commissionAmount = Number(g('st-amt'));
+        if (!(p.contractAmount > 0)) return '계약 금액을 입력해 주세요'; if (basis === 'rate' && !(p.commissionRatePct > 0)) return '요율을 입력해 주세요'; if (basis === 'fixed' && !(p.commissionAmount >= 0)) return '커미션 금액을 입력해 주세요';
+        if (dev && !g('st-note')) return '합의 요율과 다르게 입력하려면 사유를 메모에 적어 주세요';
+        return { p: p, note: g('st-note') };
+      };
     } else if (action === 'record_collection') {
       body = '<label class="lbl" for="st-at">수금일</label><input id="st-at" class="inp" type="date"><label class="lbl" for="st-amt">수금액 (' + esc(s.hotelCurrency) + ') · 확정 커미션 ' + P.fmtMoney(s.commissionAmount, s.hotelCurrency) + '</label><input id="st-amt" class="inp" type="number" min="0" step="0.01" value="' + esc(s.commissionAmount || '') + '"><label class="lbl" for="st-note">메모 (금액이 다르면 필수)</label><input id="st-note" class="inp">';
       collect = function (d) { var g = function (i) { return d.querySelector('#' + i).value.trim(); }; if (!g('st-at')) return '수금일을 입력해 주세요'; return { p: { collectedAt: g('st-at') + 'T09:00:00+09:00', collectedAmount: Number(g('st-amt')) }, note: g('st-note') }; };
@@ -280,12 +296,18 @@ window.MICEGO_PTR = (function () {
       body = '<label class="lbl" for="st-note">' + (action === 'approve_commission' ? '메모 (선택)' : '사유 (필수)') + '</label><textarea id="st-note" class="inp" rows="2"></textarea>';
       collect = function (d) { var n = d.querySelector('#st-note').value.trim(); if (action !== 'approve_commission' && !n) return '사유를 적어 주세요'; return { p: {}, note: n }; };
     }
-    return A.dialog({ title: T, ok: T, body: body, collect: collect });
+    var pr = A.dialog({ title: T, ok: T, body: body, collect: collect });
+    if (agreed != null) { /* 체크하면 요율·기준 잠금 해제, 풀면 합의 요율로 되돌림 */
+      var dv = document.getElementById('st-dev'), rt = document.getElementById('st-rate'), bs = document.getElementById('st-basis');
+      if (dv) dv.addEventListener('change', function () { rt.readOnly = !dv.checked; bs.disabled = !dv.checked; if (!dv.checked) { rt.value = agreed; bs.value = 'rate'; } else rt.focus(); });
+    }
+    return pr;
   };
   P.applySettlementLocal = function (s, action, p, note) {
     var ev = { t: A.NOW, action: action, from: s.status, to: s.status, actor: A.me ? A.me.displayName : '운영자', actorRole: A.me ? A.me.role : 'operator', note: note || null };
     var r2 = function (n) { return Math.round(n * 100) / 100; };
-    if (action === 'submit_commission') { s.contractAmount = p.contractAmount; s.commissionBasis = p.commissionBasis; s.commissionRatePct = p.commissionRatePct || null; s.commissionAmount = p.commissionBasis === 'rate' ? r2(p.contractAmount * p.commissionRatePct / 100) : p.commissionAmount; s.partnerShareAmount = r2(s.commissionAmount * s.partnerSharePct / 100); s.micegoShareAmount = r2(s.commissionAmount - s.partnerShareAmount); s.status = 'commission_submitted'; }
+    if (action === 'submit_commission') { s.contractAmount = p.contractAmount; s.commissionBasis = p.commissionBasis; s.commissionRatePct = p.commissionRatePct || null; s.commissionAmount = p.commissionBasis === 'rate' ? r2(p.contractAmount * p.commissionRatePct / 100) : p.commissionAmount; s.partnerShareAmount = r2(s.commissionAmount * s.partnerSharePct / 100); s.micegoShareAmount = r2(s.commissionAmount - s.partnerShareAmount); s.status = 'commission_submitted';
+      s.flags = (s.flags || []).filter(function (f) { return f !== 'rate_deviation'; }); if (s.agreedRatePct != null && (p.commissionBasis !== 'rate' || Number(p.commissionRatePct) !== Number(s.agreedRatePct))) s.flags.push('rate_deviation'); }
     else if (action === 'approve_commission') s.status = 'commission_confirmed';
     else if (action === 'reject_commission') { s.status = 'pending_commission'; s.commissionRejectReason = note; }
     else if (action === 'record_collection') { s.status = 'collected'; s.collectedAt = p.collectedAt; s.collectedAmount = p.collectedAmount; s.remitDue = new Date(Date.parse(p.collectedAt) + 14 * 86400e3).toISOString().slice(0, 10); }
@@ -322,7 +344,37 @@ window.MICEGO_PTR = (function () {
     if (p.sourcedBy) b.push('<span class="badge teal" title="지역 파트너가 등록한 호텔">' + esc(p.sourcedBy) + ' 등록</span>');
     if (p.approvedVia === 'partner' && !p.hqReviewedAt) b.push('<span class="badge amber">본사 사후 검토 대기</span>');
     if (p.riskFlags && p.riskFlags.length) b.push('<span class="badge red" title="' + esc(p.riskFlags.join(', ')) + '">위험 표시 ' + p.riskFlags.length + '</span>');
+    var cb = A.commissionBadgeHtml(p); if (cb) b.push(cb);
     return b.join(' ');
+  };
+
+  /* ---------- 커미션 요율 카드 (호텔 상세) ---------- */
+  var CM_ACT = { proposed: '요율 제안', resent: '링크 다시 보냄', accepted: '호텔 동의', expired: '링크 만료', backfilled: '기존 합의 등록' };
+  var CM_ROLE = { operator: '본사', partner_admin: '파트너 관리자', partner_member: '파트너 담당자' };
+  P.commissionSection = function (p) {
+    var c = A.commissionOf(p), live = p.status === 'approved' || p.status === 'suspended', canEdit = live && !(A.me && A.me.role === 'partner_member');
+    var pend = c.pendingRatePct != null && !c.tokenUsedAt, expired = pend && (c.status === 'expired' || (A.tms(c.tokenExpiresAt) || 0) < A.NOW);
+    var b = A.commissionBadgeHtml(p);
+    var rows = '<dt>합의 요율</dt><dd>' + (A.commissionAgreed(p) ? '<b id="cmRateNow">' + esc(c.ratePct) + '%</b>' : '<span class="warn-cell" id="cmRateNow">합의 전</span> <span class="small muted">합의하기 전에는 견적 초대를 보낼 수 없습니다</span>') + '</dd>' +
+      '<dt>산정 기준</dt><dd>객실 + 연회·F&amp;B 순액 <span class="small muted">(세금·봉사료 제외)</span></dd>' +
+      '<dt>동의</dt><dd>' + (A.commissionAgreed(p) ? dtv(c.acceptedAt) + ' · 약관 ' + esc(c.termsVersion || '—') : '<span class="muted">—</span>') + '</dd>';
+    if (pend) {
+      rows += '<dt>대기 중 요율</dt><dd><b>' + esc(c.pendingRatePct) + '%</b> <span class="small muted">' + esc(CM_ROLE[c.setByRole] || '') + ' 제안 · ' + dtv(c.setAt) + '</span>' + (c.pendingReason ? '<div class="small">범위 밖 사유: ' + esc(c.pendingReason) + '</div>' : '') + '</dd>' +
+        '<dt>동의 링크</dt><dd>발송 ' + dtv(c.tokenSentAt) + ' · 만료 ' + dtv(c.tokenExpiresAt) + (expired ? ' <span class="badge red">만료됨</span>' : '') + ' · 발송 ' + (c.sendCount || 0) + '회' + ((c.sendCount || 0) >= 5 ? ' <span class="small muted">(다시 보내기 한도 5회)</span>' : '') + '</dd>';
+    }
+    var hist = (c.history || []).slice().sort(function (x, y) { return A.tms(x.t) - A.tms(y.t); }).map(function (h) {
+      var who = h.action === 'accepted' ? '호텔' : (h.actorRole ? (CM_ROLE[h.actorRole] || h.actorRole) : '시스템');
+      return '<tr><td style="white-space:nowrap" class="mono">' + dtv(h.t) + '</td><td>' + esc(CM_ACT[h.action] || h.action) + '</td><td class="num">' + (h.ratePct != null ? esc(h.ratePct) + '%' : '—') + (h.prevRatePct != null && h.prevRatePct !== h.ratePct ? ' <span class="small muted">← ' + esc(h.prevRatePct) + '%</span>' : '') + '</td><td>' + esc(who) + '</td><td class="mono small">' + esc(h.termsVersion || '—') + '</td><td>' + (h.hqOverride ? '<span class="badge amber">본사 예외</span> ' : '') + esc(h.reason || '') + '</td></tr>';
+    }).join('');
+    var btns = '';
+    if (canEdit) {
+      btns += '<button type="button" class="btn sm primary" data-ptr="cm-set">요율 변경 제안</button>';
+      if (pend) btns += ' <button type="button" class="btn sm" data-ptr="cm-resend"' + ((c.sendCount || 0) >= 5 ? ' disabled title="다시 보내기는 최대 5회입니다"' : '') + '>동의 링크 다시 보내기</button>';
+    }
+    return '<section class="card" id="cmSection" aria-labelledby="h-cm"><h2 id="h-cm">커미션 요율 ' + b + '</h2>' +
+      (live ? '' : '<p class="sub">요율은 승인할 때 정합니다. 승인하면 호텔에 동의 링크가 나갑니다.</p>') +
+      '<dl class="kv">' + rows + '</dl>' + (btns ? '<div class="memo-add" style="gap:6px">' + btns + '</div>' : (live ? '<p class="small muted">요율 변경은 본사 또는 파트너 관리자가 제안합니다. 담당자는 조회만 할 수 있습니다.</p>' : '')) +
+      '<h3>요율 이력</h3>' + (hist ? '<div class="tbl-wrap"><table id="cmHist"><thead><tr><th>시각</th><th>구분</th><th class="num">요율</th><th>주체</th><th>약관</th><th>사유</th></tr></thead><tbody>' + hist + '</tbody></table></div>' : '<p class="muted small">아직 요율 이력이 없습니다.</p>') + '</section>';
   };
   P.RISK = { free_mail: '무료 메일 도메인', domain_mismatch: '호텔 도메인 불일치', partner_domain: '파트너 조직 도메인과 동일', dup_phone: '전화번호 중복', dup_domain: '도메인 중복 호텔' };
   P.hotelCard = function (p) {
@@ -345,6 +397,28 @@ window.MICEGO_PTR = (function () {
       if (!ok) return;
       var r = await A.persist('admin_partner_update', { p_code: code, p_patch: { hqReviewed: true } }, function () { p.hqReviewedAt = A.NOW; A.plog && A.plog(p, '운영자', null, null, '본사 사후 검토 완료'); });
       if (r) { rerender(); A.toast('사후 검토 완료로 표시했습니다', 'ok'); }
+      return;
+    }
+    if (act === 'cm-set') {
+      var cm = A.commissionOf(p);
+      var v0 = await A.commissionDialog(p, { title: '요율 변경 제안', ok: '제안하고 링크 보내기', def: cm.pendingRatePct != null ? cm.pendingRatePct : cm.ratePct,
+        help: '새 요율은 호텔이 메일 링크에서 동의해야 적용됩니다. ' + (cm.ratePct != null ? '동의 전까지는 지금 합의한 ' + cm.ratePct + '%가 그대로 유지되고, ' : '') + '새 요율은 동의한 뒤 만드는 초대부터 적용됩니다.' });
+      if (!v0) return;
+      var r0 = await A.persist('admin_partner_update', { p_code: code, p_patch: { commissionRatePct: v0.rate, commissionReason: v0.reason } }, function () { A.commissionLocal(p, v0.rate, v0.reason); A.plog && A.plog(p, '운영자', null, null, '커미션 요율 ' + v0.rate + '% 제안'); });
+      if (r0) { rerender(); A.toast('요율 ' + v0.rate + '%를 제안하고 동의 링크를 보냈습니다', 'ok'); }
+      return;
+    }
+    if (act === 'cm-resend') {
+      var cm2 = A.commissionOf(p);
+      if ((cm2.sendCount || 0) >= 5) { A.toast('동의 링크는 최대 5회까지 다시 보낼 수 있습니다', 'error'); return; }
+      var ok2 = await A.confirm(p.name + ' 담당자(' + p.email + ')에게 요율 ' + cm2.pendingRatePct + '% 동의 링크를 새로 보냅니다. 이전에 보낸 링크는 쓸 수 없게 됩니다.', '다시 보내기');
+      if (!ok2) return;
+      var r2c = await A.persist('partner_commission_resend', { p_code: code }, function () {
+        A.data().tick += 1; var t = A.NOW + A.data().tick * 60000;
+        cm2.tokenSentAt = t; cm2.tokenExpiresAt = t + 168 * 3600e3; cm2.tokenUsedAt = null; cm2.sendCount = (cm2.sendCount || 0) + 1; cm2.status = 'pending';
+        cm2.history = (cm2.history || []).concat([{ t: t, action: 'resent', ratePct: cm2.pendingRatePct, prevRatePct: cm2.ratePct, basis: cm2.basis, termsVersion: 'PT-2026-10', actorRole: A.me ? A.me.role : 'operator', reason: null, hqOverride: false }]);
+      });
+      if (r2c) { rerender(); A.toast('동의 링크를 다시 보냈습니다', 'ok'); }
       return;
     }
     if (act === 'hotel-region') {
