@@ -52,7 +52,7 @@ MG_PGBIN=/usr/lib/postgresql/16/bin MG_DENO_BIN=$(which deno) bash supabase/test
 
 ## 알려진 공백 (2026-09-28 이관 시점)
 
-- **Turnstile 스팸 방어 + 운영자 대리 확정 동의 기록 작업이 이 저장소에 없다.** 프로젝트 문서(진행 현황·오픈 체크리스트·장애 런북·운영자 온보딩 v1.1)는 `supabase/migrations/0010_selection_consent.sql`, `_shared/turnstile.ts`, 상태전이표 v1.8, 사이트맵 v1.4, 백엔드 테스트 PASS=14(당시 기준)를 전제로 쓰였지만, 해당 코드는 PC 폴더에 저장되지 않은 채 다른 세션에만 남아 있었다. 되찾으면 **`0010`·`0017`이 이미 쓰였으므로 `0018_selection_consent.sql`로 번호를 바꿔(0017은 호텔 커미션)** 넣고 테스트를 다시 돌린다. 그 전까지 `docs/*.md`(v1.0)와 `knowledge/project-docs/`의 v1.1 문서는 버전이 어긋난다.
+- **Turnstile 스팸 방어 + 운영자 대리 확정 동의 기록 작업이 이 저장소에 없다.** 프로젝트 문서(진행 현황·오픈 체크리스트·장애 런북·운영자 온보딩 v1.1)는 `supabase/migrations/0010_selection_consent.sql`, `_shared/turnstile.ts`, 상태전이표 v1.8(이 저장소의 `docs/state-transitions.html`은 v1.9로 v1.8을 건너뜀), 사이트맵 v1.4, 백엔드 테스트 PASS=14(당시 기준)를 전제로 쓰였지만, 해당 코드는 PC 폴더에 저장되지 않은 채 다른 세션에만 남아 있었다. 되찾으면 **`0010`·`0017`이 이미 쓰였으므로 `0018_selection_consent.sql`로 번호를 바꿔(0017은 호텔 커미션)** 넣고 테스트를 다시 돌린다. 그 전까지 `docs/*.md`(v1.0)와 `knowledge/project-docs/`의 v1.1 문서는 버전이 어긋난다.
 - 법무 검토 31곳, 사업자 정보·도메인·공식 메일, Supabase 리전, 비회원 요청 30일 파기 작업(system_tick) — `HANDOFF.md`·진행 현황 §3~§5.
 
 ## 저장소 구조

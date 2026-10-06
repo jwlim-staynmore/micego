@@ -1,6 +1,6 @@
 # MICEGO 운영자 온보딩
 
-*v1.0 · 2026-09-27 · 상태전이표 v1.7 · VOC SOP v2 · 운영 콘솔(admin/*.html) 기준*
+*v1.0 · 2026-09-27 · 상태전이표 v1.9 · VOC SOP v2 · 운영 콘솔(admin/*.html) 기준*
 
 > 첫 주에 콘솔을 쓰기 시작하는 운영자를 위한 문서입니다. 화면 이름·버튼 문구는 실제 코드(admin/*.html·admin.js) 그대로이며, VOC 응대 규칙은 프로젝트 문서 micego-voc-sop-cx-v1을 요약했습니다.
 
@@ -181,11 +181,11 @@
 
 ## 10. 도움 요청 경로
 
-- **콘솔 사용법이 헷갈릴 때** — 이 문서와 [상태전이표 v1.7](state-transitions.html)을 먼저 확인합니다. 화면 문구·가드 조건은 상태전이표 §2~§5-4에 전부 있습니다.
+- **콘솔 사용법이 헷갈릴 때** — 이 문서와 [상태전이표 v1.9](state-transitions.html)을 먼저 확인합니다. 화면 문구·가드 조건은 상태전이표 §2~§5-4에 전부 있습니다.
 - **화면이 안 되거나 오류가 뜰 때** — [장애 대응 runbook](incident-runbook.html)의 심각도 정의부터 확인하고, 판단이 서면 해당 시나리오 카드를 따라갑니다. 애매하면 낮추지 말고 개발 담당에게 바로 공유합니다.
 - **사유·조건이 기억 안 나는 조치**(사유 필수인 전이 등) — `admin/settings.html` "기본 규칙"·"회원 인증 규칙" 탭이 읽기 전용 참고표입니다.
 - **그래도 모르겠을 때** — 계정을 발급해 준 운영자나 개발 담당에게 요청번호·회원 ID·화면 캡처와 함께 물어봅니다. 혼자 SQL로 고치려 하지 않습니다([절대 하지 말 것](#donot) 참고).
 
 ---
 
-**연관 문서** · [상태전이표 v1.7](state-transitions.html) · [알림 라이브러리](notification-library.html) · [오픈 당일 체크리스트](launch-checklist.html) · [장애 대응 runbook](incident-runbook.html) · 프로젝트 문서 micego-voc-sop-cx-v1
+**연관 문서** · [상태전이표 v1.9](state-transitions.html) · [알림 라이브러리](notification-library.html) · [오픈 당일 체크리스트](launch-checklist.html) · [장애 대응 runbook](incident-runbook.html) · 프로젝트 문서 micego-voc-sop-cx-v1

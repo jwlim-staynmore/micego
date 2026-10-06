@@ -9,6 +9,10 @@
 - 운영 콘솔: 승인 시 요율 입력, 호텔 상세 커미션 카드(변경 제안·동의 링크 재발송·이력), "요율 합의 필요"·"동의 대기" 배지, 초대 카드에서 미합의 호텔 비활성, 정산 요율 잠금.
 - 테스트: `supabase/tests/sql/07_hotel_commission.sql`(9 시나리오), Deno 단위 테스트, `verify_admin_partner.py` 78항목, `verify2`·`verify_api` 요율 노출 검사. 백엔드 PASS=14.
 
+### 문서
+- `docs/state-transitions.html` v1.7 → **v1.9**(v1.8은 이 저장소에 없는 작업이라 건너뜀): 5-5 요청 위임 상태(`rfps.delegation`·보류 사유·전이 RPC·읽기/쓰기·HQ override), 4장 대리 입력 상태와 비교표 포함 기준·초대 때 커미션 합의 확인, 5-6 정산 상태(전이·가드·기한·플래그), 5-1 호텔 커미션 합의 상태, 6·7장 화면·알림(PTN_COMMISSION_TERMS·HTL_CONFIRM·PTR_*/HQ_* → CONSOLE_NOTICE) 행, 9장 미결 m~p. 기준은 마이그레이션 0010~0017.
+- 문서 버전 표기를 v1.9로 갱신: `build_sitemap.py`(사이트맵 재생성), `docs/launch-checklist`·`incident-runbook`·`operator-onboarding`(.md·.html), `README.md`, `HANDOFF.md`, `admin/settings.html`, `verify_admin_members.py`(기대 버전).
+
 ### 검토 반영 (4단계)
 - `0017`: `partners`의 동의 토큰·IP 해시·제안 사유 컬럼을 콘솔 직접 조회(PostgREST)에서 차단(테이블 SELECT 회수 후 민감 컬럼 제외 재부여). 정지된 조직의 요율 제안 차단, 재개 알림 1통(요율 없음 PTN_REINSTATED / 새 요율 PTN_COMMISSION_TERMS), 분쟁 해소로 금액을 덮어쓰면 `rate_deviation` 플래그. SQL 테스트 확장(`07_hotel_commission.sql`).
 - Partner Terms 5.5 인보이스 주체에 지역 운영 파트너 반영, `REVIEW_NOTES.md`·CLAUDE.md·사이트맵 검토 표시 수를 실제 태그 기준 31곳으로 정정, 호텔 랜딩 파트너 조건에 커미션 안내 한 줄, 여행사 랜딩 제목·배지 등 단독 문구를 "주최 측 수수료 없음"으로.

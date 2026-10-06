@@ -12,7 +12,7 @@
 | 운영 콘솔 | `admin/` 11p | 직접 편집하는 HTML/JS(생성기 아님), mock/api 이중 모드 |
 | 백엔드 | `supabase/` | Postgres 마이그레이션 9개(테이블 29), Edge Function 28개(Deno), pg_cron, RLS |
 | 알림 템플릿 | `emails/` 29 + `docs/notification-templates.json` | 이메일 29·알림톡 9·SMS 2 |
-| 문서 | `docs/` | 상태전이표 v1.7, 알림 라이브러리, 사이트맵·오픈 전 점검 v1.3, 오픈 체크리스트·장애 runbook·운영자 온보딩 |
+| 문서 | `docs/` | 상태전이표 v1.9, 알림 라이브러리, 사이트맵·오픈 전 점검 v1.3, 오픈 체크리스트·장애 runbook·운영자 온보딩 |
 | 설계 스펙 | `SPEC_LAUNCH.md` `SPEC_ACCOUNTS.md` `SPEC_FEEDBACK.md` `SPEC_FEEDBACK_ADDENDUM.md` | 코드 주석이 `§N`으로 인용 |
 | 디자인 원천 | `src/` 3 HTML | `build.py`가 CSS·마크업 조각을 여기서 추출 |
 | 약관·개인정보 전문 | `legal/` 4 JSON | `build_legal.py`가 ko/en terms·privacy 4페이지로 렌더링. `[법무 검토]` 표시는 `site.config.json.legal.reviewed=true`로 제거 |

@@ -1,6 +1,6 @@
 # MICEGO 장애 대응 runbook
 
-*v1.0 · 2026-09-27 · 상태전이표 v1.7 · 배포 런북(supabase/README.md) 기준*
+*v1.0 · 2026-09-27 · 상태전이표 v1.9 · 배포 런북(supabase/README.md) 기준*
 
 > Edge Function 이름·크론 주기·알림 ID는 supabase/README.md와 docs/state-transitions.html §7을 그대로 씁니다. 이 리포지토리에 없는 벤더 운영 정보(발신 대행사 장애 공지 채널 등)는 확인 필요로 표시했습니다.
 
@@ -242,4 +242,4 @@
 
 ---
 
-**연관 문서** · [상태전이표 v1.7](state-transitions.html) · [오픈 당일 체크리스트](launch-checklist.html) · [운영자 온보딩](operator-onboarding.html) · [알림 라이브러리](notification-library.html) · supabase/README.md
+**연관 문서** · [상태전이표 v1.9](state-transitions.html) · [오픈 당일 체크리스트](launch-checklist.html) · [운영자 온보딩](operator-onboarding.html) · [알림 라이브러리](notification-library.html) · supabase/README.md

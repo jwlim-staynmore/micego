@@ -1,12 +1,12 @@
 # MICEGO 오픈 당일 체크리스트
 
-*v1.0 · 2026-09-27 · 상태전이표 v1.7 · 배포 런북(supabase/README.md) · 사이트맵 점검 v1.2 기준*
+*v1.0 · 2026-09-27 · 상태전이표 v1.9 · 배포 런북(supabase/README.md) · 사이트맵 점검 v1.2 기준*
 
 > 상태전이표(state-transitions.html), 사이트맵·미구현 항목(sitemap.html), Supabase 배포 런북(supabase/README.md), 운영 콘솔 화면(admin/*.html·admin.js)을 근거로 정리했습니다. 이 리포지토리에 근거가 없어 확정하지 못한 값(SSL 발급사, PITR 요금제 지원 여부 등)은 확인 필요로 표시했습니다.
 
 ## 1. 한눈에 보기
 
-*이 체크리스트는 오픈 전 7일부터 오픈 뒤 첫 주까지, 데모(mock) 데이터로 만들어진 지금의 프런트엔드를 실제 Supabase 백엔드로 전환하는 과정을 단계별로 확인합니다. 근거는 [상태전이표 v1.7](state-transitions.html), [사이트맵·오픈 전 점검](sitemap.html), `supabase/README.md`, 운영 콘솔(`admin/*.html`) 코드입니다.*
+*이 체크리스트는 오픈 전 7일부터 오픈 뒤 첫 주까지, 데모(mock) 데이터로 만들어진 지금의 프런트엔드를 실제 Supabase 백엔드로 전환하는 과정을 단계별로 확인합니다. 근거는 [상태전이표 v1.9](state-transitions.html), [사이트맵·오픈 전 점검](sitemap.html), `supabase/README.md`, 운영 콘솔(`admin/*.html`) 코드입니다.*
 
 | 단계 | 핵심 질문 | 항목 수 |
 |---|---|---|
@@ -59,7 +59,7 @@
 |---|---|---|---|---|
 | 1 | 첫 운영자 로그인 | 대표·운영 | `admin/index.html`에서 Supabase Auth에 만들어 둔 실제 운영자 이메일·비밀번호로 로그인합니다(사전에 `app_metadata.role = "operator"`가 부여돼 있어야 합니다). | DEMO 리본과 "DEMO · 실제 인증은 없습니다" 안내가 사라지고 `dashboard.html`로 정상 진입합니다. 권한이 없는 계정이면 `index.html?e=role`로 돌아가며 "운영자 권한이 있는 계정으로 로그인해 주세요"가 뜹니다 — 이 메시지가 보이면 통과가 아닙니다. |
 | 2 | 대시보드 SLA 시계가 실제 시각인지 확인 | 운영 | `dashboard.html` 상단 "기준 시각 … KST"가 지금 시각과 맞는지 확인합니다. | 데모 고정 시각(`2026-10-08 19:30`)이 아니라 실제 현재 시각이 표시됩니다. mock 모드가 아니라 `MGA.mode === 'api'`로 동작 중이라는 뜻입니다. |
-| 3 | 견적 요청 한 바퀴(테스트 데이터) | 운영·개발 | `ko/index.html`에서 테스트 요청을 접수 → `ko/track.html` 추적 링크 수신 확인 → `admin/rfp.html`에서 검증중→오픈→비딩중 전이하며 승인 파트너 1곳 초대 → `en/bid.html`에서 견적 제출 → 콘솔에서 취합중→전달됨 → 추적 페이지에서 제안 선택 + 인증번호 입력 → 전달됨→성사 전이까지 실제로 눌러 봅니다. | 상태전이표 v1.7의 전이 순서와 어긋나지 않고, 각 단계 알림(`ORG_RECEIVED · ORG_BIDDING · HTL_INVITE · HTL_QUOTE_RECEIVED · ORG_DELIVERED · ORG_PICK_OTP · HTL_SELECTED_CONNECT · ORG_WON`)이 실제로 발송됩니다. |
+| 3 | 견적 요청 한 바퀴(테스트 데이터) | 운영·개발 | `ko/index.html`에서 테스트 요청을 접수 → `ko/track.html` 추적 링크 수신 확인 → `admin/rfp.html`에서 검증중→오픈→비딩중 전이하며 승인 파트너 1곳 초대 → `en/bid.html`에서 견적 제출 → 콘솔에서 취합중→전달됨 → 추적 페이지에서 제안 선택 + 인증번호 입력 → 전달됨→성사 전이까지 실제로 눌러 봅니다. | 상태전이표 v1.9의 전이 순서와 어긋나지 않고, 각 단계 알림(`ORG_RECEIVED · ORG_BIDDING · HTL_INVITE · HTL_QUOTE_RECEIVED · ORG_DELIVERED · ORG_PICK_OTP · HTL_SELECTED_CONNECT · ORG_WON`)이 실제로 발송됩니다. |
 | 4 | 회원가입 한 바퀴 | 운영 | `ko/signup.html`에서 테스트 계정으로 기본 정보 → 이메일 인증번호 → 휴대전화 인증번호까지 진행합니다. | `active` 상태에 도달하고 `ACC_WELCOME`을 수신하며, `admin/members.html`에 새 회원으로 표시됩니다. |
 | 5 | 피드백 위젯 한 바퀴 | 운영 | 아무 공개 페이지 우하단 "의견 보내기" 버튼으로 테스트 피드백을 제출합니다. | `FB-YYMMDD-XXXX` 접수번호가 발급되고, 운영팀이 `FB_OPS_ALERT`을 수신하며, `admin/feedback.html`에 **신규** 상태로 보입니다. |
 | 6 | 검색엔진 등록 | 운영 | 네이버 서치어드바이저·구글 서치콘솔에 `site.config.json`의 `siteVerification` 값으로 소유 확인 후 `sitemap.xml`을 제출합니다. | 두 콘솔 모두 소유 확인이 완료되고 sitemap이 정상 접수됩니다. |
@@ -141,4 +141,4 @@
 
 ---
 
-**연관 문서** · [상태전이표 v1.7](state-transitions.html) · [사이트맵 · 오픈 전 점검 v1.2](sitemap.html) · [알림 라이브러리](notification-library.html) · [장애 대응 runbook](incident-runbook.html) · [운영자 온보딩](operator-onboarding.html) · supabase/README.md
+**연관 문서** · [상태전이표 v1.9](state-transitions.html) · [사이트맵 · 오픈 전 점검 v1.2](sitemap.html) · [알림 라이브러리](notification-library.html) · [장애 대응 runbook](incident-runbook.html) · [운영자 온보딩](operator-onboarding.html) · supabase/README.md

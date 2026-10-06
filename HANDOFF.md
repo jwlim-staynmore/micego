@@ -54,7 +54,7 @@ git 추적 434개 파일. Python 약 17k줄(생성기·검증) · TypeScript 약
 | `SPEC_FEEDBACK.md` + `_ADDENDUM.md` | 피드백(VOC) 시스템 설계·구현 확정 |
 | `docs/partner-console-impl-v1.md` | 지역 파트너 콘솔(0010~0016) 구현 노트 + 0017 추가분. 설계서 원문은 `knowledge/project-docs/micego-지역파트너-콘솔-기술설계서-v1 - 클로드.md` |
 | `docs/hotel-commission-design-v1 - 클로드.md` | 호텔 커미션(0017) 설계 |
-| `docs/state-transitions.html` v1.7 | RFP·초대·파트너·회원·공유링크·피드백 상태 머신 + 알림 ID(커미션·파트너 콘솔 상태는 각 설계서 참고) |
+| `docs/state-transitions.html` v1.9 | RFP·초대(대리 입력)·파트너·커미션 합의·회원·공유링크·피드백·요청 위임·정산 상태 머신 + 알림 ID(v1.8은 이 저장소에 없는 작업이라 건너뜀) |
 | `legal/*.json` + `legal/REVIEW_NOTES.md` | 이용약관·Partner Terms·개인정보처리방침·Privacy Notice 전문과 **법무 검토 표시 31곳** |
 | `DECISIONS.md` | 확정 결정 D-1~D-43, 미결 O-1~O-6 |
 
