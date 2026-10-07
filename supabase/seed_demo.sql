@@ -71,7 +71,7 @@ begin
   m8 := gen_random_uuid();
   insert into auth.users(id, email, encrypted_password, email_confirmed_at, raw_app_meta_data) values (m8, 'yujin.jung@onnuri-edu.example', crypt('Demopass1!', gen_salt('bf')), now() - interval '1 days', '{}');
   insert into members(id, state, name, company, org_type, email, phone, consents, email_verified_at, created_at)
-    values (m8, 'pending_phone', '정유진', '온누리에듀', '기업(인하우스)', 'yujin.jung@onnuri-edu.example', null, '{"age":true,"terms":true,"privacy":true}', now() - interval '1 days', now() - interval '1 days');
+    values (m8, 'pending_phone', '정유진', '온누리에듀', '기업(행사 주최)', 'yujin.jung@onnuri-edu.example', null, '{"age":true,"terms":true,"privacy":true}', now() - interval '1 days', now() - interval '1 days');
 
   -- ---------- rfps: 파이프라인 각 상태 ----------
   insert into rfps(ref, state, round, org_type, company, contact_name, contact_email, contact_phone, event_type, start_date, end_date, headcount_band, region, twin_rooms, king_rooms, ballroom_use, ballroom_purpose, note, consent_at, destination, headcount, public_memo, anon_reviewed, created_at)

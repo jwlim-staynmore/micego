@@ -3,7 +3,7 @@
 <head>
 <script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
 <meta charset="UTF-8">
-<meta name="micego-build" content="2026.09.29-0">
+<meta name="micego-build" content="2026.10.07-0">
 <script src="../assets/config.js"></script><script src="../assets/mg.js"></script><script src="../assets/feedback.js" defer></script>
 <script>document.documentElement.className+=' js-anim';</script>
 <script>(function(){var h=document.documentElement,q=new URLSearchParams(location.search),t=q.get('t')||'',s=q.get('state')||'open';var C=window.MG_CONFIG||{},api=!!(C.supabase&&C.supabase.url),preview=(C.demo!==false)&&q.has('state');if(!/^[A-Za-z0-9_-]{4,64}$/.test(t)){s='invalid';}else if(api&&!preview){s='loading';}else if(["open", "submitted", "selected", "not_selected", "declined", "expired", "cancelled", "invalid", "loading"].indexOf(s)<0){s='invalid';}h.setAttribute('data-state',s);h.setAttribute('data-mode',(api&&!preview)?'api':'demo');})();</script>
@@ -440,12 +440,17 @@ html:not([data-state]) [data-states~="open"]{display:revert}
       <label for="currency">Quote currency <span class="req">*</span></label>
       <select id="currency" name="currency">
         <option value="USD">USD — US Dollar</option>
+        <option value="THB">THB — Thai Baht</option>
         <option value="VND">VND — Vietnamese Dong</option>
-        <option value="EUR">EUR — Euro</option>
-        <option value="KRW">KRW — Korean Won</option>
-        <option value="GBP">GBP — British Pound</option>
-        <option value="JPY">JPY — Japanese Yen</option>
+        <option value="IDR">IDR — Indonesian Rupiah</option>
+        <option value="MYR">MYR — Malaysian Ringgit</option>
+        <option value="PHP">PHP — Philippine Peso</option>
         <option value="SGD">SGD — Singapore Dollar</option>
+        <option value="JPY">JPY — Japanese Yen</option>
+        <option value="TWD">TWD — New Taiwan Dollar</option>
+        <option value="HKD">HKD — Hong Kong Dollar</option>
+        <option value="KRW">KRW — Korean Won</option>
+        <option value="EUR">EUR — Euro</option>
       </select>
     </div>
     <div class="cur-note" id="currencyNote">Quote in whichever currency your property invoices in. MICEGO records the currency with each quote and reconfirms it before compiling the comparison for the organizer.</div>
@@ -700,7 +705,12 @@ html:not([data-state]) [data-states~="open"]{display:revert}
     VND: { twinRate: '3500000', kingRate: '4000000', breakfastSupplement: '450000', ballroomFee: '85000000', fnbMinimum: '1350000' },
     EUR: { twinRate: '135',     kingRate: '155',     breakfastSupplement: '17',     ballroomFee: '3200',     fnbMinimum: '50'    },
     KRW: { twinRate: '190000',  kingRate: '215000',  breakfastSupplement: '24000',  ballroomFee: '4600000',  fnbMinimum: '72000' },
-    GBP: { twinRate: '115',     kingRate: '132',     breakfastSupplement: '14',     ballroomFee: '2750',     fnbMinimum: '43'    },
+    THB: { twinRate: '4800',    kingRate: '5500',    breakfastSupplement: '600',    ballroomFee: '120000',   fnbMinimum: '1800'  },
+    IDR: { twinRate: '2300000', kingRate: '2600000', breakfastSupplement: '290000', ballroomFee: '55000000', fnbMinimum: '870000' },
+    MYR: { twinRate: '650',     kingRate: '740',     breakfastSupplement: '80',     ballroomFee: '15500',    fnbMinimum: '245'   },
+    PHP: { twinRate: '8200',    kingRate: '9300',    breakfastSupplement: '1000',   ballroomFee: '196000',   fnbMinimum: '3100'  },
+    TWD: { twinRate: '4600',    kingRate: '5300',    breakfastSupplement: '580',    ballroomFee: '110000',   fnbMinimum: '1750'  },
+    HKD: { twinRate: '1130',    kingRate: '1290',    breakfastSupplement: '140',    ballroomFee: '27000',    fnbMinimum: '430'   },
     JPY: { twinRate: '21000',   kingRate: '24000',   breakfastSupplement: '2600',   ballroomFee: '510000',   fnbMinimum: '8000'  },
     SGD: { twinRate: '195',     kingRate: '222',     breakfastSupplement: '24',     ballroomFee: '4700',     fnbMinimum: '74'    }
   };

@@ -199,7 +199,7 @@ def banner(cls, inner, states=None, ident='', role='status'):
 def chips(name, vals, checked=None, cls='', dis=False):
     return ''.join('<label class="radio-chip %s"><input type="radio" name="%s" value="%s"%s>%s</label>' % (cls, name, v, ' checked' if v == checked else '', v) for v in vals)
 
-ORG_VALS = ['여행사', '기업(인하우스)', '기타']
+ORG_VALS = ['여행사', '랜드사', '기업(행사 주최)', '협회·기관', '기타']  # submit_rfp·signup_start·account_update ORG_TYPES와 같은 목록
 
 # ================================================================== signup
 PRIV_TABLE = ('<details class="consent-more"><summary>수집 항목 자세히 보기</summary><table><thead><tr><th scope="col" style="width:34%">항목</th><th scope="col" style="width:36%">목적</th><th scope="col">보유 기간</th></tr></thead><tbody>'

@@ -352,7 +352,19 @@ with sync_playwright() as pw:
         ok('track: share view (?s=) has no visible .owner-only elements')
     ctx.close()
 
+    # D-46: 비회원 진행 상황 화면에는 공유 링크 대신 가입 안내가 보여야 한다
     ctx, page, router, errs = new_ctx(browser)
+    router.set('get_track', 'get_track__bidding')
+    page.goto(U('ko/track.html?t=trk_test_014'))
+    page.wait_for_timeout(300)
+    note = page.query_selector('#shareSignup')
+    if page.query_selector('[data-share-create]') is None and note and note.is_visible():
+        ok('track: non-member sees the signup note instead of the share-link control')
+    else:
+        F('track: non-member should see #shareSignup and no share-create control')
+    ctx.close()
+
+    ctx, page, router, errs = new_ctx(browser, session=SESSION_MEMBER)
     router.set('get_track', 'get_track__bidding')
     router.set('create_share_link', 'create_share_link__ok')
     router.set('revoke_share_link', 'revoke_share_link__ok')

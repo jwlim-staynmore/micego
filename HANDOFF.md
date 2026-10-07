@@ -60,12 +60,12 @@ git 추적 434개 파일. Python 약 17k줄(생성기·검증) · TypeScript 약
 
 ## 5. 백엔드 요약
 
-- **마이그레이션 17개**(0001~0017): 0001 확장·enum → 0002 기본 테이블 → 0003 private 함수(rfp_transition·due·enqueue·pick_and_win·system_tick) → 0004 회원 RPC → 0005 운영자 RPC·알림 메타 → 0006 RLS → 0007 크론 → 0008·0009 피드백 → **0010~0016 지역 파트너 콘솔**(지역·파트너 조직·콘솔 계정·위임·대리 입력·정산·초대 수락·콘솔 알림) → **0017 호텔 커미션**(요율·동의 토큰·이력, 초대/정산 스냅샷, 초대 차단). `create table` 41개.
+- **마이그레이션 18개**(0001~0018): 0001 확장·enum → 0002 기본 테이블 → 0003 private 함수(rfp_transition·due·enqueue·pick_and_win·system_tick) → 0004 회원 RPC → 0005 운영자 RPC·알림 메타 → 0006 RLS → 0007 크론 → 0008·0009 피드백 → **0010~0016 지역 파트너 콘솔**(지역·파트너 조직·콘솔 계정·위임·대리 입력·정산·초대 수락·콘솔 알림) → **0017 호텔 커미션**(요율·동의 토큰·이력, 초대/정산 스냅샷, 초대 차단) → **0018 소속 유형 5종·지원 통화(TWD·HKD)·견적 통화 트리거**. `create table` 41개.
 - **0017 주의**: `partners` 테이블이 **열 단위 SELECT 권한**으로 바뀌었다. 새 컬럼을 추가하면 같은 마이그레이션에서 `grant select (컬럼) on partners to authenticated`를 넣어야 콘솔에 보인다(동의 토큰 해시·IP 해시는 일부러 제외). `admin_partner_transition`은 인자 시그니처가 바뀌어 drop 후 재생성했다.
 - **Edge Function 31개** — RFP/비딩·회원/인증·콘솔·문의/구독·알림·파트너 등록·공유링크·피드백·`partner_invite`·`quote_confirm`·`partner_commission_accept`. 각 `handle.ts` 첫 주석에 인증·요청·응답 형식. 오류는 `_shared/errors.ts`(`MG:CODE`), 프론트 `mg.js`와 콘솔 `admin.js`가 미러.
 - **알림**: 이메일 32종(`emails/`) · 알림톡 9 · SMS 2. 문안은 `build_notify.py`에서 고치고 `sync_templates.py`까지 다시 돌린다. 콘솔 내부 알림 PTR_*/HQ_*는 `CONSOLE_NOTICE` 한 장으로 라우팅.
 - **토큰 페이지 3종**: `bid`(견적 제출) · `confirm`(대리 입력 견적 확인) · `commission`(요율 동의). 모두 GET은 조회만, POST로만 소비(메일 보안 스캐너 대비), 원문은 메일에만.
-- **테스트**: `supabase/tests/run.sh` — pglast 구문검사 → PostgreSQL 16에 마이그레이션·시드·SQL 테스트 7종 → `admin_snapshot` 키 대조 → Deno check + 단위 테스트(97개). **2026-10-06 PASS=14 FAIL=0.** Deno가 없으면 타입체크·단위 테스트가 안 돈다 — 반드시 설치(`npm i -g deno`). psql이 `postgres` 사용자로 파일을 읽으므로 홈 디렉터리에서 권한 오류가 나면 저장소를 `/tmp`에 복사해 `chmod -R a+rX` 후 실행.
+- **테스트**: `supabase/tests/run.sh` — pglast 구문검사 → PostgreSQL 16에 마이그레이션·시드·SQL 테스트 8종 → `admin_snapshot` 키 대조 → Deno check + 단위 테스트(97개). **2026-10-06 PASS=14 FAIL=0.** Deno가 없으면 타입체크·단위 테스트가 안 돈다 — 반드시 설치(`npm i -g deno`). psql이 `postgres` 사용자로 파일을 읽으므로 홈 디렉터리에서 권한 오류가 나면 저장소를 `/tmp`에 복사해 `chmod -R a+rX` 후 실행.
 
 ## 6. 프론트·콘솔 요약
 
@@ -126,7 +126,7 @@ git 추적 434개 파일. Python 약 17k줄(생성기·검증) · TypeScript 약
 | # | 내용 | 조치 제안 |
 |---|---|---|
 | K-1 | **`admin/`·`docs/`·`emails/`가 정적 파일로 공개 배포됨.** robots 차단과 콘솔 로그인만 있고 파일 자체는 누구나 받을 수 있음(mock-data.js 포함) | Vercel Password Protection 또는 admin 별도 프로젝트(O-1). 오픈 차단급 |
-| K-13 | **Turnstile·대리 확정 동의 기록 코드 미수록**(§0) | 복구 또는 재구현 → 0018 |
+| K-13 | **Turnstile·대리 확정 동의 기록 코드 미수록**(§0) | 복구 또는 재구현 → 0019 (0018은 소속 유형·통화 정리) |
 | K-14 | 원문 토큰(`CONFIRM_TOKEN`·`COMMISSION_TOKEN`)이 `notification_log.vars`에 남음(운영자만 조회 가능) | 발송 성공 후 vars에서 제거 |
 | K-2 | SQL `GUARD_*`·`INVALID_TRANSITION`·`FORBIDDEN_FIELD`가 Edge 경로에서 `INTERNAL(500)`로 뭉개짐(콘솔 RPC 경로는 보존) | `errors.ts` 카탈로그 추가 + `fromSqlError` 매핑 |
 | K-3 | 클라이언트 이메일 정규식(`build2.py` EMAIL_RE)과 서버 `validate.ts` 불일치 가능 | 통일 |
@@ -164,6 +164,7 @@ v1의 K-11(git 없음)·K-12(동시 편집 사고)는 git 이관으로 해소, K
 
 | 날짜 | 작업자 | 변경 |
 |---|---|---|
+| 2026-10-07 | jwlim(클로드 작성) | v2.1: 불일치 3건 수정(소속 유형 5종 통일·견적 통화=정산 지원 통화·공유 링크 회원 한정), `0018_org_types_currencies`, run.sh PASS=15, 선정 동의 작업 번호 0019로 |
 | 2026-10-06 | jwlim(클로드 작성) | v2: git 이관·지역 파트너 콘솔(0010~0016)·호텔 커미션(0017) 반영, 수치 실측 갱신(마이그레이션 17·Edge 31·이메일 32·verify 11·PASS=14·법무 표시 31), 알려진 공백(Turnstile·동의 기록) 명시, K-13~K-15 추가, O-5·O-7 종결, Vercel·커미션 오픈 절차 추가 |
 | 2026-09-28 | jwlim(클로드 작성) | K-12 병합 완료 메모 추가(git 이관) |
 | 2026-09-27 | jwlim(클로드 작성) | v1 최초 작성 + 독립 검증 반영 |
