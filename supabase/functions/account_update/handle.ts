@@ -13,7 +13,8 @@ import { createOtp, verifyOtp } from "../_shared/otp.ts";
 import { enqueueAndDispatch } from "../_shared/notify/enqueue_and_dispatch.ts";
 import type { MemberRow } from "../_shared/auth_ctx.ts";
 
-const ORG_TYPES = ["여행사", "기업(인하우스)", "기타"];
+// 견적 요청 폼·가입·계정 설정이 같은 목록을 쓴다(0018_org_types_currencies).
+const ORG_TYPES = ["여행사", "랜드사", "기업(행사 주최)", "협회·기관", "기타"];
 
 function memberView(m: Record<string, unknown>) {
   return {

@@ -54,10 +54,15 @@ export async function handle(req: Request, deps: Deps): Promise<unknown> {
   const contactPhone = asString(body.contactPhone).trim();
   const consent = asBool(body.consent);
 
+  // 정산이 받는 통화(settings.supported_currencies)로만 견적을 받는다. 설정이 없으면 형식만 본다.
+  const currencySupported = /^[A-Z]{3}$/.test(currency)
+    ? (await deps.db.scalar<boolean>(
+        `select coalesce((select value ? $1 from settings where key = 'supported_currencies'), true)`, [currency])) !== false
+    : false;
   const minValidUntil = deadline ? await deps.db.scalar<string>(`select private.due($1, 2)::date`, [deadline]) : null;
 
   const fe = new FieldErrors();
-  fe.check("currency", /^[A-Z]{3}$/.test(currency));
+  fe.check("currency", currencySupported);
   fe.check("twinRate", twinRate !== null && twinRate >= 0);
   fe.check("kingRate", kingRate !== null && kingRate >= 0);
   fe.check("breakfast", breakfast === "included" || breakfast === "not_included");

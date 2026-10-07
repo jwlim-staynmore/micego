@@ -377,7 +377,7 @@ view
 
 `account_update`는 member JWT로 인증하며 `op` 필드로 분기한다(핸들러 상단 주석에 명시된 스펙과의 차이 포함):
 
-- **`profile`**: `{name,company,orgType}` → `name.length>=2`, `company.length>=1`, `orgType`이 `["여행사","기업(인하우스)","기타"]` 중 하나여야 함. 응답은 `{member}` (memberView).
+- **`profile`**: `{name,company,orgType}` → `name.length>=2`, `company.length>=1`, `orgType`이 `["여행사","랜드사","기업(행사 주최)","협회·기관","기타"]` 중 하나여야 함. 응답은 `{member}` (memberView).
 - **`marketing`**: `{mktEmail,mktSms}` → 검증 없이 즉시 반영, `mkt_at` 갱신. 응답 `{member}`.
 - **`email_start`**: `{new_email,password?}` → `RE_EMAIL` 검증 후 `requireReauthIfStale` 호출. 이미 다른 계정이 쓰는 이메일이면 열거 방지를 위해 **디코이 OTP**(회원 연결 없음, target=`decoy:...`)를 발급해 정상과 동일한 모양으로 응답한다. **스펙 이탈 명시**: §3 표는 모든 `op`이 `{member}`를 돌려준다고 되어 있으나, 코드 주석에 따르면 `email_start`만 다음 단계(이메일 인증 코드 입력)를 위해 `{otp_id,expires_at,resend_at}`를 돌려주도록 의도적으로 다르게 구현되어 있다(다른 인증코드 발급 엔드포인트 `pick_send_otp`/`send_phone_otp` 등과의 응답 형태 일관성을 위함). 나머지 op(`profile`/`marketing`/`email_verify`/`password`)는 스펙대로 `{member}`를 반환한다.
 - **`email_verify`**: `{otp_id,code}` → OTP 검증, `otp.member_id`가 현재 회원과 다르면 `OTP_WRONG`. `meta.new_email`이 없으면 `BAD_REQUEST`. Auth의 이메일과 `members.email`을 갱신하고 옛 이메일로 `ACC_EMAIL_CHANGED` 발송(마스킹된 새 이메일 포함). 응답 `{member}`.
@@ -476,7 +476,7 @@ Edge Function(`withdraw/handle.ts`) 쪽에서는 탈퇴 완료 메일 `ACC_WITHD
 
 | 필드 | 규칙 |
 |---|---|
-| `orgType` | `["여행사","기업(인하우스)","기타"]` 중 하나 |
+| `orgType` | `["여행사","랜드사","기업(행사 주최)","협회·기관","기타"]` 중 하나 |
 | `company` | 1자 이상 |
 | `name` | 2자 이상 |
 | `email` | `RE_EMAIL` |

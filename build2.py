@@ -1167,7 +1167,7 @@ S_CAN = spanel(' is-muted', '×', '요청이 취소됐습니다', '<p>2026-10-06
 S_INV = spanel(' is-muted', '!', '링크를 열 수 없습니다', '<p>주소 일부가 빠졌거나 더 이상 쓰지 않는 링크입니다. 접수 확인 메일의 링크를 다시 눌러 보시고, 그래도 열리지 않으면 MICEGO로 알려 주세요.</p><div class="app-actions"><a class="btn btn-ghost" href="contact.html">문의하기</a><a class="btn btn-ghost" href="mailto:mysteri1984@gmail.com?subject=' + quote('[MICEGO 링크 문의]') + '">이메일 보내기</a></div>')
 LINK_NOTE = '<div class="link-note owner-only"><b>이 링크는 요청하신 분 전용입니다.</b> 로그인 없이 열리니 외부로 전달하지 말아 주세요. 접수 확인 메일의 링크로 언제든 다시 확인하실 수 있습니다.</div>'
 ASKPANEL = '<div class="panel owner-only"><h2>궁금한 점이 있나요?</h2><p class="app-lead" style="margin-top:0">호텔에 직접 연락하지 않으셔도 됩니다. MICEGO에 질문을 보내 주시면 해당 호텔에 확인해 답변드립니다.</p><div class="app-actions"><a class="btn btn-ghost" data-mg-action="ask" href="' + ASK + '">MICEGO에 질문 보내기</a></div></div>'
-SHARE_PANEL = '<div class="panel owner-only" id="sharePanel"><h2>동료와 공유</h2><p class="app-lead" style="margin-top:0;font-size:14.5px">같이 검토할 동료에게 보기 전용 링크를 보낼 수 있습니다. 이 링크로는 제안을 선택하거나 조건을 바꿀 수 없습니다.</p>' + share_ui('MG-2610-014', '2610014') + '</div>'
+SHARE_PANEL = '<div class="panel owner-only" id="sharePanel"><h2>동료와 공유</h2><p class="app-lead" style="margin-top:0;font-size:14.5px">같이 검토할 동료에게 보기 전용 링크를 보낼 수 있습니다. 이 링크로는 제안을 선택하거나 조건을 바꿀 수 없습니다.</p>' + share_ui('MG-2610-014', '2610014') + '<p class="app-lead" id="shareSignup" hidden style="margin:0;font-size:14px">공유 링크는 회원만 만들 수 있습니다. 이 요청에 쓴 이메일로 <a class="tlink" href="signup.html">가입</a>하면 요청이 계정에 자동으로 연결되고, 그때부터 링크를 만들 수 있습니다. 이미 회원이면 <a class="tlink" href="login.html">로그인</a>해 주세요.</p></div>'
 SHARE_BANNER = '<div class="share-banner share-only" role="note"><b>보기 전용 공유 링크입니다.</b> 요청하신 분이 공유했습니다. 제안 선택과 조건 변경은 요청하신 분만 할 수 있습니다.</div>'
 TRACK_BODY = ('<div class="app-wrap">\n' + ds(NONINV, SHARE_BANNER + '<a class="acc-back owner-only" id="myBack" href="my.html" hidden>← 내 견적 요청</a><h1>다낭 인센티브 행사 · 견적 진행 상황</h1>') + ds(NOREJ, META) + PROGS
     + ''.join(ds(x, h) for x, h in [('received', S_REC), ('verifying', S_VER), ('rejected', S_REJ), ('bidding', S_BID), ('rebid', S_REB), ('collecting', S_COL), ('delivered', S_DEL), ('won', S_WON), ('lost', S_LOST), ('cancelled', S_CAN), ('invalid', S_INV)])
@@ -1228,6 +1228,8 @@ TRACK_JS = TERMINAL_JS([x for x in TRACK_STATES if x != 'loading']) + r'''
     try{
       var _isMember = (window.MG && MG.mode==='api' && !MG.preview) ? !!MG.auth.member() : !!sessionStorage.getItem('mg_demo_member');
       if(_isMember){var mb=document.getElementById('myBack');if(mb)mb.hidden=false;}
+      // 공유 링크는 회원 본인 요청에만 만들 수 있다(create_share_link가 회원 JWT를 요구). 비회원에게는 가입 안내로 바꾼다.
+      if(!_isMember){var sp=document.getElementById('sharePanel');if(sp){var ui=sp.querySelector('[data-share]');if(ui)ui.remove();var sn=document.getElementById('shareSignup');if(sn)sn.hidden=false;}}
     }catch(e){}
     document.querySelectorAll('[data-share]').forEach(shareInit);
   }

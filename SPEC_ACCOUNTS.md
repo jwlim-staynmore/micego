@@ -29,7 +29,7 @@ A0. Shared changes
 - robots.txt: add Disallow for /ko/my.html, /ko/account.html, /ko/withdraw.html, /ko/reset.html. Those 4 pages get noindex,nofollow + no-referrer (token=True-style meta but WITHOUT the t-token requirement). signup.html, login.html, terms.html are indexable.
 
 A1. ko/signup.html — 3-step stepper on one page (1 기본 정보 → 2 이메일 인증 → 3 휴대전화 인증 → 완료)
-- Step 1 fields: 이메일(아이디) *, 비밀번호 * (show/hide toggle, no confirm field; rule: 10자 이상 + 영문·숫자·특수문자 중 2종, 12자 이상이면 종류 무관, 이메일 앞부분 포함 금지; live rule checklist), 이름 *, 소속 유형 * (chips: 여행사 / 기업(인하우스) / 기타), 회사·단체명 *. Personal mail domains allowed. `?email=` prefills email.
+- Step 1 fields: 이메일(아이디) *, 비밀번호 * (show/hide toggle, no confirm field; rule: 10자 이상 + 영문·숫자·특수문자 중 2종, 12자 이상이면 종류 무관, 이메일 앞부분 포함 금지; live rule checklist), 이름 *, 소속 유형 * (chips: 여행사 / 랜드사 / 기업(행사 주최) / 협회·기관 / 기타 — 견적 요청 폼과 같은 목록, 0018), 회사·단체명 *. Personal mail domains allowed. `?email=` prefills email.
 - Consents: [전체 동의] then [필수] 만 14세 이상입니다 · [필수] 이용약관 동의 (terms.html) · [필수] 개인정보 수집·이용 동의 (expandable table: 항목 / 목적 / 보유기간) · [선택] 서비스 소식 받기 — 채널 chips 이메일 / 문자·알림톡. Optional unchecked must not block. No pre-checked boxes.
 - Step 2 email code: "jieun.kim@…로 인증번호 6자리를 보냈습니다" · input (inputmode numeric, autocomplete one-time-code, 6 digits) · 10:00 countdown · 재발송 (disabled 60s, shows "0:42 후 재발송") · "이메일 주소 수정" back link · help: 스팸함 확인, 회사 메일은 수신까지 몇 분 걸릴 수 있음. Rules: valid 10 min, resend cooldown 60s, 10 sends/day/email, 5 wrong → code void, must resend.
 - Step 3 phone: 휴대전화 input (same Korean mobile regex as landing) → 인증번호 받기 → 6 digits, 3:00 countdown, resend 60s, 5 sends/day/number, 5 wrong → 10분 잠금. Note under field: "진행 알림(알림톡·문자)과 제안 선택 확인에 쓰는 번호입니다." SMS is sent only after email is verified.

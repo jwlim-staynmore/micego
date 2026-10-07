@@ -11,7 +11,8 @@ import { bearerToken } from "../_shared/auth_ctx.ts";
 const HEADCOUNT_BANDS = ["50명 미만", "50~100명", "100~300명", "300~500명", "500명 이상"];
 const BALLROOM_USE = ["사용", "미사용"];
 const BALLROOM_PURPOSE = ["디너", "Full Day", "Half Day", "기타"];
-const ORG_TYPES = ["여행사", "기업(인하우스)", "기타"];
+// 견적 요청 폼·가입·계정 설정이 같은 목록을 쓴다(0018_org_types_currencies).
+const ORG_TYPES = ["여행사", "랜드사", "기업(행사 주최)", "협회·기관", "기타"];
 
 export async function handle(req: Request, deps: Deps): Promise<unknown> {
   const body = await req.json().catch(() => { throw new MGError("BAD_REQUEST"); });
