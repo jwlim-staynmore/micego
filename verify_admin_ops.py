@@ -46,7 +46,10 @@ with sync_playwright() as p:
     pg.click('[data-to=approved]'); pg.wait_for_timeout(80); ok('still blocked w/o memo','소속 확인 방법 메모' in toast(pg).split('승인하려면')[-1])
     pg.fill('#ckAff','호텔 대표번호로 통화해 재직 확인')
     ok('summary ok','모두 충족' in pg.inner_text('#chkSum'))
-    pg.click('[data-to=approved]'); pg.wait_for_timeout(100); ok('p19 approved','승인' in pg.inner_text('.dh .chip') and '시스템이 결과 메일을 보냅니다' in toast(pg))
+    pg.click('[data-to=approved]'); pg.wait_for_selector('.dlg #cmRate',timeout=3000); ok('p19 approval opens rate dialog','5~20%' in pg.inner_text('#cmHint') and pg.get_attribute('#cmRate','step')=='0.5')
+    pg.fill('#cmRate',''); pg.click('.dlg [data-x=ok]'); ok('rate required','요율' in pg.inner_text('.dlg-err'),pg.inner_text('.dlg-err'))
+    pg.fill('#cmRate','10'); pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(100); ok('p19 approved','승인' in pg.inner_text('.dh .chip') and '시스템이 결과 메일을 보냅니다' in toast(pg))
+    ok('p19 approved with 10% proposal, 동의 대기','동의 대기' in pg.inner_text('.dh') and '10%' in pg.inner_text('#cmSection'),pg.inner_text('.dh'))
     ok('p19 approved -> suspend only',pg.eval_on_selector_all('#tbtns [data-to]','e=>e.map(x=>x.dataset.to)')==['suspended'])
     ok('history appended','승인' in pg.inner_text('#histTable'))
     # p22 reject

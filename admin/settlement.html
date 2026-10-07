@@ -31,8 +31,9 @@ A.boot('settlements','정산 상세',function(main){
   function ts(v){return v==null?null:(typeof v==='number'?v:Date.parse(v));}
   function dt(v){var m=ts(v);return m?A.fmtDT(m):'—';}
   function d(v){var m=ts(v);return m?A.fmtD(m):'—';}
+  var FLAG_KO={hotel_unreviewed:'호텔 사후검토 필요',rate_deviation:'합의 요율과 다름',no_agreed_rate:'합의 요율 없음'};
   function header(){
-    var flags=(s.flags||[]).map(function(f){return '<span class="badge amber">'+esc(f==='hotel_unreviewed'?'호텔 사후검토 필요':f)+'</span>';}).join(' ');
+    var flags=(s.flags||[]).map(function(f){return '<span class="badge amber">'+esc(FLAG_KO[f]||f)+'</span>';}).join(' ');
     return '<p class="crumb"><a href="settlements.html">← 정산</a></p><div class="dh"><h1 class="mono">'+esc(s.ref)+'</h1>'+P.stChip(s.status)+flags+'<div class="dh-act"><a class="btn" href="rfp.html?id='+esc(s.rfpId)+'">요청 '+esc(s.rfpId)+'</a><a class="btn" href="settlements.html">목록으로</a></div></div>';
   }
   function side(){
@@ -47,7 +48,7 @@ A.boot('settlements','정산 상세',function(main){
   }
   function moneyCard(){
     var c=s.hotelCurrency;
-    return '<section class="card" aria-labelledby="h-m"><h2 id="h-m">금액 · '+esc(c||'')+'</h2><dl class="kv"><dt>계약 금액</dt><dd>'+P.fmtMoney(s.contractAmount,c)+'</dd><dt>커미션</dt><dd>'+P.fmtMoney(s.commissionAmount,c)+(s.commissionBasis==='rate'?' <span class="small muted">요율 '+s.commissionRatePct+'%</span>':s.commissionBasis==='fixed'?' <span class="small muted">정액</span>':'')+(s.commissionRejectReason?'<div class="small warn-cell">반려 사유: '+esc(s.commissionRejectReason)+'</div>':'')+'</dd><dt>파트너 몫</dt><dd>'+P.fmtMoney(s.partnerShareAmount,c)+'</dd><dt>MICEGO 몫</dt><dd><b>'+P.fmtMoney(s.micegoShareAmount,c)+'</b></dd>'+
+    return '<section class="card" aria-labelledby="h-m"><h2 id="h-m">금액 · '+esc(c||'')+'</h2><dl class="kv"><dt>합의 요율</dt><dd id="agreedRate">'+(s.agreedRatePct!=null?'<b>'+esc(s.agreedRatePct)+'%</b> <span class="small muted">기준: 객실 + 연회·F&amp;B 순액(세금·봉사료 제외)'+(s.commissionTermsVersion?' · 약관 '+esc(s.commissionTermsVersion):'')+' · 성사 시점 기준으로 고정</span>':'<span class="warn-cell">기록 없음</span> <span class="small muted">합의 요율이 기록되지 않은 건입니다</span>')+'</dd><dt>계약 금액 <span class="small muted">(순액: 세금·봉사료 제외)</span></dt><dd>'+P.fmtMoney(s.contractAmount,c)+'</dd><dt>커미션</dt><dd>'+P.fmtMoney(s.commissionAmount,c)+(s.commissionBasis==='rate'?' <span class="small muted">요율 '+s.commissionRatePct+'%</span>':s.commissionBasis==='fixed'?' <span class="small muted">정액</span>':'')+(s.commissionRejectReason?'<div class="small warn-cell">반려 사유: '+esc(s.commissionRejectReason)+'</div>':'')+'</dd><dt>파트너 몫</dt><dd>'+P.fmtMoney(s.partnerShareAmount,c)+'</dd><dt>MICEGO 몫</dt><dd><b>'+P.fmtMoney(s.micegoShareAmount,c)+'</b></dd>'+
       '<dt>수금</dt><dd>'+(s.collectedAt?dt(s.collectedAt)+' · '+P.fmtMoney(s.collectedAmount,c):'<span class="muted">미기록</span>')+'</dd>'+
       '<dt>송금</dt><dd>'+(s.remittedAt?dt(s.remittedAt)+' · '+P.fmtMoney(s.remitActual,s.remitCurrency)+' <span class="small muted">환율 '+esc(String(s.fxRate||''))+(s.fxRateSource?' ('+esc(s.fxRateSource)+')':'')+' · 예상 '+P.fmtMoney(s.remitExpected,s.remitCurrency)+(s.remitReference?' · 참조 '+esc(s.remitReference):'')+'</span>':'<span class="muted">미기록</span>')+'</dd>'+
       '<dt>입금 확인</dt><dd>'+(s.receivedAt?dt(s.receivedAt)+' · '+P.fmtMoney(s.receivedAmount,s.remitCurrency):'<span class="muted">—</span>')+'</dd>'+

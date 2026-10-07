@@ -29,7 +29,7 @@ python3 supabase/scripts/sync_templates.py   # Edge Function 템플릿(templates
 # 검증 11종 — 전부 FAILS 0 이어야 한다
 for v in verify2 verify3 verify_acc verify_launch verify_api verify_feedback verify_admin verify_admin_ops verify_admin_members verify_admin_feedback verify_admin_partner; do python3 $v.py | tail -1; done
 
-# 백엔드(PostgreSQL 16 + Deno) — PASS=13 FAIL=0
+# 백엔드(PostgreSQL 16 + Deno) — PASS=14 FAIL=0
 MG_PGBIN=/usr/lib/postgresql/16/bin MG_DENO_BIN=$(which deno) bash supabase/tests/run.sh
 ```
 
@@ -40,10 +40,10 @@ MG_PGBIN=/usr/lib/postgresql/16/bin MG_DENO_BIN=$(which deno) bash supabase/test
 ## 편집 규칙
 
 1. **`ko/`·`en/`·`index.html`·`404.html`·`assets/config.js`·`emails/`·`docs/sitemap.*`·`docs/notification-*`는 생성물** — 손으로 고치지 말고 `build*.py`·`src/`를 고친 뒤 재생성.
-2. **약관·개인정보처리방침 원문은 `legal/*.json`뿐**. HTML이 아니라 JSON(또는 `site.config.json`의 `operator`·`legal`·`sms` 블록)을 고친다. 검토 쟁점 18곳은 `legal/REVIEW_NOTES.md`(본문 표시는 한국어 `[법무 검토]`, 영어 `[legal review]`).
+2. **약관·개인정보처리방침 원문은 `legal/*.json`뿐**. HTML이 아니라 JSON(또는 `site.config.json`의 `operator`·`legal`·`sms` 블록)을 고친다. 검토 쟁점 31곳은 `legal/REVIEW_NOTES.md`(본문 표시는 한국어 `[법무 검토]`, 영어 `[legal review]`).
 3. **운영 콘솔 `admin/*.html`·`admin/*.js`는 직접 편집**(생성기 아님). mock/api 이중 모드 — `?as=partner`로 파트너 화면 시연.
 4. `site.config.json`이 도메인·공식 메일·사업자 정보·Supabase 키·GA4를 채우는 **유일한 설정 파일**. 실제 키·시크릿은 커밋하지 않는다(시크릿은 `supabase secrets`, 예시는 `.env.example`).
-5. 마이그레이션은 번호 순서(`supabase/migrations/00NN_*.sql`). 이미 적용된 파일은 고치지 말고 새 번호로 추가. enum 값 추가는 단독 파일.
+5. `partners` 테이블은 0017부터 **열 단위 SELECT 권한**이다 — 새 컬럼을 추가하면 같은 마이그레이션에서 `grant select (새컬럼) on partners to authenticated`를 넣어야 콘솔에서 보인다(요율 토큰·IP 해시 컬럼은 일부러 제외). 마이그레이션은 번호 순서(`supabase/migrations/00NN_*.sql`). 이미 적용된 파일은 고치지 말고 새 번호로 추가. enum 값 추가는 단독 파일.
 6. RFP 상태는 전이 RPC로만 바꾼다. SQL로 직접 상태를 바꾸는 코드·절차를 만들지 않는다(이력·알림 누락).
 7. 오거나이저 신원(회사명·담당자·연락처·예산)은 선정 전 호텔에 절대 노출되지 않는다. 호텔 화면·메일·요건서에 새 필드를 넣을 때 확인.
 8. JS 미실행 환경에서도 핵심 콘텐츠가 보여야 한다(진입 애니메이션은 `js-anim` 부모 클래스 + 세이프티넷).
@@ -52,8 +52,8 @@ MG_PGBIN=/usr/lib/postgresql/16/bin MG_DENO_BIN=$(which deno) bash supabase/test
 
 ## 알려진 공백 (2026-09-28 이관 시점)
 
-- **Turnstile 스팸 방어 + 운영자 대리 확정 동의 기록 작업이 이 저장소에 없다.** 프로젝트 문서(진행 현황·오픈 체크리스트·장애 런북·운영자 온보딩 v1.1)는 `supabase/migrations/0010_selection_consent.sql`, `_shared/turnstile.ts`, 상태전이표 v1.8, 사이트맵 v1.4, 백엔드 테스트 PASS=14를 전제로 쓰였지만, 해당 코드는 PC 폴더에 저장되지 않은 채 다른 세션에만 남아 있었다. 되찾으면 **`0010`이 이미 지역 파트너 마이그레이션이므로 `0017_selection_consent.sql`로 번호를 바꿔** 넣고 테스트를 다시 돌린다. 그 전까지 `docs/*.md`(v1.0)와 `knowledge/project-docs/`의 v1.1 문서는 버전이 어긋난다.
-- 법무 검토 18곳, 사업자 정보·도메인·공식 메일, Supabase 리전, 비회원 요청 30일 파기 작업(system_tick) — `HANDOFF.md`·진행 현황 §3~§5.
+- **Turnstile 스팸 방어 + 운영자 대리 확정 동의 기록 작업이 이 저장소에 없다.** 프로젝트 문서(진행 현황·오픈 체크리스트·장애 런북·운영자 온보딩 v1.1)는 `supabase/migrations/0010_selection_consent.sql`, `_shared/turnstile.ts`, 상태전이표 v1.8(이 저장소의 `docs/state-transitions.html`은 v1.9로 v1.8을 건너뜀), 사이트맵 v1.4, 백엔드 테스트 PASS=14(당시 기준)를 전제로 쓰였지만, 해당 코드는 PC 폴더에 저장되지 않은 채 다른 세션에만 남아 있었다. 되찾으면 **`0010`·`0017`이 이미 쓰였으므로 `0018_selection_consent.sql`로 번호를 바꿔(0017은 호텔 커미션)** 넣고 테스트를 다시 돌린다. 그 전까지 `docs/*.md`(v1.0)와 `knowledge/project-docs/`의 v1.1 문서는 버전이 어긋난다.
+- 법무 검토 31곳, 사업자 정보·도메인·공식 메일, Supabase 리전, 비회원 요청 30일 파기 작업(system_tick) — `HANDOFF.md`·진행 현황 §3~§5.
 
 ## 저장소 구조
 

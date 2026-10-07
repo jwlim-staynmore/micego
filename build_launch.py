@@ -127,7 +127,7 @@ TERMS_EN_BODY = (
   '<h2>6. Organizer identity</h2><p>The organizer’s company name and budget are withheld from the request brief. Likewise, your property name is not shown to the organizer in the comparison sheet — it is disclosed only if the organizer selects your proposal.</p>'
   '<h2>7. Quote accuracy and validity</h2><p>Rates, availability and terms you submit should be accurate, and should remain valid until at least the date you state, which must be no earlier than 2 business days after the request’s deadline.</p>'
   '<h2>8. Selection result and connection</h2><p>If selected, MICEGO introduces you to the organizer by email so you can connect and continue directly. If not selected, we notify you of the result only — no organizer details are shared.</p>'
-  '<h2>9. Contracts and payment</h2><p>Any booking contract, deposit and payment terms are agreed directly between you and the organizer. MICEGO is not a party to that contract and does not process payments; MICEGO charges no commission to either side.</p>'
+  '<h2>9. Contracts and payment</h2><p>Any booking contract, deposit and payment terms are agreed directly between you and the organizer. MICEGO is not a party to that contract and does not process payments. MICEGO charges the hotel a commission on confirmed bookings at the rate agreed with you when you are approved; the rate is not shown to organizers.</p>'
   '<h2>10. Contact</h2><p>Questions about these terms: <a href="mailto:mysteri1984@gmail.com">mysteri1984@gmail.com</a>.</p>'
   '<!-- TODO(operator): legal entity name, representative, business registration number, address, privacy officer -- fill in once confirmed -->'
   '</div></div>')
@@ -199,6 +199,12 @@ wr('en/unsubscribe.html', app_page('en', 'Unsubscribe | MICEGO Partner',
     'Stop MICEGO invitation emails for your property.', 'en/unsubscribe.html', UNSUB_BODY, token=True,
     state_head=STATE_HEAD(UNSUB_STATES, 'confirm'), cur='en', ko_href='../ko/index.html', en_href='index.html',
     script=UNSUB_JS))
+
+# ---- token pages derived from en/unsubscribe.html (head/header/footer reused, body and script swapped).
+# They must run here, before the head-tag pass below, so config.js/mg.js/feedback wiring is applied to them like every other page.
+import subprocess as _sp, sys as _sys
+for _gen in ('build_confirm.py', 'build_commission.py'):
+    _sp.run([_sys.executable, os.path.join(_SITE_DIR, _gen)], cwd=_SITE_DIR, check=True)
 
 # ============================================================== 5. head tags: config.js/mg.js + icon links (every generated page)
 ALL_HTML_NO_404 = ['index.html'] + sorted(glob.glob('ko/*.html')) + sorted(glob.glob('en/*.html'))
@@ -469,7 +475,7 @@ if not DEMO:
 _robots = ['User-agent: *', 'Disallow: /admin/', 'Disallow: /docs/', 'Disallow: /emails/',
            'Disallow: /ko/track.html', 'Disallow: /ko/my.html', 'Disallow: /ko/account.html',
            'Disallow: /ko/withdraw.html', 'Disallow: /ko/reset.html', 'Disallow: /en/bid.html',
-           'Disallow: /en/unsubscribe.html', 'Disallow: /404.html']
+           'Disallow: /en/unsubscribe.html', 'Disallow: /en/confirm.html', 'Disallow: /en/commission.html', 'Disallow: /404.html']
 if CFG.get('domain'):
     _robots.append('Sitemap: %s/sitemap.xml' % SITE_BASE)
 else:
@@ -513,7 +519,7 @@ _GLOBAL_HEADERS = [
     ('Cross-Origin-Opener-Policy', 'same-origin'),
     ('Content-Security-Policy', _CSP),
 ]
-_TOKEN_PAGES = ['/ko/track.html', '/en/bid.html', '/ko/reset.html', '/en/unsubscribe.html', '/ko/my.html', '/ko/account.html', '/ko/withdraw.html']
+_TOKEN_PAGES = ['/ko/track.html', '/en/bid.html', '/ko/reset.html', '/en/unsubscribe.html', '/en/confirm.html', '/en/commission.html', '/ko/my.html', '/ko/account.html', '/ko/withdraw.html']
 _TOKEN_HEADERS = [('Referrer-Policy', 'no-referrer'), ('Cache-Control', 'no-store'), ('X-Robots-Tag', 'noindex, nofollow')]
 _NOINDEX_SECTIONS = ['/admin/*', '/docs/*', '/emails/*']
 _NOINDEX_HEADERS = [('X-Robots-Tag', 'noindex'), ('Cache-Control', 'no-store')]

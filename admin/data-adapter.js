@@ -21,6 +21,7 @@ window.MGA = (function () {
   var ROLE_KEY = 'micego_admin_role';
   var DEMO_CLOCK = Date.parse('2026-10-08T19:30:00+09:00');
   var _accessToken = null;
+  var _settings = null;
 
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
   function parseJsonSafe(t) { if (!t) return {}; try { return JSON.parse(t); } catch (e) { return {}; } }
@@ -157,6 +158,14 @@ window.MGA = (function () {
     },
 
     now: function () { return hasApi ? Date.now() : DEMO_CLOCK; },
+
+    /* 콘솔 설정(console_settings): 커미션 허용 범위 commission_rate_range 등. 한 번 불러와 캐시한다.
+     * mock 모드는 데모 값. 실패하면 캐시하지 않아 다음 호출에서 다시 시도한다. */
+    settings: function () {
+      if (_settings) return Promise.resolve(_settings);
+      if (!hasApi) { _settings = { commission_rate_range: [5, 20] }; return Promise.resolve(_settings); }
+      return rpc('console_settings', {}).then(function (s) { _settings = s || {}; return _settings; });
+    },
 
     /* ---------- 피드백 콘솔 (SPEC_FEEDBACK.md §5, WP-F3). mock 모드에서는 사용하지 않는다(admin.js 의
      * A.data().feedback 을 직접 읽고 A.persist 로 반영). api 모드에서만 호출된다. */

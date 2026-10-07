@@ -302,7 +302,7 @@ def page(lang, title, desc, path, body, cur, brand_href):
     cls = 'is-current'
     h = h.replace('<a href="index.html" lang="ko"', f'<a href="index.html" lang="ko" class="{cls}"', 1) if ko else h.replace('<a href="index.html" lang="en" hreflang="en">', f'<a href="index.html" lang="en" hreflang="en" class="{cls}">', 1)
     if ko:
-        f = footer('ko', '해외 MICE 호텔 역경매 플랫폼', '해외 호텔 대상 · 수수료 없음 · 영업일 3일 이내 회신 · 요건서에 회사명·예산 미포함.', [('index.html', '여행사 모드', ''), ('privacy.html', '개인정보처리방침', '')],
+        f = footer('ko', '해외 MICE 호텔 역경매 플랫폼', '해외 호텔 대상 · 주최 측 수수료 없음 · 영업일 3일 이내 회신 · 요건서에 회사명·예산 미포함.', [('index.html', '여행사 모드', ''), ('privacy.html', '개인정보처리방침', '')],
                    '<div class="footer-modes"><a href="../en/index.html" lang="en" hreflang="en">Hotels (English) →</a><a href="../index.html">모드 선택 · <span lang="en">Choose mode</span></a></div>', '마이스고')
     else:
         f = footer('en', 'Overseas MICE hotel sourcing for Korean organizers.', 'No listing fee · You choose which requests to quote on · Confirmed-date requests only · Organizer identity withheld.', [('index.html', 'Hotel mode', ''), ('privacy.html', 'Privacy', '')],

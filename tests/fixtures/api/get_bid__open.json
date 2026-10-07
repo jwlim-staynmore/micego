@@ -8,6 +8,10 @@
       "contact_name": "Test Contact",
       "email": "test@example.com",
       "phone": "010-0000-0000"
+    },
+    "commission": {
+      "rate_pct": 12.5,
+      "basis": "rooms_fnb_net"
     }
   }
 }

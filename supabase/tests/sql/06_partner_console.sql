@@ -89,11 +89,33 @@ begin
   begin perform admin_partner_transition(j->>'id', 'approved'); raise exception 'risky hotel must not be partner-approved'; exception when others then if sqlerrm not like 'MG:HOTEL_RISK_HQ_ONLY%' then raise; end if; end;
   -- 정상 호텔 승인 (지역 내)
   perform admin_partner_update(hcode, '{"check":{"exists":true,"capOk":true,"contactOk":true}}'::jsonb);
-  j := admin_partner_transition(hcode, 'approved');
+  -- 승인에는 커미션 요율이 필수(0017)
+  begin perform admin_partner_transition(hcode, 'approved'); raise exception 'approval without rate must fail'; exception when others then if sqlerrm not like 'MG:COMMISSION_RATE_REQUIRED%' then raise; end if; end;
+  j := admin_partner_transition(hcode, 'approved', null, null, null, 10);
   if j->>'status' <> 'approved' or j->>'approvedVia' <> 'partner' or (j->>'hqReviewedAt') is not null then raise exception 'partner approval wrong: %', j; end if;
-  -- verifying → open → 초대 → bidding
+  if (j->'commission'->>'status') <> 'pending' or (j->'commission'->>'pendingRatePct')::numeric <> 10 or (j->'commission'->>'acceptedAt') is not null then raise exception 'commission pending wrong: %', j->'commission'; end if;
+  -- verifying → open → 합의 전 초대는 막힌다
   perform admin_rfp_update('MG-TEST-PT1', jsonb_build_object('anonReviewed', true, 'deadline', (now() + interval '5 days')::text));
   perform admin_transition('MG-TEST-PT1', 'open');
+  begin perform admin_invite('MG-TEST-PT1', array[hcode]); raise exception 'invite before agreement must fail'; exception when others then if sqlerrm not like 'MG:COMMISSION_NOT_AGREED%' then raise; end if; end;
+  raise notice 'PASS hotel register/approve with rate (invite blocked before agreement)';
+end $$;
+reset role; reset request.jwt.claims;
+-- 호텔이 승인 메일의 링크로 동의 (service role 경로 = private 함수). 토큰 원문은 알림 큐에서 꺼낸다.
+do $$
+declare raw text; j jsonb;
+begin
+  select l.vars->>'COMMISSION_TOKEN' into raw from notification_log l join partners p on p.id = l.partner_id where p.name = 'Riverside Bangkok' and l.template_id = 'PTN_APPROVED';
+  if coalesce(raw,'') = '' then raise exception 'PTN_APPROVED must carry COMMISSION_TOKEN'; end if;
+  j := private.partner_commission_apply(raw, 'iphash-test');
+  if (j->>'ok') <> 'true' then raise exception 'commission accept failed: %', j; end if;
+end $$;
+select set_config('request.jwt.claims', json_build_object('role','authenticated','sub', user_id::text)::text, false) from console_user where email = 'pa1@tmthai.example';
+set role authenticated;
+do $$
+declare j jsonb; hcode text; inv_id uuid; qid uuid;
+begin
+  select code into hcode from partners where name = 'Riverside Bangkok';
   j := admin_invite('MG-TEST-PT1', array[hcode]);
   if jsonb_array_length(j->'invitations') <> 1 then raise exception 'invite failed: %', j->'invitations'; end if;
   inv_id := (j->'invitations'->0->>'id')::uuid;

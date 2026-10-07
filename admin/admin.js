@@ -126,7 +126,7 @@
    * ack 만 돌려주는 RPC(admin_link_decide, admin_holiday_*, admin_delivery_resolve, admin_resend,
    * admin_member_action)는 localFn 을 그대로 재생해 로컬 상태를 맞춘다. */
   var RFP_REPLACE_OPS = { admin_transition: 1, admin_rfp_update: 1, admin_invite: 1, admin_reinvite: 1, admin_mark_selection: 1, admin_quote_update: 1, admin_invitation_flag: 1, admin_add_note: 1 };
-  var PARTNER_REPLACE_OPS = { admin_partner_transition: 1, admin_partner_update: 1 };
+  var PARTNER_REPLACE_OPS = { admin_partner_transition: 1, admin_partner_update: 1, partner_commission_resend: 1 };
   var PARTNER_HOTEL_OPS = { partner_hotel_register: 1 };
   var RFP_WRAPPED_OPS = { rfp_assign: 1, rfp_hold: 1, rfp_set_region: 1, rfp_takeover: 1, rfp_release: 1 };
   var RFP_PLAIN_OPS = { partner_quote_proxy_enter: 1, partner_quote_proxy_resend: 1 };
@@ -155,9 +155,15 @@
       if (typeof A.onChange === 'function') A.onChange();
       return true;
     }, function (err) {
-      A.toast((err && (err.message || err.message_ko)) || '처리하지 못했습니다', 'error');
+      A.toast((err && (CM_ERR[err.code] || err.message || err.message_ko)) || '처리하지 못했습니다', 'error');
       return false;
     });
+  };
+  /* 커미션 관련 서버 오류 코드 → 콘솔 안내문 (원문 'MG:…' 이 그대로 보이지 않게) */
+  var CM_ERR = {
+    COMMISSION_NOT_AGREED: '요율에 동의한 호텔이 없어 초대할 수 없습니다. 호텔이 동의 링크를 누른 뒤에 초대해 주세요.',
+    COMMISSION_OUT_OF_RANGE: '허용 범위를 벗어난 요율입니다. 범위 밖 요율은 본사에 요청해 주세요.',
+    COMMISSION_RATE_REQUIRED: '승인하려면 커미션 요율을 입력해 주세요.'
   };
 
   /* ---------- 파생값 ---------- */
@@ -290,17 +296,75 @@
   };
   var PREJECT = ['국내 소재', '단체 50명 미만', '연락처 확인 불가', '실재 확인 불가', '기타'];
   var PSUSPEND = ['3회 연속 무응답', '반복 부정확 견적', '기타'];
+  /* ---------- 호텔 커미션(호텔별 고정 요율) — 설계서 hotel-commission-design-v1 §4 ----------
+   * 요율은 승인할 때 제안하고, 호텔이 메일 링크에서 동의해야 합의(commission.ratePct)가 됩니다. 합의 전에는 견적 초대가 막힙니다. */
+  A.tms = function (v) { return v == null ? null : (typeof v === 'number' ? v : Date.parse(v)); };
+  A.commissionOf = function (p) { return p.commission || { status: 'none', ratePct: null, history: [] }; };
+  A.commissionAgreed = function (p) { var c = A.commissionOf(p); return c.ratePct != null && !!c.acceptedAt; };
+  /* 승인·중지 호텔의 합의 상태 배지. 반환: null | { text, cls, title } */
+  A.commissionBadge = function (p) {
+    if (p.status !== 'approved' && p.status !== 'suspended') return null;
+    var c = A.commissionOf(p), pend = c.pendingRatePct != null && !c.tokenUsedAt;
+    if (pend) return { text: '동의 대기', cls: 'amber', title: c.status === 'expired' ? '동의 링크가 만료됐습니다. 다시 보내 주세요.' : '호텔이 메일 링크에서 요율 ' + c.pendingRatePct + '%에 동의하기를 기다리는 중입니다.' };
+    if (!A.commissionAgreed(p)) return { text: '요율 합의 필요', cls: 'red', title: '요율에 합의하기 전에는 견적 초대를 보낼 수 없습니다.' };
+    return null;
+  };
+  A.commissionBadgeHtml = function (p) { var b = A.commissionBadge(p); return b ? '<span class="badge ' + b.cls + '" title="' + esc(b.title) + '">' + b.text + '</span>' : ''; };
+  A.commissionRange = function () {
+    return MGA.settings ? MGA.settings().then(function (st) {
+      var r = st && st.commission_rate_range; return (r && r.length === 2 && isFinite(r[0]) && isFinite(r[1])) ? [Number(r[0]), Number(r[1])] : [5, 20];
+    }, function () { return [5, 20]; }) : Promise.resolve([5, 20]);
+  };
+  /* 요율 입력 다이얼로그. 파트너는 범위 밖 요율을 저장할 수 없고, 운영자는 범위 밖일 때 사유가 필수. 취소하면 null, 아니면 { rate, reason } */
+  A.commissionDialog = async function (p, o) {
+    var rng = await A.commissionRange(), lo = rng[0], hi = rng[1], isOp = A.isOperator();
+    var hint = isOp ? '기본 범위는 ' + lo + '~' + hi + '%입니다. 범위 밖 요율은 사유를 남겨야 하고, 이력에 본사 예외로 기록됩니다.' : '지역 파트너는 ' + lo + '~' + hi + '% 안에서 정할 수 있습니다. 범위 밖 요율은 본사에 요청해 주세요.';
+    return A.dialog({
+      title: o.title, ok: o.ok || '저장하고 진행',
+      body: '<p class="muted">' + esc(o.help) + '</p><dl class="kv"><dt>산정 기준</dt><dd>객실 + 연회·F&amp;B 순액 (세금·봉사료 제외)</dd></dl>' +
+        '<label class="lbl" for="cmRate">' + esc(p.name) + ' 커미션 요율 (%)</label><input id="cmRate" class="inp" type="number" min="0.5" max="50" step="0.5" inputmode="decimal" value="' + esc(o.def == null ? '' : o.def) + '" data-lo="' + lo + '" data-hi="' + hi + '">' +
+        '<p class="small muted" id="cmHint">' + esc(hint) + '</p>' +
+        (isOp ? '<label class="lbl" for="cmReason">범위 밖 요율 사유 (범위 밖일 때 필수)</label><textarea id="cmReason" class="inp" rows="2"></textarea>' : ''),
+      collect: function (d) {
+        var raw = d.querySelector('#cmRate').value.trim(), rate = Number(raw);
+        if (!raw || !isFinite(rate) || rate <= 0 || rate > 50) return '요율을 0보다 크고 50 이하인 숫자로 입력해 주세요';
+        var out = rate < lo || rate > hi, rs = isOp ? d.querySelector('#cmReason').value.trim() : '';
+        if (out && !isOp) return '요율은 ' + lo + '~' + hi + '% 안에서만 정할 수 있습니다. 범위 밖 요율은 본사에 요청해 주세요';
+        if (out && !rs) return '범위(' + lo + '~' + hi + '%) 밖 요율은 사유를 적어 주세요';
+        return { rate: rate, reason: out ? rs : null };
+      }
+    });
+  };
+  /* mock 모드 재생: 요율 제안(승인·요율 변경 공통). 서버 partner_commission_propose 와 같은 결과 모양 */
+  var CM_TERMS = 'PT-2026-10', CM_HOURS = 168;
+  A.commissionLocal = function (p, rate, reason) {
+    var c = p.commission = A.commissionOf(p), me = A.me || { role: 'operator' }, rng = [5, 20];
+    var out = rate < rng[0] || rate > rng[1];
+    S.tick += 1; var t = NOW + S.tick * 60000;
+    c.pendingRatePct = rate; c.pendingReason = reason || null; c.setByRole = me.role; c.setAt = t;
+    c.tokenSentAt = t; c.tokenExpiresAt = t + CM_HOURS * HOUR; c.tokenUsedAt = null; c.sendCount = 1; c.status = 'pending'; c.basis = c.basis || 'rooms_fnb_net';
+    c.history = (c.history || []).concat([{ t: t, action: 'proposed', ratePct: rate, prevRatePct: c.ratePct == null ? null : c.ratePct, basis: c.basis, termsVersion: CM_TERMS, actorRole: me.role, reason: reason || null, hqOverride: out && me.role === 'operator' }]);
+  };
   A.partnerRequest = async function (id, action) {
     var p = A.partner(id); if (!p || A.pallowed(p).indexOf(action) < 0) return false;
-    var from = p.status, memo = '', tail = '', reasonVal = null, noteVal = null;
+    var from = p.status, memo = '', tail = '', reasonVal = null, noteVal = null, rateVal = null, cmReasonVal = null;
     if (action === 'approved' && from === 'suspended') {
       var m = await A.memoDialog('재승인', '답신 내용', '호텔에서 받은 답신의 요지를 적어 주세요. 이력에 남습니다.', '재승인하기', true);
       if (m === null) return false;
       memo = '답신: ' + m; tail = ' · 시스템이 결과 메일을 보냅니다';
+      /* 합의 요율이 이미 있으면 그대로 유지(다이얼로그 없음). 합의한 적이 없으면 승인과 같이 요율을 받는다 */
+      if (!A.commissionAgreed(p)) {
+        var cm0 = await A.commissionDialog(p, { title: '재승인 · 커미션 요율', help: '이 호텔은 아직 요율에 합의한 적이 없습니다. 요율을 정하면 호텔에 동의 링크가 나갑니다. 동의 전에는 견적 초대를 보낼 수 없습니다.', def: 10 });
+        if (!cm0) return false;
+        rateVal = cm0.rate; cmReasonVal = cm0.reason;
+      }
     } else if (action === 'approved') {
       var miss = A.partnerChecks(p).missing;
       if (miss.length) { A.toast('승인하려면 다음을 채워 주세요: ' + miss.join(', '), 'error'); return false; }
-      memo = '체크리스트 완료'; tail = ' · 시스템이 결과 메일을 보냅니다';
+      var cm1 = await A.commissionDialog(p, { title: '승인 · 커미션 요율', help: '이 호텔이 성사된 모든 건에 적용할 고정 요율입니다. 승인 메일에 동의 링크가 함께 나가며, 호텔이 동의해야 견적 초대를 보낼 수 있습니다.', def: 10 });
+      if (!cm1) return false;
+      rateVal = cm1.rate; cmReasonVal = cm1.reason;
+      memo = '체크리스트 완료 · 커미션 ' + rateVal + '% 제안' + (cmReasonVal ? ' (범위 밖: ' + cmReasonVal + ')' : ''); tail = ' · 시스템이 결과 메일을 보냅니다';
     } else if (action === 'rejected') {
       var r = await A.reasonDialog('거절 사유', PREJECT); if (!r) return false;
       memo = r.reason + (r.note ? ' · ' + r.note : ''); tail = ' · 시스템이 결과 메일을 보냅니다';
@@ -313,10 +377,11 @@
     var localFn = function () {
       A.plog(p, '운영자', from, action, memo ? memo + tail : tail.replace(' · ', ''));
       p.status = action;
+      if (rateVal != null) A.commissionLocal(p, rateVal, cmReasonVal);
     };
-    var okP = await A.persist('admin_partner_transition', { p_code: id, p_action: action, p_reason: reasonVal, p_note: noteVal, p_memo: memo }, localFn);
+    var okP = await A.persist('admin_partner_transition', { p_code: id, p_action: action, p_reason: reasonVal, p_note: noteVal, p_memo: memo, p_commission_rate_pct: rateVal, p_commission_reason: cmReasonVal }, localFn);
     if (!okP) return false;
-    var msg = { reviewing: '심사중으로 바꿨습니다', approved: (from === 'suspended' ? '재승인했습니다' : '승인했습니다') + ' · 시스템이 결과 메일을 보냅니다', rejected: '거절했습니다 · 시스템이 결과 메일을 보냅니다', suspended: '중지했습니다 · 중지 안내 메일을 직접 보내세요' }[action];
+    var msg = { reviewing: '심사중으로 바꿨습니다', approved: (from === 'suspended' ? '재승인했습니다' : '승인했습니다') + ' · 시스템이 결과 메일을 보냅니다' + (rateVal != null ? ' (요율 ' + rateVal + '% 동의 링크 포함)' : ''), rejected: '거절했습니다 · 시스템이 결과 메일을 보냅니다', suspended: '중지했습니다 · 중지 안내 메일을 직접 보내세요' }[action];
     A.toast(msg, 'ok');
     A.refreshBadge();
     return true;
@@ -641,6 +706,12 @@
 
   /* ---------- 초대 ---------- 이제 두 함수 모두 Promise<boolean> 을 돌려준다 (A.persist 경유). */
   A.invite = function (r, hotelIds) {
+    /* 요율 합의 전 호텔은 초대하지 않는다. api 모드는 서버(admin_invite)가 같은 규칙으로 걸러 내고 전부 막히면 COMMISSION_NOT_AGREED */
+    var sent = hotelIds.filter(function (hid) { var hp = A.partner(hid); return hp && A.commissionAgreed(hp); });
+    if (MGA.mode !== 'api') {
+      if (hotelIds.length && !sent.length) { A.toast(CM_ERR.COMMISSION_NOT_AGREED, 'error'); return Promise.resolve(false); }
+      hotelIds = sent;
+    }
     var localFn = function () {
       var n = r.invitations.length;
       hotelIds.forEach(function (hid) {

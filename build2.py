@@ -778,7 +778,7 @@ def app_page(lang, title, desc, path, body, *, token=False, state_head='', top='
     ko = lang == 'ko'
     if ko:
         h = header('ko', 'index.html', 'MICEGO', None, nav, None if token else 'index.html#register', '견적 요청', '지금 견적 요청하기', ko_href, en_href, cur, '../index.html', '모드 선택 · <span lang="en">Choose mode</span>', solid=True, login='login.html')
-        foot = footer('ko', '해외 MICE 호텔 역경매 플랫폼', '해외 호텔 대상 · 수수료 없음 · 영업일 3일 이내 회신 · 요건서에 회사명·예산 미포함.', FL_KO_SUB, KO_MODES, '마이스고')
+        foot = footer('ko', '해외 MICE 호텔 역경매 플랫폼', '해외 호텔 대상 · 주최 측 수수료 없음 · 영업일 3일 이내 회신 · 요건서에 회사명·예산 미포함.', FL_KO_SUB, KO_MODES, '마이스고')
     else:
         h = header('en', 'index.html', 'MICEGO', None, nav, None if token else 'index.html#register', 'Register', 'Register your property', ko_href, en_href, cur, '../index.html', 'Choose mode · <span lang="ko">모드 선택</span>', solid=True)
         foot = footer('en', 'Overseas MICE hotel sourcing for Korean organizers.', 'No listing fee · You choose which requests to quote on · Confirmed-date requests only · Organizer identity withheld.', FL_EN_SUB, EN_MODES, 'Partner Network')
@@ -833,8 +833,8 @@ FORM = rep(FORM, '<input type="date" id="validUntil" name="validUntil">', '<inpu
 FORM = rep(FORM, 'Please enter a valid-until date.', 'Please keep the quote valid at least until Mon 12 Oct 2026.')
 CONSENT = 'I confirm the rates and terms above are accurate, accept the MICEGO <a href="index.html#terms" target="_blank" rel="noopener">partner terms</a>, and agree they may be shared with the organizer under reference MG-2610-014. My property name and contact details are disclosed to the organizer only if they select this proposal. See our <a href="privacy.html" target="_blank" rel="noopener">privacy notice</a>.'
 FORM = re.sub(r'<label for="consent">.*?</label>', lambda m: '<label for="consent">' + CONSENT + '</label>', FORM, count=1, flags=re.S)
-FORM = re.sub(r'<div class="submit-row">.*?</div>\s*</form>', lambda m: '<div class="submit-row"><p class="submit-note">You can revise your quote through this link until the deadline. Commercial terms for a confirmed booking are agreed with MICEGO before confirmation.</p><button type="submit" class="btn btn-accent">Review &amp; send quote</button></div>\n    </form>', FORM, count=1, flags=re.S)
-assert FORM.count('Commercial terms for a confirmed booking') == 1
+FORM = re.sub(r'<div class="submit-row">.*?</div>\s*</form>', lambda m: '<div class="submit-row"><p class="submit-note">You can revise your quote through this link until the deadline.<span id="cmNote" hidden></span></p><button type="submit" class="btn btn-accent">Review &amp; send quote</button></div>\n    </form>', FORM, count=1, flags=re.S)
+assert FORM.count('id="cmNote"') == 1
 FORM = FORM.replace('placeholder="e.g. Ocean Pearl Resort Da Nang"', 'placeholder="e.g. Ocean Pearl Resort Da Nang"')
 
 BID_LIVE = 'open submitted selected not_selected declined expired cancelled'
@@ -903,6 +903,14 @@ BID_JS = TERMINAL_JS(['selected', 'not_selected', 'declined', 'expired', 'cancel
           var og = resp.organizer;
           var map = {bidOrgCompany: og.company, bidOrgContact: og.contact_name, bidOrgEmail: og.email, bidOrgPhone: og.phone};
           Object.keys(map).forEach(function(k){document.querySelectorAll('[data-mg="'+k+'"]').forEach(function(x){x.textContent = map[k] || '';});});
+        }
+        // Hotel-only note: the commission rate agreed with this property (snapshot taken when the invitation was created). Hidden when null.
+        var cmEl = document.getElementById('cmNote');
+        if(cmEl){
+          if(resp.commission && resp.commission.rate_pct != null && isFinite(Number(resp.commission.rate_pct))){
+            cmEl.textContent = ' Your agreed commission: ' + Number(resp.commission.rate_pct) + '% of net booking value.';
+            cmEl.hidden = false;
+          } else { cmEl.textContent = ''; cmEl.hidden = true; }
         }
         H.setAttribute('data-state', resp.state);
         Object.assign(window.MICEGO_PAGE_STATE, {state: resp.state, rfpRef: resp.ref || null,
@@ -1338,7 +1346,7 @@ def faq_groups(groups):
 def jump(groups): return '<div class="faq-jump">' + ''.join('<a href="#%s">%s</a>' % (g, t) for g, t, _ in groups) + '</div>'
 
 KO_FAQ = [('g-terms', '이용 조건', [
- ('이용 요금이 있나요?', '여행사·기업 등 행사 주최 측은 별도의 수수료 없이 이용합니다. 호텔 계약과 결제는 선택한 호텔과 직접 진행합니다.'),
+ ('이용 요금이 있나요?', '여행사·기업 등 행사 주최 측이 MICEGO에 내는 수수료는 없습니다. MICEGO는 성사된 예약에 대해 호텔 파트너로부터 수수료를 받을 수 있고, 그 수준은 공개하지 않습니다. 호텔 계약과 결제는 선택한 호텔과 직접 진행합니다.'),
  ('어떤 행사를 요청할 수 있나요?', '일정이 확정된 해외 행사입니다. 인센티브 여행, 컨퍼런스, 기업 행사, 시상식 등이며 국내 행사는 지원하지 않습니다.'),
  ('행사 규모 제한이 있나요?', '최소 규모 제한은 없습니다. 필요한 객실 수와 연회장 규모에 맞는 호텔에 요청을 보냅니다.'),
  ('회사명과 예산이 호텔에 공개되나요?', '호텔에 보내는 요건서에는 회사명·예산·담당자 연락처가 들어가지 않습니다. 제안을 선택하시면 선정된 호텔에 회사명·담당자 이름·이메일·연락처가 전달되고, 선정되지 않은 호텔에는 결과만 알립니다.')]),
@@ -1387,7 +1395,7 @@ EN_FAQ = [('g-partner', 'Partner approval', [
  ('g-after', 'After you submit', [
  ('What does the organizer see?', 'Your rates, availability, ballroom details, inclusions, validity, cancellation policy and extra offers, side by side with other proposals. Your property appears as Proposal A, B or C with its star rating, area, distance to the beach, size and whether it is chain-affiliated. Your property name and contact details are disclosed only if the organizer selects your proposal. <a href="bid.html?t=demo-2610">See an example request page</a>'),
  ('How will I know if I was selected?', 'MICEGO emails every property that quoted once the organizer decides. If you are selected, you receive the organizer\'s company name and contact details, and we introduce you by email. If you are not selected, you receive the result only. If you quoted, the same link later shows the result too: "Selected" with the organizer\'s contact details, or "Not selected".'),
- ('What are the commercial terms?', 'There is no listing fee to register or to receive requests. Commercial terms for a confirmed booking are agreed with MICEGO before confirmation; our partnerships manager explains them when we are in touch.'),
+ ('What are the commercial terms?', 'There is no listing fee to register or to receive requests. MICEGO charges a commission on confirmed bookings only. The rate is set for your property when it is approved; you see it, and accept it with one click, in your approval email, and invitations start after you accept. It is calculated on the net contract value (rooms and banquet or F&amp;B, excluding taxes and service charges) and is not shown to organizers.'),
  ('Who do I ask about a request?', 'Use the contact page and include the reference code. MICEGO relays questions to the organizer, so every property quotes on the same information.')])]
 FAQ_EN_BODY = ('<div class="app-wrap narrow"><h1>Hotel partner FAQ</h1><p class="app-lead">Can\'t find your answer? <a class="tlink" href="contact.html">Contact us</a>.</p>' + jump(EN_FAQ) + faq_groups(EN_FAQ) + '</div>')
 wr('en/faq.html', app_page('en', 'Hotel partner FAQ | MICEGO Partner', 'How request links, deadlines, currencies, revisions and selection work for MICEGO partner hotels.', 'en/faq.html', FAQ_EN_BODY, nav=PUB_NAV_EN, cur='en', ko_href='../ko/faq.html', en_href='index.html', faq=True, cur_page='faq.html'))

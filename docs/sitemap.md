@@ -1,6 +1,6 @@
 # MICEGO 사이트맵 · 서비스 오픈 전 프론트엔드 점검 - 클로드
 
-v1.3 · 2026-09-27 · 페이지 41개 · 미구현 항목 47개 (A 오픈 차단 19 · B 오픈 전 필수 18 · C 오픈 직후 5 · D 결정 필요 5)
+v1.3 · 2026-09-27 · 페이지 42개 · 미구현 항목 47개 (A 오픈 차단 19 · B 오픈 전 필수 18 · C 오픈 직후 5 · D 결정 필요 5)
 
 ## 1. 페이지 목록
 
@@ -18,7 +18,7 @@ v1.3 · 2026-09-27 · 페이지 41개 · 미구현 항목 47개 (A 오픈 차단
 | `ko/about.html` | 서비스 소개 — 운영 방식·정책·운영사 소개 | 공개 | 색인 | — | 없음 |
 | `ko/faq.html` | 자주 묻는 질문 — 이용 조건·진행·회원 그룹 | 공개 | 색인 | — | 없음 |
 | `ko/contact.html` | 문의하기 — 문의 폼 + 메일 주소 | 공개 | 색인 | — | 폼 제출 API |
-| `ko/terms.html` | 이용약관(전문 초안) — legal/terms_ko.json 7장 23조 렌더링. 법무 검토 표시 18곳 중 7곳 | 공개 | 색인 | — | 없음 |
+| `ko/terms.html` | 이용약관(전문 초안) — legal/terms_ko.json 7장 23조 렌더링. 법무 검토 표시 31곳 중 8곳 | 공개 | 색인 | — | 없음 |
 | `ko/privacy.html` | 개인정보처리방침(전문 초안) — legal/privacy_ko.json 16조 렌더링. 보유 기간·제3자 제공·위탁·국외 이전·브라우저 저장 표 | 공개 | 색인 | — | 없음 |
 | `ko/track.html?t=…` | 견적 진행 상황(요청자 전용) — 접수→비교표→선정까지 상태별 화면, 제안 비교, 제안 선택(휴대전화 인증), 조건 변경, 동료 공유 링크 발급 | 토큰 링크 | noindex | 11 상태 + 공유 보기(?s=) | 토큰별 데이터, 선택 RPC, OTP, 공유 링크 |
 | `ko/signup.html` | 회원가입 — 기본 정보 → 이메일 인증번호 → 휴대전화 인증번호 3단계 | 공개 | 색인 | 12 상태 | 가입·인증 API |
@@ -35,6 +35,7 @@ v1.3 · 2026-09-27 · 페이지 41개 · 미구현 항목 47개 (A 오픈 차단
 | `en/index.html` | Partner landing + Register — Why partner·How it works·Sample·Partner terms(#terms)·FAQ, #register 파트너 등록 폼 | 공개 | 색인 | — | 폼 제출 API |
 | `en/sample-request.html` | Sample request — 호텔이 받게 될 요건서·견적 폼 예시 | 공개 | 색인 | — | 없음 |
 | `en/bid.html?t=…` | Request & quote(초대 호텔 전용) — 요건서 열람, 견적 제출, 거절, 결과 확인 | 토큰 링크 | noindex | 8 상태 | 토큰별 데이터, 견적 제출·거절 RPC |
+| `en/commission.html?t=…` | Accept commission terms(승인 호텔 전용) — 승인 메일의 1회용 링크. 합의 요율·산정 기준 확인 후 클릭 동의(POST). 동의 전에는 초대 불가 | 토큰 링크 | noindex | 5 상태 | 토큰별 lookup·동의 API(partner_commission_accept) |
 | `en/faq.html` | Hotel FAQ — 파트너 조건·비딩·선정 결과 | 공개 | 색인 | — | 없음 |
 | `en/contact.html` | Contact — 문의 폼 + 메일 주소 | 공개 | 색인 | — | 폼 제출 API |
 | `en/privacy.html` | Privacy notice(전문 초안) — legal/privacy_en.json 12항 렌더링. 호텔 파트너·주최 측 정보 처리 | 공개 | 색인 | — | 없음 |
@@ -59,7 +60,7 @@ v1.3 · 2026-09-27 · 페이지 41개 · 미구현 항목 47개 (A 오픈 차단
 
 | 경로 | 페이지 | 접근 | 색인 | 상태/변형 | 백엔드 연동 |
 |---|---|---|---|---|---|
-| `docs/state-transitions.html` | 상태전이표 v1.7 — RFP·초대·파트너·회원·공유 링크·피드백 상태 머신과 알림 ID | 내부 문서 | noindex | — | — |
+| `docs/state-transitions.html` | 상태전이표 v1.9 — RFP·초대(대리 입력)·파트너·커미션 합의·회원·공유 링크·피드백·위임·정산 상태 머신과 알림 ID | 내부 문서 | noindex | — | — |
 | `docs/notification-library.html` | 알림 라이브러리 — 이메일 29종·알림톡 9종·SMS 2종·운영자 수동 문안, JSON·CSV 동봉 | 내부 문서 | noindex | — | — |
 | `docs/sitemap.html` | 사이트맵 · 오픈 전 점검(이 문서) — 전체 페이지 목록과 미구현 항목 | 내부 문서 | noindex | — | — |
 | `docs/launch-checklist.html` | 오픈 당일 체크리스트 — D-7 · D-1 · D-day · 오픈 직후 1시간 · D+1 · 첫 주 확인 항목과 오픈 중단 기준 | 내부 문서 | noindex | — | — |
@@ -138,8 +139,8 @@ v1.3 · 2026-09-27 · 페이지 41개 · 미구현 항목 47개 (A 오픈 차단
 
 | 항목 | 현재 상태 | 오픈 조건 | 우선순위 | 담당 | 진행 |
 |---|---|---|---|---|---|
-| 이용약관 전문 | legal/terms_ko.json(23조)·partner_terms_en.json(20조) 초안 렌더링 완료. [법무 검토] 12곳 | 법무 검토 → legal/REVIEW_NOTES.md 항목 확정 → site.config.json legal.reviewed=true·effectiveDate 기재 | A 오픈 차단 | 법무 | 일부 구현 |
-| 개인정보처리방침 확정 | legal/privacy_ko.json·privacy_en.json 초안 렌더링 완료(이전 TODO(legal) 5건 모두 반영). [법무 검토] 6곳 + 결정 대기: 비회원 요청 30일 파기, 운영자 대리 확정 동의, Supabase 리전 | 법무 검토 + 운영 결정 → 파기 작업(system_tick) 추가 → legal.reviewed=true | A 오픈 차단 | 법무+BE | 일부 구현 |
+| 이용약관 전문 | legal/terms_ko.json(23조)·partner_terms_en.json(20조) 초안 렌더링 완료. [법무 검토] 18곳 | 법무 검토 → legal/REVIEW_NOTES.md 항목 확정 → site.config.json legal.reviewed=true·effectiveDate 기재 | A 오픈 차단 | 법무 | 일부 구현 |
+| 개인정보처리방침 확정 | legal/privacy_ko.json·privacy_en.json 초안 렌더링 완료(이전 TODO(legal) 5건 모두 반영). [법무 검토] 13곳 + 결정 대기: 비회원 요청 30일 파기, 운영자 대리 확정 동의, Supabase 리전 | 법무 검토 + 운영 결정 → 파기 작업(system_tick) 추가 → legal.reviewed=true | A 오픈 차단 | 법무+BE | 일부 구현 |
 | 사업자 정보 | 상호·대표자·사업자등록번호·주소·개인정보 보호책임자 미기재(TODO(operator) — about·privacy·terms) | 확정 후 푸터·약관·방침에 기재 | A 오픈 차단 | 운영 | 구현됨 · 설정 필요 |
 | 휴대전화 인증 범위 표기 | 소유 확인이며 본인확인 아님 — 약관·방침에 반영됨 | 법무 확인만 | B 오픈 전 필수 | 법무 | 외부 작업 |
 

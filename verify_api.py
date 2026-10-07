@@ -271,6 +271,21 @@ with sync_playwright() as pw:
     else:
         ok('bid: organizer-free ref code rendered')
     check_widths(page, errs, 'bid open')
+    note_txt = (page.text_content('#cmNote') or '').strip()
+    if page.is_hidden('#cmNote') or note_txt != 'Your agreed commission: 12.5% of net booking value.':
+        F('bid: #cmNote should show the agreed commission from get_bid view.commission, got %r (hidden=%s)' % (note_txt, page.is_hidden('#cmNote')))
+    else:
+        ok('bid: commission note rendered from get_bid view.commission')
+    ctx.close()
+
+    ctx, page, router, errs = new_ctx(browser)
+    router.set('get_bid', 'get_bid__open_no_commission')
+    page.goto(U('en/bid.html?t=trk_bid_test'))
+    page.wait_for_timeout(300)
+    if not page.is_hidden('#cmNote') or (page.text_content('#cmNote') or '').strip():
+        F('bid: #cmNote must stay hidden and empty when view.commission is null')
+    else:
+        ok('bid: commission note hidden when view.commission is null')
     ctx.close()
 
     ctx, page, router, errs = new_ctx(browser)
@@ -672,6 +687,64 @@ with sync_playwright() as pw:
         F('unsubscribe: could not find #unsubBtn')
     check_widths(page, errs, 'unsubscribe done')
     ctx.close()
+
+    # ============================================================== partner_commission_accept: lookup never consumes, accept is an explicit POST
+    for scenario, expect_state in (('pending', 'review'), ('used_status', 'used'), ('expired_status', 'expired'), ('invalid', 'invalid')):
+        ctx, page, router, errs = new_ctx(browser)
+        router.set('partner_commission_accept', 'partner_commission_accept__' + scenario)
+        page.goto(U('en/commission.html?t=commission_test_token'))
+        page.wait_for_timeout(250)
+        got = page.get_attribute('html', 'data-state')
+        if got != expect_state:
+            F('commission: scenario %s expected state %s, got %r' % (scenario, expect_state, got))
+        else:
+            ok('commission: %s renders the %s state' % (scenario, expect_state))
+        actions = [c.get('action') for c in router.calls_for('partner_commission_accept')]
+        if actions != ['lookup']:
+            F('commission: opening the page must only send action=lookup, got %r' % actions)
+        if scenario == 'pending':
+            if (page.text_content('[data-states~="review"] [data-mg="rate"]') or '').strip() != '12.5%':
+                F('commission: review state should show the rate from lookup')
+            if not page.is_disabled('#cmBtn'):
+                F('commission: Accept must be disabled until the checkbox is ticked')
+            page.check('#cmAgree', force=True)
+            if page.is_disabled('#cmBtn'):
+                F('commission: Accept should enable after the checkbox is ticked')
+            else:
+                ok('commission: Accept is gated by the checkbox')
+        ctx.close()
+
+    ctx, page, router, errs = new_ctx(browser)
+    router.set('partner_commission_accept', 'partner_commission_accept__pending', 'partner_commission_accept__accepted')
+    page.goto(U('en/commission.html?t=commission_test_token'))
+    page.wait_for_timeout(200)
+    page.check('#cmAgree', force=True)
+    page.click('#cmBtn')
+    page.wait_for_timeout(250)
+    if page.get_attribute('html', 'data-state') != 'done':
+        F('commission: accept should reach the done state, got %r' % page.get_attribute('html', 'data-state'))
+    else:
+        ok('commission: lookup -> accept -> done')
+    acts = [c.get('action') for c in router.calls_for('partner_commission_accept')]
+    if acts != ['lookup', 'accept']:
+        F('commission: expected lookup then accept, got %r' % acts)
+    check_widths(page, errs, 'commission done')
+    ctx.close()
+
+    for scenario, expect_state in (('token_used', 'used'), ('token_expired', 'expired')):
+        ctx, page, router, errs = new_ctx(browser)
+        router.set('partner_commission_accept', 'partner_commission_accept__pending', 'partner_commission_accept__' + scenario)
+        page.goto(U('en/commission.html?t=commission_test_token'))
+        page.wait_for_timeout(200)
+        page.check('#cmAgree', force=True)
+        page.click('#cmBtn')
+        page.wait_for_timeout(250)
+        got = page.get_attribute('html', 'data-state')
+        if got != expect_state:
+            F('commission: accept error %s expected state %s, got %r' % (scenario, expect_state, got))
+        else:
+            ok('commission: accept error %s -> %s state' % (scenario, expect_state))
+        ctx.close()
 
     # ============================================================== admin: role reject
     ctx, page, router, errs = new_ctx(browser, stub={

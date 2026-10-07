@@ -71,6 +71,10 @@ V = {
  "REVIEW_BY": ("회신기한", "파트너 심사 회신 기한 (5영업일)", "", "Tue 13 Oct 2026, 18:00 KST", 30),
  "PTN_REJECT_REASON": ("거절사유", "파트너 거절 사유 문장 (고정 5종 중 택1, 아래 표)", "", "Our organizers' groups start at 50 attendees, and the group capacity you listed is below that.", 120),
  "PARTNER_APPLY_URL": ("파트너신청URL", "파트너 신청 페이지 링크", BASE_URL + "/en/index.html#register", None, 60),
+ "COMMISSION_RATE": ("커미션율", "호텔별 합의 커미션율 (% 숫자만, 예: 10)", "10", None, 5),
+ "COMMISSION_URL": ("커미션동의URL", "호텔 커미션 동의 링크 (1회용 토큰)", BASE_URL + "/en/commission.html?t=demo-commission-2610", None, 90),
+ "COMMISSION_NOTE": ("커미션안내", "초대 시점 합의 요율 한 줄 (합의 요율이 있을 때만, 없으면 빈 값)", "", "Your agreed commission: 10% of net booking value.", 70),
+ "TERMS_VERSION": ("약관버전", "호텔 파트너 약관 버전", "", "PT-2026-10", 16),
  # --- manual (OPS) ---
  "CURRENT_STEP": ("현재단계", "현재 진행 단계", "호텔 견적 취합 중", None, 30),
  "PROGRESS_NOTE": ("진행내용", "지금까지 한 일 한두 문장", "조건에 맞는 호텔에 요청을 보냈고, 마감까지 제안을 받고 있습니다.", None, 100),
@@ -361,7 +365,7 @@ add(id="HTL_INVITE", name="Bid invitation", recipient="htl", mode="auto", lang="
     cta=("View request & submit quote", "{{HOTEL_BID_URL}}"),
     link_note="This is your personal link &mdash; no login needed. Opening it marks the invitation as viewed, and it stops working when the request closes. Please don&rsquo;t forward it.",
     decline="<a href=\"{{HOTEL_BID_URL}}\" style=\"color:#076E67;text-decoration:underline;\">Can&rsquo;t quote on this one? Decline on the request page</a> &mdash; it never counts against you; three unanswered invitations in a row pause your listing.",
-    policy="The organizer's company name is withheld, and the budget is never part of the brief. Your property name is shown to the organizer only if they select your proposal &mdash; in that case you receive the organizer's company name and contact details.",
+    policy="The organizer's company name is withheld, and the budget is never part of the brief. Your property name is shown to the organizer only if they select your proposal &mdash; in that case you receive the organizer's company name and contact details. {{COMMISSION_NOTE}}",
     why=EN_WHY_HTL, unsub=True)
 
 add(id="HTL_REMINDER", name="Deadline reminder (24h)", recipient="htl", mode="auto", lang="en",
@@ -471,9 +475,27 @@ add(id="PTN_APPROVED", name="Partner approved", recipient="ptn", mode="auto", la
     rows=[("Invitations", "You receive a personal quote link by email &mdash; no login and no account to manage."),
           ("Declining", "You can decline any request. Declining never counts against you."),
           ("Pausing", "If three invitations in a row go unanswered, we pause your listing. Reply to us and we&rsquo;ll reinstate it."),
-          ("Fees", "There is no listing fee to join.")],
-    callouts=[("gray", "Approved &middot; {{PROPERTY_NAME}}", "Listed for {{PROPERTY_LOCATION}}. Your first invitation will come when a matching request opens.")],
-    cta=None, link_note=None, policy="Organizers&rsquo; company names are withheld until they select a proposal, and the budget is never part of a brief.", why=PTN_WHY)
+          ("Commission", "{{COMMISSION_RATE}}% of net booking value, on confirmed bookings only. There is no listing fee to join.")],
+    optional_block=dict(name="COMMISSION_TERMS", cond="a commission rate was proposed with this approval (COMMISSION_URL is set)",
+        preview_labels=("이메일 미리보기 · 동의 블록 없음", "이메일 미리보기 · 동의 블록 포함 (승인 메일 기본)"),
+        callout=("amber", "Invitations start after you accept",
+                 "Please review and accept your commission terms ({{COMMISSION_RATE}}% of net booking value, partner terms {{TERMS_VERSION}}) with one click. We can&rsquo;t send you request invitations until you do. The link is single-use and expires {{EXPIRES_HOURS}} hours after this email was sent."),
+        cta=("Review and accept commission terms", "{{COMMISSION_URL}}")),
+    callouts=[("gray", "Approved &middot; {{PROPERTY_NAME}}", "Listed for {{PROPERTY_LOCATION}}. Your first invitation will come when a matching request opens and your commission terms are accepted.")],
+    cta=None, link_note=None, policy="The commission is charged to the hotel on confirmed bookings only. Organizers&rsquo; company names are withheld until they select a proposal, and the budget is never part of a brief.", why=PTN_WHY)
+
+add(id="PTN_COMMISSION_TERMS", name="Commission terms to accept", recipient="ptn", mode="auto", lang="en",
+    trigger="호텔 파트너 요율 변경 제안 · 요율 동의 링크 재발송 (admin_partner_update · partner_commission_resend)", trig_nums=[], states="파트너 approved · 요율 동의 대기",
+    subject="[MICEGO] Please accept your commission terms · REF {{PARTNER_ID}}",
+    preheader="Ref {{PARTNER_ID}} · {{COMMISSION_RATE}}% of net booking value. Accept to start receiving invitations.",
+    chip=("Action needed", "amber"), tag="Partner Network", ref_var="PARTNER_ID",
+    title="Please accept your commission terms.",
+    lead="{{PROPERTY_NAME}} is approved for the MICEGO Partner Network. Before we can invite you to quote, we need you to accept the commission that applies to confirmed bookings from MICEGO requests.",
+    rows=[("Property", "{{PROPERTY_NAME}}"), ("Commission", "{{COMMISSION_RATE}}% of net booking value"), ("Basis", "Total contract value for rooms and banquet/F&amp;B, excluding taxes and service charges"), ("Partner terms", "{{TERMS_VERSION}}")],
+    callouts=[("amber", "Invitations start after you accept", "This link is single-use and expires {{EXPIRES_HOURS}} hours after it was sent. If it expires, reply to this email and we will send a new one. A new rate applies to invitations sent after you accept it; invitations already sent keep the rate they were sent with.")],
+    cta=("Review and accept commission terms", "{{COMMISSION_URL}}"),
+    link_note="This is a single-use link for your property only. Opening it does not accept anything &mdash; you accept only by pressing the button on the page. Please don&rsquo;t forward it.",
+    policy="The commission is charged to the hotel on confirmed bookings only, and is not shown to organizers. There is no listing fee to join.", why=PTN_WHY)
 
 add(id="PTN_REJECTED", name="Partner not approved", recipient="ptn", mode="auto", lang="en",
     trigger="신청·심사중 → 거절 (사유 필수)", trig_nums=[], states="파트너 거절 (rejected)",
@@ -735,7 +757,8 @@ CONSOLE_MAP = [
  ("선정 · 미선정 결과", "호텔", "HTL_NOT_SELECTED", "미선정 결과는 이 템플릿. 선정 결과는 아래 연결 메일에 통합"),
  ("선정 연결 메일", "선정 호텔 (오거나이저 참조)", "HTL_SELECTED_CONNECT", "선정 결과와 연결 메일을 한 통으로 통합"),
  ("(신규) 파트너 신청 접수", "호텔 담당자", "PTN_APPLIED", "콘솔 목록에 없던 알림. 추가 필요"),
- ("파트너 심사 결과", "호텔 담당자", "PTN_APPROVED · PTN_REJECTED", "승인/거절 2개로 분리"),
+ ("파트너 심사 결과", "호텔 담당자", "PTN_APPROVED · PTN_REJECTED", "승인/거절 2개로 분리. 승인 메일에 요율 동의 블록(COMMISSION_TERMS) 포함"),
+ ("(신규) 커미션 요율 동의", "호텔 담당자", "PTN_COMMISSION_TERMS", "승인 후 요율 변경 제안·동의 링크 재발송. 1회용 링크에서 동의(POST)"),
  ("(신규) 파트너 재승인", "호텔 담당자", "PTN_REINSTATED", "콘솔 목록에 없던 알림. 추가 필요"),
  ("취소 시 호텔 안내", "초대 호텔", "OPS_HTL_CANCELLED", "수동 유지"),
  ("파트너 중지 안내", "호텔 담당자", "OPS_PTN_SUSPEND", "수동 유지"),
@@ -830,6 +853,7 @@ def build_email(t, sample=False, variant=None):
     ob = t.get("optional_block")
     if ob:
         block = callout(ob["callout"], F)
+        if ob.get("cta"): block += "\n" + cta_html(ob["cta"], lang, F)
         if sample:
             if variant == "round2": A(block)
         else:
@@ -850,15 +874,7 @@ def build_email(t, sample=False, variant=None):
     if t.get("extra_para"):
         A('<table role="presentation" width="100%%" cellpadding="0" cellspacing="0" border="0"><tr><td class="px-mobile" bgcolor="#FFFFFF" style="padding:20px 32px 0;background-color:#FFFFFF;font-family:%s;font-size:14px;line-height:1.7;color:#4A5D8C;">%s</td></tr></table>' % (F, fmt(t["extra_para"])))
     # G CTA
-    cta = t.get("cta")
-    if cta:
-        label, url = cta
-        w = 300 if lang == "ko" else 320
-        lab = fmt(label)
-        A('<!-- G. CTA -->\n<table role="presentation" width="100%%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" bgcolor="#FFFFFF" style="padding:28px 32px 8px;background-color:#FFFFFF;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" bgcolor="%s" style="border-radius:8px;background-color:%s;">'
-          '<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="%s" style="height:52px;v-text-anchor:middle;width:%dpx;" arcsize="15%%" stroke="f" fillcolor="%s"><w:anchorlock/><center style="color:#FFFFFF;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">%s</center></v:roundrect><![endif]-->'
-          '<!--[if !mso]><!-- --><a href="%s" target="_blank" style="display:inline-block;padding:16px 34px;font-family:%s;font-size:16px;font-weight:700;color:#FFFFFF;text-decoration:none;border-radius:8px;background-color:%s;">%s</a><!--<![endif]-->'
-          '</td></tr></table></td></tr></table>' % (TEAL, TEAL, url, w, TEAL, lab, url, F, TEAL, lab))
+    if t.get("cta"): A(cta_html(t["cta"], lang, F))
     # H link note
     if t.get("link_note") or t.get("decline"):
         parts = []
@@ -879,6 +895,15 @@ def build_email(t, sample=False, variant=None):
     if sample:
         out = subst(out, lang, t.get("samples"))
     return out
+
+def cta_html(cta, lang, F):
+    label, url = cta
+    w = 300 if lang == "ko" else 320
+    lab = fmt(label)
+    return ('<!-- G. CTA -->\n<table role="presentation" width="100%%" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" bgcolor="#FFFFFF" style="padding:28px 32px 8px;background-color:#FFFFFF;"><table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td align="center" bgcolor="%s" style="border-radius:8px;background-color:%s;">'
+          '<!--[if mso]><v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="%s" style="height:52px;v-text-anchor:middle;width:%dpx;" arcsize="15%%" stroke="f" fillcolor="%s"><w:anchorlock/><center style="color:#FFFFFF;font-family:Arial,sans-serif;font-size:16px;font-weight:bold;">%s</center></v:roundrect><![endif]-->'
+          '<!--[if !mso]><!-- --><a href="%s" target="_blank" style="display:inline-block;padding:16px 34px;font-family:%s;font-size:16px;font-weight:700;color:#FFFFFF;text-decoration:none;border-radius:8px;background-color:%s;">%s</a><!--<![endif]-->'
+          '</td></tr></table></td></tr></table>' % (TEAL, TEAL, url, w, TEAL, lab, url, F, TEAL, lab))
 
 def callout(c, F):
     kind, title, text = c
@@ -911,7 +936,9 @@ def email_raw_strings(t):
          t.get("decline", ""), t["policy"], t["why"], t["chip"][0], t.get("cc", "")]
     for l, v in t["rows"]: s += [l, v]
     for c in t.get("callouts", []): s += list(c[1:])
-    if t.get("optional_block"): s += list(t["optional_block"]["callout"][1:])
+    if t.get("optional_block"):
+        s += list(t["optional_block"]["callout"][1:])
+        if t["optional_block"].get("cta"): s += [t["optional_block"]["cta"][1]]
     if t.get("cta"): s += [t["cta"][1]]
     if t.get("code"): s += list(t["code"])
     rv = t["ref_var"] if "ref_var" in t else "RFP_ID"
@@ -1231,8 +1258,9 @@ def render_page(data, doc):
                 return '<div class="emailwrap"><iframe srcdoc="%s" title="%s 이메일 미리보기" width="640" tabindex="-1" scrolling="no" sandbox="allow-same-origin"></iframe></div>%s' % (
                     _e(srcdoc), d["id"], '<div class="vlabel">%s</div>' % label if label else "")
             if t.get("optional_block"):
-                pv.append(ifr(None, "이메일 미리보기 · 라운드 1 (기본)"))
-                pv.append(ifr("round2", "이메일 미리보기 · 라운드 2 이상 재초대 (선택 블록 포함)"))
+                _vl = t["optional_block"].get("preview_labels") or ("이메일 미리보기 · 라운드 1 (기본)", "이메일 미리보기 · 라운드 2 이상 재초대 (선택 블록 포함)")
+                pv.append(ifr(None, _vl[0]))
+                pv.append(ifr("round2", _vl[1]))
             else:
                 pv.append(ifr(None, "이메일 미리보기 · 샘플 값 적용"))
             if d.get("alimtalk"):

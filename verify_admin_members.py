@@ -166,7 +166,7 @@ with sync_playwright() as p:
     pg.goto(BASE+'settings.html#notify'); pg.evaluate('location.reload()'); pg.wait_for_timeout(300)
     nt=pg.inner_text('#notify')
     ok('notify new IDs',all(k in nt for k in ['ACC_EMAIL_CODE','ACC_EMAIL_EXISTS','ACC_SMS_OTP','ORG_PICK_OTP','ACC_WELCOME','ACC_LINKED','ACC_PW_RESET','ACC_PW_CHANGED','ACC_EMAIL_CHANGED','ACC_PHONE_CHANGED','ACC_LOCKED','ACC_WITHDRAWN','OPS_ACC_LINK','OPS_RFP_TRANSFER']))
-    pg.goto(BASE+'settings.html#system'); pg.evaluate('location.reload()'); pg.wait_for_timeout(300); ok('doc v1.7','v1.7' in pg.inner_text('#system'))
+    pg.goto(BASE+'settings.html#system'); pg.evaluate('location.reload()'); pg.wait_for_timeout(300); ok('doc v1.9','v1.9' in pg.inner_text('#system'))
     ctx.close()
     # old-session compatibility: state without members gets filled
     ctx,pg=newpage(); login(pg); pg.goto(BASE+'dashboard.html')
@@ -186,7 +186,7 @@ with sync_playwright() as p:
             pg.goto(BASE+n); pg.wait_for_timeout(500)
             sw=pg.evaluate('document.documentElement.scrollWidth'); cw=pg.evaluate('document.documentElement.clientWidth')
             ok(f'no overflow docs {n} @{w}',sw<=cw,(sw,cw))
-        pg.goto(BASE+'../docs/state-transitions.html'); ok('doc v1.7 + ACC-T1..T9 + share', 'v1.7' in pg.inner_text('h1') and all(f'ACC-T{i}' in pg.inner_text('#member') for i in range(1,10)) and '공유 링크' in pg.inner_text('#share') and 'ORG_PICK_OTP' in pg.inner_text('#transitions'))
+        pg.goto(BASE+'../docs/state-transitions.html'); ok('doc v1.9 + ACC-T1..T9 + share', 'v1.9' in pg.inner_text('h1') and all(f'ACC-T{i}' in pg.inner_text('#member') for i in range(1,10)) and '공유 링크' in pg.inner_text('#share') and 'ORG_PICK_OTP' in pg.inner_text('#transitions'))
         for n,nm in [('members.html','members'),('member.html?id=m1','member_m1')]:
             if w in (360,1280):
                 pg.goto(BASE+n); pg.wait_for_timeout(300); pg.screenshot(path=os.path.join(SHOTS,f'{nm}_{w}.png'),full_page=True)

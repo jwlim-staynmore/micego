@@ -8,7 +8,7 @@ en/unsubscribe.html 을 템플릿으로 삼아 head/header/footer 를 그대로 
 """
 import io, os, re, sys
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.environ.get('MG_SITE_DIR') or os.path.dirname(os.path.abspath(__file__))
 SRC = os.path.join(ROOT, 'en', 'unsubscribe.html')
 DST = os.path.join(ROOT, 'en', 'confirm.html')
 

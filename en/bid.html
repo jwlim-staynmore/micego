@@ -3,7 +3,7 @@
 <head>
 <script>window.__mgfbEarly=[];addEventListener('error',function(e){__mgfbEarly.length<3&&__mgfbEarly.push({t:new Date().toISOString(),m:String(e.message).slice(0,500),s:e.filename,l:e.lineno+':'+e.colno})});</script>
 <meta charset="UTF-8">
-<meta name="micego-build" content="2026.09.28-0">
+<meta name="micego-build" content="2026.09.29-0">
 <script src="../assets/config.js"></script><script src="../assets/mg.js"></script><script src="../assets/feedback.js" defer></script>
 <script>document.documentElement.className+=' js-anim';</script>
 <script>(function(){var h=document.documentElement,q=new URLSearchParams(location.search),t=q.get('t')||'',s=q.get('state')||'open';var C=window.MG_CONFIG||{},api=!!(C.supabase&&C.supabase.url),preview=(C.demo!==false)&&q.has('state');if(!/^[A-Za-z0-9_-]{4,64}$/.test(t)){s='invalid';}else if(api&&!preview){s='loading';}else if(["open", "submitted", "selected", "not_selected", "declined", "expired", "cancelled", "invalid", "loading"].indexOf(s)<0){s='invalid';}h.setAttribute('data-state',s);h.setAttribute('data-mode',(api&&!preview)?'api':'demo');})();</script>
@@ -574,7 +574,7 @@ html:not([data-state]) [data-states~="open"]{display:revert}
         </div>
       </fieldset>
 
-      <div class="submit-row"><p class="submit-note">You can revise your quote through this link until the deadline. Commercial terms for a confirmed booking are agreed with MICEGO before confirmation.</p><button type="submit" class="btn btn-accent">Review &amp; send quote</button></div>
+      <div class="submit-row"><p class="submit-note">You can revise your quote through this link until the deadline.<span id="cmNote" hidden></span></p><button type="submit" class="btn btn-accent">Review &amp; send quote</button></div>
     </form>
 <div class="send-panel" id="sendPanel" hidden tabindex="-1"><h2>Send your quote — two steps</h2><ol class="steps"><li>Copy the quote details — a safety copy in case your email app shortens long text.</li><li>Open the email draft and press send. MICEGO replies to confirm receipt.</li></ol><div class="app-actions"><button type="button" class="btn btn-ghost" id="copyBtn">Copy quote details</button><a class="btn btn-accent" id="mailBtn" href="#">Open email draft</a><button type="button" class="btn btn-ghost btn-sm" id="editBtn">Edit quote</button></div><span class="send-subject">Subject: <span id="mailSubject"></span></span><textarea class="copy-box" id="copyBox" readonly aria-label="Message details"></textarea><p class="submit-note">No email app on this device? Paste the copied details into an email to mysteri1984@gmail.com with the subject above.</p></div>
 </div>
@@ -673,6 +673,14 @@ html:not([data-state]) [data-states~="open"]{display:revert}
           var og = resp.organizer;
           var map = {bidOrgCompany: og.company, bidOrgContact: og.contact_name, bidOrgEmail: og.email, bidOrgPhone: og.phone};
           Object.keys(map).forEach(function(k){document.querySelectorAll('[data-mg="'+k+'"]').forEach(function(x){x.textContent = map[k] || '';});});
+        }
+        // Hotel-only note: the commission rate agreed with this property (snapshot taken when the invitation was created). Hidden when null.
+        var cmEl = document.getElementById('cmNote');
+        if(cmEl){
+          if(resp.commission && resp.commission.rate_pct != null && isFinite(Number(resp.commission.rate_pct))){
+            cmEl.textContent = ' Your agreed commission: ' + Number(resp.commission.rate_pct) + '% of net booking value.';
+            cmEl.hidden = false;
+          } else { cmEl.textContent = ''; cmEl.hidden = true; }
         }
         H.setAttribute('data-state', resp.state);
         Object.assign(window.MICEGO_PAGE_STATE, {state: resp.state, rfpRef: resp.ref || null,
