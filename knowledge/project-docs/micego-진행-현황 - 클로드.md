@@ -4,7 +4,7 @@
 
 ## 0-1. 2026-10-07 갱신 — 불일치 3건 수정
 
-- 브랜치 `fix/org-types-currency-share`(커미션 브랜치 위). 마이그레이션 `0018_org_types_currencies.sql`, D-44~D-46.
+- 2026-10-07 `feat/hotel-commission-rate`·`fix/org-types-currency-share` 모두 **main에 병합** 완료. 마이그레이션 `0018_org_types_currencies.sql`, D-44~D-46.
 - 소속 유형 5종(여행사·랜드사·기업(행사 주최)·협회·기관·기타)으로 폼·가입·계정·서버 통일 — 랜드사·기업·협회 요청이 접수 거절되던 문제 해결.
 - 호텔 견적 통화 = 정산 지원 통화(THB 등 추가, TWD·HKD 신규, GBP 제외). 지원 밖 통화는 서버·DB에서 거절.
 - 진행 상황 화면의 공유 링크 패널은 회원에게만, 비회원에게는 가입·로그인 안내.
