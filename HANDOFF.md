@@ -8,7 +8,7 @@
 
 - **원본은 GitHub 비공개 저장소 `jwlim-staynmore/micego`** 다. 저장소 루트 = 예전 PC 폴더의 `micego-site/`. 사업·운영 자료는 `knowledge/`(배포 제외).
 - **브랜치 2개**: `main`(2026-09-28 이관 시점) · `feat/hotel-commission-rate`(호텔 커미션, 2026-09-29~). **이 문서와 함께 받는 프론트엔드 zip은 커미션 브랜치 기준**이다. `main` 병합은 대표 승인 대기 — 인수 첫날 병합 여부부터 확인한다.
-- **저장소에 없는 작업 1건**: Turnstile 스팸 방어 + 운영자 대리 확정 동의 기록(`0010_selection_consent.sql`, `_shared/turnstile.ts`, 상태전이표 v1.8, 사이트맵 v1.4). 프로젝트 문서 일부(진행 현황·오픈 체크리스트·장애 런북·운영자 온보딩 v1.1)는 이 코드가 있다고 전제하고 쓰였지만, 코드는 PC 폴더에 저장되지 않은 채 다른 세션에만 남았다. 되찾으면 `0018_selection_consent.sql`로 번호를 바꿔 넣는다(0010·0017은 이미 쓰임). 못 찾으면 문서 설계 기준으로 다시 구현한다. 그 전까지 `docs/*.md`(v1.0)와 `knowledge/project-docs/`(v1.1)는 버전이 어긋난다.
+- ~~저장소에 없는 작업 1건(Turnstile·대리 확정 동의 기록)~~ → 2026-10-07 재구현(K-13 종결): `0019_selection_consent.sql`, `0020_organizer_cancel.sql`, `_shared/turnstile.ts`, Edge `cancel_rfp`. 결정은 D-47~D-50.
 - 클로드 Code로 작업할 때의 규칙은 `CLAUDE.md`에 있다(생성물 편집 금지, 브랜치 분리 등). 사람 개발자에게도 그대로 적용된다.
 
 ## 1. 서비스 한 장 요약
@@ -55,14 +55,14 @@ git 추적 434개 파일. Python 약 17k줄(생성기·검증) · TypeScript 약
 | `docs/partner-console-impl-v1.md` | 지역 파트너 콘솔(0010~0016) 구현 노트 + 0017 추가분. 설계서 원문은 `knowledge/project-docs/micego-지역파트너-콘솔-기술설계서-v1 - 클로드.md` |
 | `docs/hotel-commission-design-v1 - 클로드.md` | 호텔 커미션(0017) 설계 |
 | `docs/state-transitions.html` v1.9 | RFP·초대(대리 입력)·파트너·커미션 합의·회원·공유링크·피드백·요청 위임·정산 상태 머신 + 알림 ID(v1.8은 이 저장소에 없는 작업이라 건너뜀) |
-| `legal/*.json` + `legal/REVIEW_NOTES.md` | 이용약관·Partner Terms·개인정보처리방침·Privacy Notice 전문과 **법무 검토 표시 31곳** |
+| `legal/*.json` + `legal/REVIEW_NOTES.md` | 이용약관·Partner Terms·개인정보처리방침·Privacy Notice 전문과 **법무 검토 표시 36곳** |
 | `DECISIONS.md` | 확정 결정 D-1~D-43, 미결 O-1~O-6 |
 
 ## 5. 백엔드 요약
 
 - **마이그레이션 18개**(0001~0018): 0001 확장·enum → 0002 기본 테이블 → 0003 private 함수(rfp_transition·due·enqueue·pick_and_win·system_tick) → 0004 회원 RPC → 0005 운영자 RPC·알림 메타 → 0006 RLS → 0007 크론 → 0008·0009 피드백 → **0010~0016 지역 파트너 콘솔**(지역·파트너 조직·콘솔 계정·위임·대리 입력·정산·초대 수락·콘솔 알림) → **0017 호텔 커미션**(요율·동의 토큰·이력, 초대/정산 스냅샷, 초대 차단) → **0018 소속 유형 5종·지원 통화(TWD·HKD)·견적 통화 트리거**. `create table` 41개.
 - **0017 주의**: `partners` 테이블이 **열 단위 SELECT 권한**으로 바뀌었다. 새 컬럼을 추가하면 같은 마이그레이션에서 `grant select (컬럼) on partners to authenticated`를 넣어야 콘솔에 보인다(동의 토큰 해시·IP 해시는 일부러 제외). `admin_partner_transition`은 인자 시그니처가 바뀌어 drop 후 재생성했다.
-- **Edge Function 31개** — RFP/비딩·회원/인증·콘솔·문의/구독·알림·파트너 등록·공유링크·피드백·`partner_invite`·`quote_confirm`·`partner_commission_accept`. 각 `handle.ts` 첫 주석에 인증·요청·응답 형식. 오류는 `_shared/errors.ts`(`MG:CODE`), 프론트 `mg.js`와 콘솔 `admin.js`가 미러.
+- **Edge Function 32개** — RFP/비딩·회원/인증·콘솔·문의/구독·알림·파트너 등록·공유링크·피드백·`partner_invite`·`quote_confirm`·`partner_commission_accept`·`cancel_rfp`. 각 `handle.ts` 첫 주석에 인증·요청·응답 형식. 오류는 `_shared/errors.ts`(`MG:CODE`), 프론트 `mg.js`와 콘솔 `admin.js`가 미러.
 - **알림**: 이메일 32종(`emails/`) · 알림톡 9 · SMS 2. 문안은 `build_notify.py`에서 고치고 `sync_templates.py`까지 다시 돌린다. 콘솔 내부 알림 PTR_*/HQ_*는 `CONSOLE_NOTICE` 한 장으로 라우팅.
 - **토큰 페이지 3종**: `bid`(견적 제출) · `confirm`(대리 입력 견적 확인) · `commission`(요율 동의). 모두 GET은 조회만, POST로만 소비(메일 보안 스캐너 대비), 원문은 메일에만.
 - **테스트**: `supabase/tests/run.sh` — pglast 구문검사 → PostgreSQL 16에 마이그레이션·시드·SQL 테스트 8종 → `admin_snapshot` 키 대조 → Deno check + 단위 테스트(97개). **2026-10-06 PASS=14 FAIL=0.** Deno가 없으면 타입체크·단위 테스트가 안 돈다 — 반드시 설치(`npm i -g deno`). psql이 `postgres` 사용자로 파일을 읽으므로 홈 디렉터리에서 권한 오류가 나면 저장소를 `/tmp`에 복사해 `chmod -R a+rX` 후 실행.
@@ -84,7 +84,7 @@ git 추적 434개 파일. Python 약 17k줄(생성기·검증) · TypeScript 약
 | 도메인 | 사이트·메일 | jwlim | **미확정** — `site.config.json.domain` 빈칸 |
 | Resend | 이메일 | jwlim | 미가입. SPF/DKIM/DMARC |
 | Solapi | SMS·알림톡 | jwlim | 미가입. 발신번호 사전등록·카카오 채널·알림톡 9종 심사(리드타임 가장 김 — 먼저 착수) |
-| Cloudflare Turnstile | 스팸 방어 | jwlim | 코드 미수록(§0) |
+| Cloudflare Turnstile | 스팸 방어(견적 요청·호텔 등록·가입) | jwlim | 코드 완료(D-50). 사이트 키·시크릿 발급 필요 — 키 빌드 배포 후 `TURNSTILE_SECRET` 설정 |
 | GA4 / 서치콘솔 | 분석·인증 | jwlim | 자리만 |
 | 임시 접수 메일 | mysteri1984@gmail.com | jwlim 개인 | 공개 페이지 다수에 노출 — 전부 `site.config.json.officialEmail/privacyEmail`에서 주입되므로 값 교체·재빌드로 일괄 해결 |
 
@@ -97,12 +97,12 @@ git 추적 434개 파일. Python 약 17k줄(생성기·검증) · TypeScript 약
 
 ## 9. 배포 순서
 
-1. **백엔드**: `supabase/README.md` §2~§4(= 프로젝트 문서 '백엔드 배포 런북 v1.1' Step 1~12) — link → 확장 → `db push`(0001~0017) → seed → GUC 2종 → `sync_templates.py` → functions deploy(31) → secrets → 운영자 계정 → 벤더. 0010~0016 추가 절차는 `docs/partner-console-impl-v1.md` §3(초대 메일 리다이렉트 허용 목록에 `/admin/accept.html` 등).
+1. **백엔드**: `supabase/README.md` §2~§4(= 프로젝트 문서 '백엔드 배포 런북 v1.1' Step 1~12) — link → 확장 → `db push`(0001~0020) → seed → GUC 2종 → `sync_templates.py` → functions deploy(32) → secrets → 운영자 계정 → 벤더. 0010~0016 추가 절차는 `docs/partner-console-impl-v1.md` §3(초대 메일 리다이렉트 허용 목록에 `/admin/accept.html` 등).
 2. **정적 사이트**: `site.config.json`을 복사해 `site.config.prod.json`(domain·메일·사업자·supabase 키·`prod:true`·`demo:false`) → `MG_SITE_CONFIG=site.config.prod.json python3 build2.py` → 산출물이 같은 폴더에 덮어써지므로 배포용 브랜치에서 빌드·커밋 → Vercel이 그 브랜치를 배포. `.vercelignore`가 `supabase/`·`src/`·`legal/`·`knowledge/`·`*.py`·`*.md`를 제외한다.
 3. **커미션 오픈 전 필수**: 배포 직후 기존 승인 호텔은 전부 "요율 합의 필요"라 초대되지 않는다. `partners where state='approved' and commission_accepted_at is null` 대상에 콘솔에서 요율을 제안하고 동의를 받는다.
 4. 롤백: DB는 down 마이그레이션 없음 → PITR, Edge·정적 사이트는 이전 커밋 재배포.
 
-**오픈 전 대표(jwlim) 몫**: 도메인·공식 메일, 사업자 정보, **법무 검토 31곳**(`legal/REVIEW_NOTES.md`) 확정 후 `legal.reviewed=true`·`effectiveDate`, `TODO(legal)` 2곳(ko/index·ko/withdraw), Supabase 리전, 파트너 계약서(커미션 수금의 세무 성격 — 대리 수금 vs 파트너 매출), Solapi/Resend 심사, 실기기 QA(카카오 인앱·삼성 인터넷·iOS Safari).
+**오픈 전 대표(jwlim) 몫**: 도메인·공식 메일, 사업자 정보, **법무 검토 36곳**(`legal/REVIEW_NOTES.md`) 확정 후 `legal.reviewed=true`·`effectiveDate`, `TODO(legal)` 2곳(ko/index·ko/withdraw), Supabase 리전, 파트너 계약서(커미션 수금의 세무 성격 — 대리 수금 vs 파트너 매출), Solapi/Resend 심사, 실기기 QA(카카오 인앱·삼성 인터넷·iOS Safari).
 
 ## 10. 검증 방법
 
@@ -119,16 +119,16 @@ git 추적 434개 파일. Python 약 17k줄(생성기·검증) · TypeScript 약
 | verify_admin · _ops · _members · _feedback | 콘솔(본사) |
 | verify_admin_partner | 파트너 콘솔·정산·커미션 UI·commission.html (78항목) |
 
-공통 기준: 360/768/1280에서 콘솔 오류 0, h1 1개, 가로 오버플로 없음. **2026-10-06 커미션 브랜치에서 전부 0 FAILS, run.sh PASS=14.** 빌드 재현성: 4종 빌드 후 diff는 빌드 날짜 스탬프뿐.
+공통 기준: 360/768/1280에서 콘솔 오류 0, h1 1개, 가로 오버플로 없음. **2026-10-07 긴급 보완 브랜치에서 전부 0 FAILS, run.sh PASS=17.** 빌드 재현성: 4종 빌드 후 diff는 빌드 날짜 스탬프뿐.
 
 ## 11. 알려진 결함·기술부채 (우선순위순)
 
 | # | 내용 | 조치 제안 |
 |---|---|---|
 | K-1 | **`admin/`·`docs/`·`emails/`가 정적 파일로 공개 배포됨.** robots 차단과 콘솔 로그인만 있고 파일 자체는 누구나 받을 수 있음(mock-data.js 포함) | Vercel Password Protection 또는 admin 별도 프로젝트(O-1). 오픈 차단급 |
-| K-13 | **Turnstile·대리 확정 동의 기록 코드 미수록**(§0) | 복구 또는 재구현 → 0019 (0018은 소속 유형·통화 정리) |
+| ~~K-13~~ | ~~Turnstile·대리 확정 동의 기록 코드 미수록~~ | **종결 2026-10-07**: 0019·0020·turnstile.ts로 재구현 |
 | K-14 | 원문 토큰(`CONFIRM_TOKEN`·`COMMISSION_TOKEN`)이 `notification_log.vars`에 남음(운영자만 조회 가능) | 발송 성공 후 vars에서 제거 |
-| K-2 | SQL `GUARD_*`·`INVALID_TRANSITION`·`FORBIDDEN_FIELD`가 Edge 경로에서 `INTERNAL(500)`로 뭉개짐(콘솔 RPC 경로는 보존) | `errors.ts` 카탈로그 추가 + `fromSqlError` 매핑 |
+| K-2 | SQL `GUARD_*`(GUARD_REASON은 2026-10-07 카탈로그에 이미 있음 — 나머지)·`INVALID_TRANSITION`·`FORBIDDEN_FIELD`가 Edge 경로에서 `INTERNAL(500)`로 뭉개짐(콘솔 RPC 경로는 보존) | `errors.ts` 카탈로그 추가 + `fromSqlError` 매핑 |
 | K-3 | 클라이언트 이메일 정규식(`build2.py` EMAIL_RE)과 서버 `validate.ts` 불일치 가능 | 통일 |
 | K-4 | `OTP_PEPPER`·`IP_HASH_SALT` 미설정 시 빈 문자열로 조용히 동작 | 기동 시 필수 env 검증 |
 | K-5 | `get_bid`: 종료된 요청에서 미제출 호텔의 라벨이 "open"으로 보임 | 종료 상태 우선 판정 |
@@ -149,7 +149,7 @@ v1의 K-11(git 없음)·K-12(동시 편집 사고)는 git 이관으로 해소, K
 2. 검증 11종 + `run.sh` 로컬 실행(Deno·PostgreSQL 16 필요).
 3. Vercel 프리뷰 연결(데모 상태 — 외부 공유 금지, K-1 때문에 Password Protection 권장).
 4. Supabase 프로젝트 생성 → 배포 순서 1(`NOTIFY_MODE=log`) → `site.config.json`에 키 → api 빌드 → `verify_launch` (c).
-5. K-1·K-13 해결 방식 결정·구현.
+5. K-1 해결 방식 결정·구현. Turnstile 사이트 키·시크릿 발급(D-50 순서).
 6. Solapi 알림톡 템플릿 심사 제출(리드타임 김).
 7. 기존 승인 호텔 요율 제안·동의(§9-3) 리허설.
 
@@ -165,6 +165,7 @@ v1의 K-11(git 없음)·K-12(동시 편집 사고)는 git 이관으로 해소, K
 | 날짜 | 작업자 | 변경 |
 |---|---|---|
 | 2026-10-07 | jwlim(클로드 작성) | v2.1: 불일치 3건 수정(소속 유형 5종 통일·견적 통화=정산 지원 통화·공유 링크 회원 한정), `0018_org_types_currencies`, run.sh PASS=15, 선정 동의 작업 번호 0019로 |
+| 2026-10-07 | jwlim(클로드 작성) | v2.2: 긴급 보완 3건(자체 취소 0020·대리 확정 동의 기록 0019·Turnstile) 반영, K-13 종결, Edge 32·PASS=17·법무 표시 36 |
 | 2026-10-06 | jwlim(클로드 작성) | v2: git 이관·지역 파트너 콘솔(0010~0016)·호텔 커미션(0017) 반영, 수치 실측 갱신(마이그레이션 17·Edge 31·이메일 32·verify 11·PASS=14·법무 표시 31), 알려진 공백(Turnstile·동의 기록) 명시, K-13~K-15 추가, O-5·O-7 종결, Vercel·커미션 오픈 절차 추가 |
 | 2026-09-28 | jwlim(클로드 작성) | K-12 병합 완료 메모 추가(git 이관) |
 | 2026-09-27 | jwlim(클로드 작성) | v1 최초 작성 + 독립 검증 반영 |

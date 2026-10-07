@@ -1,6 +1,14 @@
 # MICEGO 프로젝트 진행 현황 - 클로드
 
-기준일 2026-09-28(운영자 대리 확정 동의 기록·Turnstile 스팸 방어 반영 후 갱신) · 작성 계정 jwlim@staynmore.com · 이 문서는 세션이 바뀌어도 이어서 작업할 수 있도록 상태를 고정해 둔 것입니다.
+기준일 2026-10-07(긴급 보완 3건 반영, 본문 1장 이하는 2026-09-28 기준) · 작성 계정 jwlim@staynmore.com · 이 문서는 세션이 바뀌어도 이어서 작업할 수 있도록 상태를 고정해 둔 것입니다.
+
+## 0-2. 2026-10-07 갱신 — 긴급 보완 3건
+
+- 브랜치 `fix/urgent-cancel-consent-turnstile`. D-47~D-50, CHANGELOG 0.11.0. 백엔드 **PASS=17**, verify 11종 0 FAILS.
+- **오거나이저 자체 취소**(D-47): 진행 상황 화면에서 호텔에 보내기 전(접수됨·확인 중, 공개 준비면 초대 0건)까지 "이 요청 취소하기" → 사유 4종 선택 → 취소. `0020_organizer_cancel.sql`, Edge `cancel_rfp`. 그 뒤로는 문의 → 운영자 취소. 회원 my.html 취소 버튼은 다음 범위.
+- **대리 확정 동의 기록**(D-48·D-49): 유실된 옛 0010을 찾지 못해 **0019로 재설계·구현**. 콘솔 성사 = 항상 대리 확정 → 확인 방법(이메일 회신·통화·기타, 아래 09-28 메모의 '문자 회신'은 기타로 통합), 일시, 근거 10자 이상 필수. 파트너 담당자는 성사 불가, 파트너 관리자가 하면 본사 알림. `admin_transition`이 6인자가 되므로 **0019와 admin/admin.js를 같은 날 배포**.
+- **Turnstile**(D-50): 견적 요청·호텔 등록·회원가입 3곳(아래 09-28 메모의 5곳·의견 보내기 포함 계획에서 축소 — 문의·피드백은 레이트리밋 유지). 사이트 키·시크릿 비어 있으면 꺼짐. 개인정보처리방침 Cloudflare 행 추가로 법무 검토 표시 36곳.
+- 아래 표의 "운영자 대리 확정 동의 기록(0010)"·"Turnstile(5개 Edge Function)" 행은 09-28 다른 세션 기준이다. 현재 코드는 위 내용이 맞다.
 
 ## 0-1. 2026-10-07 갱신 — 불일치 3건 수정
 
@@ -15,7 +23,7 @@
 - **원본이 GitHub `jwlim-staynmore/micego`(비공개)로 옮겨졌다.** PC 폴더는 09-28 시점 사본. 09-27 동시 편집 사고(K-12) 병합을 마쳤고, 호텔 약관(en/terms) 전문이 요약본에 덮어써지던 문제도 고쳤다.
 - **호텔 커미션 도입(D-37~D-43)**: 호텔별 고정 요율을 승인 때 합의(기준: 객실+연회·F&B 순액), 호텔이 링크로 동의해야 초대가 나간다. 지역 파트너는 5~20% 안에서 결정. 초대 시점 요율 스냅샷 → 정산 자동 프리필. 주최 측은 계속 수수료 없음·요율 비공개. 브랜치 `feat/hotel-commission-rate`(0017 마이그레이션, `en/commission.html`, 콘솔 요율 UI). 검증 11종 0 FAILS, 백엔드 PASS=14.
 - **오픈 전 추가 할 일**: 기존 승인 호텔에 요율 제안·동의 받기, Partner Terms 5.2~5.7·이용약관 제4조⑤ 법무 검토(검토 쟁점 21곳), 파트너 계약서에 커미션 수금의 세무 성격(대리 수금 vs 파트너 매출) 명시.
-- **이 문서 아래 내용(09-28 기준)과 코드가 어긋나는 곳**: Turnstile·운영자 대리 확정 동의 기록(`0010_selection_consent`)은 저장소에 없다 — 되찾으면 `0019`로 넣는다(0018은 아래 불일치 수정이 사용).
+- ~~이 문서 아래 내용(09-28 기준)과 코드가 어긋나는 곳: Turnstile·대리 확정 동의 기록 미수록~~ → 10-07 재구현(위 0-2).
 
 ## 1. 한눈에 보기
 
@@ -33,8 +41,9 @@
 | **이용약관·파트너 약관·개인정보처리방침(한·영) 전문 초안** | **초안 완료 · 법무 검토 전** — JSON 원본을 네 페이지에 렌더링 | legal/*.json, legal_render.py, build_legal.py → ko/terms, en/terms, ko/privacy, en/privacy |
 | **prod 빌드 예시 데이터 제거** | 완료 — 16개 예시 문자열이 prod에서 하드 FAIL로 검사됨 | build2/build_acc/build_acc2/build_launch, verify_launch |
 | **운영 준비 문서 3종** | 완료 v1.1(확인 필요 항목은 §4 표) | docs/launch-checklist · incident-runbook · operator-onboarding (.html/.md) |
-| **운영자 대리 확정 동의 기록** | 코드 완료 · **배포 전**(0010 + admin.js 동시 배포) | supabase/migrations/0010_selection_consent.sql, admin/admin.js·rfp.html |
-| **스팸 방어(Cloudflare Turnstile)** | 코드 완료 · 기본 꺼짐(siteKey·TURNSTILE_SECRET 비어 있음) | assets/mg.js·feedback.js, supabase/functions/_shared/turnstile.ts, 5개 Edge Function |
+| **운영자 대리 확정 동의 기록** | 코드 완료(10-07 재구현) · **배포 전**(0019 + admin.js 동시 배포) | supabase/migrations/0019_selection_consent.sql, admin/admin.js·rfp.html |
+| **스팸 방어(Cloudflare Turnstile)** | 코드 완료(10-07 재구현) · 기본 꺼짐(siteKey·TURNSTILE_SECRET 비어 있음) | assets/mg.js, supabase/functions/_shared/turnstile.ts, Edge Function 3개 |
+| **오거나이저 자체 취소** | 코드 완료(10-07) · 배포 전 | supabase/migrations/0020_organizer_cancel.sql, functions/cancel_rfp, build2.py 진행 상황 |
 
 테스트: verify2 · verify3 · verify_acc · verify_admin · verify_admin_ops · verify_admin_members · verify_admin_feedback · verify_launch · verify_api · verify_feedback · supabase/tests/run.sh — 모두 0 FAILS (2026-09-28 기준, supabase 테스트 PASS=14).
 

@@ -5,6 +5,7 @@ import { FieldErrors, RE_EMAIL, asString, asBool } from "../_shared/validate.ts"
 import { rateLimit } from "../_shared/ratelimit.ts";
 import { randomToken } from "../_shared/tokens.ts";
 import { clientIp, hashIp } from "../_shared/http.ts";
+import { requireTurnstile } from "../_shared/turnstile.ts";
 
 function parseCapNumber(band: string): number | null {
   const m = /(\d+)/.exec(band);
@@ -36,6 +37,7 @@ export async function handle(req: Request, deps: Deps): Promise<unknown> {
   fe.check("contactEmail", RE_EMAIL.test(contactEmail));
   fe.check("consent", consent === true);
   fe.throwIfAny();
+  await requireTurnstile(deps, req, body.turnstile_token); // D-50 · 시크릿 없으면 통과
 
   // 대기중(pending) 동일 이메일+상호명 재제출은 기존 행을 그대로 돌려준다.
   const existing = await deps.db.query<{ code: string; review_due_at: string }>(

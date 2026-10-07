@@ -51,6 +51,8 @@ window.MG = (function () {
     COMMISSION_RATE_REQUIRED: { status: 422, ko: "승인하려면 커미션 요율을 입력해 주세요.", en: "Enter a commission rate to approve." },
     FORBIDDEN: { status: 403, ko: "권한이 없습니다.", en: "You don't have permission." },
     NOT_FOUND: { status: 404, ko: "찾을 수 없습니다.", en: "Not found." },
+    CANCEL_NOT_ALLOWED: { status: 409, ko: "호텔에 요청을 보낸 뒤라 여기서는 취소할 수 없습니다. 문의하기에서 알려 주세요.", en: "This request has already gone to hotels and can't be cancelled here. Please contact us." },
+    TURNSTILE_FAILED: { status: 403, ko: "자동 입력 방지 확인에 실패했습니다. 새로고침한 뒤 다시 시도해 주세요.", en: "We couldn't complete the bot check. Please reload and try again." },
     INTERNAL: { status: 500, ko: "일시적인 오류입니다. 잠시 후 다시 시도해 주세요.", en: "Temporary error. Please try again." }
   };
 
@@ -212,12 +214,78 @@ window.MG = (function () {
     'submit_rfp', 'get_track', 'request_change', 'ask_question', 'create_share_link', 'revoke_share_link',
     'pick_send_otp', 'pick_verify', 'register_partner', 'get_bid', 'submit_quote', 'decline_bid', 'unsubscribe', 'quote_confirm', 'partner_commission_accept',
     'contact', 'signup_start', 'resend_email_code', 'verify_email', 'send_phone_otp', 'verify_phone_otp',
-    'password_reset_request', 'password_reset_complete', 'account_update', 'withdraw'
+    'password_reset_request', 'password_reset_complete', 'account_update', 'withdraw', 'cancel_rfp'
   ];
   var RPC_NAMES = ['my_profile', 'my_rfps', 'my_sessions', 'link_request'];
   var RPC_PARAM_MAP = { link_request: { ref: 'p_ref' } };
 
+  // ---------------- Turnstile (D-50) ----------------
+  // 사이트 키가 있고 api 모드일 때만 동작. 키가 없으면 스크립트를 불러오지 않는다(외부 요청 0).
+  // 토큰은 1회용이라 제출할 때마다 reset → execute 로 새로 받는다.
+  var TS_KEY = (config.turnstile && config.turnstile.siteKey) || '';
+  var TS_EDGES = { submit_rfp: 1, register_partner: 1, signup_start: 1 };
+  var _tsLoad = null, _tsWidget = null, _tsPending = null, _tsChain = null;
+  function tsLoad() {
+    if (_tsLoad) return _tsLoad;
+    _tsLoad = new Promise(function (resolve, reject) {
+      if (window.turnstile) { resolve(window.turnstile); return; }
+      var sc = document.createElement('script');
+      sc.src = 'https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';
+      sc.async = true; sc.defer = true;
+      sc.onload = function () { window.turnstile ? resolve(window.turnstile) : reject(); };
+      sc.onerror = function () { _tsLoad = null; reject(); };
+      document.head.appendChild(sc);
+    });
+    return _tsLoad;
+  }
+  function tsFail() { return { code: 'TURNSTILE_FAILED', status: 403, message_ko: ERRORS.TURNSTILE_FAILED.ko, message_en: ERRORS.TURNSTILE_FAILED.en }; }
+  var turnstile = {
+    enabled: function () { return !!(hasApi && TS_KEY); },
+    // 동시에 여러 번 불려도(빠른 두 번 클릭) 위젯 하나를 순서대로 써서 호출마다 새 토큰을 준다
+    getToken: function () {
+      if (!turnstile.enabled()) return Promise.resolve(null);
+      var run = function () { return tsOnce(); };
+      _tsChain = _tsChain ? _tsChain.then(run, run) : run();
+      return _tsChain;
+    }
+  };
+  function tsOnce() {
+      return tsLoad().then(function (ts) {
+        return new Promise(function (resolve, reject) {
+          var done = false;
+          var timer = setTimeout(function () { if (!done) { done = true; _tsPending = null; reject(tsFail()); } }, 120000);
+          _tsPending = function (ok, tok) { if (done) return; done = true; clearTimeout(timer); _tsPending = null; ok ? resolve(tok) : reject(tsFail()); };
+          if (_tsWidget === null) {
+            var box = document.createElement('div');
+            box.className = 'mg-turnstile';
+            box.style.cssText = 'position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:9999';
+            document.body.appendChild(box);
+            _tsWidget = ts.render(box, {
+              sitekey: TS_KEY, execution: 'execute', appearance: 'interaction-only', language: lang === 'en' ? 'en' : 'ko',
+              callback: function (t) { if (_tsPending) _tsPending(true, t); },
+              'error-callback': function () { if (_tsPending) _tsPending(false); },
+              'expired-callback': function () { try { ts.reset(_tsWidget); } catch (e) {} }
+            });
+          } else {
+            try { ts.reset(_tsWidget); } catch (e) {}
+          }
+          ts.execute(_tsWidget);
+        });
+      }, function () { return Promise.reject(tsFail()); });
+  }
+
   function buildEdgeFn(name) {
+    if (TS_EDGES[name]) {
+      return function (payload) {
+        return turnstile.getToken().then(function (t) {
+          var p = {}, k;
+          payload = payload || {};
+          for (k in payload) { if (payload.hasOwnProperty(k)) p[k] = payload[k]; }
+          if (t) p.turnstile_token = t;
+          return callEdge(name, p);
+        });
+      };
+    }
     return function (payload) { return callEdge(name, payload); };
   }
   function buildRpcFn(name) {
@@ -312,6 +380,7 @@ window.MG = (function () {
     ready: ready,
     api: api,
     auth: auth,
+    turnstile: turnstile,
     msg: msg,
     show: show,
     url: {

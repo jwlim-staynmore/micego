@@ -181,7 +181,7 @@ declare j jsonb; inv_id uuid; s settlements%rowtype;
 begin
   j := admin_rfp('MG-TEST-PT1'); inv_id := (j->'invitations'->0->>'id')::uuid;
   perform admin_mark_selection('MG-TEST-PT1', inv_id, 'selected');
-  j := admin_transition('MG-TEST-PT1', 'won');
+  j := admin_transition('MG-TEST-PT1', 'won', null, null, null, jsonb_build_object('method','phone_call','confirmed_at',now()::text,'note','10-07 통화로 선정 의사와 정보 제공 동의 확인'));
   if j->>'state' <> 'won' then raise exception 'won failed'; end if;
   select * into s from settlements st join rfps r on r.id = st.rfp_id where r.ref = 'MG-TEST-PT1';
   if s.id is null or s.status <> 'pending_commission' or s.partner_share_pct <> 50 or not ('hotel_unreviewed' = any(s.flags)) then raise exception 'settlement create wrong: % % %', s.status, s.partner_share_pct, s.flags; end if;

@@ -6,6 +6,7 @@ import { FieldErrors, RE_EMAIL, RE_PHONE_KR, asString, asBool, isIsoDate, normal
 import { rateLimit } from "../_shared/ratelimit.ts";
 import { randomToken } from "../_shared/tokens.ts";
 import { clientIp, hashIp } from "../_shared/http.ts";
+import { requireTurnstile } from "../_shared/turnstile.ts";
 import { bearerToken } from "../_shared/auth_ctx.ts";
 
 const HEADCOUNT_BANDS = ["50명 미만", "50~100명", "100~300명", "300~500명", "500명 이상"];
@@ -64,6 +65,7 @@ export async function handle(req: Request, deps: Deps): Promise<unknown> {
   if (ballroomUse === "사용") fe.check("ballroomPurpose", BALLROOM_PURPOSE.includes(ballroomPurpose));
   fe.check("consent", consent === true);
   fe.throwIfAny();
+  await requireTurnstile(deps, req, body.turnstile_token); // D-50 · 시크릿 없으면 통과
 
   await rateLimit(deps.db, "submit_rfp_email", email, 20, 86400); // 20/day/email
 

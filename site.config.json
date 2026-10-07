@@ -9,6 +9,7 @@
   "analytics": {"ga4": ""},
   "siteVerification": {"google": "", "naver": ""},
   "supabase": {"url": "", "anonKey": "", "functionsUrl": ""},
+  "turnstile": {"siteKey": ""},
   "sms": {"vendor": "solapi", "vendorName": ""},
   "legal": {"effectiveDate": "", "reviewed": false},
   "prod": false,

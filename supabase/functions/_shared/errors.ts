@@ -44,6 +44,8 @@ export const ERRORS: Record<string, ErrorSpec> = {
   COMMISSION_NOT_AGREED: { status: 409, ko: "커미션 요율에 동의한 호텔이 없어 초대할 수 없습니다. 호텔의 동의를 먼저 받아 주세요.", en: "No invited hotel has agreed to its commission rate yet." },
   COMMISSION_OUT_OF_RANGE: { status: 422, ko: "허용 범위를 벗어난 커미션 요율입니다. 본사에 요청해 주세요.", en: "This commission rate is outside the allowed range. Please ask HQ." },
   COMMISSION_RATE_REQUIRED: { status: 422, ko: "승인하려면 커미션 요율을 입력해 주세요.", en: "Enter a commission rate to approve." },
+  CANCEL_NOT_ALLOWED: { status: 409, ko: "호텔에 요청을 보낸 뒤라 여기서는 취소할 수 없습니다. 문의하기에서 알려 주세요.", en: "This request has already gone to hotels and can't be cancelled here. Please contact us." },
+  TURNSTILE_FAILED: { status: 403, ko: "자동 입력 방지 확인에 실패했습니다. 새로고침한 뒤 다시 시도해 주세요.", en: "We couldn't complete the bot check. Please reload and try again." },
   INTERNAL: { status: 500, ko: "일시적인 오류입니다. 잠시 후 다시 시도해 주세요.", en: "Temporary error. Please try again." },
 };
 

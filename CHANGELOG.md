@@ -1,5 +1,16 @@
 # CHANGELOG
 
+## [0.11.0-prelaunch] — 2026-10-07 (긴급 보완 3건)
+
+### 추가
+- **오거나이저 자체 취소**(D-47): 진행 상황 화면 접수됨·확인 중 패널에 "이 요청 취소하기" → 확인 상자(사유 4종, 기타는 메모 필수) → 취소됨 화면. 서버가 `can_cancel`로 허용 여부를 정한다(호텔 초대 전까지). 마이그레이션 `0020_organizer_cancel.sql`(`private.rfp_organizer_cancel` — 잠금·멱등·`MG:CANCEL_NOT_ALLOWED`·개입 알림 정리·위임 파트너 알림), Edge Function `cancel_rfp`(32개째), `get_track`에 `can_cancel`. 취소됨 화면 문구에서 고정 날짜·"호텔에 알렸습니다" 단정을 뺐다.
+- **운영자 대리 확정 동의 기록**(D-48·D-49, 약관 제7조 ⑧): 마이그레이션 `0019_selection_consent.sql` — `selections.consent_method·consent_confirmed_at·consent_note·consent_recorded_by·consent_recorded_role·consent_partner_org_id`, 기존 행 백필(OTP는 `otp`, 옛 대리 확정은 `legacy_unrecorded`), OTP 기본값 트리거, `admin_transition` 6인자(`p_consent`)로 재생성, `MG:GUARD_CONSENT`, 파트너 담당자 성사 금지, 파트너 관리자 성사 시 본사 알림, 3년 뒤 근거 메모 파기(`system_tick_all`). 콘솔 "성사로 닫기 · 동의 확인 기록" 다이얼로그와 소유·선택 인증 카드의 "대리 확정" 표시.
+- **Turnstile 스팸 방어**(D-50): `_shared/turnstile.ts`(시크릿 없으면 통과, 있으면 fail-closed), `submit_rfp`·`register_partner`·`signup_start`에 적용, `MG.turnstile`(사이트 키가 있을 때만 스크립트 지연 로드, 제출마다 새 토큰), `site.config.json` `turnstile.siteKey`, CSP `script-src`·`frame-src`(키 있을 때만), 오류 `TURNSTILE_FAILED`(403). 개인정보처리방침 위탁·국외 이전 표와 쿠키 단서에 Cloudflare 추가(`[법무 검토]` 5곳 → 총 36곳).
+
+### 테스트
+- `supabase/tests/sql/09_selection_consent.sql`, `10_organizer_cancel.sql`, Deno `cancel_rfp_test.ts`·`turnstile_test.ts`, `06_partner_console.sql` 성사 호출에 동의 기록 추가. 백엔드 **PASS=17**.
+- `verify_api.py`: 자체 취소 흐름·비딩 중 버튼 없음·Turnstile 토큰 부착. `verify_admin.py`·`verify_admin_members.py`: 동의 다이얼로그 검증(빈 제출·짧은 근거 거절)과 카드 표시.
+
 ## [0.10.1-prelaunch] — 2026-10-07 (불일치 3건 수정)
 
 ### 수정

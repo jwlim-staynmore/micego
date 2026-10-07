@@ -57,6 +57,7 @@ supabase functions deploy             # functions/ 아래 전체 배포 (functio
 | `ALIGO_KEY`, `ALIGO_USER_ID` | Aligo SMS/LMS 폴백 (미설정 시 `NotConfiguredError`) |
 | `OTP_PEPPER` | `code_hash = sha256(code:otp_id:pepper)` 의 pepper |
 | `IP_HASH_SALT` | 레이트리밋 키로 쓰는 IP 해시의 salt |
+| `TURNSTILE_SECRET` | Cloudflare Turnstile 서버 검증(`_shared/turnstile.ts`, D-50). 없으면 검사 생략, 있으면 fail-closed. **사이트 키(`site.config.json` `turnstile.siteKey`)를 넣은 정적 사이트를 먼저 배포한 다음 설정**한다 — 반대로 하면 토큰 없는 제출이 모두 403. 급할 때는 이 시크릿만 지우면 꺼진다 |
 | `CRON_SECRET` | `dispatch_notifications` 를 pg_cron 이 호출할 때 쓰는 `x-cron-secret` 값 |
 | `MG_DEMO_OTP` | `1` 이면 모든 OTP 코드가 `123456` 으로 고정된다. **`NOTIFY_MODE=live` 에서는 무시된다** (코드에서 강제) |
 

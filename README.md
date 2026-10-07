@@ -34,7 +34,7 @@ python3 build_sitemap.py   # docs/sitemap.html
 for s in verify2 verify3 verify_acc verify_launch verify_api verify_feedback \
          verify_admin verify_admin_ops verify_admin_members verify_admin_feedback; do python3 $s.py || break; done
 npm i -g deno              # 백엔드 3단계에 필요 (없으면 esbuild 구문검사로 대체되어 단위 테스트가 안 돈다)
-bash supabase/tests/run.sh # 백엔드: pglast + PostgreSQL 16(root·postgres OS 사용자 필요) + Deno check/test → PASS=12 이어야 함
+bash supabase/tests/run.sh # 백엔드: pglast + PostgreSQL 16(root·postgres OS 사용자 필요) + Deno check/test → PASS=17 이어야 함
 ```
 
 로컬 미리보기는 정적 서버면 충분하다: `python3 -m http.server 8080` → `http://localhost:8080/`.

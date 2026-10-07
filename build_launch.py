@@ -34,6 +34,7 @@ os.makedirs('assets', exist_ok=True)
 _cfg_out = {
     'domain': CFG.get('domain', ''), 'baseUrl': SITE_BASE, 'officialEmail': MAIL, 'privacyEmail': PMAIL,
     'supabase': CFG.get('supabase') or {'url': '', 'anonKey': '', 'functionsUrl': ''},
+    'turnstile': {'siteKey': ((CFG.get('turnstile') or {}).get('siteKey') or '')},
     'demo': DEMO, 'prod': PROD, 'lang': None,
 }
 
@@ -504,11 +505,15 @@ _SUPA_WSS = ('wss://' + _SUPA[len('https://'):]) if _SUPA.startswith('https://')
 _GA_SCRIPT = ' https://www.googletagmanager.com' if _GA else ''
 _GA_IMGCONN = ' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com' if _GA else ''
 _FORM_ACTION = "form-action 'self' mailto:" if DEMO else "form-action 'self'"
-_CSP = ("default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net%s; "
+# Turnstile(D-50): 사이트 키가 있을 때만 Cloudflare 스크립트·iframe 허용. frame-src 가 없으면 default-src 'self' 가 iframe 을 막는다.
+_TS_ON = bool((CFG.get('turnstile') or {}).get('siteKey'))
+_TS_SCRIPT = ' https://challenges.cloudflare.com' if _TS_ON else ''
+_TS_FRAME = 'frame-src https://challenges.cloudflare.com; ' if _TS_ON else ''
+_CSP = ("default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net%s%s; "
         "style-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://fonts.googleapis.com; "
         "font-src 'self' data: https://cdn.jsdelivr.net https://fonts.gstatic.com; "
-        "img-src 'self' data:%s; connect-src 'self' %s %s%s; frame-ancestors 'none'; base-uri 'self'; "
-        "%s; object-src 'none'; upgrade-insecure-requests") % (_GA_SCRIPT, _GA_IMGCONN, _SUPA, _SUPA_WSS, _GA_IMGCONN, _FORM_ACTION)
+        "img-src 'self' data:%s; connect-src 'self' %s %s%s; %sframe-ancestors 'none'; base-uri 'self'; "
+        "%s; object-src 'none'; upgrade-insecure-requests") % (_GA_SCRIPT, _TS_SCRIPT, _GA_IMGCONN, _SUPA, _SUPA_WSS, _GA_IMGCONN, _TS_FRAME, _FORM_ACTION)
 
 _GLOBAL_HEADERS = [
     ('Strict-Transport-Security', 'max-age=31536000; includeSubDomains'),

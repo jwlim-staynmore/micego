@@ -6,6 +6,7 @@ import { rateLimit } from "../_shared/ratelimit.ts";
 import { randomToken } from "../_shared/tokens.ts";
 import { createOtp } from "../_shared/otp.ts";
 import { clientIp, hashIp } from "../_shared/http.ts";
+import { requireTurnstile } from "../_shared/turnstile.ts";
 
 // 견적 요청 폼·가입·계정 설정이 같은 목록을 쓴다(0018_org_types_currencies).
 const ORG_TYPES = ["여행사", "랜드사", "기업(행사 주최)", "협회·기관", "기타"];
@@ -33,6 +34,7 @@ export async function handle(req: Request, deps: Deps): Promise<unknown> {
   fe.check("terms", asBool(consents.terms));
   fe.check("privacy", asBool(consents.privacy));
   fe.throwIfAny();
+  await requireTurnstile(deps, req, body.turnstile_token); // D-50 · 시크릿 없으면 통과
 
   await rateLimit(deps.db, "signup_start_email", email, 10, 86400); // 10/day/email
 

@@ -1,0 +1,11 @@
+{
+  "status": 200,
+  "body": {
+    "ref": "MG-TEST-014",
+    "state": "received",
+    "owner": true,
+    "can_cancel": true,
+    "destination": "Da Nang",
+    "eventType": "Conference"
+  }
+}

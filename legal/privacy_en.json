@@ -96,6 +96,11 @@
         "Regional Partners (local companies that operate MICEGO requests in a destination on our behalf; named on the request page and in our emails when they handle a request)",
         "Invite you to quote, enter quotes you agree by phone or messenger (subject to your confirmation), collect and compare quotes, and contact you about a request they handle. They see your property and contact details for that request only. [legal review]",
         "The destination country of the request, within our service countries: Thailand, Vietnam, Indonesia, Malaysia, the Philippines, Singapore, Japan, Taiwan, Hong Kong, Macao, Guam and Saipan (US territories) and the United States including Hawaii. Currently: Thailand. [legal review]"
+       ],
+       [
+        "Cloudflare, Inc.",
+        "Runs the bot check (Turnstile) on our public forms — partner registration and quote requests — using your IP address and browser signals for that check only [legal review]",
+        "United States and other countries in Cloudflare's network"
        ]
       ]
      }
@@ -162,6 +167,7 @@
    "title": "Cookies and browser storage",
    "paras": [
     "We do not use cookies. If we introduce analytics or other cookies, we will update this notice first.",
+    "The bot check on our public forms (Cloudflare Turnstile, section 4) may briefly use a cookie or browser storage while it runs. [legal review]",
     "Your browser stores the last mode you chose (Travel agencies / Hotels) in localStorage, and anything you are typing in the feedback widget in sessionStorage until you send it or close the tab.",
     "Fonts and some scripts load from Google Fonts and jsDelivr, which receive connection data such as your IP address when a page loads."
    ]

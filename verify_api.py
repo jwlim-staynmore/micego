@@ -46,6 +46,7 @@ def build_b():
         "analytics": {"ga4": ""}, "siteVerification": {"google": "", "naver": ""},
         "supabase": {"url": "https://stub.mg.test", "anonKey": "stub-anon-key", "functionsUrl": ""},
         "sms": {"vendor": "solapi", "vendorName": ""}, "prod": False, "demo": True,
+        "turnstile": {"siteKey": "1x00000000000000000000AA"},  # D-50: 가짜 Turnstile 스크립트로 토큰 부착 확인
     }
     cfg_path = os.path.join(d, 'site.config.json')
     open(cfg_path, 'w', encoding='utf-8').write(json.dumps(cfg, ensure_ascii=False, indent=2))
@@ -132,12 +133,19 @@ class Router:
                       body=json.dumps(resp_body))
 
 
+_FAKE_TS = ("window.__tsN=0;window.turnstile={render:function(el,o){window.__tsO=o;return 'w1';},"
+            "reset:function(){},execute:function(){setTimeout(function(){window.__tsN++;window.__tsO.callback('ts-tok-'+window.__tsN);},0);}};")
+
+
 def new_ctx(browser, viewport=None, stub=None, session=None):
     ctx = browser.new_context(viewport=viewport or {'width': 1280, 'height': 900})
     router = Router()
     ctx.route(re.compile(r'^https://stub\.mg\.test/.*'), router.handle)
     ctx.route(re.compile(r'.*supabase-js@2/dist/umd/supabase\.js.*'),
               lambda route: route.fulfill(path=STUB_JS, headers={'Content-Type': 'application/javascript'}))
+    # Turnstile(D-50): Cloudflare 스크립트 대신 즉시 토큰을 주는 가짜 위젯
+    ctx.route(re.compile(r'^https://challenges\.cloudflare\.com/turnstile/.*'),
+              lambda route: route.fulfill(status=200, headers={'Content-Type': 'application/javascript'}, body=_FAKE_TS))
     init_parts = []
     if stub is not None:
         init_parts.append('window.__mgStub = %s;' % json.dumps(stub))
@@ -202,12 +210,16 @@ with sync_playwright() as pw:
     else:
         expected_keys = {'orgType', 'company', 'name', 'email', 'phone', 'eventType', 'startDate', 'endDate',
                           'headcount', 'region', 'twinRooms', 'kingRooms', 'ballroomUse', 'ballroomPurpose',
-                          'note', 'consent', 'idem', 'lang'}
+                          'note', 'consent', 'idem', 'lang', 'turnstile_token'}
         got_keys = set(calls[0].keys())
         if got_keys != expected_keys:
             F('landing submit: payload keys %s do not match §3 list %s' % (sorted(got_keys), sorted(expected_keys)))
         else:
             ok('landing submit: payload keys equal the §3 list')
+        if str(calls[0].get('turnstile_token', '')).startswith('ts-tok-'):
+            ok('landing submit: Turnstile token attached (D-50)')
+        else:
+            F('landing submit: turnstile_token missing or wrong: %r' % calls[0].get('turnstile_token'))
     if page.is_hidden('#rfpDone'):
         F('landing submit ok: #rfpDone should be visible')
     else:
@@ -362,6 +374,38 @@ with sync_playwright() as pw:
         ok('track: non-member sees the signup note instead of the share-link control')
     else:
         F('track: non-member should see #shareSignup and no share-create control')
+    ctx.close()
+
+    # D-47: 호텔 발송 전(can_cancel)이면 '이 요청 취소하기' → 사유 선택 → cancel_rfp → cancelled
+    ctx, page, router, errs = new_ctx(browser)
+    router.set('get_track', 'get_track__received')
+    router.set('cancel_rfp', 'cancel_rfp__ok')
+    page.goto(U('ko/track.html?t=trk_test_014'))
+    page.wait_for_timeout(300)
+    btn = page.query_selector('[data-states~="received"] [data-mg-cancel]')
+    if not (btn and btn.is_visible()):
+        F('track: received + can_cancel should show the cancel button')
+    else:
+        btn.click(); page.wait_for_timeout(100)
+        page.click('.mg-cancel-box [data-ok]'); page.wait_for_timeout(150)
+        if router.calls_for('cancel_rfp'):
+            F('track cancel: confirming without a reason must not call cancel_rfp')
+        page.select_option('#mgCancelReason', '일정 변경')
+        page.click('.mg-cancel-box [data-ok]'); page.wait_for_timeout(300)
+        c = router.calls_for('cancel_rfp')
+        if len(c) == 1 and c[0].get('token') == 'trk_test_014' and c[0].get('reason') == '일정 변경' and page.get_attribute('html', 'data-state') == 'cancelled':
+            ok('track: self-cancel calls cancel_rfp({token, reason}) and shows the cancelled state')
+        else:
+            F('track cancel: unexpected calls=%r state=%r' % (c, page.get_attribute('html', 'data-state')))
+    ctx.close()
+    ctx, page, router, errs = new_ctx(browser)
+    router.set('get_track', 'get_track__bidding')
+    page.goto(U('ko/track.html?t=trk_test_014'))
+    page.wait_for_timeout(300)
+    if page.query_selector('[data-mg-cancel]:visible'):
+        F('track: bidding (no can_cancel) must not show the cancel button')
+    else:
+        ok('track: no cancel button once hotels have the request')
     ctx.close()
 
     ctx, page, router, errs = new_ctx(browser, session=SESSION_MEMBER)

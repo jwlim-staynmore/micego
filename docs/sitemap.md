@@ -18,7 +18,7 @@ v1.3 · 2026-09-27 · 페이지 42개 · 미구현 항목 47개 (A 오픈 차단
 | `ko/about.html` | 서비스 소개 — 운영 방식·정책·운영사 소개 | 공개 | 색인 | — | 없음 |
 | `ko/faq.html` | 자주 묻는 질문 — 이용 조건·진행·회원 그룹 | 공개 | 색인 | — | 없음 |
 | `ko/contact.html` | 문의하기 — 문의 폼 + 메일 주소 | 공개 | 색인 | — | 폼 제출 API |
-| `ko/terms.html` | 이용약관(전문 초안) — legal/terms_ko.json 7장 23조 렌더링. 법무 검토 표시 31곳 중 8곳 | 공개 | 색인 | — | 없음 |
+| `ko/terms.html` | 이용약관(전문 초안) — legal/terms_ko.json 7장 23조 렌더링. 법무 검토 표시 36곳 중 8곳 | 공개 | 색인 | — | 없음 |
 | `ko/privacy.html` | 개인정보처리방침(전문 초안) — legal/privacy_ko.json 16조 렌더링. 보유 기간·제3자 제공·위탁·국외 이전·브라우저 저장 표 | 공개 | 색인 | — | 없음 |
 | `ko/track.html?t=…` | 견적 진행 상황(요청자 전용) — 접수→비교표→선정까지 상태별 화면, 제안 비교, 제안 선택(휴대전화 인증), 조건 변경, 동료 공유 링크 발급 | 토큰 링크 | noindex | 11 상태 + 공유 보기(?s=) | 토큰별 데이터, 선택 RPC, OTP, 공유 링크 |
 | `ko/signup.html` | 회원가입 — 기본 정보 → 이메일 인증번호 → 휴대전화 인증번호 3단계 | 공개 | 색인 | 12 상태 | 가입·인증 API |
@@ -140,7 +140,7 @@ v1.3 · 2026-09-27 · 페이지 42개 · 미구현 항목 47개 (A 오픈 차단
 | 항목 | 현재 상태 | 오픈 조건 | 우선순위 | 담당 | 진행 |
 |---|---|---|---|---|---|
 | 이용약관 전문 | legal/terms_ko.json(23조)·partner_terms_en.json(20조) 초안 렌더링 완료. [법무 검토] 18곳 | 법무 검토 → legal/REVIEW_NOTES.md 항목 확정 → site.config.json legal.reviewed=true·effectiveDate 기재 | A 오픈 차단 | 법무 | 일부 구현 |
-| 개인정보처리방침 확정 | legal/privacy_ko.json·privacy_en.json 초안 렌더링 완료(이전 TODO(legal) 5건 모두 반영). [법무 검토] 13곳 + 결정 대기: 비회원 요청 30일 파기, 운영자 대리 확정 동의, Supabase 리전 | 법무 검토 + 운영 결정 → 파기 작업(system_tick) 추가 → legal.reviewed=true | A 오픈 차단 | 법무+BE | 일부 구현 |
+| 개인정보처리방침 확정 | legal/privacy_ko.json·privacy_en.json 초안 렌더링 완료(이전 TODO(legal) 5건 모두 반영). [법무 검토] 18곳 + 결정 대기: 비회원 요청 30일 파기, Supabase 리전(운영자 대리 확정 동의 기록은 0019로 구현) | 법무 검토 + 운영 결정 → 파기 작업(system_tick) 추가 → legal.reviewed=true | A 오픈 차단 | 법무+BE | 일부 구현 |
 | 사업자 정보 | 상호·대표자·사업자등록번호·주소·개인정보 보호책임자 미기재(TODO(operator) — about·privacy·terms) | 확정 후 푸터·약관·방침에 기재 | A 오픈 차단 | 운영 | 구현됨 · 설정 필요 |
 | 휴대전화 인증 범위 표기 | 소유 확인이며 본인확인 아님 — 약관·방침에 반영됨 | 법무 확인만 | B 오픈 전 필수 | 법무 | 외부 작업 |
 

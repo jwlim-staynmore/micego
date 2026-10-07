@@ -90,6 +90,8 @@ export async function handle(req: Request, deps: Deps): Promise<unknown> {
     [r.id, r.round],
   );
   view.hotels_invited = Number(invCountRows[0]?.n ?? 0);
+  // 호텔에 아무것도 보내기 전까지만 직접 취소 가능(D-47). 판정 기준은 private.rfp_organizer_cancel 과 같다.
+  view.can_cancel = !isShare && (["received", "verifying"].includes(stateRaw) || (stateRaw === "open" && view.hotels_invited === 0));
 
   // 제안 비교표 (전달됨/성사 상태에서만 의미 있음, delivered 이후 라벨이 매겨짐)
   const won = stateRaw === "won";

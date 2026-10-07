@@ -163,7 +163,8 @@
   var CM_ERR = {
     COMMISSION_NOT_AGREED: '요율에 동의한 호텔이 없어 초대할 수 없습니다. 호텔이 동의 링크를 누른 뒤에 초대해 주세요.',
     COMMISSION_OUT_OF_RANGE: '허용 범위를 벗어난 요율입니다. 범위 밖 요율은 본사에 요청해 주세요.',
-    COMMISSION_RATE_REQUIRED: '승인하려면 커미션 요율을 입력해 주세요.'
+    COMMISSION_RATE_REQUIRED: '승인하려면 커미션 요율을 입력해 주세요.',
+    GUARD_CONSENT: '동의 확인 방법·일시·근거(10자 이상)를 모두 입력해 주세요.'
   };
 
   /* ---------- 파생값 ---------- */
@@ -667,6 +668,7 @@
   }
 
   A.request = async function (id, action) {
+    var consent = null;
     var r = A.get(id); if (!r) return false;
     if (A.allowed(r).indexOf(action) < 0) return false;
     var g = A.guard(r, action);
@@ -692,12 +694,19 @@
       if (note === null) return false;
       memo = '새 라운드 ' + (r.round + 1) + (note ? ' · ' + note : '');
     } else if (action === 'won') {
+      /* 콘솔 성사는 언제나 휴대전화 인증 없는 대리 확정이다 → 동의 확인 기록 필수(약관 제7조 ⑧, D-49) */
+      if (A.me && A.me.role === 'partner_member') { A.toast('성사 처리는 파트너 관리자나 본사만 할 수 있습니다', 'error'); return false; }
       var sel = A.curInv(r).filter(function (i) { return i.sel === 'selected'; })[0];
-      var ok2 = await A.confirm(sel.hotel + '을(를) 선정 호텔로 확정합니다. 나머지 호텔은 미선정 처리됩니다. 이 시점에 선정 호텔에 연결 메일(HTL_SELECTED_CONNECT, 오거나이저 참조), 제출한 나머지 호텔에 미선정 안내(HTL_NOT_SELECTED), 오거나이저에게 성사 알림톡(ORG_WON)이 자동으로 나갑니다.', '성사로 닫기');
-      if (!ok2) return false;
-      memo = sel.hotel + ' 선정 · 연결 메일 자동 발송(오거나이저 참조) · 미선정 안내·성사 알림 자동 발송';
+      consent = await A.consentDialog(r, sel);
+      if (!consent) return false;
+      memo = sel.hotel + ' 선정 · 연결 메일 자동 발송(오거나이저 참조) · 미선정 안내·성사 알림 자동 발송 · 동의 확인: ' + A.CONSENT_METHODS[consent.method] + ' ' + A.toInput(Date.parse(consent.confirmed_at)).replace('T', ' ');
     }
-    var okP = await A.persist('admin_transition', { p_ref: id, p_action: action, p_reason: reasonVal, p_note: noteVal, p_memo: memo }, function () { apply(r, action, memo); });
+    var args = { p_ref: id, p_action: action, p_reason: reasonVal, p_note: noteVal, p_memo: memo };
+    if (consent) args.p_consent = consent;
+    var okP = await A.persist('admin_transition', args, function () {
+      apply(r, action, memo);
+      if (consent) { r.pickOtp = r.pickOtp || { at: null, phone: '', operator: true }; r.pickOtp.consent = { method: consent.method, at: consent.confirmed_at, by_role: (A.me && A.me.role) || 'operator' }; }
+    });
     if (!okP) return false;
     var r2 = A.get(id) || r;
     A.toast(STATES[target(action)] + '(으)로 바꿨습니다' + (action === 'rebid' ? ' · 라운드 ' + r2.round : '') + (action === 'won' ? ' · 연결 메일·결과 안내를 자동으로 보냈습니다' : ''), 'ok');
@@ -777,6 +786,29 @@
         if (!reason) return '사유를 선택해 주세요';
         if (reason === '기타' && !note) return '기타를 고른 경우 메모를 적어 주세요';
         return { reason: reason, note: note };
+      }
+    });
+  };
+  /* 성사로 닫기 · 동의 확인 기록 (0019 admin_transition p_consent 와 같은 규칙) */
+  A.CONSENT_METHODS = { email_reply: '이메일 회신', phone_call: '통화', other: '기타' };
+  A.consentDialog = function (r, sel) {
+    var radios = Object.keys(A.CONSENT_METHODS).map(function (k) { return '<label class="chk"><input type="radio" name="dlgConsentMethod" value="' + k + '"> ' + esc(A.CONSENT_METHODS[k]) + '</label>'; }).join(' ');
+    return dialog({
+      title: '성사로 닫기 · 동의 확인 기록', ok: '기록하고 성사로 닫기',
+      body: '<p>' + esc(sel.hotel) + '을(를) 선정 호텔로 확정합니다. 나머지 호텔은 미선정 처리됩니다. 이 시점에 선정 호텔에 연결 메일(HTL_SELECTED_CONNECT, 오거나이저 참조), 제출한 나머지 호텔에 미선정 안내(HTL_NOT_SELECTED), 오거나이저에게 성사 알림톡(ORG_WON)이 자동으로 나갑니다.</p>' +
+        '<p class="muted small">오거나이저가 휴대전화 인증으로 고른 건이 아니므로, 선정 의사와 정보 제공(회사명·담당자·이메일·연락처를 선정 호텔에 전달) 동의를 어떻게 확인했는지 남겨 주세요. 이용약관 제7조 ⑧에 따라 기록하며, 성사 기록과 함께 3년 보관 후 파기합니다.</p>' +
+        '<fieldset class="fs"><legend class="lbl">확인 방법</legend><div id="dlgConsentMethod">' + radios + '</div></fieldset>' +
+        '<label class="lbl" for="dlgConsentAt">확인 일시 (KST)</label><input id="dlgConsentAt" class="inp" type="datetime-local" value="' + toInput(MGA.now()) + '">' +
+        '<label class="lbl" for="dlgConsentNote">근거</label><textarea id="dlgConsentNote" class="inp" rows="3" maxlength="1000" placeholder="예: 10/07 14:20 ' + esc((r.organizer && r.organizer.name) || '담당자') + '님과 통화. 제안 ' + esc(sel.label || '') + ' 선정과 연락처 전달 동의 확인. \'확인함\'만 쓰지 말고 누구와 어떻게 확인했는지 적어 주세요."></textarea>',
+      collect: function (d) {
+        var m = d.querySelector('input[name=dlgConsentMethod]:checked'), atv = d.querySelector('#dlgConsentAt').value, note = d.querySelector('#dlgConsentNote').value.trim();
+        if (!m) return '확인 방법을 골라 주세요';
+        var at = fromInput(atv);
+        if (!at) return '확인 일시를 입력해 주세요';
+        if (at > MGA.now() + 5 * 60 * 1000) return '확인 일시가 지금보다 늦습니다';
+        if (r.createdAt && at < r.createdAt) return '확인 일시가 요청 접수보다 이릅니다';
+        if (note.length < 10) return '근거를 10자 이상 적어 주세요';
+        return { method: m.value, confirmed_at: new Date(at).toISOString(), note: note };
       }
     });
   };

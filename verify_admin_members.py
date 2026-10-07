@@ -156,8 +156,8 @@ with sync_playwright() as p:
     pg.goto(BASE+'rfp.html?id=MG-2610-009'); ob=pg.inner_text('#ownerBox'); ok('009 won otp line','완료 2026-09-25 10:31 (010-****-8642)' in ob,ob)
     pg.goto(BASE+'rfp.html?id=MG-2610-021'); ob=pg.inner_text('#ownerBox'); ok('021 비회원','비회원' in ob and pg.locator('#ownerLink').count()==0,ob)
     # operator won without OTP record
-    pg.goto(BASE+'rfp.html?id=MG-2610-012'); pg.locator('[data-sel=selected]').nth(1).click(); pg.click('[data-to=won]'); pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(120)
-    ok('012 won: no otp record note','인증 기록 없음' in pg.inner_text('#ownerBox'),pg.inner_text('#ownerBox'))
+    pg.goto(BASE+'rfp.html?id=MG-2610-012'); pg.locator('[data-sel=selected]').nth(1).click(); pg.click('[data-to=won]'); pg.check('.dlg input[name=dlgConsentMethod][value=email_reply]'); pg.fill('#dlgConsentNote','메일 회신으로 선정과 연락처 전달 동의 확인'); pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(120)
+    ok('012 won: proxy consent recorded (no OTP)','대리 확정' in pg.inner_text('#ownerBox') and '이메일 회신' in pg.inner_text('#ownerBox'),pg.inner_text('#ownerBox'))
     # settings
     pg.goto(BASE+'settings.html#rules'); pg.evaluate('location.reload()'); pg.wait_for_timeout(300)
     mr=pg.inner_text('#memberRules'); ok('member rules table',all(k in mr for k in ['10자 이상','유효 10분','유효 3분','15분','30분','72시간','10분 잠금','3개월','ORG_PICK_OTP']),mr[:200])

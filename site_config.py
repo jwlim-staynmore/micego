@@ -23,6 +23,7 @@ _DEFAULT = {
   "analytics": {"ga4": ""},
   "siteVerification": {"google": "", "naver": ""},
   "supabase": {"url": "", "anonKey": "", "functionsUrl": ""},
+  "turnstile": {"siteKey": ""},
   "sms": {"vendor": "solapi", "vendorName": ""},
   "prod": False, "demo": True,
 }

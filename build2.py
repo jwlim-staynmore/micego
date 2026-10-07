@@ -1154,8 +1154,8 @@ PICK = ('<div class="panel owner-only" id="pickCard"><h2>제안 선택하기</h2
     '<li>MICEGO가 선정된 호텔과 나머지 호텔에 결과를 알립니다.</li><li>선정된 호텔에는 회사명·담당자 이름·이메일·연락처가 전달되고, MICEGO가 연결 메일로 양쪽을 이어 드립니다. <a class="tlink" href="terms.html#art7">이용약관 제7조</a></li><li>계약과 결제는 선정된 호텔과 직접 진행합니다.</li></ol>'
     '<p class="submit-note" style="margin-top:14px">선정되지 않은 호텔에는 결과만 알리며 회사명과 연락처는 전달하지 않습니다. 견적 유효기한이 가장 빠른 제안은 제안 B(2026-12-15)입니다. 조건을 바꾸고 싶으시면 선택 대신 <a class="tlink" data-mg-action="change" href="' + CHG + '">변경 내용을 알려 주세요</a>. 바뀐 조건으로 호텔에 다시 요청합니다.</p></div>')
 ASK = 'mailto:mysteri1984@gmail.com?subject=' + quote('[MICEGO 비교표 문의] MG-2610-014') + '&amp;body=' + quote('문의할 제안: 제안 A / B / C\r\n질문 내용:\r\n')
-S_REC = spanel(' is-wait', '1', '요청을 받았습니다', '<p>2026-09-30(수) 14:20에 견적 요청이 접수됐습니다. 접수 확인 메일에 이 페이지 링크를 함께 보내 드렸습니다.</p><p>접수된 영업일에 요건 확인을 시작하고, 그때부터 3영업일 안에 진행 상황과 다음 일정을 이메일로 알려 드립니다. 영업일은 주말과 한국 공휴일을 뺀 날이며, 기한은 마지막 날 18:00(KST)입니다.</p><p class="owner-only">그사이 일정이나 인원이 바뀌면 <a class="tlink" data-mg-action="change" href="' + CHG + '">이메일로 알려 주세요</a>.</p>')
-S_VER = spanel(' is-wait', '…', '요건을 확인하고 있습니다', '<p>해외 행사인지, 일정이 확정됐는지, 인원·객실·연회 정보가 서로 맞는지 살펴보고 있습니다. 더 여쭤볼 내용이 있으면 이메일로 연락드립니다.</p><p>확인을 시작한 2026-09-30(수)부터 3영업일 안에 진행 상황을 회신드립니다. 확인이 길어지면 예상 일정을 먼저 알려 드립니다.</p><p>호텔에는 아직 아무것도 보내지 않았습니다. 요청서를 보낼 때도 회사명·예산·담당자 연락처는 빼고 보냅니다.</p>')
+S_REC = spanel(' is-wait', '1', '요청을 받았습니다', '<p>2026-09-30(수) 14:20에 견적 요청이 접수됐습니다. 접수 확인 메일에 이 페이지 링크를 함께 보내 드렸습니다.</p><p>접수된 영업일에 요건 확인을 시작하고, 그때부터 3영업일 안에 진행 상황과 다음 일정을 이메일로 알려 드립니다. 영업일은 주말과 한국 공휴일을 뺀 날이며, 기한은 마지막 날 18:00(KST)입니다.</p><p class="owner-only">그사이 일정이나 인원이 바뀌면 <a class="tlink" data-mg-action="change" href="' + CHG + '">이메일로 알려 주세요</a>.</p><p class="owner-only mg-cancel-wrap" hidden><button type="button" class="tlink mg-cancel-btn" data-mg-cancel>이 요청 취소하기</button></p>')
+S_VER = spanel(' is-wait', '…', '요건을 확인하고 있습니다', '<p>해외 행사인지, 일정이 확정됐는지, 인원·객실·연회 정보가 서로 맞는지 살펴보고 있습니다. 더 여쭤볼 내용이 있으면 이메일로 연락드립니다.</p><p>확인을 시작한 2026-09-30(수)부터 3영업일 안에 진행 상황을 회신드립니다. 확인이 길어지면 예상 일정을 먼저 알려 드립니다.</p><p>호텔에는 아직 아무것도 보내지 않았습니다. 요청서를 보낼 때도 회사명·예산·담당자 연락처는 빼고 보냅니다.</p><p class="owner-only mg-cancel-wrap" hidden><button type="button" class="tlink mg-cancel-btn" data-mg-cancel>이 요청 취소하기</button></p>')
 S_REJ = spanel(' is-muted', '×', '이번 요청은 진행하지 않습니다', '<span class="st-chip"><span class="k">사유</span>일정 미확정</span><p>행사 시작일이 아직 확정되지 않아 호텔에 요청을 보내지 않았습니다. MICEGO는 일정이 확정된 해외 행사만 호텔에 요청합니다.</p><p>일정이 정해지면 새 요청으로 다시 보내 주세요. 이번 요청 내용은 어느 호텔에도 전달되지 않았습니다.</p>' + NEWREQ) + '<!-- TODO(backend): 사유별 문구 — 국내 행사: 국내에서 열리는 행사라 진행하지 않습니다(MICEGO는 해외 호텔만 연결) / 필수 정보 부족: 인원·객실·연회 정보를 확인하지 못해 진행을 멈췄습니다 -->'
 S_BID = spanel('', '→', '호텔에 요청을 보냈습니다', '<p>행사 조건에 맞는 해외 호텔 몇 곳에 같은 요건서를 보냈습니다. 요건서에는 회사명·예산·담당자 연락처가 들어가지 않습니다.</p><p>호텔 제안 마감은 2026-10-08(목) 18:00 KST입니다. 마감 뒤 MICEGO가 요금·통화·유효기한·취소 규정을 확인해 2026-10-12(월)까지 이 링크에 비교표를 올리고 이메일로 알려 드립니다. 10-09(금)은 한글날이라 영업일에서 빠집니다.</p><p class="owner-only">조건이 바뀌었다면 <a class="tlink" data-mg-action="change" href="' + CHG + '">변경 내용을 알려 주세요</a>. 바뀐 조건으로 다시 요청하고 마감을 새로 정합니다.</p>')
 S_REB = spanel('', '→', '바뀐 조건으로 호텔에 다시 요청했습니다', '<p>2026-10-13(화)에 알려 주신 변경(트윈 60실 → 70실)을 반영해 새 요건서를 보냈습니다. 이전 조건으로 받은 제안은 비교에 쓰지 않고 기록으로만 남겨 둡니다.</p><p>새 제안 마감은 2026-10-16(금) 18:00 KST이고, 새 비교표는 2026-10-19(월)까지 이 링크에서 보여 드립니다.</p>')
@@ -1163,7 +1163,7 @@ S_COL = spanel(' is-wait', '…', '받은 제안을 정리하고 있습니다', 
 S_DEL = spanel('', '✓', '비교표가 도착했습니다', '<p>호텔 3곳의 제안을 정리했습니다. 선정 전까지 호텔명은 제안 A·B·C로만 표시합니다.</p><p>금액은 호텔이 제출한 통화 그대로입니다. 제안마다 통화가 달라 트윈 1박 요금 옆에 USD 참고 금액을 함께 적었습니다.</p>')
 S_WON = spanel('', '✓', '선정 호텔과 연결해 드렸습니다', '<p>제안 A(Ocean Pearl Resort Da Nang)를 선정하셨습니다. 2026-10-14(수)에 호텔 담당자에게 연결 메일을 보내고 주최 측 담당자를 참조로 넣었습니다.</p><p>선정과 함께 호텔에 회사명·담당자 이름·이메일·연락처가 전달됐습니다. 계약과 결제는 호텔과 직접 진행해 주세요. 주최 측이 MICEGO에 내는 수수료는 없습니다.</p><p>선정되지 않은 두 호텔에는 결과만 알렸고, 회사명과 연락처는 전달하지 않았습니다.</p>')
 S_LOST = spanel(' is-muted', '–', '이번 요청은 성사 없이 종료됐습니다', '<span class="st-chip"><span class="k">사유</span>선택하지 않음</span><p>2026-10-20(화)에 주신 회신에 따라 제안을 선택하지 않고 요청을 종료했습니다. 호텔에는 결과만 알렸고, 회사명과 연락처는 전달하지 않았습니다.</p><p>조건을 바꿔 다시 받아 보시려면 새로 요청해 주세요.</p>' + NEWREQ) + '<!-- TODO(backend): 사유 — 선택하지 않음 / 유효기한 경과(회신 없음) / 두 차례 요청에도 제안 없음 -->'
-S_CAN = spanel(' is-muted', '×', '요청이 취소됐습니다', '<p>2026-10-06(화)에 요청하신 대로 이 견적 요청을 취소했습니다. 이미 요청을 받은 호텔에는 취소 사실을 알렸습니다.</p><p>회사명과 담당자 연락처는 어느 호텔에도 전달되지 않았습니다. 다시 진행하시려면 새로 요청해 주세요.</p>' + NEWREQ)
+S_CAN = spanel(' is-muted', '×', '요청이 취소됐습니다', '<p>이 견적 요청은 취소됐습니다. 호텔에 요청서를 보낸 뒤였다면 MICEGO가 해당 호텔에 취소 사실을 알려 드립니다.</p><p>회사명과 담당자 연락처는 어느 호텔에도 전달되지 않았습니다. 다시 진행하시려면 새로 요청해 주세요.</p>' + NEWREQ)
 S_INV = spanel(' is-muted', '!', '링크를 열 수 없습니다', '<p>주소 일부가 빠졌거나 더 이상 쓰지 않는 링크입니다. 접수 확인 메일의 링크를 다시 눌러 보시고, 그래도 열리지 않으면 MICEGO로 알려 주세요.</p><div class="app-actions"><a class="btn btn-ghost" href="contact.html">문의하기</a><a class="btn btn-ghost" href="mailto:mysteri1984@gmail.com?subject=' + quote('[MICEGO 링크 문의]') + '">이메일 보내기</a></div>')
 LINK_NOTE = '<div class="link-note owner-only"><b>이 링크는 요청하신 분 전용입니다.</b> 로그인 없이 열리니 외부로 전달하지 말아 주세요. 접수 확인 메일의 링크로 언제든 다시 확인하실 수 있습니다.</div>'
 ASKPANEL = '<div class="panel owner-only"><h2>궁금한 점이 있나요?</h2><p class="app-lead" style="margin-top:0">호텔에 직접 연락하지 않으셔도 됩니다. MICEGO에 질문을 보내 주시면 해당 호텔에 확인해 답변드립니다.</p><div class="app-actions"><a class="btn btn-ghost" data-mg-action="ask" href="' + ASK + '">MICEGO에 질문 보내기</a></div></div>'
@@ -1202,6 +1202,8 @@ TRACK_JS = TERMINAL_JS([x for x in TRACK_STATES if x != 'loading']) + r'''
         }
         H.setAttribute('data-state', resp.state);
         Object.assign(window.MICEGO_PAGE_STATE, {state: resp.state, rfpRef: resp.ref || null});
+        // D-47: 호텔에 보내기 전까지만 직접 취소 버튼을 보인다(판정은 서버 can_cancel)
+        document.querySelectorAll('.mg-cancel-wrap').forEach(function(w){ w.hidden = !resp.can_cancel; });
         document.dispatchEvent(new CustomEvent('mg:trackLoaded'));
       }, function(err){ H.setAttribute('data-state','invalid'); });
     });
@@ -1259,6 +1261,48 @@ TRACK_JS = TERMINAL_JS([x for x in TRACK_STATES if x != 'loading']) + r'''
             box.innerHTML = '<p class="small-note">보냈습니다. MICEGO가 확인 후 답변드립니다.</p>';
             toast('보냈습니다.');
           }, function(err){ toast(MG.msg(err)); });
+        });
+      });
+    });
+  })();
+  // D-47: 오거나이저 자체 취소(호텔 발송 전). 확인 상자 + 사유 선택 → cancel_rfp
+  (function(){
+    var on = false; try{ on = !!(window.MG && MG.mode==='api' && !MG.preview); }catch(e){}
+    if(!on) return;
+    document.querySelectorAll('[data-mg-cancel]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var wrap = btn.parentNode;
+        if(wrap.nextElementSibling && wrap.nextElementSibling.classList.contains('mg-cancel-box')) return;
+        var box = document.createElement('div');
+        box.className = 'mg-cancel-box';
+        box.setAttribute('role','group'); box.setAttribute('aria-label','요청 취소');
+        box.style.cssText = 'margin-top:10px;padding:14px;border:1px solid var(--line, #E4E7EE);border-radius:8px;background:var(--bg,#F7F8FB)';
+        box.innerHTML = '<p style="margin:0 0 10px"><b>이 견적 요청을 취소할까요?</b> 호텔에는 아직 아무것도 보내지 않았습니다. 취소하면 되돌릴 수 없고, 다시 진행하려면 새로 요청해야 합니다.</p>' +
+          '<label style="display:block;font-size:14px;margin-bottom:4px" for="mgCancelReason">취소 사유</label>' +
+          '<select id="mgCancelReason" style="width:100%;padding:8px;border:1px solid #ccc;border-radius:6px"><option value="">선택해 주세요</option><option>일정 변경</option><option>다른 경로로 예약</option><option>행사 취소</option><option>기타</option></select>' +
+          '<textarea id="mgCancelNote" rows="2" maxlength="500" hidden style="width:100%;margin-top:8px;padding:8px;border:1px solid #ccc;border-radius:6px" placeholder="취소 사유를 적어 주세요"></textarea>' +
+          '<div style="margin-top:10px;display:flex;gap:8px"><button type="button" class="btn btn-accent btn-sm" data-ok>취소 확정</button><button type="button" class="btn btn-ghost btn-sm" data-close>닫기</button></div>';
+        wrap.insertAdjacentElement('afterend', box);
+        var sel = box.querySelector('select'), note = box.querySelector('textarea'), ok = box.querySelector('[data-ok]');
+        sel.focus();
+        sel.addEventListener('change', function(){ note.hidden = sel.value !== '기타'; if(!note.hidden) note.focus(); });
+        box.querySelector('[data-close]').addEventListener('click', function(){ box.remove(); btn.focus(); });
+        ok.addEventListener('click', function(){
+          if(!sel.value){ sel.focus(); toast('취소 사유를 골라 주세요.'); return; }
+          var n = note.value.trim();
+          if(sel.value==='기타' && !n){ note.focus(); toast('기타를 고르셨다면 사유를 적어 주세요.'); return; }
+          ok.disabled = true;
+          MG.api.cancel_rfp({token: TOKEN, reason: sel.value, note: n}).then(function(){
+            box.remove();
+            H.setAttribute('data-state','cancelled');
+            Object.assign(window.MICEGO_PAGE_STATE || {}, {state: 'cancelled'});
+            window.scrollTo(0,0);
+            toast('요청을 취소했습니다.');
+          }, function(err){
+            ok.disabled = false;
+            toast(MG.msg(err));
+            if(err && (err.code==='CANCEL_NOT_ALLOWED' || err.code==='STATE_CONFLICT')){ box.remove(); mgLoadTrack(); }
+          });
         });
       });
     });
@@ -1324,6 +1368,7 @@ TRACK_JS = TERMINAL_JS([x for x in TRACK_STATES if x != 'loading']) + r'''
 '''
 TRACK_JS = OTP_JS + SHARE_JS + TRACK_JS
 TRACK_CSS = ('html:not([data-state]) [data-states~="delivered"]{display:revert}\n'
+    '.app-main button.tlink,.app-wrap button.tlink{background:none;border:0;padding:0;font:inherit;cursor:pointer}\n'
     'html[data-state="won"] .cmp-table [data-p="A"],html[data-state="won"] .pcard[data-p="A"]{background:#F2FAF9}\n'
     'html:not(.js-anim) .share-ui{display:none}\n'
     'html[data-view="share"] .owner-only{display:none!important}\n'
