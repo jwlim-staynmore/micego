@@ -40,7 +40,7 @@
 
 | # | 확인 내용 | 담당 | 확인 방법 | 통과 기준 |
 |---|---|---|---|---|
-| 1 | site.config.json 최종값 반영 후 재빌드 | 개발 | `site.config.json`에 `prod:true, demo:false`와 D-7에서 채운 실값을 넣고 빌드 파이프라인(`build2.py` → 말미에 `build_launch.py` 실행)을 다시 돌립니다. | `site_config.py`의 `prod:true but …` 검사가 통과하고(필수값 누락 없음), 공개 페이지에서 DEMO 띠와 `?state=` 미리보기 스위처가 사라집니다. |
+| 1 | site.config.json 최종값 반영 후 재빌드 | 개발 | `site.config.json`에 `prod:true, demo:false`와 D-7에서 채운 실값을 넣고 빌드 파이프라인(`build2.py` → 말미에 `build_launch.py` 실행)을 다시 돌립니다. **MVP로 오픈하면 `pick.otpEnabled:false`도 함께 넣습니다**(D-54, 요청자 선택을 메일 회신으로). | `site_config.py`의 `prod:true but …` 검사가 통과하고(필수값 누락 없음), 공개 페이지에서 DEMO 띠와 `?state=` 미리보기 스위처가 사라집니다. |
 | 2 | sitemap.xml · robots.txt · canonical 확인 | 개발 | `sitemap.xml`에 공개 페이지 15개만 있는지, `robots.txt`의 `Disallow: /admin/ /docs/ /emails/`와 `Sitemap:` 줄, 각 페이지 `<link rel=canonical>`가 실제 도메인 절대 URL인지 확인합니다. | 토큰 링크(`track.html?t=`, `bid.html?t=`)와 회원·admin 페이지가 sitemap에 없고, canonical·hreflang의 `TODO(domain)` 주석이 모두 실제 도메인으로 풀립니다. |
 | 3 | Supabase secrets 최종 재확인 | 개발 | `supabase secrets list`로 D-7 값을 다시 확인하고, 특히 `SITE_BASE_URL`·`SITE_ORIGINS`·`FEEDBACK_ALLOWED_ORIGINS`가 실제 운영 도메인인지 봅니다. | 임시·스테이징 도메인이 `FEEDBACK_ALLOWED_ORIGINS`가 아니라 `FEEDBACK_STAGING_ORIGINS` 쪽에만 들어 있습니다(운영 Origin에 남아 있으면 실제 피드백이 `is_demo`로 잘못 분류됩니다). |
 | 4 | NOTIFY_MODE 전환 리허설 | 개발 | 스테이징 프로젝트에서 `supabase secrets set NOTIFY_MODE=live` 후 테스트 알림 1건을 실제로 발송해 봅니다. 절차는 [8장](#notify-mode) 참고. | `notification_deliveries.status`가 `skipped`가 아니라 `sent`로 남습니다. 문제가 있으면 즉시 `log`로 되돌리는 절차까지 리허설합니다. |

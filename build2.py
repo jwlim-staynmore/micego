@@ -4,6 +4,7 @@ _SITE_DIR = _os_.environ.get('MG_SITE_DIR') or _os_.path.dirname(_os_.path.abspa
 from decimal import Decimal as D, ROUND_HALF_UP
 from urllib.parse import quote
 exec(open(_os_.path.join(_SITE_DIR, 'site_config.py'), encoding='utf-8').read(), globals())  # CFG/BASE/MAIL/PMAIL/API/DEMO/PROD (WP2)
+PICK_OTP = bool((CFG.get('pick') or {}).get('otpEnabled'))  # D-54: 본 기획은 휴대전화 인증 선택(true). MVP 빌드에서만 false → 메일 회신 선택
 exec(open(_os_.path.join(_SITE_DIR, 'build.py'), encoding='utf-8').read(), globals())   # regenerates base pages, gives helpers
 
 def rd(p): return open(p, encoding='utf-8').read()
@@ -168,7 +169,7 @@ def patch_landing(path, lang):
         for a, b in KO_LAND:
             t = rep(t, a, b)
         # ---- member-account additions (A9) ----
-        t = rep(t, '진행 상황을 카카오 알림톡(안 되면 문자)으로 알려 드립니다.</p>', '진행 알림과 제안 선택 확인(인증번호)에 사용합니다. 진행 상황은 카카오 알림톡(안 되면 문자)으로 알려 드립니다.</p>')
+        t = rep(t, '진행 상황을 카카오 알림톡(안 되면 문자)으로 알려 드립니다.</p>', ('진행 알림과 제안 선택 확인(인증번호)에 사용합니다. ' if PICK_OTP else '진행 알림과 선정 확인 연락에 사용합니다. ') + '진행 상황은 카카오 알림톡(안 되면 문자)으로 알려 드립니다.</p>')
         t = rep(t, '<p class="form-hint">필수 항목만', '<p class="acc-login-line" id="accLoginLine">이미 회원이신가요? <a href="login.html?next=index.html%23register">로그인</a>하면 담당자 정보가 자동으로 채워집니다.</p>\n        <div class="acc-member-chip" id="accMemberChip" hidden><span id="accMemberText"></span><button type="button" class="acc-linkbtn" id="accLogout">로그아웃</button></div>\n        <p class="form-hint">필수 항목만')
         t = rep(t, 'placeholder="name@company.com" autocomplete="email">', 'placeholder="name@company.com" autocomplete="email">\n            <p class="acc-ro" data-acc-ro hidden>회원 정보로 채워졌습니다. <a href="account.html">계정 설정에서 변경</a></p>')
         t = rep(t, '<a href="privacy.html" target="_blank" rel="noopener" style="text-decoration:underline">개인정보처리방침 보기</a><!-- TODO(legal): 문구 법무 검토 필요 -->', '<a href="terms.html" target="_blank" rel="noopener" style="text-decoration:underline">이용약관 보기</a> · <a href="privacy.html" target="_blank" rel="noopener" style="text-decoration:underline">개인정보처리방침 보기</a><!-- TODO(legal): 문구 법무 검토 필요 -->')
@@ -754,6 +755,7 @@ ACC_SHARED_CSS = '''.acc-back{display:inline-flex;align-items:center;min-height:
 .share-line{display:flex;gap:8px}
 .share-url{flex:1 1 auto;min-width:0;min-height:48px;padding:0 12px;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);font:500 13px/1.4 var(--font-mono);color:var(--ink)}
 .share-ui .hint{font-size:12.5px;line-height:1.6;color:var(--gray);margin-top:8px}
+#pickCard[data-mode=mail] .pk-otp,#pickCard[data-mode=otp] .pk-mail{display:none!important}
 .pick-step{margin-top:16px}
 .pick-step .anon-note{margin-top:0}
 .otp-sent{font-size:14.5px;line-height:1.7;color:var(--ink-80);margin:16px 0 12px;word-break:keep-all}
@@ -1114,9 +1116,10 @@ ROOMS60 = ' '.join(x for x in TRACK_STATES if x not in ('rebid', 'invalid'))
 MT = 'mailto:mysteri1984@gmail.com?subject='
 CHG = MT + quote('[MICEGO 조건 변경] MG-2610-014') + '&amp;body=' + quote('바뀐 내용(인원·일정·객실 등):\r\n')
 NEWREQ = '<div class="app-actions"><a class="btn btn-accent" href="index.html#register">새로 요청하기</a><a class="btn btn-ghost" href="contact.html">문의하기</a></div>'
-def pick_href(i): return MT + quote('[MICEGO 제안 선택] MG-2610-014 · 제안 ' + i) + '&amp;body=' + quote('선택한 제안: 제안 %s\r\n선택하신 분 성함:\r\n호텔에 전달할 요청 사항(선택):\r\n' % i)
+PICK_CONSENT = '동의: 선정 호텔에 회사·기관명, 담당자 이름, 이메일, 휴대전화 번호가 전달되고 호텔이 있는 국가로 이전되는 데 동의합니다.'
+def pick_href(i): return MT + quote('[MICEGO 제안 선택] MG-2610-014 · 제안 ' + i) + '&amp;body=' + quote('선택한 제안: 제안 %s\r\n선택하신 분 성함:\r\n호텔에 전달할 요청 사항(선택):\r\n%s\r\n' % (i, PICK_CONSENT))
 BADGE = [('received', 'badge-wait', '접수됨'), ('verifying', 'badge-wait', '요건 확인 중'), ('rejected', 'badge-closed', '진행 불가'), ('bidding', 'badge-open', '호텔 제안 받는 중'), ('rebid', 'badge-open', '새 조건으로 재요청'), ('collecting', 'badge-wait', '제안 정리 중'), ('delivered', 'badge-open', '비교표 도착'), ('won', 'badge-done', '연결 완료'), ('lost', 'badge-closed', '종료'), ('cancelled', 'badge-closed', '취소됨')]
-TRACK_TOP = ('<!-- TODO(backend): ORGANIZER_TRACK_URL=/ko/track.html?t=<token> · 상태와 데이터는 토큰별로 서버에서 채움 -->\n<!--demo:start--><div class="demo-strip">DEMO · 진행 상황 페이지 예시입니다. 호텔·금액·환율·날짜는 모두 예시 데이터입니다. 제안 선택 인증번호는 123456입니다.</div><!--demo:end-->'
+TRACK_TOP = ('<!-- TODO(backend): ORGANIZER_TRACK_URL=/ko/track.html?t=<token> · 상태와 데이터는 토큰별로 서버에서 채움 -->\n<!--demo:start--><div class="demo-strip">DEMO · 진행 상황 페이지 예시입니다. 호텔·금액·환율·날짜는 모두 예시 데이터입니다.' + (' 제안 선택 인증번호는 123456입니다. MVP의 메일 회신 선택 화면은 주소 끝에 &amp;pickotp=0을 붙이면 볼 수 있습니다.' if PICK_OTP else ' MVP 빌드(메일 회신 선택)입니다. 휴대전화 인증 화면은 주소 끝에 &amp;pickotp=1을 붙이면 볼 수 있습니다(인증번호 123456).') + '</div><!--demo:end-->'
     + '<div data-states="loading" class="mg-loading" role="status" aria-live="polite">불러오는 중입니다… / Loading…</div>'
     + ds(NONINV, '<div class="req-bar"><div class="req-bar-inner"><span class="ref-code">MICE 견적 요청 · REF MG-2610-014</span><div class="req-bar-right">' + ''.join('<span data-states="%s"><span class="badge %s">%s</span></span>' % b for b in BADGE) + '</div></div></div>'))
 def mi(l, v, st=None): return '<div class="meta-item"%s><span class="lbl">%s</span><span class="val">%s</span></div>' % ((' data-states="%s"' % st) if st else '', l, v)
@@ -1131,12 +1134,16 @@ PROGS = (ds('received', prog(0, {0: '09-30(수)'})) + ds('verifying', prog(1, {0
     + ds('rebid', prog(2, {0: '09-30(수)', 1: '10-13(화) 변경 확인', 2: '새 마감 10-16(금) 18:00', 4: '10-19(월)까지'}))
     + ds('collecting', prog(3, {0: '09-30(수)', 1: '10-02(금)', 2: '10-05(월)', 3: '10-08(목) 마감 후', 4: '10-12(월)까지'}))
     + ds('delivered', prog(4, D0)) + ds('won', prog(6, {**D0, 5: '10-14(수)'}, '종료 · 성사')) + ds('lost', prog(6, {**D0, 5: '10-20(화)'}, '종료 · 미성사')))
-PICK = ('<div class="panel owner-only" id="pickCard"><h2>제안 선택하기</h2><p class="app-lead" style="margin-top:0">마음에 드는 제안을 고르면 등록된 휴대전화로 인증번호를 보냅니다. 인증을 마치면 선택이 확정됩니다.</p>'
-    '<noscript><p class="submit-note">이 브라우저에서는 휴대전화 인증 화면을 열 수 없어 선택 메일 초안으로 대신합니다. 메일을 받은 운영팀이 인증번호를 별도로 안내합니다.</p></noscript>'
+PICK = ('<div class="panel owner-only" id="pickCard" data-mode="' + ('otp' if PICK_OTP else 'mail') + '"><h2>제안 선택하기</h2>'
+    '<p class="app-lead pk-otp" style="margin-top:0">마음에 드는 제안을 고르면 등록된 휴대전화로 인증번호를 보냅니다. 인증을 마치면 선택이 확정됩니다.</p>'
+    '<p class="app-lead pk-mail" style="margin-top:0">마음에 드는 제안의 버튼을 누르면 선택 메일 초안이 열립니다. <b>요청서에 적은 이메일 주소로</b> 보내 주시면 MICEGO가 확인한 뒤 선정을 확정합니다.</p>'
+    '<div class="anon-note pk-mail">선택 메일을 보내시면 <b>회사명·담당자 이름·이메일·연락처</b>가 선정된 호텔에만 전달되고, 호텔이 있는 국가로 이전됩니다. 메일 초안의 동의 문장을 지우면 선정을 확정할 수 없습니다. <a class="tlink" href="terms.html#art7">이용약관 제7조</a></div>'
+    '<noscript><p class="submit-note pk-otp">이 브라우저에서는 휴대전화 인증 화면을 열 수 없어 선택 메일 초안으로 대신합니다. 메일을 받은 운영팀이 인증번호를 별도로 안내합니다.</p></noscript>'
     '<!-- progressive enhancement: without JS the buttons below stay plain mailto links (the server must enforce the SMS OTP before a selection counts). With JS they open the OTP step. -->'
     '<ul class="pick-list" id="pickList">'
-    + ''.join('<li class="pick-row"><div><b>제안 %s</b><span class="small-note">견적 유효기한 %s</span></div><div class="pick-btns"><a class="btn btn-accent btn-sm" data-pick="%s" href="%s">제안 %s 선택</a></div></li>' % (i, byid[i]['valid'], i, pick_href(i), i) for i in 'ABC')
+    + ''.join('<li class="pick-row"><div><b>제안 %s</b><span class="small-note">견적 유효기한 %s</span></div><div class="pick-btns"><a class="btn btn-accent btn-sm" data-pick="%s" href="%s">제안 %s 선택</a><button type="button" class="btn btn-ghost btn-sm pk-mail" data-pick-copy="%s">내용 복사</button></div></li>' % (i, byid[i]['valid'], i, pick_href(i), i, i) for i in 'ABC')
     + '</ul>'
+    '<textarea class="copy-box pk-mail" id="pickMailCopy" hidden readonly aria-label="보낼 내용"></textarea>'
     '<div class="pick-step" id="pickStep" hidden tabindex="-1"><h3 id="pickStepTitle">제안 선택 확인</h3>'
     '<div class="anon-note">선택하시면 <b>회사명·담당자 이름·이메일·연락처</b>가 선정된 호텔에만 전달됩니다. 선정되지 않은 호텔에는 결과만 알립니다. <a class="tlink" href="terms.html#art7">이용약관 제7조</a></div>'
     '<div id="pickOtp"><p class="otp-sent" id="pickSent">등록된 휴대전화 <b>010-****-5678</b>로 인증번호를 보냈습니다.</p>'
@@ -1151,6 +1158,7 @@ PICK = ('<div class="panel owner-only" id="pickCard"><h2>제안 선택하기</h2
     '<div class="app-actions"><a class="btn btn-accent" id="pickConfirm" href="#">제안 선택 확정</a><button type="button" class="btn btn-ghost" id="pickCopyBtn">내용 복사</button></div>'
     '<textarea class="copy-box" id="pickCopy" hidden readonly aria-label="보낼 내용"></textarea></div></div>'
     '<h3 style="margin-top:22px">선택하시면 이렇게 진행됩니다</h3><ol class="steps">'
+    '<li class="pk-mail">MICEGO가 메일을 받은 영업일에 보낸 주소가 요청서의 이메일과 같은지, 어떤 제안을 고르셨는지 확인합니다. 확인이 더 필요하면 전화로 한 번 더 여쭙니다.</li>'
     '<li>MICEGO가 선정된 호텔과 나머지 호텔에 결과를 알립니다.</li><li>선정된 호텔에는 회사명·담당자 이름·이메일·연락처가 전달되고, MICEGO가 연결 메일로 양쪽을 이어 드립니다. <a class="tlink" href="terms.html#art7">이용약관 제7조</a></li><li>계약과 결제는 선정된 호텔과 직접 진행합니다.</li></ol>'
     '<p class="submit-note" style="margin-top:14px">선정되지 않은 호텔에는 결과만 알리며 회사명과 연락처는 전달하지 않습니다. 견적 유효기한이 가장 빠른 제안은 제안 B(2026-12-15)입니다. 조건을 바꾸고 싶으시면 선택 대신 <a class="tlink" data-mg-action="change" href="' + CHG + '">변경 내용을 알려 주세요</a>. 바뀐 조건으로 호텔에 다시 요청합니다.</p></div>')
 ASK = 'mailto:mysteri1984@gmail.com?subject=' + quote('[MICEGO 비교표 문의] MG-2610-014') + '&amp;body=' + quote('문의할 제안: 제안 A / B / C\r\n질문 내용:\r\n')
@@ -1310,11 +1318,16 @@ TRACK_JS = TERMINAL_JS([x for x in TRACK_STATES if x != 'loading']) + r'''
   var pickCard=document.getElementById('pickCard');
   if(pickCard){
     var SUBJ='[MICEGO 제안 선택] MG-2610-014 · 제안 ';
-    var pickBody=function(id,ver){var L=['선택한 제안: 제안 '+id,'추적 링크 토큰: '+TOKEN];if(ver)L.push('휴대전화 확인: 완료(인증 시각 '+ver+')');L.push('선택하신 분 성함:','호텔에 전달할 요청 사항(선택):');return L.join('\n');};
+    var pickBody=function(id,ver){var L=['선택한 제안: 제안 '+id,'추적 링크 토큰: '+TOKEN];if(ver)L.push('휴대전화 확인: 완료(인증 시각 '+ver+')');L.push('선택하신 분 성함:','호텔에 전달할 요청 사항(선택):','동의: 선정 호텔에 회사·기관명, 담당자 이름, 이메일, 휴대전화 번호가 전달되고 호텔이 있는 국가로 이전되는 데 동의합니다.');return L.join('\n');};
     var $=function(i){return document.getElementById(i);};
     var pickList=$('pickList'),pickStep=$('pickStep'),pOtp=$('pickOtp'),pOk=$('pickOk'),pLocked=$('pickLocked'),pCur='',lockEnd=0,lockIv=null,mgOtpId=null;
     var mgApiPick = false; try{ mgApiPick = !!(window.MG && MG.mode==='api' && !MG.preview); }catch(e){}
+    try{ var pkm=/[?&]pickotp=([01])(&|$)/.exec(location.search); if(window.MG_CONFIG && MG_CONFIG.demo && pkm) pickCard.setAttribute('data-mode', pkm[1]==='1'?'otp':'mail'); }catch(e){}
+    var PICK_MAIL = pickCard.getAttribute('data-mode')!=='otp';
     pickCard.querySelectorAll('a[data-pick]').forEach(function(a){var id=a.getAttribute('data-pick'),b=pickBody(id);a.href=mailHref(SUBJ+id,b,b);});
+    if(PICK_MAIL){
+      pickCard.querySelectorAll('[data-pick-copy]').forEach(function(btn){btn.addEventListener('click',function(){var id=btn.getAttribute('data-pick-copy');copyText('받는 사람: '+MAIL+'\n제목: '+SUBJ+id+'\n\n'+pickBody(id),$('pickMailCopy'),'복사했습니다. 요청서에 적은 이메일 주소로 보내 주세요','아래 내용을 직접 선택해 복사해 주세요');});});
+    } else {
     var otp=Otp({input:$('pickCode'),timer:$('pickTimer'),resend:$('pickResend'),msg:$('pickMsg'),ttl:180,cool:60,max:5,deadMsg:'인증번호를 다시 받아 주세요.'});
     function stamp(){var d=new Date(),z=function(n){return ('0'+n).slice(-2);};return d.getFullYear()+'-'+z(d.getMonth()+1)+'-'+z(d.getDate())+' '+z(d.getHours())+':'+z(d.getMinutes());}
     function views(w){pOtp.hidden=w!=='otp';pOk.hidden=w!=='ok';pLocked.hidden=w!=='locked';}
@@ -1364,6 +1377,7 @@ TRACK_JS = TERMINAL_JS([x for x in TRACK_STATES if x != 'loading']) + r'''
     $('pickVerify').addEventListener('click',verify);
     $('pickCode').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();verify();}});
     $('pickCopyBtn').addEventListener('click',function(){var b=pickBody(pCur,pickCard.dataset.verified||stamp());copyText('받는 사람: '+MAIL+'\n제목: '+SUBJ+pCur+'\n\n'+b,$('pickCopy'),'복사했습니다','아래 내용을 직접 선택해 복사해 주세요');});
+    }
   }
 '''
 TRACK_JS = OTP_JS + SHARE_JS + TRACK_JS
@@ -1411,8 +1425,8 @@ KO_FAQ = [('g-terms', '이용 조건', [
  ("'추정 합계'는 무엇을 더한 금액인가요?", '(트윈 요금 × 트윈 객실 수 + 킹 요금 × 킹 객실 수) × 박수 + 볼룸 대관료입니다. 세금·봉사료가 별도인 제안은 호텔이 밝힌 비율을 더합니다. 조식 별도 요금, F&amp;B 최소 주문 금액, 항공·차량은 넣지 않으므로 실제 청구액과 다를 수 있습니다. 합계는 호텔이 제출한 통화로만 계산하고 환산하지 않습니다.'),
  ("'MICEGO 검토 메모'는 무엇인가요?", 'MICEGO 담당자가 제안을 확인하면서 요건과 다른 점, 추가로 확인한 내용, 비교할 때 눈여겨볼 부분을 사실 위주로 적은 메모입니다. 선택은 주최 측에서 하십니다.')]),
  ('g-after', '선택 이후', [
- ('제안을 고르면 어떻게 진행되나요?', '비교표 아래에서 제안을 고르고, 요청서에 등록한 휴대전화로 받은 인증번호를 입력하면 선택이 확정됩니다. MICEGO가 선정된 호텔과 나머지 호텔에 결과를 알리고, 선정된 호텔에는 회사명·담당자 이름·이메일·연락처가 전달됩니다. 이어서 연결 메일로 양쪽을 이어 드립니다.'),
- ('제안을 선택할 때 왜 인증번호를 입력하나요?', '선택하는 순간 회사명과 담당자 연락처가 호텔에 전달되기 때문입니다. 요청서에 등록한 휴대전화로 인증번호를 보내, 요청하신 분이 직접 선택하는지 확인합니다. 회원이든 아니든 같은 절차이고, 동료에게 공유한 보기 전용 링크로는 선택할 수 없습니다. 인증번호는 3분 동안 유효하며 5회 틀리면 10분 뒤에 다시 시도할 수 있습니다.'),
+ ('제안을 고르면 어떻게 진행되나요?', ('비교표 아래에서 제안을 고르고, 요청서에 등록한 휴대전화로 받은 인증번호를 입력하면 선택이 확정됩니다. ' if PICK_OTP else '비교표 아래에서 제안을 고르면 선택 메일 초안이 열립니다. 요청서에 적은 이메일 주소로 보내 주시면 MICEGO가 보낸 주소와 내용을 확인한 뒤 선택을 확정합니다. ') + 'MICEGO가 선정된 호텔과 나머지 호텔에 결과를 알리고, 선정된 호텔에는 회사명·담당자 이름·이메일·연락처가 전달됩니다. 이어서 연결 메일로 양쪽을 이어 드립니다.'),
+ ('제안을 선택할 때 왜 인증번호를 입력하나요?' if PICK_OTP else '선택 메일은 왜 요청서에 적은 이메일로 보내야 하나요?', ('선택하는 순간 회사명과 담당자 연락처가 호텔에 전달되기 때문입니다. 요청서에 등록한 휴대전화로 인증번호를 보내, 요청하신 분이 직접 선택하는지 확인합니다. 회원이든 아니든 같은 절차이고, 동료에게 공유한 보기 전용 링크로는 선택할 수 없습니다. 인증번호는 3분 동안 유효하며 5회 틀리면 10분 뒤에 다시 시도할 수 있습니다.' if PICK_OTP else '선택하는 순간 회사명과 담당자 연락처가 호텔에 전달되기 때문입니다. 요청서에 적은 이메일에서 온 메일인지 확인해, 요청하신 분이 직접 선택하는지 확인합니다. 메일 초안의 동의 문장은 지우지 말아 주세요. 동료에게 공유한 보기 전용 링크로는 선택할 수 없습니다.')),
  ('계약과 결제는 누구와 하나요?', '선택한 호텔과 직접 진행합니다. MICEGO는 결제 대금을 대신 받지 않습니다.'),
  ('마음에 드는 제안이 없으면 어떻게 하나요?', '선택하지 않겠다고 알려 주시면 요청을 종료하고 호텔에는 결과만 알립니다. 조건을 바꿔 다시 받아 보시려면 종료 전에 변경 내용을 알려 주시거나, 종료 후 새로 요청해 주세요.')]),
  ('g-member', '회원', [

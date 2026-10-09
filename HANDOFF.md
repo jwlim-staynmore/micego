@@ -84,6 +84,7 @@ git 추적 434개 파일. Python 약 17k줄(생성기·검증) · TypeScript 약
 | 도메인 | 사이트·메일 | jwlim | **미확정** — `site.config.json.domain` 빈칸 |
 | Resend | 이메일 | jwlim | 미가입. SPF/DKIM/DMARC |
 | Solapi | SMS·알림톡 | jwlim | 미가입. 발신번호 사전등록·카카오 채널·알림톡 9종 심사(리드타임 가장 김 — 먼저 착수) |
+| 선택 방식 스위치 | `site.config.json` `pick.otpEnabled` — 본 기획 true(휴대전화 인증 선택), **MVP 배포 false**(메일 회신 선택 + 운영자 대리 확정) | jwlim | 코드 완료(D-54). MVP는 문자 인증용 발신번호 없이 시작 가능. 알림톡은 그대로 Solapi 필요 |
 | Cloudflare Turnstile | 스팸 방어(견적 요청·호텔 등록·가입) | jwlim | 코드 완료(D-50). 사이트 키·시크릿 발급 필요 — 키 빌드 배포 후 `TURNSTILE_SECRET` 설정 |
 | GA4 / 서치콘솔 | 분석·인증 | jwlim | 자리만 |
 | 임시 접수 메일 | mysteri1984@gmail.com | jwlim 개인 | 공개 페이지 다수에 노출 — 전부 `site.config.json.officialEmail/privacyEmail`에서 주입되므로 값 교체·재빌드로 일괄 해결 |

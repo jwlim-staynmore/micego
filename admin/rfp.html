@@ -95,7 +95,9 @@ A.boot('rfps','견적 상세',function(main){
       if(o&&o.consent){var ca=typeof o.consent.at==='string'?Date.parse(o.consent.at):o.consent.at;otp='<b>대리 확정</b> '+esc(A.CONSENT_METHODS[o.consent.method]||o.consent.method)+' · '+A.toInput(ca).replace('T',' ')+' <span class="small muted">'+(o.consent.by_role==='partner_admin'?'파트너 관리자':'운영자')+'가 동의 확인을 기록하고 성사로 닫았습니다</span>';}
       else if(!o&&A.isPartner())otp='<b>성사</b> <span class="small muted">휴대전화 인증 또는 대리 확정 · 동의 확인 내용은 이력에서 볼 수 있습니다</span>';
       else otp=(o&&!o.operator&&o.at)?'<b>완료</b> '+A.toInput(o.at).replace('T',' ')+' ('+A.maskPhone(o.phone||ph)+')':'<span class="warn-cell">인증 기록 없음</span> <span class="small muted">운영자가 요청자의 이메일 선택을 확인하고 성사로 닫았습니다</span>';
-    }else if(r.state==='delivered')otp='<span class="muted">대기 · 요청자가 제안을 고르면 등록 휴대전화 '+A.maskPhone(ph)+'(으)로 인증번호(ORG_PICK_OTP)를 보냅니다</span>';
+    }else if(r.state==='delivered'){var pickOtpOn=false;try{pickOtpOn=!!(window.MG_CONFIG&&MG_CONFIG.pick&&MG_CONFIG.pick.otpEnabled);var pkm=/[?&]pickotp=([01])(&|$)/.exec(location.search);if(window.MG_CONFIG&&MG_CONFIG.demo&&pkm)pickOtpOn=pkm[1]==='1';}catch(e){}
+      otp=pickOtpOn?'<span class="muted">대기 · 요청자가 제안을 고르면 등록 휴대전화 '+A.maskPhone(ph)+'(으)로 인증번호(ORG_PICK_OTP)를 보냅니다</span>'
+        :'<span class="muted">메일 회신 · 요청자가 고른 제안을 메일로 알려 옵니다. 보낸 주소가 요청자 정보의 이메일과 같은지, 동의 문장이 남아 있는지 확인한 뒤 「성사로 닫기」에서 동의 기록을 남깁니다</span>';}
     else otp='<span class="muted">해당 없음</span>';
     return '<section class="card" aria-labelledby="h-own"><h2 id="h-own">소유 · 공유 · 선택 인증</h2><dl class="kv" id="ownerBox"><dt>소유자</dt><dd>'+own+'</dd><dt>공유 링크</dt><dd>'+shr+'</dd><dt>선택 인증</dt><dd>'+otp+'</dd></dl></section>';
   }

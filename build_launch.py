@@ -35,6 +35,7 @@ _cfg_out = {
     'domain': CFG.get('domain', ''), 'baseUrl': SITE_BASE, 'officialEmail': MAIL, 'privacyEmail': PMAIL,
     'supabase': CFG.get('supabase') or {'url': '', 'anonKey': '', 'functionsUrl': ''},
     'turnstile': {'siteKey': ((CFG.get('turnstile') or {}).get('siteKey') or '')},
+    'pick': {'otpEnabled': bool((CFG.get('pick') or {}).get('otpEnabled'))},
     'demo': DEMO, 'prod': PROD, 'lang': None,
 }
 

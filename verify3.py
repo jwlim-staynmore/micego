@@ -83,7 +83,17 @@ with sync_playwright() as pw:
     for pid,h in pg.evaluate("()=>[...document.querySelectorAll('a[data-pick]')].map(a=>[a.dataset.pick,a.href])"):
         u=urlparse(h); q=parse_qs(u.query)
         if u.path!='mysteri1984@gmail.com' or q['subject'][0]!='[MICEGO 제안 선택] MG-2610-014 · 제안 '+pid or 'demo-2610' not in q['body'][0] or len(h)>1800: F('pick mail '+pid)
-    pg.click('a[data-pick="B"]')   # pick flow is now OTP-gated: select -> code -> confirm (JS-off keeps the mailto links checked above)
+        if '동의:' not in q['body'][0]: F('pick mail consent '+pid)
+    pg.context.close()
+    # D-54 MVP build: mail mode (pick.otpEnabled=false; demo preview via ?pickotp=0) -- no OTP step, copy button, consent text visible
+    pg=page(1280); pg.goto(url('ko/track.html',T+'&state=delivered&pickotp=0'))
+    if pg.evaluate("pickCard.dataset.mode")!='mail' or not pg.is_visible('#pickCard .anon-note.pk-mail') or pg.is_visible('#pickCard p.pk-otp'): F('pick mail mode')
+    pg.click('[data-pick-copy="B"]')
+    if pg.evaluate("pickMailCopy.hidden") or '제안 B' not in pg.evaluate("pickMailCopy.value") or '동의:' not in pg.evaluate("pickMailCopy.value"): F('pick mail copy')
+    pg.context.close()
+    # OTP mode (default, pick.otpEnabled=true)
+    pg=page(1280); pg.goto(url('ko/track.html',T+'&state=delivered'))
+    pg.click('a[data-pick="B"]')   # pick flow is OTP-gated: select -> code -> confirm (JS-off keeps the mailto links checked above)
     if pg.evaluate("pickStep.hidden"): F('pick step not opened')
     pg.fill('#pickCode','000000'); pg.click('#pickVerify')
     if '남은 시도 4회' not in pg.evaluate("pickMsg.textContent"): F('pick wrong code msg')
