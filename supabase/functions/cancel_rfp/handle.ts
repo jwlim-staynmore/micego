@@ -1,4 +1,4 @@
-// POST /cancel_rfp — anon (진행 상황 토큰). 오거나이저가 호텔 발송 전에 요청을 직접 취소한다(D-47).  - 클로드
+// POST /cancel_rfp — anon (진행 상황 토큰). 요청자가 호텔 발송 전에 요청을 직접 취소한다(D-47).  - 클로드
 // body: { token, reason, note? }
 // 허용 범위 판정(received·verifying, 또는 open + 초대 0건)은 DB 함수 private.rfp_organizer_cancel 이 한다.
 import type { Deps } from "../_shared/deps.ts";

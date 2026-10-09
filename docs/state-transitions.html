@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex,nofollow">
-<title>MICEGO 상태전이표 v1.9</title>
+<title>MICEGO 상태전이표 v2.0</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -85,16 +85,17 @@ body{font-size:11.5px}
 <div class="wrap">
 <header class="top">
 <div class="brand">MICE<b>GO</b></div>
-<h1>MICEGO 상태전이표 v1.9</h1>
-<p class="ver">v1.9 · 2026-10-06 · SOP v2 · 마이그레이션 0001~0017 기준</p>
+<h1>MICEGO 상태전이표 v2.0</h1>
+<p class="ver">v2.0 · 2026-10-09 · SOP v2 · 마이그레이션 0001~0020 기준</p>
 <p class="note">v1.2 원본이 없어 SOP v2, 운영 콘솔 목업(admin.js), 공개 페이지(ko/track.html, en/bid.html)에서 다시 정리했습니다.</p>
 <h3 style="margin:16px 0 4px">개정 이력</h3>
 <ul class="tight small" id="revisions">
+<li><b>v2.0</b> · 2026-10-09 · 운영자 대리 확정 동의 기록(#10, 마이그레이션 0019)과 요청자 자체 취소(#12b, 0020) 반영, #12 취소 사유 이름을 「요청자 취소 요청」으로, 9장 o를 반영됨으로. 상태·버튼 이름은 개발 요청 명세서 v2(<code>docs/ux-flow-spec-v2.md</code>) 용어집과 같습니다.</li>
 <li><b>v1.9</b> · 2026-10-06 · 지역 파트너 콘솔·호텔 커미션 반영 — 요청 위임 상태(5-5), 초대의 대리 입력 상태(4), 정산 상태(5-6), 호텔 커미션 합의 상태(5-1), 화면 표시(6)·알림(7) 행 추가, 미결(9) 갱신. 기준은 마이그레이션 0010~0017과 SQL 테스트 06·07이고, 설계서와 코드가 다른 곳은 코드를 따랐습니다(9장 p). v1.8은 운영자 대리 확정 동의 기록을 다룬 문서였지만 그 작업이 이 저장소에 없어 건너뜁니다.</li>
 <li><b>v1.7</b> · 2026-09-27 · 피드백·VOC — 피드백 접수 상태(5-4)와 전이 가드, 알림 FB_OPS_ALERT·FB_ACK 추가 (SOP v2.2 부록 §9 기준)</li>
 <li><b>v1.6</b> · 2026-09-26 · 회원제·공유 링크·선택 인증 — 회원 계정 상태(5-2), 공유 링크 수명주기와 요청 소유권 이관(5-3), 성사 전이에 선택 휴대전화 인증 가드, 알림 ACC_*·ORG_PICK_OTP 추가</li>
-<li><b>v1.5</b> · 2026-09-26 · v1.5 — 알림 ID 체계·채널(알림톡/LMS) 반영, 결과 메일을 성사 시점으로 통합, 오거나이저 알림(비딩중·미성사·취소) 추가 (2026-09-26)</li>
-<li><b>v1.4</b> · 2026-09-25 · 미결 a·b·c·d·e·g·h 반영 (취합중 → 미성사, SLA 임박·오픈 표시, USD 참고환산, bid 결과 화면, 초대별 마감·재초대, 연결 메일 자동)</li>
+<li><b>v1.5</b> · 2026-09-26 · v1.5 — 알림 ID 체계·채널(알림톡/LMS) 반영, 결과 메일을 성사 시점으로 통합, 요청자 알림(견적 받는 중·미성사·취소) 추가 (2026-09-26)</li>
+<li><b>v1.4</b> · 2026-09-25 · 미결 a·b·c·d·e·g·h 반영 (견적 정리 중 → 미성사, SLA 임박·초대 준비 표시, USD 참고환산, bid 결과 화면, 초대별 마감·재초대, 연결 메일 자동)</li>
 <li><b>v1.3</b> · 2026-09-25 · SOP v2와 콘솔 목업, 공개 페이지를 기준으로 재구성</li>
 </ul>
 </header>
@@ -126,7 +127,7 @@ body{font-size:11.5px}
 <div class="diagram">
 <svg viewBox="0 0 960 350" role="img" aria-labelledby="dgT dgD" xmlns="http://www.w3.org/2000/svg" font-family="'Pretendard Variable',Pretendard,'Noto Sans CJK KR','Noto Sans KR','Malgun Gothic',sans-serif">
 <title id="dgT">RFP 상태 흐름도</title>
-<desc id="dgD">접수됨, 검증중, 오픈, 비딩중, 취합중, 전달됨을 거쳐 성사 또는 미성사로 종료됩니다. 검증중에서는 반려됨으로 갈 수 있고, 취합중과 전달됨에서 비딩중으로 돌아가는 새 라운드가 있습니다. 취합중에서 제출이 0건이고 2라운드 이상이면 미성사로 닫을 수 있습니다.</desc>
+<desc id="dgD">접수됨, 요건 확인 중, 초대 준비, 견적 받는 중, 견적 정리 중, 비교표 전달됨을 거쳐 성사 또는 미성사로 종료됩니다. 요건 확인 중에서는 반려로 갈 수 있고, 견적 정리 중과 비교표 전달됨에서 견적 받는 중으로 돌아가는 새 라운드가 있습니다. 견적 정리 중에서 제출이 0건이고 2라운드 이상이면 미성사로 닫을 수 있습니다.</desc>
 <defs>
 <marker id="aT" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#0B8F86"/></marker>
 <marker id="aA" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#D99A00"/></marker>
@@ -135,18 +136,18 @@ body{font-size:11.5px}
 <!-- start -->
 <circle cx="54" cy="96" r="7" fill="#6B7794"/>
 <line x1="54" y1="103" x2="54" y2="146" stroke="#6B7794" stroke-width="2.5" marker-end="url(#aG)"/>
-<text x="68" y="100" font-size="13" fill="#4A5570">오거나이저 폼</text>
+<text x="68" y="100" font-size="13" fill="#4A5570">요청자 폼</text>
 <!-- nodes -->
-<g font-size="17" font-weight="700" text-anchor="middle">
+<g font-size="14" font-weight="700" text-anchor="middle">
 <rect x="6" y="150" width="96" height="46" rx="10" fill="#fff" stroke="#0F1E3D" stroke-width="2"/><text x="54" y="179" fill="#0F1E3D">접수됨</text>
-<rect x="148" y="150" width="96" height="46" rx="10" fill="#fff" stroke="#0F1E3D" stroke-width="2"/><text x="196" y="179" fill="#0F1E3D">검증중</text>
-<rect x="290" y="150" width="96" height="46" rx="10" fill="#fff" stroke="#0F1E3D" stroke-width="2"/><text x="338" y="179" fill="#0F1E3D">오픈</text>
-<rect x="432" y="150" width="96" height="46" rx="10" fill="#E3F5F2" stroke="#0B8F86" stroke-width="2"/><text x="480" y="179" fill="#076B64">비딩중</text>
-<rect x="574" y="150" width="96" height="46" rx="10" fill="#fff" stroke="#0F1E3D" stroke-width="2"/><text x="622" y="179" fill="#0F1E3D">취합중</text>
-<rect x="716" y="150" width="96" height="46" rx="10" fill="#fff" stroke="#0F1E3D" stroke-width="2"/><text x="764" y="179" fill="#0F1E3D">전달됨</text>
+<rect x="148" y="150" width="96" height="46" rx="10" fill="#fff" stroke="#0F1E3D" stroke-width="2"/><text x="196" y="179" fill="#0F1E3D">요건 확인 중</text>
+<rect x="290" y="150" width="96" height="46" rx="10" fill="#fff" stroke="#0F1E3D" stroke-width="2"/><text x="338" y="179" fill="#0F1E3D">초대 준비</text>
+<rect x="432" y="150" width="96" height="46" rx="10" fill="#E3F5F2" stroke="#0B8F86" stroke-width="2"/><text x="480" y="179" fill="#076B64">견적 받는 중</text>
+<rect x="574" y="150" width="96" height="46" rx="10" fill="#fff" stroke="#0F1E3D" stroke-width="2"/><text x="622" y="179" fill="#0F1E3D">견적 정리 중</text>
+<rect x="716" y="150" width="96" height="46" rx="10" fill="#fff" stroke="#0F1E3D" stroke-width="2"/><text x="764" y="179" fill="#0F1E3D">비교표 전달됨</text>
 <rect x="852" y="104" width="102" height="46" rx="23" fill="#0F1E3D"/><text x="903" y="133" fill="#fff">성사</text>
 <rect x="852" y="196" width="102" height="46" rx="23" fill="#0F1E3D"/><text x="903" y="225" fill="#fff">미성사</text>
-<rect x="148" y="262" width="96" height="46" rx="10" fill="#FDECEC" stroke="#EF4444" stroke-width="2"/><text x="196" y="291" fill="#B42323">반려됨</text>
+<rect x="148" y="262" width="96" height="46" rx="10" fill="#FDECEC" stroke="#EF4444" stroke-width="2"/><text x="196" y="291" fill="#B42323">반려</text>
 </g>
 <text x="903" y="172" font-size="12" fill="#6B7794" text-anchor="middle">종료</text>
 <!-- forward edges -->
@@ -186,11 +187,11 @@ body{font-size:11.5px}
 <div class="legend" aria-label="범례">
 <span><i style="border-color:#0B8F86"></i>운영자 (콘솔 버튼)</span>
 <span><i style="border-color:#D99A00"></i>시스템 (cron)</span>
-<span><i style="border-color:#6B7794"></i>오거나이저 폼</span>
+<span><i style="border-color:#6B7794"></i>요청자 폼</span>
 <span><i class="dash" style="border-color:#0B8F86"></i>점선: 조건 변경 · 새 라운드 (라운드 +1)</span>
-<span><i style="border-color:#6B7794"></i>회색 실선: 취합중 → 미성사 (제출 0 · 2라운드 이상일 때만)</span>
+<span><i style="border-color:#6B7794"></i>회색 실선: 견적 정리 중 → 미성사 (제출 0 · 2라운드 이상일 때만)</span>
 </div>
-<p class="small">비딩중 → 취합중은 시스템이 하는 유일한 상태 전이이지만, 모든 견적을 일찍 모았다면 운영자가 &quot;취합중(으)로&quot; 버튼으로 직접 넘길 수 있습니다. 취합중에서는 제출이 0건이고 라운드가 2 이상일 때만 미성사로 바로 닫을 수 있습니다. 성사·미성사·반려됨·취소는 종료 상태로 더 이상 바뀌지 않습니다.</p>
+<p class="small">견적 받는 중 → 견적 정리 중은 시스템이 하는 유일한 상태 전이이지만, 모든 견적을 일찍 모았다면 운영자가 &quot;견적 정리 시작&quot; 버튼으로 직접 넘길 수 있습니다. 견적 정리 중에서는 제출이 0건이고 라운드가 2 이상일 때만 미성사로 바로 닫을 수 있습니다. 성사·미성사·반려·취소는 종료 상태로 더 이상 바뀌지 않습니다.</p>
 <div class="callout"><b>이 흐름과 따로 도는 상태기계.</b> 요청을 누가 운영하는지(위임, <a href="#delegation">5-5</a>)와 호텔 견적을 누가 입력했는지(대리 입력, <a href="#proxy">4장</a>)는 RFP 상태와 별개로 움직이고, 호텔 커미션 합의(<a href="#commission">5-1</a>)는 호텔 파트너 상태 위에 얹혀 있습니다. 성사되면 정산(<a href="#settlement">5-6</a>)이 자동으로 만들어져 커미션 확정·수금·송금까지 따로 진행됩니다.</div>
 </section>
 
@@ -198,18 +199,18 @@ body{font-size:11.5px}
 <h2><span class="n">2</span>RFP 상태 정의</h2>
 <p class="lead">slug는 admin.js의 STATES와 같습니다. 추적 페이지 열은 ko/track.html이 보여 주는 제목입니다.</p>
 <div class="tw"><table>
-<thead><tr><th>slug</th><th>상태</th><th>의미</th><th>다음으로 넘기는 주체</th><th>오거나이저 추적 페이지</th><th>호텔 쪽 영향</th></tr></thead>
+<thead><tr><th>slug</th><th>상태</th><th>의미</th><th>다음으로 넘기는 주체</th><th>요청자 추적 페이지</th><th>호텔 쪽 영향</th></tr></thead>
 <tbody>
-<tr><td><span class="slug">received</span></td><td class="nw"><b>접수됨</b></td><td>접수 폼이 DB에 저장된 상태. 아직 아무도 내용을 보지 않았습니다.</td><td><span class="tag op">운영자</span> 당일 검증중으로</td><td>「요청을 받았습니다」</td><td>없음. 호텔 화면에는 나가지 않습니다.</td></tr>
-<tr><td><span class="slug">verifying</span></td><td class="nw"><b>검증중</b></td><td>해외 행사 여부, 일정 확정, 필수 정보, 익명화를 확인하는 중. SLA 3영업일이 흐릅니다.</td><td><span class="tag op">운영자</span> 오픈 또는 반려</td><td>「요건을 확인하고 있습니다」</td><td>없음.</td></tr>
-<tr><td><span class="slug">rejected</span></td><td class="nw"><b>반려됨</b></td><td>국내 행사, 일정 미확정, 필수 정보 부족 등으로 진행하지 않는 종료 상태.</td><td>없음 (종료)</td><td>「이번 요청은 진행하지 않습니다」</td><td>없음.</td></tr>
-<tr><td><span class="slug">open</span></td><td class="nw"><b>오픈</b></td><td>검증과 익명화 검토를 마치고 호텔에 내보낼 준비가 된 상태. 마감 설정과 초대는 이 단계에서 합니다. 오픈에 도달하면 SLA는 충족이고, 이후 같은 기한은 초대 기한으로 봅니다.</td><td><span class="tag op">운영자</span> 비딩중으로</td><td>검증중과 같은 화면으로 표시 (track에 open slug 없음)</td><td>초대를 보내기 전까지 없음. 초대를 먼저 발송한 경우 호텔은 링크를 열 수 있습니다.</td></tr>
-<tr><td><span class="slug">bidding</span></td><td class="nw"><b>비딩중</b></td><td>호텔이 견적을 내는 기간. 추가 초대도 이 상태에서 가능합니다.</td><td><span class="tag sys">시스템</span> 마감 또는 전원 응답 (운영자 수동 가능)</td><td>「호텔에 요청을 보냈습니다」 · 라운드 2 이상이면 「바뀐 조건으로 호텔에 다시 요청했습니다」(rebid)</td><td>초대 링크에서 견적 제출·수정·거절. 마감 24시간 전 리마인더.</td></tr>
-<tr><td><span class="slug">collecting</span></td><td class="nw"><b>취합중</b></td><td>마감된 견적을 비교표로 정리하는 중. 제출이 0건이면 여기서 멈추고, 두 번째 라운드까지 0건이면 미성사로 닫습니다.</td><td><span class="tag op">운영자</span> 전달 · 새 라운드 · (제출 0건 &amp; 2라운드 이상) 미성사</td><td>「받은 제안을 정리하고 있습니다」</td><td>제출은 닫힘. 미응답 초대는 마감(expired)으로 바뀝니다.</td></tr>
-<tr><td><span class="slug">delivered</span></td><td class="nw"><b>전달됨</b></td><td>비교표를 오거나이저에게 전달한 상태. 선택을 기다립니다.</td><td><span class="tag op">운영자</span> 성사·미성사·새 라운드</td><td>「비교표가 도착했습니다」</td><td>변화 없음. 선정 표시 전까지 결과를 알 수 없습니다.</td></tr>
-<tr><td><span class="slug">won</span></td><td class="nw"><b>성사</b></td><td>선정 호텔 1곳이 정해져 닫힌 상태. 오거나이저 신원이 선정 호텔에 공개됩니다(약관 제7조).</td><td>없음 (종료)</td><td>「선정 호텔과 연결해 드렸습니다」</td><td>선정 호텔은 결과 메일과 연결 메일(자동)을 받습니다. 나머지는 미선정. 제출한 호텔의 링크에는 결과가 표시됩니다.</td></tr>
-<tr><td><span class="slug">lost</span></td><td class="nw"><b>미성사</b></td><td>선택하지 않음, 유효기한 경과, 두 차례 요청에도 제안 없음으로 닫힌 상태. 전달됨에서 닫거나, 제출 0건 &amp; 2라운드 이상이면 취합중에서 바로 닫습니다.</td><td>없음 (종료)</td><td>「이번 요청은 성사 없이 종료됐습니다」</td><td>없음.</td></tr>
-<tr><td><span class="slug">cancelled</span></td><td class="nw"><b>취소</b></td><td>종료 전 어느 상태에서든 사유를 남기고 닫을 수 있습니다.</td><td>없음 (종료)</td><td>「요청이 취소됐습니다」</td><td>초대 링크는 취소 화면(cancelled)으로 바뀜. 비딩중 취소는 호텔 안내 메일을 운영자가 직접 보냅니다.</td></tr>
+<tr><td><span class="slug">received</span></td><td class="nw"><b>접수됨</b></td><td>접수 폼이 DB에 저장된 상태. 아직 아무도 내용을 보지 않았습니다.</td><td><span class="tag op">운영자</span> 당일 요건 확인 중으로</td><td>「요청을 받았습니다」</td><td>없음. 호텔 화면에는 나가지 않습니다.</td></tr>
+<tr><td><span class="slug">verifying</span></td><td class="nw"><b>요건 확인 중</b></td><td>해외 행사 여부, 일정 확정, 필수 정보, 익명화를 확인하는 중. SLA 3영업일이 흐릅니다.</td><td><span class="tag op">운영자</span> 초대 준비 또는 반려</td><td>「요건을 확인하고 있습니다」</td><td>없음.</td></tr>
+<tr><td><span class="slug">rejected</span></td><td class="nw"><b>반려</b></td><td>국내 행사, 일정 미확정, 필수 정보 부족 등으로 진행하지 않는 종료 상태.</td><td>없음 (종료)</td><td>「이번 요청은 진행하지 않습니다」</td><td>없음.</td></tr>
+<tr><td><span class="slug">open</span></td><td class="nw"><b>초대 준비</b></td><td>검증과 익명화 검토를 마치고 호텔에 내보낼 준비가 된 상태. 마감 설정과 초대는 이 단계에서 합니다. 초대 준비에 도달하면 SLA는 충족이고, 이후 같은 기한은 초대 기한으로 봅니다.</td><td><span class="tag op">운영자</span> 견적 받는 중으로</td><td>요건 확인 중과 같은 화면으로 표시 (track에 open slug 없음)</td><td>초대를 보내기 전까지 없음. 초대를 먼저 발송한 경우 호텔은 링크를 열 수 있습니다.</td></tr>
+<tr><td><span class="slug">bidding</span></td><td class="nw"><b>견적 받는 중</b></td><td>호텔이 견적을 내는 기간. 추가 초대도 이 상태에서 가능합니다.</td><td><span class="tag sys">시스템</span> 마감 또는 전원 응답 (운영자 수동 가능)</td><td>「호텔에 요청을 보냈습니다」 · 라운드 2 이상이면 「바뀐 조건으로 호텔에 다시 요청했습니다」(rebid)</td><td>초대 링크에서 견적 제출·수정·거절. 마감 24시간 전 리마인더.</td></tr>
+<tr><td><span class="slug">collecting</span></td><td class="nw"><b>견적 정리 중</b></td><td>마감된 견적을 비교표로 정리하는 중. 제출이 0건이면 여기서 멈추고, 두 번째 라운드까지 0건이면 미성사로 닫습니다.</td><td><span class="tag op">운영자</span> 전달 · 새 라운드 · (제출 0건 &amp; 2라운드 이상) 미성사</td><td>「받은 제안을 정리하고 있습니다」</td><td>제출은 닫힘. 미응답 초대는 마감(expired)으로 바뀝니다.</td></tr>
+<tr><td><span class="slug">delivered</span></td><td class="nw"><b>비교표 전달됨</b></td><td>비교표를 요청자에게 전달한 상태. 선택을 기다립니다.</td><td><span class="tag op">운영자</span> 성사·미성사·새 라운드</td><td>「비교표가 도착했습니다」</td><td>변화 없음. 선정 표시 전까지 결과를 알 수 없습니다.</td></tr>
+<tr><td><span class="slug">won</span></td><td class="nw"><b>성사</b></td><td>선정 호텔 1곳이 정해져 닫힌 상태. 요청자 신원이 선정 호텔에 공개됩니다(약관 제7조).</td><td>없음 (종료)</td><td>「선정 호텔과 연결해 드렸습니다」</td><td>선정 호텔은 결과 메일과 연결 메일(자동)을 받습니다. 나머지는 미선정. 제출한 호텔의 링크에는 결과가 표시됩니다.</td></tr>
+<tr><td><span class="slug">lost</span></td><td class="nw"><b>미성사</b></td><td>선택하지 않음, 유효기한 경과, 두 차례 요청에도 제안 없음으로 닫힌 상태. 비교표 전달됨에서 닫거나, 제출 0건 &amp; 2라운드 이상이면 견적 정리 중에서 바로 닫습니다.</td><td>없음 (종료)</td><td>「이번 요청은 성사 없이 종료됐습니다」</td><td>없음.</td></tr>
+<tr><td><span class="slug">cancelled</span></td><td class="nw"><b>취소</b></td><td>종료 전 어느 상태에서든 사유를 남기고 닫을 수 있습니다.</td><td>없음 (종료)</td><td>「요청이 취소됐습니다」</td><td>초대 링크는 취소 화면(cancelled)으로 바뀜. 견적 받는 중 취소는 호텔 안내 메일을 운영자가 직접 보냅니다.</td></tr>
 </tbody></table></div>
 </section>
 
@@ -219,23 +220,24 @@ body{font-size:11.5px}
 <div class="tw"><table style="min-width:900px">
 <thead><tr><th>#</th><th>전이</th><th>주체</th><th>트리거</th><th>가드 조건</th><th>자동 동작</th><th>SOP 단계</th></tr></thead>
 <tbody>
-<tr><td>0</td><td class="nw">(없음) → 접수됨</td><td><span class="tag org">오거나이저</span></td><td>접수 폼 제출</td><td>필수 항목 입력</td><td><code>ORG_RECEIVED</code> 발송(추적 링크) · 이력 기록</td><td>1</td></tr>
-<tr><td>1</td><td class="nw">접수됨 → 검증중</td><td><span class="tag op">운영자</span></td><td>「검증중(으)로」</td><td>없음. 내용을 보기 전에 누릅니다.</td><td>이력 기록 · <b>SLA 기산점</b></td><td>1</td></tr>
-<tr><td>2</td><td class="nw">검증중 → 반려됨</td><td><span class="tag op">운영자</span></td><td>「반려됨(으)로」</td><td><b>사유 필수</b> (국내 행사(정책 2) / 일정 미확정 / 필수 정보 부족 / 기타는 메모 필수)</td><td><code>ORG_REJECTED</code> 발송 · 이력 기록 · SLA 충족</td><td>2 · 예외</td></tr>
-<tr><td>3</td><td class="nw">검증중 → 오픈</td><td><span class="tag op">운영자</span></td><td>「오픈(으)로」</td><td><b>익명화 검토 완료 표시</b> 필수. 없으면 &quot;익명화 검토 완료 표시가 필요합니다&quot;</td><td>이력 기록 · SLA 충족</td><td>2</td></tr>
-<tr><td>4</td><td class="nw">오픈 → 비딩중</td><td><span class="tag op">운영자</span></td><td>「비딩중(으)로」</td><td><b>마감일시 설정 + 초대 1곳 이상</b>. 초대가 2곳 미만이면 &quot;오거나이저에게 미리 알리셨나요?&quot; 확인을 거침. 초대를 보내는 시점에 저장된 마감이 초대별로 기록됨</td><td><code>HTL_INVITE</code>(호텔) · <code>ORG_BIDDING</code>(오거나이저) 발송 · 마감 24시간 전 <code>HTL_REMINDER</code> 예약 · 이력(초대 수·마감)</td><td>3</td></tr>
-<tr><td>5</td><td class="nw">비딩중 → 취합중</td><td><span class="tag sys">시스템</span> (운영자 수동 가능)</td><td>cron 10분 · 수동은 「취합중(으)로」</td><td><b>진행 중인 초대의 마감이 모두 경과(초대별 마감 중 가장 늦은 것 기준) 또는 전원 응답</b>. 수동 전이는 조건 없이 가능</td><td>미응답 초대를 마감(expired) 처리, 호텔 확인을 못 받은 대리 입력 초대는 proxy_expired 처리(4장) · 이력 기록. 제출 0건이면 취합중에서 멈춤</td><td>4</td></tr>
-<tr><td>6</td><td class="nw">취합중 → 전달됨</td><td><span class="tag op">운영자</span></td><td>「전달됨(으)로」</td><td><b>제출 견적 1건 이상</b>. 통화가 2종 이상이면 <b>모든 견적에 USD 참고(트윈)와 기준일</b> 입력. 비교표에는 호텔이 직접 낸 견적과 호텔이 확인한 대리 입력 견적만 실립니다(4장). 본사 사후 검토 전인 파트너 승인 호텔이 끼어 있어도 막지 않고 <code>HQ_HOTEL_UNREVIEWED_DELIVERED</code>로 알리기만 합니다</td><td><code>ORG_DELIVERED</code> 발송 · 추적 링크에 비교표 공개 · 이력 기록</td><td>5</td></tr>
-<tr><td>7</td><td class="nw">취합중 → 비딩중</td><td><span class="tag op">운영자</span></td><td>「조건 변경 → 새 라운드」</td><td>변경 내용 입력(선택). 요청 내용을 먼저 고친 뒤 실행</td><td>라운드 +1 · 마감 초기화 · 이전 라운드 견적은 이력으로 보존 · 재초대 필요 · <code>ORG_REBID</code> 발송(오거나이저)</td><td>예외</td></tr>
-<tr><td>8</td><td class="nw">취합중 → 미성사</td><td><span class="tag op">운영자</span></td><td>「미성사(으)로」</td><td><b>제출 견적 0건 &amp; 라운드 2 이상</b>일 때만. 아니면 &quot;견적 없이 두 번째 라운드까지 간 경우에만 미성사로 닫습니다. 먼저 '조건 변경 → 새 라운드'로 다른 호텔을 초대하세요.&quot; 안내. <b>사유 필수</b> (기본 선택: 두 차례 요청에도 제안 없음)</td><td><code>ORG_LOST</code> 발송(사유 포함) · 이력 기록</td><td>4 · 예외</td></tr>
-<tr><td>9</td><td class="nw">전달됨 → 비딩중</td><td><span class="tag op">운영자</span></td><td>「조건 변경 → 새 라운드」</td><td>7과 같음</td><td>7과 같음</td><td>예외</td></tr>
-<tr><td>10</td><td class="nw">전달됨 → 성사</td><td><span class="tag op">운영자</span></td><td>「성사(으)로」</td><td><b>선정 호텔 정확히 1곳</b> 표시 + 확인 창. <b>선택 휴대전화 인증(ORG_PICK_OTP) 완료</b>: 오거나이저(회원·비회원 모두)가 등록 휴대전화로 받은 인증번호를 맞춰야 선택이 확정됩니다. <b>공유 링크로는 선택할 수 없습니다.</b></td><td>나머지 초대를 미선정 처리 · 이력(선정 호텔) · 같은 시각에 자동 발송: <code>HTL_SELECTED_CONNECT</code>(선정 호텔에게, 오거나이저 회사명·담당자·이메일·휴대전화 포함, 오거나이저 참조) · <code>HTL_NOT_SELECTED</code>(제출한 나머지 호텔) · <code>ORG_WON</code>(오거나이저). 선정·미선정 표시만으로는 메일이 나가지 않음. 같은 전이에서 <b>정산 1건이 자동 생성</b>됩니다(5-6)</td><td>6</td></tr>
-<tr><td>11</td><td class="nw">전달됨 → 미성사</td><td><span class="tag op">운영자</span></td><td>「미성사(으)로」</td><td><b>사유 필수</b> (선택하지 않음 / 유효기한 경과(회신 없음) / 두 차례 요청에도 제안 없음)</td><td><code>ORG_LOST</code> 발송 · 이력 기록. 닫기 전 이메일로 한 번 확인</td><td>6</td></tr>
-<tr><td>12</td><td class="nw">접수됨·검증중·오픈·비딩중·취합중·전달됨 → 취소</td><td><span class="tag op">운영자</span></td><td>「취소」</td><td><b>사유 필수</b> (오거나이저 요청 / 기타는 메모 필수)</td><td><code>ORG_CANCELLED</code> 발송(오거나이저) · 이력 기록. 비딩중 취소는 초대 호텔에 자동 알림이 없어 <code>OPS_HTL_CANCELLED</code>로 직접 안내</td><td>예외</td></tr>
+<tr><td>0</td><td class="nw">(없음) → 접수됨</td><td><span class="tag org">요청자</span></td><td>접수 폼 제출</td><td>필수 항목 입력</td><td><code>ORG_RECEIVED</code> 발송(추적 링크) · 이력 기록</td><td>1</td></tr>
+<tr><td>1</td><td class="nw">접수됨 → 요건 확인 중</td><td><span class="tag op">운영자</span></td><td>「요건 확인 시작」</td><td>없음. 내용을 보기 전에 누릅니다.</td><td>이력 기록 · <b>SLA 기산점</b></td><td>1</td></tr>
+<tr><td>2</td><td class="nw">요건 확인 중 → 반려</td><td><span class="tag op">운영자</span></td><td>「반려」</td><td><b>사유 필수</b> (국내 행사(정책 2) / 일정 미확정 / 필수 정보 부족 / 기타는 메모 필수)</td><td><code>ORG_REJECTED</code> 발송 · 이력 기록 · SLA 충족</td><td>2 · 예외</td></tr>
+<tr><td>3</td><td class="nw">요건 확인 중 → 초대 준비</td><td><span class="tag op">운영자</span></td><td>「초대 준비로」</td><td><b>익명화 검토 완료 표시</b> 필수. 없으면 &quot;익명화 검토 완료 표시가 필요합니다&quot;</td><td>이력 기록 · SLA 충족</td><td>2</td></tr>
+<tr><td>4</td><td class="nw">초대 준비 → 견적 받는 중</td><td><span class="tag op">운영자</span></td><td>「견적 받기 시작」</td><td><b>마감일시 설정 + 초대 1곳 이상</b>. 초대가 2곳 미만이면 &quot;요청자에게 미리 알리셨나요?&quot; 확인을 거침. 초대를 보내는 시점에 저장된 마감이 초대별로 기록됨</td><td><code>HTL_INVITE</code>(호텔) · <code>ORG_BIDDING</code>(요청자) 발송 · 마감 24시간 전 <code>HTL_REMINDER</code> 예약 · 이력(초대 수·마감)</td><td>3</td></tr>
+<tr><td>5</td><td class="nw">견적 받는 중 → 견적 정리 중</td><td><span class="tag sys">시스템</span> (운영자 수동 가능)</td><td>cron 10분 · 수동은 「견적 정리 시작」</td><td><b>진행 중인 초대의 마감이 모두 경과(초대별 마감 중 가장 늦은 것 기준) 또는 전원 응답</b>. 수동 전이는 조건 없이 가능</td><td>미응답 초대를 마감(expired) 처리, 호텔 확인을 못 받은 대리 입력 초대는 proxy_expired 처리(4장) · 이력 기록. 제출 0건이면 견적 정리 중에서 멈춤</td><td>4</td></tr>
+<tr><td>6</td><td class="nw">견적 정리 중 → 비교표 전달됨</td><td><span class="tag op">운영자</span></td><td>「비교표 전달」</td><td><b>제출 견적 1건 이상</b>. 통화가 2종 이상이면 <b>모든 견적에 USD 참고(트윈)와 기준일</b> 입력. 비교표에는 호텔이 직접 낸 견적과 호텔이 확인한 대리 입력 견적만 실립니다(4장). 본사 사후 검토 전인 파트너 승인 호텔이 끼어 있어도 막지 않고 <code>HQ_HOTEL_UNREVIEWED_DELIVERED</code>로 알리기만 합니다</td><td><code>ORG_DELIVERED</code> 발송 · 추적 링크에 비교표 공개 · 이력 기록</td><td>5</td></tr>
+<tr><td>7</td><td class="nw">견적 정리 중 → 견적 받는 중</td><td><span class="tag op">운영자</span></td><td>「조건 변경 → 새 라운드」</td><td>변경 내용 입력(선택). 요청 내용을 먼저 고친 뒤 실행</td><td>라운드 +1 · 마감 초기화 · 이전 라운드 견적은 이력으로 보존 · 재초대 필요 · <code>ORG_REBID</code> 발송(요청자)</td><td>예외</td></tr>
+<tr><td>8</td><td class="nw">견적 정리 중 → 미성사</td><td><span class="tag op">운영자</span></td><td>「미성사로 닫기」</td><td><b>제출 견적 0건 &amp; 라운드 2 이상</b>일 때만. 아니면 &quot;견적 없이 두 번째 라운드까지 간 경우에만 미성사로 닫습니다. 먼저 '조건 변경 → 새 라운드'로 다른 호텔을 초대하세요.&quot; 안내. <b>사유 필수</b> (기본 선택: 두 차례 요청에도 제안 없음)</td><td><code>ORG_LOST</code> 발송(사유 포함) · 이력 기록</td><td>4 · 예외</td></tr>
+<tr><td>9</td><td class="nw">비교표 전달됨 → 견적 받는 중</td><td><span class="tag op">운영자</span></td><td>「조건 변경 → 새 라운드」</td><td>7과 같음</td><td>7과 같음</td><td>예외</td></tr>
+<tr><td>10</td><td class="nw">비교표 전달됨 → 성사</td><td><span class="tag op">운영자</span></td><td>요청자 「제안 X 선택」+ 인증번호 · 운영자 「성사로 닫기」(대리 확정)</td><td>두 경로가 있습니다. <b>① 요청자 직접 선택</b>: 등록 휴대전화로 받은 인증번호(ORG_PICK_OTP)를 맞추면 선택과 성사가 한 번에 끝납니다(<code>pick_and_win</code>). <b>공유 링크로는 선택할 수 없습니다.</b> <b>② 운영자 대리 확정</b>: <b>선정 호텔 정확히 1곳</b> 표시 + 확인 창에서 <b>동의 기록 필수</b> — 확인 방법(이메일 회신·통화·기타), 확인 일시(요청 접수 이후·지금으로부터 5분 이내), 근거 메모 10~1000자. 빠지면 <code>GUARD_CONSENT</code>. 파트너 담당자는 불가(<code>FORBIDDEN</code>), 파트너 관리자가 처리하면 본사에 <code>HQ_PROXY_CONSENT_RECORDED</code></td><td>나머지 초대를 미선정 처리 · 이력(선정 호텔, 대리 확정이면 「동의 확인: 방법 일시」 덧붙임) · 동의 기록은 <code>selections.consent_*</code>에 남고 근거 메모는 3년 뒤 파기 · 같은 시각에 자동 발송: <code>HTL_SELECTED_CONNECT</code>(선정 호텔에게, 요청자 회사명·담당자·이메일·휴대전화 포함, 요청자 참조) · <code>HTL_NOT_SELECTED</code>(제출한 나머지 호텔) · <code>ORG_WON</code>(요청자). 선정·미선정 표시만으로는 메일이 나가지 않음. 같은 전이에서 <b>정산 1건이 자동 생성</b>됩니다(5-6)</td><td>6</td></tr>
+<tr><td>11</td><td class="nw">비교표 전달됨 → 미성사</td><td><span class="tag op">운영자</span></td><td>「미성사로 닫기」</td><td><b>사유 필수</b> (선택하지 않음 / 유효기한 경과(회신 없음) / 두 차례 요청에도 제안 없음)</td><td><code>ORG_LOST</code> 발송 · 이력 기록. 닫기 전 이메일로 한 번 확인</td><td>6</td></tr>
+<tr><td>12</td><td class="nw">접수됨·요건 확인 중·초대 준비·견적 받는 중·견적 정리 중·비교표 전달됨 → 취소됨</td><td><span class="tag op">운영자</span></td><td>「요청 취소」</td><td><b>사유 필수</b> (요청자 취소 요청 / 기타는 메모 필수). 파트너 담당자는 불가</td><td><code>ORG_CANCELLED</code> 발송(요청자) · 이력 기록. 견적 받는 중 취소는 초대 호텔에 자동 알림이 없어 <code>OPS_HTL_CANCELLED</code>로 직접 안내</td><td>예외</td></tr>
+<tr><td>12b</td><td class="nw">접수됨·요건 확인 중·초대 준비(지금 라운드 초대 0건) → 취소됨</td><td><span class="tag org">요청자</span></td><td>진행 상황 화면 「이 요청 취소하기」 (<code>cancel_rfp</code>)</td><td>개인 링크 소유자만(공유 링크는 <code>FORBIDDEN_SHARE</code>). <b>사유 필수</b>(일정 변경 / 다른 경로로 예약 / 행사 취소 / 기타는 메모 필수, 500자 이내). 범위 밖이면 <code>CANCEL_NOT_ALLOWED</code>. 같은 요청을 두 번 보내도 결과는 같음</td><td><code>ORG_CANCELLED</code> 발송 · 이력(요청자) · 위임 건이면 담당 지역 파트너에 <code>PTR_ORG_CANCELLED</code>. 호텔 초대 전이라 호텔 안내는 필요 없음</td><td>예외</td></tr>
 </tbody></table></div>
-<div class="callout"><b>SLA 기산 규칙.</b> 검증중 전이(#1)가 SLA 3영업일의 기산점이고 기한은 3번째 영업일 18:00 KST입니다. <b>충족은 반려·오픈·비딩중 중 하나에 도달한 시점</b>입니다. 계산 방법은 <a href="#bizday">영업일 규칙</a>을 보세요.<br><b>SLA 마감 임박(황색)</b>은 기한이 다음 영업일 18:00 이내이거나 24시간 이내일 때입니다.<br><b>오픈 이후.</b> 오픈에 도달하면 SLA는 충족이며 지표도 그대로입니다. 콘솔은 오픈에서 같은 기한을 「초대 기한 초과 n시간」「초대 기한 임박」으로 표시해 초대 진행을 확인하게 하고, 이 배지에는 SLA라는 말을 쓰지 않습니다. 대시보드 행 이름은 「SLA·초대 기한 초과」「SLA·초대 기한 임박」입니다.</div>
-<div class="callout" id="pick-otp"><b>선택 인증 (전달됨 → 성사, #10).</b> 오거나이저가 제안을 고르면 요청에 등록된 휴대전화로 인증번호 문자(<code>ORG_PICK_OTP</code>, 알림톡 미사용)가 갑니다. 6자리 · 유효 3분 · 재발송은 60초 뒤부터 · 5회 틀리면 10분 잠금입니다. 인증이 끝나야 회사명·담당자·이메일·연락처가 선정 호텔에 전달됩니다. 보기 전용 공유 링크에는 선택 버튼이 없고, 링크로 들어온 요청은 서버가 거부합니다. 백엔드가 생기기 전에는 운영자가 오거나이저의 이메일 선택을 확인하고 콘솔에서 대신 닫으며, 이때 인증 기록이 없다는 사실이 요청 상세에 남습니다.</div>
-<p class="small">종료 상태(반려됨·성사·미성사·취소)에서 나가는 전이는 없습니다. 상태를 SQL로 직접 바꾸면 이력과 알림이 빠지므로 하지 않습니다.</p>
+<div class="callout"><b>SLA 기산 규칙.</b> 요건 확인 중 전이(#1)가 SLA 3영업일의 기산점이고 기한은 3번째 영업일 18:00 KST입니다. <b>충족은 반려·초대 준비·견적 받는 중 중 하나에 도달한 시점</b>입니다. 계산 방법은 <a href="#bizday">영업일 규칙</a>을 보세요.<br><b>SLA 마감 임박(황색)</b>은 기한이 다음 영업일 18:00 이내이거나 24시간 이내일 때입니다.<br><b>초대 준비 이후.</b> 초대 준비에 도달하면 SLA는 충족이며 지표도 그대로입니다. 콘솔은 초대 준비에서 같은 기한을 「초대 기한 초과 n시간」「초대 기한 임박」으로 표시해 초대 진행을 확인하게 하고, 이 배지에는 SLA라는 말을 쓰지 않습니다. 대시보드 행 이름은 「SLA·초대 기한 초과」「SLA·초대 기한 임박」입니다.</div>
+<div class="callout" id="pick-otp"><b>선택 인증 (비교표 전달됨 → 성사, #10).</b> 요청자가 제안을 고르면 요청에 등록된 휴대전화로 인증번호 문자(<code>ORG_PICK_OTP</code>, 알림톡 미사용)가 갑니다. 6자리 · 유효 3분 · 재발송은 60초 뒤부터 · 5회 틀리면 10분 잠금입니다. 인증이 끝나야 회사명·담당자·이메일·연락처가 선정 호텔에 전달됩니다. 보기 전용 공유 링크에는 선택 버튼이 없고, 링크로 들어온 요청은 서버가 거부합니다. 요청자가 이메일·전화로 고른 경우에는 운영자가 콘솔에서 대신 닫고(대리 확정), 이때 동의 확인 방법·일시·근거 메모를 반드시 남깁니다(이용약관 제7조 ⑧). 요청 상세에는 「인증 없음 · 동의 확인: 방법 일시」가 표시됩니다.</div>
+<p class="small">종료 상태(반려·성사·미성사·취소)에서 나가는 전이는 없습니다. 상태를 SQL로 직접 바꾸면 이력과 알림이 빠지므로 하지 않습니다.</p>
 </section>
 
 <section id="invitation">
@@ -249,30 +251,30 @@ body{font-size:11.5px}
 <tr><td><span class="slug">viewed</span></td><td class="nw"><b>열람</b></td><td>호텔이 토큰 링크를 처음 엽니다</td><td><span class="tag org">호텔 토큰 링크</span></td><td><code>open</code></td></tr>
 <tr><td><span class="slug">submitted</span></td><td class="nw"><b>제출</b></td><td>호텔이 견적을 제출합니다. 마감 전에는 수정할 수 있습니다</td><td><span class="tag org">호텔 토큰 링크</span></td><td><code>submitted</code></td></tr>
 <tr><td><span class="slug">declined</span></td><td class="nw"><b>거절</b></td><td>호텔이 이번 요청을 거절합니다</td><td><span class="tag org">호텔 토큰 링크</span></td><td><code>declined</code></td></tr>
-<tr><td><span class="slug">expired</span></td><td class="nw"><b>마감</b></td><td>마감이 지났는데 제출·거절이 없거나, 요청이 취합중으로 넘어갈 때 남은 미응답 초대</td><td><span class="tag sys">시스템</span> cron 10분</td><td><code>expired</code></td></tr>
-<tr><td><span class="slug">reinvited</span></td><td class="nw"><b>재초대됨</b></td><td>새 마감으로 같은 호텔을 다시 초대하면 이전 초대가 이 표시로 바뀌고 이력으로 남습니다</td><td><span class="tag op">운영자</span> 「재초대」</td><td><code>expired</code> (이전 링크. 새 초대는 새 링크로 <code>open</code>)</td></tr>
+<tr><td><span class="slug">expired</span></td><td class="nw"><b>마감</b></td><td>마감이 지났는데 제출·거절이 없거나, 요청이 견적 정리 중으로 넘어갈 때 남은 미응답 초대</td><td><span class="tag sys">시스템</span> cron 10분</td><td><code>expired</code></td></tr>
+<tr><td><span class="slug">reinvited</span></td><td class="nw"><b>재초대로 대체됨</b></td><td>새 마감으로 같은 호텔을 다시 초대하면 이전 초대가 이 표시로 바뀌고 이력으로 남습니다</td><td><span class="tag op">운영자</span> 「재초대」</td><td><code>expired</code> (이전 링크. 새 초대는 새 링크로 <code>open</code>)</td></tr>
 </tbody></table></div>
 <p class="small">지역 파트너가 호텔 대신 견적을 넣는 경우에는 진행 상태가 네 가지 더 생깁니다. 아래 「대리 입력 상태」를 보세요.</p>
 <h3>결과 표시</h3>
 <div class="tw"><table>
 <thead><tr><th>slug</th><th>표시</th><th>바뀌는 조건</th><th>바꾸는 주체</th></tr></thead>
 <tbody>
-<tr><td><span class="slug">selected</span></td><td class="nw"><b>선정</b></td><td>전달됨에서 오거나이저가 고른 호텔에 표시. 성사 전환의 가드(정확히 1곳)</td><td><span class="tag op">운영자</span> 초대 표의 「선정」</td></tr>
+<tr><td><span class="slug">selected</span></td><td class="nw"><b>선정</b></td><td>비교표 전달됨에서 요청자가 고른 호텔에 표시. 성사 전환의 가드(정확히 1곳)</td><td><span class="tag op">운영자</span> 초대 표의 「선정」</td></tr>
 <tr><td><span class="slug">not_selected</span></td><td class="nw"><b>미선정</b></td><td>나머지 호텔에 표시. 성사 전환 때 선정되지 않은 초대는 자동으로 미선정이 됩니다</td><td><span class="tag op">운영자</span> · <span class="tag sys">시스템</span> 성사 시 일괄</td></tr>
 </tbody></table></div>
-<p class="small">bid.html에는 위 표시 외에 견적을 제출한 호텔에게 결과를 보여 주는 <code>selected</code>(선정 · 오거나이저 연락처 표시)와 <code>not_selected</code>(미선정 · 오거나이저 정보 없음) 화면이 있고, 요청이 취소되면 <code>cancelled</code>, 링크가 잘못됐거나 만료되어 열 수 없으면 <code>invalid</code> 화면이 있습니다. 링크는 요청이 닫히면 견적을 더 받지 않고, 견적을 냈다면 나중에 결과를 보여 줍니다. 결과 화면에도 제출한 견적 요약이 함께 보이며 견적 입력·거절 폼은 나오지 않습니다.</p>
+<p class="small">bid.html에는 위 표시 외에 견적을 제출한 호텔에게 결과를 보여 주는 <code>selected</code>(선정 · 요청자 연락처 표시)와 <code>not_selected</code>(미선정 · 요청자 정보 없음) 화면이 있고, 요청이 취소되면 <code>cancelled</code>, 링크가 잘못됐거나 만료되어 열 수 없으면 <code>invalid</code> 화면이 있습니다. 링크는 요청이 닫히면 견적을 더 받지 않고, 견적을 냈다면 나중에 결과를 보여 줍니다. 결과 화면에도 제출한 견적 요약이 함께 보이며 견적 입력·거절 폼은 나오지 않습니다.</p>
 <h3>초대별 마감과 재초대</h3>
 <ul class="tight small">
 <li>각 초대는 <b>보낸 시점의 요청 마감</b>을 <code>deadline</code>으로 저장합니다. 콘솔 초대 표에 마감 열이 있습니다.</li>
 <li>초대가 있는 상태에서 요청 마감을 바꾸면 &quot;이미 보낸 초대의 마감은 바뀌지 않습니다. 새 마감으로 받으려면 해당 호텔을 다시 초대하세요.&quot; 확인 창이 뜹니다.</li>
-<li>비딩중에서 초대·열람·마감 상태이고 마감이 현재 요청 마감과 다른 행에 「재초대」 버튼이 나타납니다. 누르면 새 마감으로 새 초대 행이 생기고 이전 행은 <b>재초대됨</b>으로 이력에 남습니다.</li>
-<li>취합중 자동 전환은 진행 중인 초대의 <b>최신 마감</b>이 모두 지났거나 모든 호텔이 응답했을 때 일어납니다.</li>
+<li>견적 받는 중에서 초대·열람·마감 상태이고 마감이 현재 요청 마감과 다른 행에 「재초대」 버튼이 나타납니다. 누르면 새 마감으로 새 초대 행이 생기고 이전 행은 <b>재초대로 대체됨</b>으로 이력에 남습니다.</li>
+<li>견적 정리 중 자동 전환은 진행 중인 초대의 <b>최신 마감</b>이 모두 지났거나 모든 호텔이 응답했을 때 일어납니다.</li>
 </ul>
 <h3>초대 때의 커미션 합의 확인 (0017)</h3>
 <ul class="tight small">
 <li>호텔의 커미션 요율이 <b>합의 완료</b>가 아니면 초대하지 않고 건너뜁니다(5-1). 건너뛴 호텔은 요청 이력에 「요율 합의 전 제외: 호텔명」으로 남습니다. 고른 호텔이 전부 이 이유로 빠지면 초대는 <code>COMMISSION_NOT_AGREED</code> 오류로 거부됩니다.</li>
 <li>재초대도 같습니다. 합의 전 호텔은 <code>COMMISSION_NOT_AGREED</code>로 거부되고, 이전 초대 행은 바뀌지 않습니다.</li>
-<li>초대를 만들 때 <b>그 시점의 합의 요율·산정 기준·약관 버전을 초대 행에 복사</b>합니다(스냅샷, D-41). 이후 호텔이 요율 변경에 동의해도 이미 나간 초대는 그대로이고, 새 초대부터 새 요율이 붙습니다. 호텔 비딩 화면과 초대 메일에는 합의 요율이 한 줄 나가지만 오거나이저 화면에는 나가지 않습니다(D-42).</li>
+<li>초대를 만들 때 <b>그 시점의 합의 요율·산정 기준·약관 버전을 초대 행에 복사</b>합니다(스냅샷, D-41). 이후 호텔이 요율 변경에 동의해도 이미 나간 초대는 그대로이고, 새 초대부터 새 요율이 붙습니다. 호텔 비딩 화면과 초대 메일에는 합의 요율이 한 줄 나가지만 요청자 화면에는 나가지 않습니다(D-42).</li>
 </ul>
 <h3 id="proxy">대리 입력 상태</h3>
 <p class="small">지역 파트너(또는 본사 운영자)가 호텔 대신 견적을 입력하는 경로입니다. RPC <code>partner_quote_proxy_enter</code>가 견적을 저장하고(<code>quotes.entered_by</code> = partner 또는 operator) 호텔의 MICEGO 등록 연락처로 확인 메일 <code>HTL_CONFIRM</code>을 보냅니다. 호텔이 확인해야 비교표에 실립니다.</p>
@@ -281,15 +283,15 @@ body{font-size:11.5px}
 <tbody>
 <tr><td><span class="slug">proxy_entered</span></td><td class="nw"><b>대리 입력됨</b> (확인 대기)</td><td>초대(<code>invited</code>·<code>viewed</code>, 또는 <code>proxy_*</code> 재입력)에 견적을 대신 입력하면 바뀝니다. 확인 토큰이 만들어지고 <code>HTL_CONFIRM</code>이 나갑니다</td><td><span class="tag op">운영자</span> 지역 파트너 · 본사</td><td><code>open</code> (호텔은 직접 제출할 수도 있음)</td></tr>
 <tr><td><span class="slug">submitted</span></td><td class="nw"><b>제출</b> (확인 완료)</td><td>호텔이 확인 링크에서 「확인」을 누르면 <code>proxy_entered</code> → <code>submitted</code>가 됩니다. 확인 사실은 <code>quotes.confirmed_at</code>·<code>confirmed_via</code>에 남고, 이후에는 호텔이 직접 낸 견적과 같은 경로(선정·인증·추적·비교표·정산)를 탑니다</td><td><span class="tag org">호텔 확인 링크</span></td><td><code>submitted</code></td></tr>
-<tr><td><span class="slug">hotel_confirmed</span></td><td class="nw"><b>(예비)</b></td><td>enum 값만 있고 쓰이지 않습니다. 설계서는 확인 완료를 이 값으로 두었지만 구현은 <code>submitted</code>로 통일했습니다. 조회 쪽(비교표 뷰·전달됨 가드·추적·선택 인증)은 두 값을 모두 받습니다</td><td>—</td><td>(<code>submitted</code>와 같게 처리)</td></tr>
+<tr><td><span class="slug">hotel_confirmed</span></td><td class="nw"><b>(예비)</b></td><td>enum 값만 있고 쓰이지 않습니다. 설계서는 확인 완료를 이 값으로 두었지만 구현은 <code>submitted</code>로 통일했습니다. 조회 쪽(비교표 뷰·비교표 전달됨 가드·추적·선택 인증)은 두 값을 모두 받습니다</td><td>—</td><td>(<code>submitted</code>와 같게 처리)</td></tr>
 <tr><td><span class="slug">proxy_disputed</span></td><td class="nw"><b>호텔 이의</b></td><td>호텔이 「내용이 다르다」(사유 3자 이상)를 누르면 바뀝니다. 그 견적은 쓰이지 않습니다. 개입 알림 <code>proxy_disputed</code>가 열리고 <code>PTR_HOTEL_DISPUTED</code>·<code>HQ_PROXY_DISPUTED</code>가 나갑니다. 다시 입력해 <code>proxy_entered</code>로 돌리거나, 호텔이 직접 제출하게 안내합니다</td><td><span class="tag org">호텔 확인 링크</span></td><td><code>open</code></td></tr>
-<tr><td><span class="slug">proxy_expired</span></td><td class="nw"><b>확인 기한 경과</b></td><td>확인 링크가 72시간 안에 쓰이지 않으면 10분 cron(<code>proxy_expire_sweep</code>)이 바꿉니다. 비딩중 → 취합중 전환 때 남아 있던 <code>proxy_entered</code>도 한꺼번에 바뀝니다. 이력에 「비교표 제외」가 남습니다. 재발송하면 <code>proxy_entered</code>로 돌아갑니다</td><td><span class="tag sys">시스템</span> cron</td><td><code>open</code></td></tr>
+<tr><td><span class="slug">proxy_expired</span></td><td class="nw"><b>확인 기한 경과</b></td><td>확인 링크가 72시간 안에 쓰이지 않으면 10분 cron(<code>proxy_expire_sweep</code>)이 바꿉니다. 견적 받는 중 → 견적 정리 중 전환 때 남아 있던 <code>proxy_entered</code>도 한꺼번에 바뀝니다. 이력에 「비교표 제외」가 남습니다. 재발송하면 <code>proxy_entered</code>로 돌아갑니다</td><td><span class="tag sys">시스템</span> cron</td><td><code>open</code></td></tr>
 </tbody></table></div>
 <ul class="tight small">
 <li><b>확인 링크.</b> 호텔의 등록 연락처로만 가며, URL(en/confirm.html)을 열기만 해서는 토큰이 쓰이지 않습니다. 「확인」·「이의」 버튼(POST)을 눌러야 1회용 토큰이 소비됩니다. DB에는 토큰 원문이 없고 sha256 해시만 저장합니다.</li>
-<li><b>유효 72시간.</b> 마지막 발송 시각부터 <code>settings.proxy_confirm_hours</code>(기본 72)시간입니다. 확인은 요청이 오픈·비딩중·취합중일 때만 되고, 지나면 <code>TOKEN_EXPIRED</code>·<code>TOKEN_USED</code> 화면이 뜹니다.</li>
+<li><b>유효 72시간.</b> 마지막 발송 시각부터 <code>settings.proxy_confirm_hours</code>(기본 72)시간입니다. 확인은 요청이 초대 준비·견적 받는 중·견적 정리 중일 때만 되고, 지나면 <code>TOKEN_EXPIRED</code>·<code>TOKEN_USED</code> 화면이 뜹니다.</li>
 <li><b>재발송.</b> RPC <code>partner_quote_proxy_resend</code>는 <code>proxy_entered</code> 또는 <code>proxy_expired</code>일 때만 되고(아니면 <code>STATE_CONFLICT</code>), 초대 한 건당 <b>3회까지</b>입니다(넘으면 <code>RATE_LIMITED</code>). 새 토큰을 만들면 이전 링크는 못 쓰고 72시간이 다시 시작됩니다. 이의(<code>proxy_disputed</code>) 상태에서는 재발송이 아니라 다시 입력해야 합니다.</li>
-<li><b>입력 가드.</b> 요청이 오픈·비딩중·취합중이고, 마감 전이며, 호텔이 승인 상태일 때만 입력할 수 있습니다. 증빙 메모 5자 이상 필수(<code>GUARD_EVIDENCE</code>), 통화·트윈·킹 요금·볼룸명·취소 규정 필수, 유효기간은 마감 2영업일 뒤 이상입니다. 호텔이 직접 낸 견적이 있으면 대리 입력은 거부됩니다(<code>QUOTE_EXISTS</code>). 콘솔 세션은 저장된 금액·조건을 고칠 수 없습니다(<code>QUOTE_IMMUTABLE</code>).</li>
+<li><b>입력 가드.</b> 요청이 초대 준비·견적 받는 중·견적 정리 중이고, 마감 전이며, 호텔이 승인 상태일 때만 입력할 수 있습니다. 증빙 메모 5자 이상 필수(<code>GUARD_EVIDENCE</code>), 통화·트윈·킹 요금·볼룸명·취소 규정 필수, 유효기간은 마감 2영업일 뒤 이상입니다. 호텔이 직접 낸 견적이 있으면 대리 입력은 거부됩니다(<code>QUOTE_EXISTS</code>). 콘솔 세션은 저장된 금액·조건을 고칠 수 없습니다(<code>QUOTE_IMMUTABLE</code>).</li>
 <li><b>호텔이 직접 제출하면.</b> 호텔이 비딩 링크로 직접 내거나 고쳐 내면 어느 단계에서든 「호텔 직접 제출」로 바뀌어 초대는 <code>submitted</code>가 되고 대리 입력 표시와 확인 토큰은 정리됩니다.</li>
 </ul>
 <h3>어떤 초대 상태가 비교표에 실리나</h3>
@@ -302,7 +304,7 @@ body{font-size:11.5px}
 <tr><td><span class="slug">proxy_disputed</span></td><td class="nw"><span class="tag hot">제외</span></td><td>호텔이 이의를 낸 견적</td></tr>
 <tr><td><span class="slug">proxy_expired</span></td><td class="nw"><span class="tag hot">제외</span></td><td>확인 기한이 지난 견적</td></tr>
 </tbody></table></div>
-<p class="small">뷰 조건은 「대체되지 않은 견적(<code>superseded_by</code> 없음)이면서 호텔이 직접 냈거나 확인이 끝난 것」입니다. 전달됨 전이의 USD 참고 검사와 비교표 라벨(A, B, …)도 이 견적에만 적용됩니다.</p>
+<p class="small">뷰 조건은 「대체되지 않은 견적(<code>superseded_by</code> 없음)이면서 호텔이 직접 냈거나 확인이 끝난 것」입니다. 비교표 전달됨 전이의 USD 참고 검사와 비교표 라벨(A, B, …)도 이 견적에만 적용됩니다.</p>
 </section>
 
 <section id="partner">
@@ -341,7 +343,7 @@ body{font-size:11.5px}
 
 <section id="commission">
 <h2><span class="n">5-1</span>호텔 커미션 합의 상태</h2>
-<p class="lead">호텔이 내는 커미션 요율을 호텔별로 한 번 합의해 두고, 그 호텔의 모든 성사 건에 적용합니다(D-38). 오거나이저는 계속 수수료가 없고 요율도 보지 못합니다(D-32·D-37). 합의 상태는 따로 저장하는 컬럼이 아니라 <code>partners.commission_*</code> 컬럼에서 계산한 값이며, 콘솔 JSON에서는 <code>commission.status</code> = none · pending · expired · agreed로 나옵니다.</p>
+<p class="lead">호텔이 내는 커미션 요율을 호텔별로 한 번 합의해 두고, 그 호텔의 모든 성사 건에 적용합니다(D-38). 요청자는 계속 수수료가 없고 요율도 보지 못합니다(D-32·D-37). 합의 상태는 따로 저장하는 컬럼이 아니라 <code>partners.commission_*</code> 컬럼에서 계산한 값이며, 콘솔 JSON에서는 <code>commission.status</code> = none · pending · expired · agreed로 나옵니다.</p>
 <div class="tw"><table style="min-width:760px">
 <thead><tr><th>합의 상태</th><th>조건</th><th>콘솔 표시</th><th>견적 초대</th></tr></thead>
 <tbody>
@@ -364,7 +366,7 @@ body{font-size:11.5px}
 <li><b>산정 기준.</b> <code>commission_basis_scope</code>는 <code>rooms_fnb_net</code> 하나뿐입니다. 객실과 연회·F&amp;B 전체 계약 금액에서 세금·봉사료를 뺀 순액입니다(D-38).</li>
 <li><b>스냅샷 (D-41).</b> 초대를 만들 때 그 시점의 합의 요율을 초대 행에 복사하고(4장), 성사되면 선정된 초대의 값을 정산의 <code>agreed_rate_pct</code>로 복사합니다(5-6). 이후 합의 요율이 바뀌어도 이미 나간 초대와 만들어진 정산은 그대로입니다.</li>
 <li><b>이력.</b> <code>partner_commission_event</code>는 추가만 되는 표입니다(수정·삭제 불가). 코드가 쓰는 종류는 <code>proposed</code> · <code>resent</code> · <code>accepted</code>이고 <code>backfilled</code>는 데모 데이터 전용입니다.</li>
-<li><b>노출 범위 (D-42).</b> 호텔 비딩 화면과 <code>HTL_INVITE</code> 메일에는 「Your agreed commission: n% of net booking value.」 한 줄이 나갑니다. 오거나이저 화면·메일·공유 링크에는 요율이 없고, <code>verify2.py</code>가 이를 검사합니다.</li>
+<li><b>노출 범위 (D-42).</b> 호텔 비딩 화면과 <code>HTL_INVITE</code> 메일에는 「Your agreed commission: n% of net booking value.」 한 줄이 나갑니다. 요청자 화면·메일·공유 링크에는 요율이 없고, <code>verify2.py</code>가 이를 검사합니다.</li>
 </ul>
 </section>
 
@@ -394,7 +396,7 @@ body{font-size:11.5px}
 <tr><td>ACC-T6</td><td class="nw">locked → active</td><td><span class="tag org">회원</span> 재설정 · <span class="tag op">운영자</span> 잠금 해제</td><td>재설정은 이메일 링크(30분·1회용). 운영자는 <b>사유 필수</b>, 전화로 본인 확인</td><td>재설정: <code>ACC_PW_RESET</code> → <code>ACC_PW_CHANGED</code>. 운영자 해제는 자동 알림 없음(감사 로그)</td></tr>
 <tr><td>ACC-T7</td><td class="nw">active → suspended</td><td><span class="tag op">운영자</span></td><td><b>사유 필수</b> (약관 위반 신고 / 계정 공유 의심 / 부정 이용 의심 / 기타는 메모 필수)</td><td>모든 세션 종료. 자동 안내 없음, 운영자가 직접 알림</td></tr>
 <tr><td>ACC-T8</td><td class="nw">suspended → active</td><td><span class="tag op">운영자</span></td><td><b>사유 필수</b></td><td>자동 알림 없음</td></tr>
-<tr><td>ACC-T9</td><td class="nw">active → withdrawn</td><td><span class="tag org">회원</span> · <span class="tag op">운영자</span></td><td><b>비딩중·재요청(라운드 2 이상)·취합중·전달됨 요청이 하나라도 있으면 불가.</b> 접수됨·검증중·오픈 요청은 탈퇴 때 자동 취소(호텔에 아직 나가지 않았거나 초대 전). 운영자 처리는 <b>「본인 요청 확인」 체크 + 사유</b>가 필요하고 강제 탈퇴는 없음</td><td><code>ACC_WITHDRAWN</code> · 연락처 즉시 파기 · 추적·공유 링크 중지 · 성사 연결 기록 3년 보관</td></tr>
+<tr><td>ACC-T9</td><td class="nw">active → withdrawn</td><td><span class="tag org">회원</span> · <span class="tag op">운영자</span></td><td><b>견적 받는 중·재요청(라운드 2 이상)·견적 정리 중·비교표 전달됨 요청이 하나라도 있으면 불가.</b> 접수됨·요건 확인 중·초대 준비 요청은 탈퇴 때 자동 취소(호텔에 아직 나가지 않았거나 초대 전). 운영자 처리는 <b>「본인 요청 확인」 체크 + 사유</b>가 필요하고 강제 탈퇴는 없음</td><td><code>ACC_WITHDRAWN</code> · 연락처 즉시 파기 · 추적·공유 링크 중지 · 성사 연결 기록 3년 보관</td></tr>
 </tbody></table></div>
 <h3>상태가 바뀌지 않는 계정 이벤트</h3>
 <div class="tw"><table>
@@ -423,7 +425,7 @@ body{font-size:11.5px}
 <div class="tw"><table>
 <thead><tr><th>구분</th><th>기준</th></tr></thead>
 <tbody>
-<tr><td class="nw"><b>대상 요청</b></td><td>진행 중인 요청(접수됨~전달됨). 종료된 요청은 이관하지 않습니다.</td></tr>
+<tr><td class="nw"><b>대상 요청</b></td><td>진행 중인 요청(접수됨~비교표 전달됨). 종료된 요청은 이관하지 않습니다.</td></tr>
 <tr><td class="nw"><b>받는 사람</b></td><td>이메일로 지정하는 <b>정상(active) 회원</b>. 잠김·정지·탈퇴·인증 대기 회원과 본인에게는 이관할 수 없습니다.</td></tr>
 <tr><td class="nw"><b>필수 입력</b></td><td>사유(담당자 변경 / 계정 오등록 정정 / 기타는 메모 필수).</td></tr>
 <tr><td class="nw"><b>결과</b></td><td>요청의 소유자만 바뀝니다. 이전 소유자의 공유 링크는 꺼지고, 호텔에 이미 보낸 요청서와 진행 상태는 그대로입니다. 요청 이력과 양쪽 회원의 감사 로그에 남습니다.</td></tr>
@@ -468,7 +470,7 @@ body{font-size:11.5px}
 <thead><tr><th>slug</th><th>콘솔 표기</th><th>의미</th><th>지역 파트너</th><th>본사 (운영자)</th></tr></thead>
 <tbody>
 <tr><td><span class="slug">hq_held</span></td><td class="nw"><b>본사 보유</b></td><td>담당 파트너가 없고 본사가 가지고 있는 상태. 파트너 조직 없이 <code>hold_reason</code>이 반드시 있습니다.</td><td>목록·상세에 나오지 않습니다 (<code>NOT_FOUND</code>).</td><td>읽기·쓰기 모두 가능. 위임 건을 건드리는 것이 아니므로 override로 기록하지 않습니다.</td></tr>
-<tr><td><span class="slug">delegated</span></td><td class="nw"><b>파트너 위임</b></td><td>지역 파트너 조직이 끝까지 운영하는 상태. 파트너 조직·지역 코드·위임 시각이 필수입니다.</td><td>읽기·쓰기. 단 조직이 활성이고 담당 지역일 때만 쓸 수 있습니다. 오거나이저 신원은 마스킹됩니다.</td><td>읽기 가능. 쓰기는 <b>HQ override</b>로 기록됩니다.</td></tr>
+<tr><td><span class="slug">delegated</span></td><td class="nw"><b>파트너 위임</b></td><td>지역 파트너 조직이 끝까지 운영하는 상태. 파트너 조직·지역 코드·위임 시각이 필수입니다.</td><td>읽기·쓰기. 단 조직이 활성이고 담당 지역일 때만 쓸 수 있습니다. 요청자 신원은 마스킹됩니다.</td><td>읽기 가능. 쓰기는 <b>HQ override</b>로 기록됩니다.</td></tr>
 <tr><td><span class="slug">taken_over</span></td><td class="nw"><b>본사 인계</b></td><td>위임했던 요청을 본사가 가져간 상태. 원래 파트너 조직은 그대로 남습니다.</td><td>읽기 전용 (쓰기는 <code>RFP_TAKEN_OVER</code>).</td><td>읽기·쓰기. 인계 때 파트너 몫(%)을 덮어쓸 수 있습니다.</td></tr>
 </tbody></table></div>
 <h3>보류 사유 (<code>hold_reason</code>)</h3>
@@ -494,14 +496,14 @@ body{font-size:11.5px}
 <tr><td class="nw">DG-T3</td><td class="nw">hq_held <span class="arrow">→</span> delegated</td><td><span class="tag op">운영자</span><br><code>rfp_assign</code></td><td>활성 파트너 조직(<code>PARTNER_SUSPENDED</code>), 그 조직이 요청 지역을 맡고 있음(<code>REGION_MISMATCH</code>), 종료 상태가 아님(<code>STATE_CONFLICT</code>). 부적격 사유(신규 접수 중지·상한 초과 등)는 막지 않고 경고로만 돌려줍니다.</td><td><code>PTR_ASSIGNED</code> · 배정 이력 <code>assign</code> · 열려 있던 개입 알림(미배정 방치·파트너 미착수·조직 정지) 해소</td></tr>
 <tr><td class="nw">DG-T4</td><td class="nw">delegated (A) <span class="arrow">→</span> delegated (B)</td><td><span class="tag op">운영자</span><br><code>rfp_assign</code></td><td>DG-T3과 같음</td><td>A에 <code>PTR_UNASSIGNED</code>, B에 <code>PTR_ASSIGNED</code> · 배정 이력 <code>reassign</code></td></tr>
 <tr><td class="nw">DG-T5</td><td class="nw">delegated · taken_over <span class="arrow">→</span> hq_held</td><td><span class="tag op">운영자</span><br><code>rfp_hold</code></td><td>이미 본사 보유면 아무 일도 없습니다. 파트너는 곧바로 이 요청을 볼 수 없게 됩니다(인계와 달리 읽기도 끊김).</td><td><code>PTR_UNASSIGNED</code> · <code>HQ_RFP_HELD</code> · 사유 <code>manual</code> · 배정 이력 <code>hold</code></td></tr>
-<tr><td class="nw">DG-T6</td><td class="nw">delegated <span class="arrow">→</span> hq_held (반려)</td><td><span class="tag op">지역 파트너 관리자</span><br><code>rfp_decline_assignment</code></td><td>자기 조직에 위임된 건이고 RFP 상태가 접수됨·검증중일 때만(<code>STATE_CONFLICT</code>), 사유 필수(<code>GUARD_REASON</code>). 다음 파트너에게 자동으로 넘기지 않습니다. 파트너 담당자는 반려할 수 없습니다.</td><td><code>HQ_PARTNER_DECLINED</code> · 사유 <code>partner_declined</code> · 배정 이력 <code>decline</code></td></tr>
+<tr><td class="nw">DG-T6</td><td class="nw">delegated <span class="arrow">→</span> hq_held (반려)</td><td><span class="tag op">지역 파트너 관리자</span><br><code>rfp_decline_assignment</code></td><td>자기 조직에 위임된 건이고 RFP 상태가 접수됨·요건 확인 중일 때만(<code>STATE_CONFLICT</code>), 사유 필수(<code>GUARD_REASON</code>). 다음 파트너에게 자동으로 넘기지 않습니다. 파트너 담당자는 반려할 수 없습니다.</td><td><code>HQ_PARTNER_DECLINED</code> · 사유 <code>partner_declined</code> · 배정 이력 <code>decline</code></td></tr>
 <tr><td class="nw">DG-T7</td><td class="nw">delegated <span class="arrow">→</span> taken_over</td><td><span class="tag op">운영자</span><br><code>rfp_takeover</code></td><td>위임 상태에서만(<code>STATE_CONFLICT</code>), 사유 필수. 파트너 몫(%)을 0~100으로 덮어쓸 수 있고 정산의 파트너 몫이 됩니다.</td><td><code>PTR_TAKEN_OVER</code> · 요청 이력 「본사 인계」 · 파트너 대상 개입 알림 해소 · 배정 이력 <code>takeover</code></td></tr>
 <tr><td class="nw">DG-T8</td><td class="nw">taken_over <span class="arrow">→</span> delegated</td><td><span class="tag op">운영자</span><br><code>rfp_release</code></td><td>인계 상태에서만(<code>STATE_CONFLICT</code>). 인계 사유와 파트너 몫 덮어쓰기는 지워집니다.</td><td><code>PTR_RELEASED</code> · 배정 이력 <code>release</code></td></tr>
 <tr><td class="nw">DG-T9</td><td class="nw">지역 변경 (위임 상태는 그대로 또는 재배정)</td><td><span class="tag op">운영자</span><br><code>rfp_set_region</code></td><td>현재 담당 파트너가 새 지역도 맡고 있으면 그대로 둡니다. 아니면(종료 상태 제외) 위임 건은 보류한 뒤 자동 배정을 다시 돌립니다. 인계 건은 재배정하지 않습니다.</td><td>배정 이력 <code>region_set</code> (+ 재배정 시 위 알림)</td></tr>
 </tbody></table></div>
 <h3>읽기·쓰기 규칙</h3>
 <ul class="tight small">
-<li><b>읽기.</b> 운영자는 전부 봅니다. 지역 파트너는 <b>자기 조직의 위임·인계 건</b>만 봅니다. 파트너 화면의 오거나이저 회사명은 첫 글자만 남기고 가려지고(예: 한**), 담당자·이메일·전화는 비어 있습니다. 전체 정보는 <code>rfp_get_identity</code>로만 볼 수 있고 열람이 <code>identity_view_log</code>에 남습니다(같은 사람의 상세 열람은 10분에 한 번, 전화번호 원문 보기는 매번). 추적 토큰·소유자·선택 인증 상태는 본사만 봅니다.</li>
+<li><b>읽기.</b> 운영자는 전부 봅니다. 지역 파트너는 <b>자기 조직의 위임·인계 건</b>만 봅니다. 파트너 화면의 요청자 회사명은 첫 글자만 남기고 가려지고(예: 한**), 담당자·이메일·전화는 비어 있습니다. 전체 정보는 <code>rfp_get_identity</code>로만 볼 수 있고 열람이 <code>identity_view_log</code>에 남습니다(같은 사람의 상세 열람은 10분에 한 번, 전화번호 원문 보기는 매번). 추적 토큰·소유자·선택 인증 상태는 본사만 봅니다.</li>
 <li><b>쓰기.</b> 지역 파트너는 <b>위임(delegated) 건에서만</b>, 조직이 활성이고 담당 지역일 때만 쓸 수 있습니다. 담당 지역이 회수되면 <code>REGION_REVOKED</code>, 조직이 정지되면 <code>PARTNER_SUSPENDED</code>입니다. 파트너 담당자(<code>partner_member</code>)는 요청의 반려·취소를 할 수 없고 관리자만 합니다. 쓰기에는 상태 전이(3장), 요청 수정, 초대·재초대, 선정 표시, 대리 입력이 모두 포함됩니다.</li>
 <li><b>HQ override.</b> 본사가 위임 건을 직접 처리하면 <code>audit_log</code>에 <code>hq_override</code>가 남고 배정 이력에 <code>hq_override</code> 항목이 쌓입니다. 상태 전이일 때는 담당 파트너에게 <code>PTR_HQ_ACTION</code>이 갑니다. 본사 보유·인계 건을 처리하는 것은 override가 아닙니다.</li>
 <li><b>개입 알림.</b> 10분 cron이 본사 보유 4시간 초과(<code>unassigned_stale</code>, 사유 <code>legacy</code>·<code>manual</code> 제외), 위임 뒤 <code>settings.partner_idle_hours</code>(기본 24시간) 동안 접수됨에 머문 건(<code>partner_idle</code>), SLA 초과(<code>sla_breach</code>)를 찾아 개입 알림을 만듭니다. 상태가 진전되면 자동으로 해소됩니다.</li>
@@ -556,28 +558,28 @@ body{font-size:11.5px}
 
 <section id="mapping">
 <h2><span class="n">6</span>화면 표시 매핑표</h2>
-<p class="lead">내부 RFP 상태가 오거나이저 추적 페이지(ko/track.html)와 호텔 초대 페이지(en/bid.html)에서 어떻게 보이는지 정리했습니다.</p>
+<p class="lead">내부 RFP 상태가 요청자 추적 페이지(ko/track.html)와 호텔 초대 페이지(en/bid.html)에서 어떻게 보이는지 정리했습니다.</p>
 <div class="tw"><table style="min-width:760px">
 <thead><tr><th>내부 RFP 상태</th><th>track.html slug</th><th>호텔 초대 / bid.html 표시</th></tr></thead>
 <tbody>
 <tr><td>접수됨 <span class="slug">received</span></td><td><code>received</code></td><td>초대 없음 (링크 미발송)</td></tr>
-<tr><td>검증중 <span class="slug">verifying</span></td><td><code>verifying</code></td><td>초대 없음</td></tr>
-<tr><td>반려됨 <span class="slug">rejected</span></td><td><code>rejected</code></td><td>초대 없음</td></tr>
-<tr><td>오픈 <span class="slug">open</span></td><td><code>verifying</code> (open slug 없음)</td><td>초대를 먼저 보낸 경우에만 <code>open</code></td></tr>
-<tr><td>비딩중 (라운드 1)</td><td><code>bidding</code></td><td>초대·열람 <code>open</code> · 제출 <code>submitted</code> · 거절 <code>declined</code></td></tr>
-<tr><td>비딩중 (라운드 2 이상)</td><td><code>rebid</code></td><td>재초대된 호텔은 새 링크로 <code>open</code>. 이전 라운드 초대는 그대로 유지</td></tr>
-<tr><td>취합중 <span class="slug">collecting</span></td><td><code>collecting</code></td><td>제출 <code>submitted</code> 유지 · 미응답은 <code>expired</code></td></tr>
-<tr><td>전달됨 <span class="slug">delivered</span></td><td><code>delivered</code></td><td>취합중과 같음</td></tr>
+<tr><td>요건 확인 중 <span class="slug">verifying</span></td><td><code>verifying</code></td><td>초대 없음</td></tr>
+<tr><td>반려 <span class="slug">rejected</span></td><td><code>rejected</code></td><td>초대 없음</td></tr>
+<tr><td>초대 준비 <span class="slug">open</span></td><td><code>verifying</code> (open slug 없음)</td><td>초대를 먼저 보낸 경우에만 <code>open</code></td></tr>
+<tr><td>견적 받는 중 (라운드 1)</td><td><code>bidding</code></td><td>초대·열람 <code>open</code> · 제출 <code>submitted</code> · 거절 <code>declined</code></td></tr>
+<tr><td>견적 받는 중 (라운드 2 이상)</td><td><code>rebid</code></td><td>재초대된 호텔은 새 링크로 <code>open</code>. 이전 라운드 초대는 그대로 유지</td></tr>
+<tr><td>견적 정리 중 <span class="slug">collecting</span></td><td><code>collecting</code></td><td>제출 <code>submitted</code> 유지 · 미응답은 <code>expired</code></td></tr>
+<tr><td>비교표 전달됨 <span class="slug">delivered</span></td><td><code>delivered</code></td><td>견적 정리 중과 같음</td></tr>
 <tr><td>성사 <span class="slug">won</span></td><td><code>won</code></td><td>선정 호텔 <code>selected</code> · 제출했지만 선정되지 않은 호텔 <code>not_selected</code></td></tr>
 <tr><td>미성사 <span class="slug">lost</span></td><td><code>lost</code></td><td>제출 <code>submitted</code> 유지</td></tr>
-<tr><td>초대 결과 <span class="slug">selected</span></td><td>(추적 페이지에는 호텔 표시 없음)</td><td><code>selected</code> — 「Your proposal was selected」와 오거나이저 연락처</td></tr>
-<tr><td>초대 결과 <span class="slug">not_selected</span></td><td>(추적 페이지에는 호텔 표시 없음)</td><td><code>not_selected</code> — 「Not selected this time」, 오거나이저 정보 없음</td></tr>
-<tr><td>취소 <span class="slug">cancelled</span></td><td><code>cancelled</code></td><td><code>cancelled</code> (취소 안내 화면)</td></tr>
+<tr><td>초대 결과 <span class="slug">selected</span></td><td>(추적 페이지에는 호텔 표시 없음)</td><td><code>selected</code> — 「Your proposal was selected」와 요청자 연락처</td></tr>
+<tr><td>초대 결과 <span class="slug">not_selected</span></td><td>(추적 페이지에는 호텔 표시 없음)</td><td><code>not_selected</code> — 「Not selected this time」, 요청자 정보 없음</td></tr>
+<tr><td>취소됨 <span class="slug">cancelled</span></td><td><code>cancelled</code></td><td><code>cancelled</code> (취소 안내 화면)</td></tr>
 <tr><td>(토큰 오류·만료)</td><td><code>invalid</code> (링크 오류)</td><td><code>invalid</code></td></tr>
 </tbody></table></div>
 <ul class="tight small">
-<li>track.html에는 open slug가 없어 오픈 상태의 오거나이저는 「요건을 확인하고 있습니다」를 계속 봅니다.</li>
-<li>track.html의 <code>rebid</code>는 별도 내부 상태가 아니라 <b>비딩중이면서 라운드 2 이상</b>일 때의 표시입니다.</li>
+<li>track.html에는 open slug가 없어 초대 준비 상태의 요청자는 「요건을 확인하고 있습니다」를 계속 봅니다.</li>
+<li>track.html의 <code>rebid</code>는 별도 내부 상태가 아니라 <b>견적 받는 중이면서 라운드 2 이상</b>일 때의 표시입니다.</li>
 <li>bid.html의 <code>selected</code>·<code>not_selected</code>는 견적을 제출한 초대에만 해당합니다. 두 화면 모두 견적 입력·거절 폼이 없고, 제출한 견적 요약을 보여 줍니다.</li>
 <li>토큰이 형식에 맞지 않거나 state 값이 목록에 없으면 두 페이지 모두 <code>invalid</code>로 처리합니다.</li>
 </ul>
@@ -586,43 +588,43 @@ body{font-size:11.5px}
 <thead><tr><th>대상</th><th>내부 값</th><th>화면</th><th>표시</th></tr></thead>
 <tbody>
 <tr><td>요청 위임</td><td><span class="slug">hq_held</span></td><td>운영 콘솔 요청 목록·상세</td><td>「본사 보유」 + 보류 사유 라벨(배정 대기·지역 미매핑·복수 국가·파트너 없음·파트너 배정 불가·파트너 반려·자동 배정 꺼짐·수동 보류·기존 건). 지역 파트너 콘솔에는 나오지 않습니다.</td></tr>
-<tr><td>요청 위임</td><td><span class="slug">delegated</span></td><td>콘솔 · ko/track.html · <code>ORG_RECEIVED</code>·<code>ORG_BIDDING</code> 메일</td><td>콘솔 「파트너 위임」. 오거나이저에게는 진행 화면의 요청 표시줄 아래에 파트너 이름·국가 한 줄(공유 링크로 봐도 같음), 접수 확인·비딩 시작 이메일에 안내 블록(알림톡 본문에는 없음).</td></tr>
-<tr><td>요청 위임</td><td><span class="slug">taken_over</span></td><td>콘솔 · ko/track.html</td><td>콘솔 「본사 인계」 + 인계 사유·파트너 몫 덮어쓰기. 파트너 콘솔은 읽기 전용이고, 오거나이저 진행 화면의 파트너 표시는 사라집니다(위임 상태일 때만 표시).</td></tr>
+<tr><td>요청 위임</td><td><span class="slug">delegated</span></td><td>콘솔 · ko/track.html · <code>ORG_RECEIVED</code>·<code>ORG_BIDDING</code> 메일</td><td>콘솔 「파트너 위임」. 요청자에게는 진행 화면의 요청 표시줄 아래에 파트너 이름·국가 한 줄(공유 링크로 봐도 같음), 접수 확인·비딩 시작 이메일에 안내 블록(알림톡 본문에는 없음).</td></tr>
+<tr><td>요청 위임</td><td><span class="slug">taken_over</span></td><td>콘솔 · ko/track.html</td><td>콘솔 「본사 인계」 + 인계 사유·파트너 몫 덮어쓰기. 파트너 콘솔은 읽기 전용이고, 요청자 진행 화면의 파트너 표시는 사라집니다(위임 상태일 때만 표시).</td></tr>
 <tr><td>초대 (대리 입력)</td><td><span class="slug">proxy_entered</span> · <span class="slug">proxy_disputed</span> · <span class="slug">proxy_expired</span></td><td>en/bid.html</td><td>모두 <code>open</code>(호텔은 직접 제출 가능). 응답에 대리 입력 안내(상태·입력 주체·확인 시각)가 함께 갑니다. <code>submitted</code>·<code>hotel_confirmed</code>는 <code>submitted</code>로 보입니다.</td></tr>
 <tr><td>초대 (대리 입력)</td><td>확인 토큰</td><td>en/confirm.html</td><td>화면 <code>loading</code> → <code>review</code> → <code>done</code> · <code>disputed</code>, 그 밖에 <code>expired</code> · <code>used</code> · <code>invalid</code>. 페이지를 열 때는 조회만 하고 버튼에서만 토큰을 씁니다.</td></tr>
 <tr><td>호텔 커미션 합의</td><td><span class="slug">none</span> · <span class="slug">pending</span> · <span class="slug">expired</span> · <span class="slug">agreed</span></td><td>운영 콘솔 호텔 목록·상세·초대 카드</td><td>none은 빨간 「요율 합의 필요」, pending·expired는 황색 「동의 대기」, agreed는 배지 없음. 합의 전 호텔은 초대 카드에서 선택할 수 없습니다.</td></tr>
 <tr><td>호텔 커미션 합의</td><td>동의 토큰</td><td>en/commission.html</td><td>화면 <code>loading</code> → <code>review</code> → <code>done</code>, 그 밖에 <code>expired</code> · <code>used</code> · <code>invalid</code>. 거절 버튼은 없고 문의는 메일로 안내합니다.</td></tr>
-<tr><td>호텔 커미션 합의</td><td>초대의 요율 스냅샷</td><td>en/bid.html · <code>HTL_INVITE</code></td><td>합의 요율이 있으면 「Your agreed commission: n% of net booking value.」 한 줄. 오거나이저 화면에는 없습니다.</td></tr>
-<tr><td>정산</td><td><span class="slug">pending_commission</span> → <span class="slug">commission_submitted</span> → <span class="slug">commission_confirmed</span> → <span class="slug">collected</span> → <span class="slug">remitted</span> → <span class="slug">completed</span> · <span class="slug">disputed</span> · <span class="slug">voided</span></td><td>콘솔 정산 목록·상세</td><td>커미션 입력 대기 · 커미션 승인 대기 · 커미션 확정 · 수금 완료 · 송금 완료 · 완료 · 분쟁 · 무효. 오거나이저·호텔 화면에는 나오지 않습니다.</td></tr>
+<tr><td>호텔 커미션 합의</td><td>초대의 요율 스냅샷</td><td>en/bid.html · <code>HTL_INVITE</code></td><td>합의 요율이 있으면 「Your agreed commission: n% of net booking value.」 한 줄. 요청자 화면에는 없습니다.</td></tr>
+<tr><td>정산</td><td><span class="slug">pending_commission</span> → <span class="slug">commission_submitted</span> → <span class="slug">commission_confirmed</span> → <span class="slug">collected</span> → <span class="slug">remitted</span> → <span class="slug">completed</span> · <span class="slug">disputed</span> · <span class="slug">voided</span></td><td>콘솔 정산 목록·상세</td><td>커미션 입력 대기 · 커미션 승인 대기 · 커미션 확정 · 수금 완료 · 송금 완료 · 완료 · 분쟁 · 무효. 요청자·호텔 화면에는 나오지 않습니다.</td></tr>
 </tbody></table></div>
 </section>
 
 <section id="notify">
 <h2><span class="n">7</span>알림 트리거표</h2>
-<p class="lead">자동 알림은 시스템이 알림 테이블에 쌓고 1분 cron이 발송합니다. 오거나이저(ORG_*)에게는 카카오 알림톡으로 먼저 보내고, 알림톡이 전달되지 않으면 LMS 문자로 대신 보내며 이메일도 함께 나갑니다. 호텔(HTL_*)과 파트너 신청자(PTN_*)는 이메일입니다. 지역 파트너(PTR_*)와 본사(HQ_*) 알림은 개별 템플릿 없이 공통 템플릿 <code>CONSOLE_NOTICE</code> 한 장에 제목·본문만 바꿔 이메일로 보냅니다(파트너는 조직의 활성 계정 전원, 본사는 <code>settings.ops_email</code>). 수동(OPS_*)은 운영자가 직접 보냅니다. 선정·미선정 결과 메일은 선정·미선정 표시 때가 아니라 <b>성사 전이 시각</b>에 한꺼번에 나갑니다. 각 알림의 문안과 변수는 <a href="notification-library.html">알림 라이브러리</a>에 있습니다.</p>
+<p class="lead">자동 알림은 시스템이 알림 테이블에 쌓고 1분 cron이 발송합니다. 요청자(ORG_*)에게는 카카오 알림톡으로 먼저 보내고, 알림톡이 전달되지 않으면 LMS 문자로 대신 보내며 이메일도 함께 나갑니다. 호텔(HTL_*)과 파트너 신청자(PTN_*)는 이메일입니다. 지역 파트너(PTR_*)와 본사(HQ_*) 알림은 개별 템플릿 없이 공통 템플릿 <code>CONSOLE_NOTICE</code> 한 장에 제목·본문만 바꿔 이메일로 보냅니다(파트너는 조직의 활성 계정 전원, 본사는 <code>settings.ops_email</code>). 수동(OPS_*)은 운영자가 직접 보냅니다. 선정·미선정 결과 메일은 선정·미선정 표시 때가 아니라 <b>성사 전이 시각</b>에 한꺼번에 나갑니다. 각 알림의 문안과 변수는 <a href="notification-library.html">알림 라이브러리</a>에 있습니다.</p>
 <div class="tw"><table style="min-width:820px">
 <thead><tr><th>트리거</th><th>ID</th><th>수신자</th><th>채널</th><th>자동/수동</th></tr></thead>
 <tbody>
-<tr><td>접수 폼 제출 (접수됨 생성)</td><td><code>ORG_RECEIVED</code></td><td>오거나이저</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
-<tr><td>검증중 → 반려됨</td><td><code>ORG_REJECTED</code></td><td>오거나이저</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
-<tr><td>오픈 → 비딩중</td><td><code>ORG_BIDDING</code></td><td>오거나이저</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
-<tr><td>취합중·전달됨 → 비딩중 (새 라운드)</td><td><code>ORG_REBID</code></td><td>오거나이저</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
-<tr><td>취합중 → 전달됨</td><td><code>ORG_DELIVERED</code></td><td>오거나이저</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
-<tr><td>전달됨 → 성사</td><td><code>ORG_WON</code></td><td>오거나이저</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
-<tr><td>취합중·전달됨 → 미성사</td><td><code>ORG_LOST</code></td><td>오거나이저</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
-<tr><td>요청 취소</td><td><code>ORG_CANCELLED</code></td><td>오거나이저</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
+<tr><td>접수 폼 제출 (접수됨 생성)</td><td><code>ORG_RECEIVED</code></td><td>요청자</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
+<tr><td>요건 확인 중 → 반려</td><td><code>ORG_REJECTED</code></td><td>요청자</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
+<tr><td>초대 준비 → 견적 받는 중</td><td><code>ORG_BIDDING</code></td><td>요청자</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
+<tr><td>견적 정리 중·비교표 전달됨 → 견적 받는 중 (새 라운드)</td><td><code>ORG_REBID</code></td><td>요청자</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
+<tr><td>견적 정리 중 → 비교표 전달됨</td><td><code>ORG_DELIVERED</code></td><td>요청자</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
+<tr><td>비교표 전달됨 → 성사</td><td><code>ORG_WON</code></td><td>요청자</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
+<tr><td>견적 정리 중·비교표 전달됨 → 미성사</td><td><code>ORG_LOST</code></td><td>요청자</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
+<tr><td>요청 취소</td><td><code>ORG_CANCELLED</code></td><td>요청자</td><td>알림톡+이메일</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>호텔 초대 발송 (합의 요율 한 줄 포함 · 요율 합의 전 호텔은 제외)</td><td><code>HTL_INVITE</code></td><td>초대 호텔</td><td>이메일</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>마감 24시간 전 (미제출·미거절 초대)</td><td><code>HTL_REMINDER</code></td><td>초대 호텔</td><td>이메일</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>호텔 견적 제출·수정</td><td><code>HTL_QUOTE_RECEIVED</code></td><td>제출 호텔</td><td>이메일</td><td><span class="tag sys">자동</span></td></tr>
-<tr><td>전달됨 → 성사</td><td><code>HTL_SELECTED_CONNECT</code></td><td>선정 호텔 (오거나이저 참조)</td><td>이메일</td><td><span class="tag sys">자동</span> 성사 전이 시각에 발송·로그 기록</td></tr>
-<tr><td>전달됨 → 성사</td><td><code>HTL_NOT_SELECTED</code></td><td>제출한 나머지 호텔</td><td>이메일</td><td><span class="tag sys">자동</span> 성사 전이 시각에 발송</td></tr>
+<tr><td>비교표 전달됨 → 성사</td><td><code>HTL_SELECTED_CONNECT</code></td><td>선정 호텔 (요청자 참조)</td><td>이메일</td><td><span class="tag sys">자동</span> 성사 전이 시각에 발송·로그 기록</td></tr>
+<tr><td>비교표 전달됨 → 성사</td><td><code>HTL_NOT_SELECTED</code></td><td>제출한 나머지 호텔</td><td>이메일</td><td><span class="tag sys">자동</span> 성사 전이 시각에 발송</td></tr>
 <tr><td>견적 대리 입력 · 확인 링크 재발송 (4장)</td><td><code>HTL_CONFIRM</code></td><td>해당 호텔 (등록 연락처)</td><td>이메일 (영문, 확인 링크 72시간)</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>파트너 신청 접수</td><td><code>PTN_APPLIED</code></td><td>파트너 신청자</td><td>이메일</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>호텔 승인 (커미션 요율을 제안하면 동의 링크 포함)</td><td><code>PTN_APPROVED</code></td><td>파트너 신청자</td><td>이메일</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>파트너 거절</td><td><code>PTN_REJECTED</code></td><td>파트너 신청자</td><td>이메일</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>중지 → 재승인 (합의한 요율 그대로)</td><td><code>PTN_REINSTATED</code></td><td>파트너 신청자</td><td>이메일</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>커미션 요율 변경 제안 · 재승인 때 새 요율 제안 · 동의 링크 재발송</td><td><code>PTN_COMMISSION_TERMS</code></td><td>호텔 담당자</td><td>이메일 (동의 링크, 기본 168시간)</td><td><span class="tag sys">자동</span></td></tr>
-<tr><td>제안 선택 확인 (전달됨 → 성사 전, 회원·비회원)</td><td><code>ORG_PICK_OTP</code></td><td>오거나이저 (등록 휴대전화)</td><td>문자(SMS) 전용</td><td><span class="tag sys">자동</span> 알림톡 미사용</td></tr>
+<tr><td>제안 선택 확인 (비교표 전달됨 → 성사 전, 회원·비회원)</td><td><code>ORG_PICK_OTP</code></td><td>요청자 (등록 휴대전화)</td><td>문자(SMS) 전용</td><td><span class="tag sys">자동</span> 알림톡 미사용</td></tr>
 <tr><td>가입·이메일 변경 이메일 인증</td><td><code>ACC_EMAIL_CODE</code></td><td>회원</td><td>이메일</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>이미 회원인 이메일로 가입 시도</td><td><code>ACC_EMAIL_EXISTS</code></td><td>회원</td><td>이메일</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>가입·번호 변경 휴대전화 인증</td><td><code>ACC_SMS_OTP</code></td><td>회원</td><td>문자(SMS) 전용</td><td><span class="tag sys">자동</span> 알림톡 미사용</td></tr>
@@ -634,16 +636,16 @@ body{font-size:11.5px}
 <tr><td>휴대전화 변경 완료</td><td><code>ACC_PHONE_CHANGED</code></td><td>회원</td><td>이메일</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>로그인 실패로 잠금</td><td><code>ACC_LOCKED</code></td><td>회원</td><td>이메일</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>회원 탈퇴 완료</td><td><code>ACC_WITHDRAWN</code></td><td>회원</td><td>이메일</td><td><span class="tag sys">자동</span></td></tr>
-<tr><td>진행 상황 문의·SLA 지연 안내</td><td><code>OPS_ORG_PROGRESS</code></td><td>오거나이저</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
-<tr><td>정보 부족 확인 요청</td><td><code>OPS_ORG_INFO</code></td><td>오거나이저</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
-<tr><td>일정 미확정 확인</td><td><code>OPS_ORG_DATE</code></td><td>오거나이저</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
-<tr><td>견적 없음 안내</td><td><code>OPS_ORG_NOQUOTE</code></td><td>오거나이저</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
-<tr><td>종료 전 확인</td><td><code>OPS_ORG_CLOSE_CHECK</code></td><td>오거나이저</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
-<tr><td>초대 호텔 2곳 미만 안내</td><td><code>OPS_ORG_FEW_HOTELS</code></td><td>오거나이저</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
-<tr><td>익명화 사고 안내</td><td><code>OPS_ORG_ANON_INCIDENT</code></td><td>오거나이저</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
+<tr><td>진행 상황 문의·SLA 지연 안내</td><td><code>OPS_ORG_PROGRESS</code></td><td>요청자</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
+<tr><td>정보 부족 확인 요청</td><td><code>OPS_ORG_INFO</code></td><td>요청자</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
+<tr><td>일정 미확정 확인</td><td><code>OPS_ORG_DATE</code></td><td>요청자</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
+<tr><td>견적 없음 안내</td><td><code>OPS_ORG_NOQUOTE</code></td><td>요청자</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
+<tr><td>종료 전 확인</td><td><code>OPS_ORG_CLOSE_CHECK</code></td><td>요청자</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
+<tr><td>초대 호텔 2곳 미만 안내</td><td><code>OPS_ORG_FEW_HOTELS</code></td><td>요청자</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
+<tr><td>익명화 사고 안내</td><td><code>OPS_ORG_ANON_INCIDENT</code></td><td>요청자</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
 <tr><td>마감 24시간 이내 제출 0건</td><td><code>OPS_HTL_FOLLOWUP</code></td><td>미응답 호텔</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
 <tr><td>견적 내용 확인 요청</td><td><code>OPS_HTL_QUOTE_CHECK</code></td><td>제출 호텔</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
-<tr><td>비딩중 상태에서 취소</td><td><code>OPS_HTL_CANCELLED</code></td><td>초대 호텔</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
+<tr><td>견적 받는 중 상태에서 취소</td><td><code>OPS_HTL_CANCELLED</code></td><td>초대 호텔</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
 <tr><td>파트너 중지</td><td><code>OPS_PTN_SUSPEND</code></td><td>해당 호텔</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
 <tr><td>파트너 도메인 확인</td><td><code>OPS_PTN_DOMAIN_CHECK</code></td><td>신청 호텔</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
 <tr><td>휴대전화만 일치하는 연결 요청 확인</td><td><code>OPS_ACC_LINK</code></td><td>회원</td><td>이메일</td><td><span class="tag org">수동</span> 운영자</td></tr>
@@ -659,7 +661,7 @@ body{font-size:11.5px}
 <tr><td>호텔이 대리 입력 견적을 확인</td><td><code>PTR_HOTEL_CONFIRMED</code></td><td>지역 파트너 (조직 활성 계정 전원)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>호텔이 대리 입력 견적에 이의</td><td><code>PTR_HOTEL_DISPUTED</code></td><td>지역 파트너 (조직 활성 계정 전원)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>호텔이 커미션 요율에 동의 (제안한 쪽이 파트너일 때)</td><td><code>PTR_HOTEL_TERMS_ACCEPTED</code></td><td>지역 파트너 (조직 활성 계정 전원)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
-<tr><td>전달됨 → 성사 (정산 생성)</td><td><code>PTR_WON</code></td><td>지역 파트너 (조직 활성 계정 전원)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
+<tr><td>비교표 전달됨 → 성사 (정산 생성)</td><td><code>PTR_WON</code></td><td>지역 파트너 (조직 활성 계정 전원)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>커미션 승인 (ST-T2)</td><td><code>PTR_COMMISSION_APPROVED</code></td><td>지역 파트너 (조직 활성 계정 전원)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>커미션 반려 (ST-T3)</td><td><code>PTR_COMMISSION_REJECTED</code></td><td>지역 파트너 (조직 활성 계정 전원)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>정산 분쟁 해소 (ST-T8)</td><td><code>PTR_SETTLEMENT_RESOLVED</code></td><td>지역 파트너 (조직 활성 계정 전원)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
@@ -667,7 +669,7 @@ body{font-size:11.5px}
 <tr><td>요청이 본사 보유가 됨 (DG-T2 · DG-T5)</td><td><code>HQ_RFP_HELD</code></td><td>본사 (ops_email)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>파트너가 배정 반려 (DG-T6)</td><td><code>HQ_PARTNER_DECLINED</code></td><td>본사 (ops_email)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>지역 파트너가 호텔 승인 (사후 검토 필요)</td><td><code>HQ_HOTEL_APPROVED_BY_PARTNER</code></td><td>본사 (ops_email)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
-<tr><td>사후 검토 전 호텔이 낀 비교표 전달 (취합중 → 전달됨)</td><td><code>HQ_HOTEL_UNREVIEWED_DELIVERED</code></td><td>본사 (ops_email)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
+<tr><td>사후 검토 전 호텔이 낀 비교표 전달 (견적 정리 중 → 비교표 전달됨)</td><td><code>HQ_HOTEL_UNREVIEWED_DELIVERED</code></td><td>본사 (ops_email)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>호텔이 대리 입력 견적에 이의</td><td><code>HQ_PROXY_DISPUTED</code></td><td>본사 (ops_email)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>호텔이 커미션 요율에 동의 (제안한 쪽이 본사일 때)</td><td><code>HQ_HOTEL_TERMS_ACCEPTED</code></td><td>본사 (ops_email)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
 <tr><td>커미션 제출 (ST-T1)</td><td><code>HQ_COMMISSION_SUBMITTED</code></td><td>본사 (ops_email)</td><td>이메일 (<code>CONSOLE_NOTICE</code>)</td><td><span class="tag sys">자동</span></td></tr>
@@ -684,12 +686,12 @@ body{font-size:11.5px}
 <li>영업일은 주말과 한국 공휴일(<code>kr_holiday</code> 테이블)을 뺀 날입니다.</li>
 <li>기한은 해당일 <b>18:00 KST</b>입니다.</li>
 <li>시작 시각이 영업일 <b>18:00 이전</b>이면 그날을 1일째로 세고, 18:00 이후이거나 휴일이면 다음 영업일이 1일째입니다.</li>
-<li>SLA는 검증중 전이부터 3영업일, 파트너 심사는 신청일부터 5영업일, 호텔 견적 기본 마감은 초대 발송부터 3영업일(대형 5)입니다.</li>
+<li>SLA는 요건 확인 중 전이부터 3영업일, 파트너 심사는 신청일부터 5영업일, 호텔 견적 기본 마감은 초대 발송부터 3영업일(대형 5)입니다.</li>
 <li><code>kr_holiday</code>가 비어 있으면 주말만 빼므로 기한이 짧게 잡힙니다. 내년까지 입력해 두어야 합니다.</li>
 </ul>
 <h3>계산 예시 (2026-10, 공휴일: 10/03·10/05 대체·10/09 한글날)</h3>
 <div class="tw"><table>
-<thead><tr><th>검증중 전이 시각</th><th>1일째</th><th>2일째</th><th>3일째 (기한)</th></tr></thead>
+<thead><tr><th>요건 확인 중 전이 시각</th><th>1일째</th><th>2일째</th><th>3일째 (기한)</th></tr></thead>
 <tbody>
 <tr><td class="nw">10/06(화) 09:00</td><td>10/06(화)</td><td>10/07(수)</td><td><b>10/08(목) 18:00</b></td></tr>
 <tr><td class="nw">10/07(수) 10:00</td><td>10/07(수)</td><td>10/08(목)</td><td><b>10/12(월) 18:00</b> — 10/09 한글날, 10/10~11 주말은 건너뜀</td></tr>
@@ -702,21 +704,21 @@ body{font-size:11.5px}
 <div class="tw"><table style="min-width:820px">
 <thead><tr><th>#</th><th>항목</th><th>상태</th><th>반영 내용 · 남은 일</th></tr></thead>
 <tbody>
-<tr><td>a</td><td><b>취합중에서 견적 0건이 두 라운드 계속될 때</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>취합중 → 미성사 경로를 추가했습니다. 제출 0건 &amp; 라운드 2 이상일 때만 열리고, 사유(기본 &quot;두 차례 요청에도 제안 없음&quot;)가 필수입니다. 그 외에는 &quot;먼저 새 라운드로 다른 호텔을 초대하세요&quot; 안내가 뜹니다. 목업에 MG-2610-013으로 시연할 수 있습니다.</td></tr>
+<tr><td>a</td><td><b>견적 정리 중에서 견적 0건이 두 라운드 계속될 때</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>견적 정리 중 → 미성사 경로를 추가했습니다. 제출 0건 &amp; 라운드 2 이상일 때만 열리고, 사유(기본 &quot;두 차례 요청에도 제안 없음&quot;)가 필수입니다. 그 외에는 &quot;먼저 새 라운드로 다른 호텔을 초대하세요&quot; 안내가 뜹니다. 목업에 MG-2610-013으로 시연할 수 있습니다.</td></tr>
 <tr><td>b</td><td><b>SLA 임박(황색) 정의</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>콘솔 기준(다음 영업일 18:00 이내 또는 24시간 이내)을 그대로 두고, 콘솔 전체에서 「SLA 마감 임박」으로 표기를 통일했습니다. 설정 &gt; 기본 규칙에 정의 문장을 넣었습니다.</td></tr>
-<tr><td>c</td><td><b>오픈 상태의 SLA 표시</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>오픈 도달 시 SLA는 충족(지표 그대로)입니다. 오픈에서는 배지가 「초대 기한 초과 n시간」「초대 기한 임박」으로 바뀌고, 대시보드 행은 「SLA·초대 기한 초과/임박」으로 이름을 나눴습니다(건수는 그대로).</td></tr>
+<tr><td>c</td><td><b>초대 준비 상태의 SLA 표시</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>초대 준비 도달 시 SLA는 충족(지표 그대로)입니다. 초대 준비에서는 배지가 「초대 기한 초과 n시간」「초대 기한 임박」으로 바뀌고, 대시보드 행은 「SLA·초대 기한 초과/임박」으로 이름을 나눴습니다(건수는 그대로).</td></tr>
 <tr><td>d</td><td><b>USD 참고환산의 세금 포함 여부</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>호텔이 제출한 금액 그대로 환산하고 세금 보정은 하지 않습니다. 세금 별도는 세금 열에 그대로 표시합니다. 콘솔 비교표 안내, 설정 기본 규칙, 추적 페이지 USD 참고 안내에 반영했습니다.</td></tr>
-<tr><td>e</td><td><b>bid.html에 선정·미선정 결과 표시</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>bid.html에 selected·not_selected 화면을 추가했습니다. 선정은 오거나이저 연락처를, 미선정은 결과만 보여 주며 제출한 견적 요약을 함께 보입니다. 링크 안내와 FAQ 문구도 고쳤습니다.</td></tr>
+<tr><td>e</td><td><b>bid.html에 선정·미선정 결과 표시</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>bid.html에 selected·not_selected 화면을 추가했습니다. 선정은 요청자 연락처를, 미선정은 결과만 보여 주며 제출한 견적 요약을 함께 보입니다. 링크 안내와 FAQ 문구도 고쳤습니다.</td></tr>
 <tr><td>f</td><td><b>폼·선택 제출이 아직 mailto</b></td><td class="nw"><span class="tag hot">미결</span></td><td>접수·파트너 신청·호텔 견적 제출이 이메일 기반이라 상태가 DB에 쌓이지 않습니다. 제안: RPC로 교체 (SOP 다음 작업 2번). 교체 전에는 이 표의 자동 동작이 실제로 돌지 않습니다. 일정 확정이 필요합니다.</td></tr>
-<tr><td>g</td><td><b>초대별 마감 저장</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>초대마다 deadline을 저장하고(기존 초대는 요청 마감으로 채움) 초대 시점의 마감을 기록합니다. 마감 변경 시 확인 창, 초대 표 마감 열, 재초대 버튼(이전 행은 재초대됨으로 보존)을 넣었습니다. 취합중 전환은 초대별 최신 마감 기준입니다.</td></tr>
-<tr><td>h</td><td><b>선정 후 연결 메일</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>성사 전이 때 「선정 연결 메일」(HTL_SELECTED_CONNECT)이 자동 발송·로그 기록됩니다. v1.5부터 미선정 안내(HTL_NOT_SELECTED)와 오거나이저 성사 알림(ORG_WON)도 같은 시각에 나갑니다. 콘솔의 수동 체크리스트는 자동 발송 확인 블록과 「직접 다시 보내기」 링크로 바뀌었고, 알림 표에서 자동으로 표시합니다.</td></tr>
+<tr><td>g</td><td><b>초대별 마감 저장</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>초대마다 deadline을 저장하고(기존 초대는 요청 마감으로 채움) 초대 시점의 마감을 기록합니다. 마감 변경 시 확인 창, 초대 표 마감 열, 재초대 버튼(이전 행은 재초대로 대체됨으로 보존)을 넣었습니다. 견적 정리 중 전환은 초대별 최신 마감 기준입니다.</td></tr>
+<tr><td>h</td><td><b>선정 후 연결 메일</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>성사 전이 때 「선정 연결 메일」(HTL_SELECTED_CONNECT)이 자동 발송·로그 기록됩니다. v1.5부터 미선정 안내(HTL_NOT_SELECTED)와 요청자 성사 알림(ORG_WON)도 같은 시각에 나갑니다. 콘솔의 수동 체크리스트는 자동 발송 확인 블록과 「직접 다시 보내기」 링크로 바뀌었고, 알림 표에서 자동으로 표시합니다.</td></tr>
 <tr><td>i</td><td><b>파트너 「지연」 배지 대상</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>이전 콘솔은 신청(pending)만 지연으로 계산했습니다. SOP 기한은 승인·거절까지 5영업일이라 심사중도 해당합니다. 신청·심사중 모두 5번째 영업일 18:00 기준으로 계산하도록 콘솔에 반영했습니다.</td></tr>
-<tr><td>j</td><td><b>알림 ID 체계와 알림톡·LMS 채널</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>알림에 ORG_/HTL_/PTN_/OPS_ ID를 붙이고 오거나이저 알림에 알림톡(LMS 대체)을 넣었습니다. 남은 일: 발송 대행사 선정, 알림톡 템플릿 심사 등록, 접수 폼 휴대전화 수집·위탁 고지의 법무 검토.</td></tr>
+<tr><td>j</td><td><b>알림 ID 체계와 알림톡·LMS 채널</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>알림에 ORG_/HTL_/PTN_/OPS_ ID를 붙이고 요청자 알림에 알림톡(LMS 대체)을 넣었습니다. 남은 일: 발송 대행사 선정, 알림톡 템플릿 심사 등록, 접수 폼 휴대전화 수집·위탁 고지의 법무 검토.</td></tr>
 <tr><td>k</td><td><b>회원제 · 공유 링크 · 선택 인증</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>회원 계정 상태(5-2), 공유 링크와 이관(5-3), 성사 전이의 선택 인증 가드(#10)와 알림 ACC_*·ORG_PICK_OTP를 추가했습니다. 남은 일: 국내 SMS 대행사·발신번호, 약관 전문, 개인정보 처리방침 개정(설정 &gt; 전제 조건).</td></tr>
 <tr><td>l</td><td><b>선택 인증의 서버 검증</b></td><td class="nw"><span class="tag hot">미결</span></td><td>지금 화면은 데모 인증번호(123456)와 mailto로 동작합니다. 백엔드에서 select_proposal(token, proposal, otp_session) RPC가 인증 여부와 공유 링크 여부를 검사해야 가드가 실제로 강제됩니다. 자체 OTP 테이블과 Edge Function이 필요합니다(Supabase Auth 휴대전화 OTP는 국내 SMS 발신 업체를 지원하지 않음).</td></tr>
 <tr><td>m</td><td><b>취소·인원 감소 시 커미션 재계산 없음</b></td><td class="nw"><span class="tag hot">미결</span></td><td>정산의 계약 금액은 커미션을 제출할 때 한 번 입력합니다. 성사 뒤 행사 취소나 인원 감소, 계약 변경이 있어도 시스템이 커미션을 다시 계산하지 않습니다. 지금은 운영자가 분쟁을 열어 금액을 정정하거나 무효 처리해야 합니다. Partner Terms 5.3은 감액·취소 시 최종 지급액 기준이라고 정해 두어, 약관과 시스템 동작이 어긋납니다.</td></tr>
-<tr><td>n</td><td><b>이중 커미션 필드 없음</b></td><td class="nw"><span class="tag hot">미결</span></td><td>정산에는 호텔 커미션 한 줄(<code>commission_amount</code>)뿐이고 요율도 호텔당 하나입니다. 오거나이저 쪽 수수료나 객실·연회 분리 요율을 담을 두 번째 필드가 없습니다(D-37·D-38에서 의도한 것). 나중에 필요해지면 새 마이그레이션과 결정 기록이 있어야 합니다. 파트너 정산의 세무 성격(대리 수금 또는 파트너 매출)도 파트너 계약서에서 정해야 합니다(D-43).</td></tr>
-<tr><td>o</td><td><b>Turnstile · 운영자 대리 확정 동의 기록 미수록</b></td><td class="nw"><span class="tag hot">미결</span></td><td>다른 세션에서 만들었던 v1.8의 내용입니다. 접수 폼 스팸 방어(Turnstile)와 운영자 대리 확정 동의 기록은 이 저장소에 코드가 없어서 이 문서에도 없습니다. 되찾으면 마이그레이션 번호를 0018로 바꿔 넣고 이 문서에 전이와 가드를 추가해야 합니다. 그 전까지 3장 #10(선택 인증)은 v1.7 그대로입니다.</td></tr>
+<tr><td>n</td><td><b>이중 커미션 필드 없음</b></td><td class="nw"><span class="tag hot">미결</span></td><td>정산에는 호텔 커미션 한 줄(<code>commission_amount</code>)뿐이고 요율도 호텔당 하나입니다. 요청자 쪽 수수료나 객실·연회 분리 요율을 담을 두 번째 필드가 없습니다(D-37·D-38에서 의도한 것). 나중에 필요해지면 새 마이그레이션과 결정 기록이 있어야 합니다. 파트너 정산의 세무 성격(대리 수금 또는 파트너 매출)도 파트너 계약서에서 정해야 합니다(D-43).</td></tr>
+<tr><td>o</td><td><b>Turnstile · 운영자 대리 확정 동의 기록</b></td><td class="nw"><span class="tag op">반영됨</span></td><td>2026-10-07에 다시 구현했습니다(유실 코드는 찾지 못함). 동의 기록은 마이그레이션 0019와 3장 #10, 요청자 자체 취소는 0020과 #12b, 스팸 방어는 Edge Function 공용 <code>_shared/turnstile.ts</code>(접수·호텔 등록·가입 시작)입니다. Turnstile은 사이트 키와 시크릿을 넣어야 켜집니다.</td></tr>
 <tr><td>p</td><td><b>설계서와 구현이 다른 곳 (코드가 기준)</b></td><td class="nw"><span class="tag op">반영됨</span></td><td><ul class="tight small" style="margin:0">
 <li>확인된 대리 입력 견적의 초대 상태: 설계서는 <code>hotel_confirmed</code>, 구현은 <code>submitted</code>(<code>hotel_confirmed</code>는 예비 값).</li>
 <li>호텔이 확인 화면에서 금액을 고쳐 내는 경우: 설계서는 대리 견적을 <code>superseded</code>로 두고 새 버전을 만든다고 했지만, 구현은 같은 견적을 「호텔 직접 제출」로 바꿉니다(<code>superseded_*</code> 컬럼은 예비).</li>

@@ -45,7 +45,7 @@ export async function handleRfpMessage(req: Request, deps: Deps, kind: "change" 
 
   const memoLabel = kind === "change" ? "변경 요청" : "문의";
   await deps.db.query(
-    `insert into rfp_history (rfp_id, at, actor, actor_label, memo) values ($1,$2,'organizer','오거나이저',$3)`,
+    `insert into rfp_history (rfp_id, at, actor, actor_label, memo) values ($1,$2,'organizer','요청자',$3)`,
     [r.id, now, `${memoLabel}: ${message.slice(0, 200)}`],
   );
 

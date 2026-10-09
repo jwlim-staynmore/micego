@@ -22,7 +22,7 @@ PH = re.compile(r"\{\{([A-Z0-9_]+)\}\}")
 V = {
  "RFP_ID": ("요청번호", "견적 요청 번호", "MG-2610-014", None, 12),
  "PARTNER_ID": ("신청번호", "파트너 신청 번호", "PT-2609-007", None, 12),
- "ORG_CONTACT_NAME": ("담당자명", "오거나이저 담당자 이름·직함", "김지은 과장", "Jieun Kim", 20),
+ "ORG_CONTACT_NAME": ("담당자명", "요청자 담당자 이름·직함", "김지은 과장", "Jieun Kim", 20),
  "RECEIVED_AT": ("접수일시", "접수 시각 (KST)", "2026-09-26 14:32", None, 16),
  "DESTINATION": ("목적지", "행사 목적지", "다낭", "Da Nang, Vietnam", 20),
  "EVENT_TYPE": ("행사유형", "행사 유형", "인센티브", "Incentive program", 12),
@@ -31,7 +31,7 @@ V = {
  "ROOMS": ("객실", "필요 객실 구성", "트윈 60·킹 20", "Twin 60 / King 20 (240 room-nights)", 20),
  "EVENT_SPACE": ("연회장", "연회장 사용 (호텔 공개 요건)", "", "Gala dinner · Night 3 (Wed 17 Mar 2027)", 60),
  "PUBLIC_NOTE": ("공개메모", "운영자가 검토한 공개 메모", "", "Full details are on the request page.", 200),
- "TRACK_URL": ("추적링크", "오거나이저 추적 링크 전체 (이메일용)", BASE_URL + "/ko/track.html?t=demo-2610", None, 90),
+ "TRACK_URL": ("추적링크", "요청자 추적 링크 전체 (이메일용)", BASE_URL + "/ko/track.html?t=demo-2610", None, 90),
  "TRACK_TOKEN": ("추적토큰", "추적 링크 토큰 (알림톡 버튼·LMS용, URL 끝 변수)", "demo-2610", None, 40),
  "REGISTER_URL": ("신규요청URL", "랜딩 접수 폼 링크", BASE_URL + "/ko/#register", None, 60),
  "REJECT_REASON": ("반려사유", "반려 사유 문장 (고정 3종 중 택1, 아래 표)", "행사 시작일이 확정되지 않아 호텔에 요청을 보내지 못했습니다.", None, 60),
@@ -43,10 +43,10 @@ V = {
  "PROPOSAL_COUNT": ("제안건수", "받은 제안 수", "3", None, 2),
  "VALID_UNTIL_MIN": ("유효기한", "제안 중 가장 빠른 견적 유효기한", "2026-12-15", None, 10),
  "SELECTED_HOTEL": ("선정호텔", "선정된 호텔명", "Ocean Pearl Resort Da Nang", None, 50),
- "ORG_COMPANY": ("회사명", "오거나이저 회사명", "한빛투어(주)", "Hanbit Tour Co., Ltd.", 30),
- "ORG_CONTACT_FULL": ("담당자", "오거나이저 담당자 (호텔에 전달)", "김지은 과장", "Jieun Kim (Manager)", 30),
- "ORG_EMAIL": ("이메일", "오거나이저 담당자 이메일", "jieun.kim@hanbit-tour.example", None, 50),
- "ORG_PHONE": ("연락처", "오거나이저 담당자 전화", "010-0000-0014", None, 16),
+ "ORG_COMPANY": ("회사명", "요청자 회사명", "한빛투어(주)", "Hanbit Tour Co., Ltd.", 30),
+ "ORG_CONTACT_FULL": ("담당자", "요청자 담당자 (호텔에 전달)", "김지은 과장", "Jieun Kim (Manager)", 30),
+ "ORG_EMAIL": ("이메일", "요청자 담당자 이메일", "jieun.kim@hanbit-tour.example", None, 50),
+ "ORG_PHONE": ("연락처", "요청자 담당자 전화", "010-0000-0014", None, 16),
  "LOST_REASON": ("미성사사유", "미성사 사유 문장 (고정 3종 중 택1, 아래 표)", "받으신 제안 중 선택하지 않으셔서 종료했습니다.", None, 45),
  "CANCELLED_AT": ("취소일시", "취소 처리 시각 (KST)", "2026-09-28 10:05", None, 16),
  "SUPPORT_EMAIL": ("문의메일", "문의 수신 주소 (운영 메일, 미확정)", MAIL, None, 40),
@@ -228,10 +228,10 @@ add(id="ORG_RECEIVED", name="접수 확인", recipient="org", mode="auto", lang=
       fb_title="[MICEGO] 접수 확인"))
 
 add(id="ORG_REJECTED", name="반려 안내", recipient="org", mode="auto", lang="ko",
-    trigger="#2 검증중 → 반려됨", trig_nums=["2"], states="검증중 → 반려됨",
+    trigger="#2 요건 확인 중 → 반려", trig_nums=["2"], states="요건 확인 중 → 반려",
     subject="[MICEGO] 이번 요청은 진행하기 어렵습니다 · {{RFP_ID}}",
     preheader="요청번호 {{RFP_ID}} · 사유를 안내드립니다. 조건이 갖춰지면 새로 요청해 주세요.",
-    chip=("반려됨", "red"), tag="견적 요청",
+    chip=("진행 불가", "red"), tag="견적 요청",
     title="이번 요청은 진행하기 어렵습니다.",
     lead="{{ORG_CONTACT_NAME}}님, 요청 내용을 검토했지만 이번에는 호텔에 요청을 보내지 못했습니다. 사유를 아래에 적었습니다.",
     rows=[("요청번호", "{{RFP_ID}}"), ("접수일시", "{{RECEIVED_AT}}"), ("목적지", "{{DESTINATION}}")],
@@ -243,11 +243,11 @@ add(id="ORG_REJECTED", name="반려 안내", recipient="org", mode="auto", lang=
       body="[MICEGO] 이번 요청은 진행하기 어렵습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청을 검토했지만 이번에는 호텔에 요청을 보내지 못했습니다.\n\n■ 사유: {{REJECT_REASON}}\n\n사유가 해결되면 아래 버튼에서 새로 요청해 주세요. 접수하신 내용은 호텔에 전달되지 않았습니다.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
       fb_title="[MICEGO] 요청 반려 안내"))
 
-add(id="ORG_BIDDING", name="비딩중 진입", recipient="org", mode="auto", lang="ko",
-    trigger="#4 오픈 → 비딩중 (초대 발송 시점)", trig_nums=["4"], states="오픈 → 비딩중",
+add(id="ORG_BIDDING", name="견적 받는 중 진입", recipient="org", mode="auto", lang="ko",
+    trigger="#4 초대 준비 → 견적 받는 중 (초대 발송 시점)", trig_nums=["4"], states="초대 준비 → 견적 받는 중",
     subject="[MICEGO] 호텔에 견적을 요청했습니다 · {{RFP_ID}}",
     preheader="요청번호 {{RFP_ID}} · 견적 마감 {{DEADLINE_KST}} · 비교표는 {{COMPARE_DATE}}까지 전달합니다.",
-    chip=("비딩중", "teal"), tag="견적 요청",
+    chip=("호텔 제안 받는 중", "teal"), tag="견적 요청",
     title="조건에 맞는 호텔에 요청을 보냈습니다.",
     lead="{{ORG_CONTACT_NAME}}님, 검토를 마치고 조건에 맞는 해외 호텔 몇 곳에 요청을 보냈습니다. 호텔이 견적을 내는 동안 따로 하실 일은 없습니다.",
     optional_block=dict(name="REGIONAL_PARTNER", cond="rfps.delegation = delegated (지역 운영 파트너 위임 건 — 결정 2026-09-27 고지)",
@@ -262,10 +262,10 @@ add(id="ORG_BIDDING", name="비딩중 진입", recipient="org", mode="auto", lan
       fb_title="[MICEGO] 호텔 견적 요청 안내"))
 
 add(id="ORG_REBID", name="새 라운드 (조건 변경)", recipient="org", mode="auto", lang="ko",
-    trigger="#7 취합중 → 비딩중 · #9 전달됨 → 비딩중 (라운드 ≥ 2)", trig_nums=["7", "9"], states="취합중·전달됨 → 비딩중 (라운드 2 이상)",
+    trigger="#7 견적 정리 중 → 견적 받는 중 · #9 비교표 전달됨 → 견적 받는 중 (라운드 ≥ 2)", trig_nums=["7", "9"], states="견적 정리 중·비교표 전달됨 → 견적 받는 중 (라운드 2 이상)",
     subject="[MICEGO] 바뀐 조건으로 호텔에 다시 요청했습니다 · {{RFP_ID}}",
     preheader="요청번호 {{RFP_ID}} · 새 견적 마감 {{DEADLINE_KST}} · 비교표는 {{COMPARE_DATE}}까지.",
-    chip=("비딩중 · 라운드 {{ROUND}}", "teal"), tag="견적 요청",
+    chip=("새 조건으로 재요청 · 라운드 {{ROUND}}", "teal"), tag="견적 요청",
     title="바뀐 조건으로 호텔에 다시 요청했습니다.",
     lead="{{ORG_CONTACT_NAME}}님, 조건이 바뀌어 호텔에 다시 요청을 보냈습니다. 이전 라운드에서 받은 제안은 기록으로 보관됩니다.",
     rows=[("변경 내용", "{{CHANGE_SUMMARY}}"), ("행사", "{{DESTINATION}} {{EVENT_TYPE}}"),
@@ -276,11 +276,11 @@ add(id="ORG_REBID", name="새 라운드 (조건 변경)", recipient="org", mode=
       body="[MICEGO] 바뀐 조건으로 호텔에 다시 요청했습니다.\n\n{{ORG_CONTACT_NAME}}님, {{RFP_ID}} 요청의 조건이 바뀌어 {{ROUND}}차로 호텔에 다시 요청을 보냈습니다.\n\n■ 변경 내용: {{CHANGE_SUMMARY}}\n■ 새 견적 마감: {{DEADLINE_KST}}\n■ 새 비교표 예정일: {{COMPARE_DATE}}\n\n이전에 받은 제안은 기록으로 보관됩니다. 진행 상황은 아래 버튼에서 확인하실 수 있습니다.\n\n※ 이 메시지는 견적을 요청하신 분께 발송되는 안내입니다.",
       fb_title="[MICEGO] 호텔 재요청 안내"))
 
-add(id="ORG_DELIVERED", name="견적 도착 (전달됨)", recipient="org", mode="auto", lang="ko",
-    trigger="#6 취합중 → 전달됨", trig_nums=["6"], states="취합중 → 전달됨",
+add(id="ORG_DELIVERED", name="견적 도착 (비교표 전달됨)", recipient="org", mode="auto", lang="ko",
+    trigger="#6 견적 정리 중 → 비교표 전달됨", trig_nums=["6"], states="견적 정리 중 → 비교표 전달됨",
     subject="[MICEGO] 받은 제안을 비교표로 전달드립니다 · {{RFP_ID}}",
     preheader="요청번호 {{RFP_ID}} · 제안 {{PROPOSAL_COUNT}}건 · 가장 빠른 견적 유효기한 {{VALID_UNTIL_MIN}}",
-    chip=("전달됨", "teal"), tag="견적 요청",
+    chip=("비교표 도착", "teal"), tag="견적 요청",
     title="받은 제안 {{PROPOSAL_COUNT}}건을 비교표로 정리했습니다.",
     lead="{{ORG_CONTACT_NAME}}님, 호텔 제안이 도착했습니다. 아래 링크에서 비교표를 보시고 마음에 드는 제안을 골라 알려 주세요.",
     rows=[("받은 제안", "{{PROPOSAL_COUNT}}건"), ("가장 빠른 견적 유효기한", "{{VALID_UNTIL_MIN}}"),
@@ -293,7 +293,7 @@ add(id="ORG_DELIVERED", name="견적 도착 (전달됨)", recipient="org", mode=
       fb_title="[MICEGO] 비교표 도착"))
 
 add(id="ORG_WON", name="성사 (호텔 선정·연결)", recipient="org", mode="auto", lang="ko",
-    trigger="#10 전달됨 → 성사", trig_nums=["10"], states="전달됨 → 성사",
+    trigger="#10 비교표 전달됨 → 성사", trig_nums=["10"], states="비교표 전달됨 → 성사",
     subject="[MICEGO] 선정하신 호텔과 연결해 드렸습니다 · {{RFP_ID}}",
     preheader="요청번호 {{RFP_ID}} · {{SELECTED_HOTEL}} 담당자에게 연결 메일을 보냈고 참조로 넣었습니다.",
     chip=("성사", "gray"), tag="견적 요청",
@@ -308,7 +308,7 @@ add(id="ORG_WON", name="성사 (호텔 선정·연결)", recipient="org", mode="
       fb_title="[MICEGO] 호텔 선정·연결 안내"))
 
 add(id="ORG_LOST", name="미성사 종료", recipient="org", mode="auto", lang="ko",
-    trigger="#11 전달됨 → 미성사 · #8 취합중 → 미성사", trig_nums=["11", "8"], states="전달됨·취합중 → 미성사",
+    trigger="#11 비교표 전달됨 → 미성사 · #8 견적 정리 중 → 미성사", trig_nums=["11", "8"], states="비교표 전달됨·견적 정리 중 → 미성사",
     subject="[MICEGO] 이번 요청은 성사 없이 종료되었습니다 · {{RFP_ID}}",
     preheader="요청번호 {{RFP_ID}} · 종료 사유와 이후 안내를 드립니다. 새 요청은 언제든 가능합니다.",
     chip=("미성사", "gray"), tag="견적 요청",
@@ -325,10 +325,10 @@ add(id="ORG_LOST", name="미성사 종료", recipient="org", mode="auto", lang="
       fb_title="[MICEGO] 요청 종료 안내"))
 
 add(id="ORG_CANCELLED", name="취소 확인", recipient="org", mode="auto", lang="ko",
-    trigger="#12 종료 전 어느 상태 → 취소", trig_nums=["12"], states="접수됨~전달됨 → 취소",
+    trigger="#12 종료 전 어느 상태 → 취소", trig_nums=["12"], states="접수됨~비교표 전달됨 → 취소",
     subject="[MICEGO] 요청이 취소되었습니다 · {{RFP_ID}}",
     preheader="요청번호 {{RFP_ID}} · 취소를 확인했습니다. 회사명과 연락처는 어느 호텔에도 전달되지 않았습니다.",
-    chip=("취소", "red"), tag="견적 요청",
+    chip=("취소됨", "red"), tag="견적 요청",
     title="요청이 취소되었습니다.",
     lead="{{ORG_CONTACT_NAME}}님, 아래 요청의 취소를 확인했습니다.",
     rows=[("요청번호", "{{RFP_ID}}"), ("행사", "{{DESTINATION}} {{EVENT_TYPE}}"), ("취소일시", "{{CANCELLED_AT}}")],
@@ -340,7 +340,7 @@ add(id="ORG_CANCELLED", name="취소 확인", recipient="org", mode="auto", lang
       fb_title="[MICEGO] 요청 취소 확인"))
 
 add(id="ORG_PICK_OTP", name="제안 선택 인증번호 (문자)", recipient="org", mode="auto", kind="sms", lang="ko",
-    trigger="제안 선택 확인 (회원·비회원 모두, 요청에 등록된 휴대전화로 발송) · 공유 링크로는 발송되지 않음", trig_nums=[], states="전달됨 (선택 확인 단계)",
+    trigger="제안 선택 확인 (회원·비회원 모두, 요청에 등록된 휴대전화로 발송) · 공유 링크로는 발송되지 않음", trig_nums=[], states="비교표 전달됨 (선택 확인 단계)",
     sms=dict(body="[MICEGO] {{RFP_ID}} 제안 선택 인증번호 [{{CODE}}] (3분). 요청하지 않았다면 무시하세요."),
     note="알림톡 대신 문자로만 보냅니다. 유효 3분, 재발송 60초, 5회 틀리면 10분 잠금.")
 
@@ -350,7 +350,7 @@ EN_SUMMARY_ROWS = [("Event type", "{{EVENT_TYPE}}"), ("Dates", "{{EVENT_DATES}}"
 SHORT_ROWS = [("Destination", "{{DESTINATION}}"), ("Attendees", "{{PAX}}"), ("Dates", "{{EVENT_DATES}}")]
 
 add(id="HTL_INVITE", name="Bid invitation", recipient="htl", mode="auto", lang="en",
-    trigger="#4 오픈 → 비딩중 · 비딩중 추가 초대 · 재초대 (라운드 ≥ 2)", trig_nums=["4", "7", "9"], states="초대 생성 (invited)",
+    trigger="#4 초대 준비 → 견적 받는 중 · 견적 받는 중 추가 초대 · 재초대 (라운드 ≥ 2)", trig_nums=["4", "7", "9"], states="초대 생성 (invited)",
     subject="[MICEGO] New group request · REF {{RFP_ID}} · quotes by {{DEADLINE_KST}}",
     subject_alt="[MICEGO] Updated request, new deadline · REF {{RFP_ID}} · quotes by {{DEADLINE_KST}}",
     preheader="Ref {{RFP_ID}} · {{DESTINATION}} · Quotes due {{DEADLINE_KST}}.",
@@ -369,7 +369,7 @@ add(id="HTL_INVITE", name="Bid invitation", recipient="htl", mode="auto", lang="
     why=EN_WHY_HTL, unsub=True)
 
 add(id="HTL_REMINDER", name="Deadline reminder (24h)", recipient="htl", mode="auto", lang="en",
-    trigger="마감 24시간 전 · 미제출·미거절 초대 (cron 1분)", trig_nums=[], states="비딩중 · 초대 invited/viewed",
+    trigger="마감 24시간 전 · 미제출·미거절 초대 (cron 1분)", trig_nums=[], states="견적 받는 중 · 초대 invited/viewed",
     subject="[MICEGO] Reminder: quotes close in 24 hours · REF {{RFP_ID}} · quotes by {{DEADLINE_KST}}",
     preheader="Ref {{RFP_ID}} · {{PAX}} · Quotes close {{DEADLINE_KST}}.",
     chip=("Reminder", "amber"), tag="Partner Network",
@@ -384,7 +384,7 @@ add(id="HTL_REMINDER", name="Deadline reminder (24h)", recipient="htl", mode="au
     why=EN_WHY_HTL, unsub=True)
 
 add(id="HTL_QUOTE_RECEIVED", name="Quote received", recipient="htl", mode="auto", lang="en",
-    trigger="호텔 견적 제출·수정 (초대 상태 submitted, 호텔 액션)", trig_nums=[], states="비딩중 · 초대 submitted",
+    trigger="호텔 견적 제출·수정 (초대 상태 submitted, 호텔 액션)", trig_nums=[], states="견적 받는 중 · 초대 submitted",
     subject="[MICEGO] Quote received · REF {{RFP_ID}}",
     preheader="Ref {{RFP_ID}} · Quote received ({{CURRENCY}}). Revise until {{DEADLINE_KST}}.",
     chip=("Quote received", "teal"), tag="Partner Network",
@@ -397,7 +397,7 @@ add(id="HTL_QUOTE_RECEIVED", name="Quote received", recipient="htl", mode="auto"
     why=EN_WHY_HTL)
 
 add(id="HTL_SELECTED_CONNECT", name="Selected + organizer introduction", recipient="htl", mode="auto", lang="en",
-    trigger="#10 전달됨 → 성사 (선정 호텔 1곳, 오거나이저 참조)", trig_nums=["10"], states="전달됨 → 성사 · 초대 selected",
+    trigger="#10 비교표 전달됨 → 성사 (선정 호텔 1곳, 요청자 참조)", trig_nums=["10"], states="비교표 전달됨 → 성사 · 초대 selected",
     subject="[MICEGO] Your proposal was selected · REF {{RFP_ID}}",
     preheader="Ref {{RFP_ID}} · The organizer selected your proposal. Their contact details are below.",
     chip=("Selected", "teal"), tag="Partner Network",
@@ -411,7 +411,7 @@ add(id="HTL_SELECTED_CONNECT", name="Selected + organizer introduction", recipie
     why=EN_WHY_HTL, cc="{{ORG_EMAIL}}")
 
 add(id="HTL_NOT_SELECTED", name="Not selected", recipient="htl", mode="auto", lang="en",
-    trigger="#10 전달됨 → 성사 (선정되지 않은 제출 호텔)", trig_nums=["10"], states="전달됨 → 성사 · 초대 not_selected",
+    trigger="#10 비교표 전달됨 → 성사 (선정되지 않은 제출 호텔)", trig_nums=["10"], states="비교표 전달됨 → 성사 · 초대 not_selected",
     subject="[MICEGO] Result: not selected this time · REF {{RFP_ID}}",
     preheader="Ref {{RFP_ID}} · The organizer chose another proposal. Your details were not shared.",
     chip=("Not selected", "gray"), tag="Partner Network",
@@ -425,7 +425,7 @@ add(id="HTL_NOT_SELECTED", name="Not selected", recipient="htl", mode="auto", la
 
 # ---------------- Regional partner console (지역파트너 콘솔 기술설계서 §12·§13) ----------------
 add(id="HTL_CONFIRM", name="Confirm quote entered on your behalf", recipient="htl", mode="auto", lang="en",
-    trigger="파트너 대리 입력(partner_quote_proxy_enter) · 재발송(partner_quote_proxy_resend)", trig_nums=[], states="비딩중 · 초대 proxy_entered",
+    trigger="파트너 대리 입력(partner_quote_proxy_enter) · 재발송(partner_quote_proxy_resend)", trig_nums=[], states="견적 받는 중 · 초대 proxy_entered",
     subject="[MICEGO] Please confirm the quote entered for your property · REF {{RFP_ID}}",
     preheader="Ref {{RFP_ID}} · A quote was entered for you. Confirm within {{EXPIRES_HOURS}} hours.",
     chip=("Action needed", "amber"), tag="Partner Network",
@@ -449,7 +449,7 @@ add(id="CONSOLE_NOTICE", name="콘솔 내부 알림 (지역 파트너 · 본사)
     callouts=[],
     cta=("콘솔에서 보기", "{{CONSOLE_URL}}"),
     link_note="콘솔은 초대받은 계정으로 로그인해야 열립니다. 이 메일은 전달하지 말아 주세요.",
-    policy="오거나이저·호텔의 연락처는 이 메일에 담지 않습니다. 상세는 콘솔에서 확인하세요.",
+    policy="요청자·호텔의 연락처는 이 메일에 담지 않습니다. 상세는 콘솔에서 확인하세요.",
     why="이 메일은 MICEGO 운영 콘솔 계정(지역 파트너·본사)으로 발송됩니다.")
 
 # ---------------- Partner applicant (EN) ----------------
@@ -687,23 +687,23 @@ ops("OPS_ORG_PROGRESS", "진행 상황 회신 (SLA)", "ko", "SLA 임박·초과 
  "[MICEGO] 진행 상황을 알려 드립니다 · {{RFP_ID}}",
  "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}}({{DESTINATION}} {{EVENT_TYPE}}) 요청의 진행 상황을 알려 드립니다.\n\n- 현재 단계: {{CURRENT_STEP}}\n- 진행 내용: {{PROGRESS_NOTE}}\n- 다음 일정: {{NEXT_DATE}}에 {{NEXT_ACTION}}\n\n궁금하신 점은 이 메일에 회신해 주세요.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
  "SOP B-4: 진행 상황 + 예상일이면 회신으로 인정.")
-ops("OPS_ORG_INFO", "정보 보완 요청", "ko", "검증중 · 필수 정보 부족·모순 (반려 전 1회 확인)",
+ops("OPS_ORG_INFO", "정보 보완 요청", "ko", "요건 확인 중 · 필수 정보 부족·모순 (반려 전 1회 확인)",
  "[MICEGO] 요청 내용 확인을 부탁드립니다 · {{RFP_ID}}",
  "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청을 검토하다가 아래 내용을 확인해야 호텔에 요청을 보낼 수 있어 문의드립니다.\n\n{{MISSING_ITEMS}}\n\n{{REPLY_BY}}까지 알려 주시면 바로 이어서 진행하겠습니다. 그때까지 확인이 어려우면 이번 요청은 진행하지 못할 수 있으니, 그 경우 알려 주세요.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
  "정보 부족은 3영업일 무응답이면 반려(사유: 필수 정보 부족).")
-ops("OPS_ORG_DATE", "일정 확정 확인", "ko", "검증중 · 일정 미확정 의심 (자유 기재란의 '미정·예정·대략')",
+ops("OPS_ORG_DATE", "일정 확정 확인", "ko", "요건 확인 중 · 일정 미확정 의심 (자유 기재란의 '미정·예정·대략')",
  "[MICEGO] 행사 일정이 확정인지 확인 부탁드립니다 · {{RFP_ID}}",
  "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청에 적어 주신 행사 일정({{DATE_ASKED}})이 확정된 일정인지 확인하고 싶습니다. MICEGO는 시작일이 확정된 요청만 호텔에 보내고 있습니다.\n\n확정이라면 「확정」이라고만 회신해 주세요. 아직 정해지지 않았다면, 확정되는 대로 새로 요청해 주시면 됩니다.\n\n{{REPLY_BY}}까지 회신이 없으면 이번 요청은 일정 미확정으로 종료합니다.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
  "1영업일 내 확정 답이 없으면 반려(사유: 일정 미확정).")
-ops("OPS_ORG_NOQUOTE", "취합중 0건 현황 + 재요청 예정일", "ko", "취합중 · 제출 견적 0건",
+ops("OPS_ORG_NOQUOTE", "견적 정리 중 0건 현황 + 재요청 예정일", "ko", "견적 정리 중 · 제출 견적 0건",
  "[MICEGO] 받은 제안 현황과 다음 일정 안내 · {{RFP_ID}}",
  "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청은 견적 마감({{DEADLINE_KST}})까지 호텔의 제안을 받지 못했습니다. 기다려 주셔서 감사하고, 결과를 바로 알려 드리지 못해 죄송합니다.\n\n다른 호텔에 {{REBID_DATE}}까지 다시 요청을 보낼 예정입니다. 새 마감과 비교표 예정일은 요청을 보낸 뒤 바로 알려 드리겠습니다. 조건을 조정하실 수 있다면 알려 주세요.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
  "두 라운드에도 0건이면 미성사로 닫고 사유를 알린다.")
-ops("OPS_ORG_CLOSE_CHECK", "미성사 닫기 전 확인", "ko", "전달됨 · 선택 회신 없음 / 유효기한 임박 (닫기 전 1회 확인)",
+ops("OPS_ORG_CLOSE_CHECK", "미성사 닫기 전 확인", "ko", "비교표 전달됨 · 선택 회신 없음 / 유효기한 임박 (닫기 전 1회 확인)",
  "[MICEGO] 제안 선택 여부를 확인드립니다 · {{RFP_ID}}",
  "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청의 비교표를 전달드린 뒤 아직 선택 소식이 없어 확인드립니다. 제안 중 가장 빠른 견적 유효기한은 {{VALID_UNTIL_MIN}}입니다.\n\n- 진행하실 제안이 있다면 고르신 제안(A·B·C)을 회신해 주세요.\n- 이번에는 선택하지 않으신다면 그렇게만 알려 주셔도 됩니다.\n\n{{REPLY_BY}}까지 회신이 없으면 이번 요청은 성사 없이 종료합니다. 종료 후에도 새로 요청하실 수 있습니다.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
  "닫기 전 반드시 1회 이메일로 묻는다 (SOP 6).")
-ops("OPS_ORG_FEW_HOTELS", "초대 가능 호텔 2곳 미만 사전 안내", "ko", "오픈 → 비딩중 전환 확인 창 (초대 2곳 미만)",
+ops("OPS_ORG_FEW_HOTELS", "초대 가능 호텔 2곳 미만 사전 안내", "ko", "초대 준비 → 견적 받는 중 전환 확인 창 (초대 2곳 미만)",
  "[MICEGO] 받으실 제안이 적을 수 있어 미리 안내드립니다 · {{RFP_ID}}",
  "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청은 검토를 마쳤습니다. 다만 요청하신 조건에 맞는 호텔이 많지 않아, 받으시는 제안이 적을 수 있어 미리 알려 드립니다.\n\n{{OPTION_NOTE}}\n\n조건을 조정하실지, 지금 조건 그대로 진행할지 {{REPLY_BY}}까지 알려 주세요. 별도 회신이 없으면 지금 조건으로 요청을 보내겠습니다.\n\n감사합니다.\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
  "호텔 수는 숫자로 적지 않는다.")
@@ -711,18 +711,18 @@ ops("OPS_ORG_ANON_INCIDENT", "익명화 누락 고지", "ko", "예외: 공개 �
  "[MICEGO] 요건서 정보 노출 관련 안내 · {{RFP_ID}}",
  "{{ORG_CONTACT_NAME}}님, 안녕하세요. MICEGO입니다.\n\n{{RFP_ID}} 요청과 관련해 알려 드릴 일이 있습니다.\n\n- 사실: {{INCIDENT_FACT}}\n- 범위: {{INCIDENT_SCOPE}}\n- 조치: {{INCIDENT_ACTION}}\n\n확인이 늦지 않도록 발견한 당일 알려 드립니다. 저희 검토 과정에서 생긴 일이며, 불편과 우려를 드려 죄송합니다. 더 궁금하신 점은 이 메일에 회신해 주세요.\n\nMICEGO 드림\n{{SUPPORT_EMAIL}}",
  "약관 제7조 3항과 별개로 알린다. 이력에 메모를 남긴다. 사실·범위·조치만 적고 사유를 꾸미지 않는다.")
-ops("OPS_HTL_FOLLOWUP", "Deadline follow-up (no reply)", "en", "비딩중 · 마감 24시간 이내 제출 0건 (자동 리마인더 이후)",
+ops("OPS_HTL_FOLLOWUP", "Deadline follow-up (no reply)", "en", "견적 받는 중 · 마감 24시간 이내 제출 0건 (자동 리마인더 이후)",
  "[MICEGO] Quick check before the deadline · REF {{RFP_ID}}",
  "Hello {{HOTEL_CONTACT_NAME}},\n\nA quick note on request {{RFP_ID}} ({{DESTINATION}}, {{PAX}}, {{EVENT_DATES}}). Quotes close {{DEADLINE_KST}}, and we haven't received one from {{HOTEL_NAME}} yet.\n\nIf you're planning to quote, the request page has everything you need: {{HOTEL_BID_URL}}\nIf this one isn't a fit, a quick decline there is just as helpful, and it never counts against you.\n\nThanks,\nMICEGO\n{{SUPPORT_EMAIL}}",
  "전화·개인 메일로 보낸 경우도 이력에 남긴다.")
-ops("OPS_HTL_QUOTE_CHECK", "Quote check (blank fields / outliers)", "en", "취합중 · 비교표에 빈 항목·이상치 (트윈>킹, 유효기한이 행사일 전)",
+ops("OPS_HTL_QUOTE_CHECK", "Quote check (blank fields / outliers)", "en", "견적 정리 중 · 비교표에 빈 항목·이상치 (트윈>킹, 유효기한이 행사일 전)",
  "[MICEGO] A quick check on your quote · REF {{RFP_ID}}",
  "Hello {{HOTEL_CONTACT_NAME}},\n\nThank you for your quote on {{RFP_ID}}. Before we pass it on, could you confirm the following?\n\n{{QUOTE_ISSUES}}\n\nPlease reply by {{REPLY_BY}} with the correct figures or a short confirmation. If we don't hear back, we'll send the quote as submitted.\n\nThanks,\nMICEGO\n{{SUPPORT_EMAIL}}",
  "마감 후에는 웹 수정이 닫히므로 답장으로 확인한다.")
-ops("OPS_HTL_CANCELLED", "Request cancelled (during bidding)", "en", "#12 비딩중 취소 — SOP상 자동 알림 없음",
+ops("OPS_HTL_CANCELLED", "Request cancelled (during bidding)", "en", "#12 견적 받는 중 취소 — SOP상 자동 알림 없음",
  "[MICEGO] Request cancelled · REF {{RFP_ID}}",
  "Hello {{HOTEL_CONTACT_NAME}},\n\nThe organizer has cancelled request {{RFP_ID}} ({{DESTINATION}}, {{EVENT_DATES}}), so we're no longer collecting quotes. Your personal link now shows the cancellation.\n\nThank you for the time you spent on it. This doesn't affect your listing, and we'll invite you to matching requests as they open.\n\nMICEGO\n{{SUPPORT_EMAIL}}",
- "취소 사유(오거나이저 사정)는 자세히 적지 않는다.")
+ "취소 사유(요청자 사정)는 자세히 적지 않는다.")
 ops("OPS_PTN_SUSPEND", "Listing paused + how to reinstate", "en", "파트너 승인 → 중지 (3회 연속 무응답 또는 견적 부정확 반복)",
  "[MICEGO] Your listing is paused · REF {{PARTNER_ID}}",
  "Hello {{APPLICANT_NAME}},\n\nWe've paused {{PROPERTY_NAME}} in the MICEGO Partner Network because {{SUSPEND_REASON}}. While paused, you won't receive new invitations.\n\nTo reinstate the listing, just reply to this email and confirm that {{HOTEL_CONTACT_EMAIL}} is still the right address for requests. We'll approve it again once we hear from you.\n\nThanks,\nMICEGO\n{{SUPPORT_EMAIL}}",
@@ -743,26 +743,26 @@ ops("OPS_RFP_TRANSFER", "요청 이관 안내 (양쪽 회원)", "ko", "회원 �
 
 # Console TPL name -> new IDs
 CONSOLE_MAP = [
- ("접수 확인", "오거나이저", "ORG_RECEIVED", "알림톡·LMS 추가"),
- ("반려", "오거나이저", "ORG_REJECTED", "사유 3종 변수화, 알림톡·LMS 추가"),
- ("(신규) 비딩중 진입", "오거나이저", "ORG_BIDDING", "콘솔 목록에 없던 알림. 추가 필요"),
- ("(신규) 새 라운드", "오거나이저", "ORG_REBID", "콘솔 목록에 없던 알림. 추가 필요"),
- ("견적 도착", "오거나이저", "ORG_DELIVERED", "알림톡(강조표기)·LMS 추가"),
- ("(신규) 성사 확인", "오거나이저", "ORG_WON", "연결 메일 참조 수신 + 알림톡. 콘솔 목록에 없던 알림"),
- ("(신규) 미성사 종료", "오거나이저", "ORG_LOST", "콘솔 목록에 없던 알림. 추가 필요"),
- ("(신규) 취소 확인", "오거나이저", "ORG_CANCELLED", "콘솔 목록에 없던 알림. 추가 필요"),
+ ("접수 확인", "요청자", "ORG_RECEIVED", "알림톡·LMS 추가"),
+ ("반려", "요청자", "ORG_REJECTED", "사유 3종 변수화, 알림톡·LMS 추가"),
+ ("(신규) 견적 받는 중 진입", "요청자", "ORG_BIDDING", "콘솔 목록에 없던 알림. 추가 필요"),
+ ("(신규) 새 라운드", "요청자", "ORG_REBID", "콘솔 목록에 없던 알림. 추가 필요"),
+ ("견적 도착", "요청자", "ORG_DELIVERED", "알림톡(강조표기)·LMS 추가"),
+ ("(신규) 성사 확인", "요청자", "ORG_WON", "연결 메일 참조 수신 + 알림톡. 콘솔 목록에 없던 알림"),
+ ("(신규) 미성사 종료", "요청자", "ORG_LOST", "콘솔 목록에 없던 알림. 추가 필요"),
+ ("(신규) 취소 확인", "요청자", "ORG_CANCELLED", "콘솔 목록에 없던 알림. 추가 필요"),
  ("초대", "호텔", "HTL_INVITE", "라운드 2 이상 재초대 블록 포함"),
  ("리마인더", "호텔", "HTL_REMINDER", ""),
  ("(신규) 견적 수신 확인", "호텔", "HTL_QUOTE_RECEIVED", "콘솔 목록에 없던 알림. 추가 필요"),
  ("선정 · 미선정 결과", "호텔", "HTL_NOT_SELECTED", "미선정 결과는 이 템플릿. 선정 결과는 아래 연결 메일에 통합"),
- ("선정 연결 메일", "선정 호텔 (오거나이저 참조)", "HTL_SELECTED_CONNECT", "선정 결과와 연결 메일을 한 통으로 통합"),
+ ("선정 연결 메일", "선정 호텔 (요청자 참조)", "HTL_SELECTED_CONNECT", "선정 결과와 연결 메일을 한 통으로 통합"),
  ("(신규) 파트너 신청 접수", "호텔 담당자", "PTN_APPLIED", "콘솔 목록에 없던 알림. 추가 필요"),
  ("파트너 심사 결과", "호텔 담당자", "PTN_APPROVED · PTN_REJECTED", "승인/거절 2개로 분리. 승인 메일에 요율 동의 블록(COMMISSION_TERMS) 포함"),
  ("(신규) 커미션 요율 동의", "호텔 담당자", "PTN_COMMISSION_TERMS", "승인 후 요율 변경 제안·동의 링크 재발송. 1회용 링크에서 동의(POST)"),
  ("(신규) 파트너 재승인", "호텔 담당자", "PTN_REINSTATED", "콘솔 목록에 없던 알림. 추가 필요"),
  ("취소 시 호텔 안내", "초대 호텔", "OPS_HTL_CANCELLED", "수동 유지"),
  ("파트너 중지 안내", "호텔 담당자", "OPS_PTN_SUSPEND", "수동 유지"),
- ("(신규) 제안 선택 인증번호", "오거나이저 (회원·비회원)", "ORG_PICK_OTP", "문자(SMS) 전용, 알림톡 미사용"),
+ ("(신규) 제안 선택 인증번호", "요청자 (회원·비회원)", "ORG_PICK_OTP", "문자(SMS) 전용, 알림톡 미사용"),
  ("(신규) 회원 가입·인증", "회원", "ACC_EMAIL_CODE · ACC_EMAIL_EXISTS · ACC_SMS_OTP · ACC_WELCOME", "회원제 v1. 이메일 3종 + 문자 1종(ACC_SMS_OTP)"),
  ("(신규) 요청 연결", "회원", "ACC_LINKED · OPS_ACC_LINK", "자동 연결은 ACC_LINKED, 휴대전화만 일치하면 운영자가 OPS_ACC_LINK로 확인"),
  ("(신규) 계정 보안 알림", "회원", "ACC_PW_RESET · ACC_PW_CHANGED · ACC_EMAIL_CHANGED · ACC_PHONE_CHANGED · ACC_LOCKED · ACC_WITHDRAWN", "모두 「본인이 요청하지 않았다면」 안내로 끝남"),
@@ -781,7 +781,7 @@ NEEDS_CONFIRM = [
  "도메인(micego.example)과 발신 주소(FROM_ADDRESS), 문의 메일(SUPPORT_EMAIL)은 미정입니다. 모든 링크·주소는 변수이며 도메인이 정해지면 BASE_URL 하나만 바꿔 다시 생성합니다.",
  "이메일 발송 도구는 Resend(SOP v2) 기준입니다. 파트너 신청번호(PARTNER_ID) 형식(PT-YYMM-NNN)과 제목의 REF 표기는 잠정안입니다.",
  "상태전이표 §7 알림 트리거표에는 아직 ORG_BIDDING, ORG_REBID, ORG_WON, ORG_LOST, ORG_CANCELLED, HTL_QUOTE_RECEIVED, PTN_APPLIED, PTN_REINSTATED 행이 없습니다. 이 표를 기준으로 갱신이 필요합니다.",
- "HTL_SELECTED_CONNECT는 수신 호텔에 오거나이저 회사명·연락처를 담습니다(약관 제7조). 수수료 관련 문구는 넣지 않았습니다.",
+ "HTL_SELECTED_CONNECT는 수신 호텔에 요청자 회사명·연락처를 담습니다(약관 제7조). 수수료 관련 문구는 넣지 않았습니다.",
  "ORG_* 메일에 회원이면 MY_URL 링크 추가(조건부 변수) — 백엔드 템플릿 엔진 결정 후.",
  "문자(SMS) 발송: 국내 SMS 대행사와 발신번호 사전 등록이 필요하며 아직 정해지지 않았습니다(설정 > 전제 조건). 90byte를 넘으면 LMS로 분류되어 요금과 표시가 달라지므로 문구는 변수 최대 길이 기준으로 90byte 이내로 썼습니다. 통신사가 붙이는 발신 표기의 바이트 포함 여부는 대행사 확인이 필요합니다.",
  "인증번호(ORG_PICK_OTP, ACC_SMS_OTP)를 알림톡이 아닌 문자로만 보내는 결정은 검수 소요 기간과 카카오톡 미사용자 대체 발송 지연을 고려한 것입니다. 인증 문자가 정보성으로 분류되는지는 대행사 확인이 필요합니다.",
@@ -988,7 +988,7 @@ def build_alimtalk(t):
 # --------------------------------------------------------------------------
 # 6. Assemble
 # --------------------------------------------------------------------------
-REC_LABEL = {"org": "오거나이저", "htl": "호텔", "ptn": "파트너 신청자", "mem": "회원", "ops": "운영자 수동", "fbk": "피드백", "ptr": "지역 파트너·본사 콘솔"}
+REC_LABEL = {"org": "요청자", "htl": "호텔", "ptn": "파트너 신청자", "mem": "회원", "ops": "운영자 수동", "fbk": "피드백", "ptr": "지역 파트너·본사 콘솔"}
 LANG_LABEL = {"ko": "한국어", "en": "English"}
 
 def assemble():
@@ -1224,7 +1224,7 @@ def render_page(data, doc):
                 m.append('<dt>제목 (재초대)</dt><dd><span class="v">%s</span></dd>' % _e(subst(d["email"]["subject_round2"], "en", t.get("samples"))))
             m.append('<dt>프리헤더</dt><dd><span class="v">%s</span> <span class="bytes">%d자</span></dd>' % (_e(d["email"]["preheader_sample"]), len(re.sub(r"&\w+;", "-", d["email"]["preheader_sample"]))))
             fl = "<code>%s</code>" % d["email"]["file"]
-            if d["email"]["cc"]: fl += " · 참조(Cc): 오거나이저"
+            if d["email"]["cc"]: fl += " · 참조(Cc): 요청자"
             if d["email"]["unsubscribe_link"]: fl += " · 수신거부 링크 포함"
             m.append('<dt>파일</dt><dd>%s</dd>' % fl)
             copy[d["id"]] = dict(subject=d["email"]["subject"])
@@ -1295,7 +1295,7 @@ def render_page(data, doc):
     blocks = [("A", "헤더 바", "네이비 #0F1E3D 바에 텍스트 로고 「MICE」+「GO」. 오른쪽 태그는 KO 「견적 요청」, EN 「Partner Network」."),
               ("B", "아이브로", "상태 칩(색: 진행=틸, 결과=회색, 반려·취소=붉은 톤)과 REF 번호(고정폭, 틸)."),
               ("C", "제목", "24px 굵게. 한 문장, 상태를 그대로 말한다."),
-              ("D", "리드", "15px. 오거나이저에게는 「○○님」으로 시작하고, 호텔에는 이름 없이 사실부터."),
+              ("D", "리드", "15px. 요청자에게는 「○○님」으로 시작하고, 호텔에는 이름 없이 사실부터."),
               ("E", "요약 표", "라벨/값 행. 모바일에서는 라벨과 값이 위아래로 쌓인다."),
               ("F", "콜아웃", "앰버=마감·유효기한, 회색=결과·안내, 붉은 톤(채도 낮춤)=반려·취소·거절. 왼쪽 3px 띠."),
               ("G", "CTA 버튼", "틸 #0B8F86 하나. 표 기반 버튼과 Outlook용 VML. 링크가 없는 메일(PTN_APPLIED 등)은 생략."),
@@ -1309,7 +1309,7 @@ def render_page(data, doc):
     counts = dict(auto=sum(1 for d in data if d["mode"] == "auto"), manual=sum(1 for d in data if d["mode"] != "auto"), kk=sum(1 for d in data if d.get("alimtalk")), sms=sum(1 for d in data if d.get("sms")))
     cd = json.dumps(copy, ensure_ascii=False).replace("</", "<\\/")
     chips = ('<div class="chips" role="group" aria-label="수신자 필터"><button type="button" data-f="all" aria-pressed="true">전체</button>'
-             '<button type="button" data-f="org" aria-pressed="false">오거나이저</button><button type="button" data-f="htl" aria-pressed="false">호텔</button>'
+             '<button type="button" data-f="org" aria-pressed="false">요청자</button><button type="button" data-f="htl" aria-pressed="false">호텔</button>'
              '<button type="button" data-f="ptn" aria-pressed="false">파트너</button><button type="button" data-f="mem" aria-pressed="false">회원</button><button type="button" data-f="ops" aria-pressed="false">운영자 수동</button>'
              '<span class="sp"></span><span class="small" id="cnt">%d개 표시</span><button type="button" id="openall" data-open="0">미리보기 모두 펼치기</button></div>' % len(data))
     return f"""<!DOCTYPE html>
@@ -1337,20 +1337,20 @@ def render_page(data, doc):
 <section id="s1"><h2><span class="n">1</span>개요</h2>
 <p class="lead">누가 무엇을 언제 받는지, 그리고 어디서 보내는지를 정리합니다.</p>
 <ul class="tight">
-<li><b>채널 원칙.</b> 오거나이저(한국어)는 이메일과 카카오 알림톡을 함께 받고, 알림톡을 받을 수 없으면 LMS로 대체 발송합니다. 호텔과 파트너 신청자(영어)는 이메일만 받습니다. 회원(한국어)은 계정 알림을 이메일로 받고, 가입 완료만 알림톡을 함께 받습니다. 운영자 수동 템플릿은 복사해 직접 보내는 텍스트 메일이며 채널이 없습니다.</li>
+<li><b>채널 원칙.</b> 요청자(한국어)는 이메일과 카카오 알림톡을 함께 받고, 알림톡을 받을 수 없으면 LMS로 대체 발송합니다. 호텔과 파트너 신청자(영어)는 이메일만 받습니다. 회원(한국어)은 계정 알림을 이메일로 받고, 가입 완료만 알림톡을 함께 받습니다. 운영자 수동 템플릿은 복사해 직접 보내는 텍스트 메일이며 채널이 없습니다.</li>
 <li><b>인증번호는 문자(SMS)로만.</b> 제안 선택 인증(ORG_PICK_OTP)과 가입·번호 변경 인증(ACC_SMS_OTP)은 알림톡으로 보내지 않습니다. 알림톡 템플릿 검수에 시간이 걸리고, 카카오톡을 쓰지 않는 분에게는 대체 발송까지 지연이 생길 수 있어 인증번호가 늦게 도착할 수 있기 때문입니다. 문자는 90byte 이내(EUC-KR)로 짧게 씁니다.</li>
 <li><b>회원 계정 알림(ACC_*).</b> 비밀번호·연락처·잠금처럼 보안과 관련된 메일은 본인이 요청하지 않았다면 어떻게 하면 되는지로 끝맺습니다. 어떤 메일과 문자에도 비밀번호와 전체 휴대전화 번호는 넣지 않습니다(번호는 가운데 4자리를 가립니다).</li>
 <li><b>발송 주체.</b> 자동 템플릿은 시스템이 알림 테이블에 쌓고 1분 cron이 발송합니다(상태전이표 7장). 수동 템플릿은 운영자가 콘솔 사례에 맞춰 복사해 보냅니다.</li>
-<li><b>보내지 않는 것.</b> 검증중 시작, 초대 열람·제출에 따른 상태 변화, USD 참고환산 입력에는 알림이 없습니다. 오거나이저에게 호텔 수와 호텔 이름은 알리지 않습니다(비딩중 안내는 「호텔 몇 곳」).</li>
+<li><b>보내지 않는 것.</b> 요건 확인 시작, 초대 열람·제출에 따른 상태 변화, USD 참고환산 입력에는 알림이 없습니다. 요청자에게 호텔 수와 호텔 이름은 알리지 않습니다(견적 받는 중 안내는 「호텔 몇 곳」).</li>
 <li><b>변수 표기.</b> 이메일은 <code>{{{{VAR}}}}</code> 영문 대문자, 알림톡은 <code>#{{한글변수}}</code>. 같은 변수는 두 채널에서 같은 값을 가리키며, 아래 카드의 변수 표에 두 이름과 샘플, 최대 길이(maxLen)를 함께 적었습니다.</li>
-<li><b>수신 언어와 시각.</b> 오거나이저 한국어, 호텔·파트너 영어. 마감과 예정일은 모두 KST로 표기하고, 마감 시각은 해당일 18:00입니다.</li>
+<li><b>수신 언어와 시각.</b> 요청자 한국어, 호텔·파트너 영어. 마감과 예정일은 모두 KST로 표기하고, 마감 시각은 해당일 18:00입니다.</li>
 </ul></section>
 
 <section id="s2"><h2><span class="n">2</span>알림 매트릭스</h2>
 <p class="lead">트리거의 # 번호는 상태전이표 3장의 전이 번호입니다. 전이가 아닌 트리거는 문구로 적었습니다.</p>
 <p class="small"><b>채널 범례.</b> 이메일 = HTML 메일 · 알림톡 = 카카오 알림톡 · LMS = 알림톡을 받을 수 없을 때 대신 가는 장문 문자 · SMS = 인증번호 전용 단문 문자(알림톡 미사용, 90byte 이내). ● 발송, — 없음.</p>
 <div class="tw"><table><thead><tr><th>ID</th><th>수신자</th><th>트리거 (전이 · 상태)</th><th>이메일</th><th>알림톡</th><th>LMS</th><th>SMS</th><th>자동/수동</th></tr></thead><tbody>{"".join(matrix)}</tbody></table></div>
-<p class="small">알림톡이 없는 자동 알림은 호텔·파트너 대상이라 이메일만 보냅니다. ORG_WON의 이메일은 짧은 확인용이고, 호텔 담당자에게 가는 연결 메일(HTL_SELECTED_CONNECT)에 오거나이저가 참조로 들어갑니다.</p></section>
+<p class="small">알림톡이 없는 자동 알림은 호텔·파트너 대상이라 이메일만 보냅니다. ORG_WON의 이메일은 짧은 확인용이고, 호텔 담당자에게 가는 연결 메일(HTL_SELECTED_CONNECT)에 요청자가 참조로 들어갑니다.</p></section>
 
 <section id="s3"><h2><span class="n">3</span>이메일 디자인 규칙</h2>
 <p class="lead">모든 자동 메일은 600px 표 레이아웃과 인라인 CSS로 만들고, 이미지와 배경 이미지를 쓰지 않습니다.</p>

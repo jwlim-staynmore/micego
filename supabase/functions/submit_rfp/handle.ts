@@ -135,7 +135,7 @@ export async function handle(req: Request, deps: Deps): Promise<unknown> {
 
   await deps.db.query(
     `insert into rfp_history (rfp_id, at, actor, actor_label, from_state, to_state, memo) values ($1,$2,$3,$4,null,'received',$5)`,
-    [rfpId, nowIso, ownerId ? "organizer" : "organizer", ownerId ? "오거나이저(회원)" : "오거나이저", "접수 폼 제출"],
+    [rfpId, nowIso, ownerId ? "organizer" : "organizer", ownerId ? "요청자(회원)" : "요청자", "접수 폼 제출"],
   );
 
   const { enqueueAndDispatch } = await import("../_shared/notify/enqueue_and_dispatch.ts");

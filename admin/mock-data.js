@@ -272,7 +272,7 @@
       organizer: { company: '해오름여행(주)', contact: '강나래 대리', email: 'narae.kang@haeoreum.example', phone: '02-000-1357', budget: '1인 120만 원' },
       anonReviewed: true, anonAt: T('2026-09-29 10:00'), deadline: null, invitations: [], quotes: [], connectDone: [],
       history: [H('2026-09-28 13:00', '시스템', null, 'received'), H('2026-09-28 13:20', '운영자', 'received', 'verifying'),
-        H('2026-09-29 10:05', '운영자', 'verifying', 'open'), H('2026-10-02 10:00', '운영자', 'open', 'cancelled', '오거나이저 요청 · 행사 취소로 접수 철회')] },
+        H('2026-09-29 10:05', '운영자', 'verifying', 'open'), H('2026-10-02 10:00', '운영자', 'open', 'cancelled', '요청자 취소 요청 · 행사 취소로 접수 철회')] },
 
     { id: 'MG-2610-009', token: 'mg2610009lm2', state: 'won', round: 1, createdAt: T('2026-09-14 10:00'), verifyingAt: T('2026-09-14 10:15'),
       destination: '다낭', eventType: '컨퍼런스', headcount: 90, start: '2026-12-02', end: '2026-12-05', twin: 42, king: 3, ballroom: '필요 · 전체 세션',
@@ -290,7 +290,7 @@
       history: [H('2026-09-14 10:00', '시스템', null, 'received'), H('2026-09-14 10:15', '운영자', 'received', 'verifying'),
         H('2026-09-15 10:05', '운영자', 'verifying', 'open'), H('2026-09-15 15:00', '운영자', 'open', 'bidding', '초대 3곳'),
         H('2026-09-21 18:10', '시스템', 'bidding', 'collecting', '마감 경과'), H('2026-09-22 14:00', '운영자', 'collecting', 'delivered'),
-        H('2026-09-25 10:30', '운영자', null, null, 'Coral Crown Resort Da Nang 선정 · 연결 메일 자동 발송(오거나이저 참조)'), H('2026-09-25 10:40', '운영자', 'delivered', 'won')] }
+        H('2026-09-25 10:30', '운영자', null, null, 'Coral Crown Resort Da Nang 선정 · 연결 메일 자동 발송(요청자 참조)'), H('2026-09-25 10:40', '운영자', 'delivered', 'won')] }
   ];
 
   /* 초대별 마감: 없으면 요청의 마감으로 채운다. 이전 라운드 초대는 그때의 마감을 따로 둔다 */
@@ -485,7 +485,7 @@
 
     fb({ id: 'fb12', ref: 'FB-261008-3D9L', status: 'new', category: 'SYS', user_type: 'organizer_guest',
       created_at: T('2026-10-08 18:00'), is_demo: true,
-      content: '데모 화면 확인 중인데 비딩중 단계에서 초대 현황 표가 잘려서 보입니다. 가로 스크롤이 필요해 보여요.',
+      content: '데모 화면 확인 중인데 견적 받는 중 단계에서 초대 현황 표가 잘려서 보입니다. 가로 스크롤이 필요해 보여요.',
       page_path: '/ko/bid.html', mode: 'agency', lang: 'ko', ui_state: 'preview:bidding', ops_mail_status: 'skipped' }),
 
     fb({ id: 'fb13', ref: 'FB-250915-8B4M', status: 'done', category: 'SYS', subcode: 'BUG', priority: 2, resolution: 'fixed', user_type: 'visitor',
@@ -567,7 +567,7 @@
         { key: 'resp', name: '호텔 응답률', value: '63%', sub: '제출 또는 거절 (마감 제외)', target: '기준 60% 이상', met: true },
         { key: 'view', name: '호텔 열람률', value: '81%', sub: '열람 이상', target: '낮으면 메일 제목·발신자 점검', met: null },
         { key: 'quotes', name: '요청당 제출 견적', value: '2.7건', sub: '전달 시점 평균', target: '기준 3건 이상', met: false },
-        { key: 'won', name: '성사율', value: '40%', sub: '전달됨 중 성사', target: '추적만 합니다', met: null },
+        { key: 'won', name: '성사율', value: '40%', sub: '비교표 전달됨 중 성사', target: '추적만 합니다', met: null },
         { key: 'partner', name: '파트너 심사 준수율', value: '100%', sub: '5영업일 안 승인/거절', target: '기준 100%', met: true },
         { key: 'fail', name: '발송 실패', value: '2건', sub: 'notification.failed', target: '기준 0건', met: false }
       ]

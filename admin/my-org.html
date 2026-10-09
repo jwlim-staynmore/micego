@@ -35,7 +35,7 @@ A.boot('my-org','내 조직',function(main){
     var susp=org.status!=='active'?'<div class="callout warn" style="margin-bottom:16px"><b>조직 상태: '+esc(P.ORG_ST[org.status]||org.status)+'</b>'+(org.status==='suspended'?'정지 중에는 콘솔이 읽기 전용입니다. '+(org.suspendedReason?'사유: '+esc(org.suspendedReason):''):org.status==='onboarding'?'MICEGO가 활성화하면 담당 지역의 요청이 자동으로 배정됩니다.':'')+'</div>':'';
     main.innerHTML='<div class="page-h"><h1>내 조직</h1><span class="muted small">'+esc(org.code)+'</span></div>'+susp+'<div class="stack">'+P.orgInfoCard(org)+
       (A.isPartnerAdmin()?P.orgUsersCard(org):'<section class="card"><h2>계정</h2><p class="muted small">계정 초대·관리는 파트너 관리자만 할 수 있습니다.</p></section>')+
-      '<section class="card"><h2>운영 규칙 요약</h2><ul style="padding-left:18px;line-height:1.7"><li>담당 지역의 요청은 접수 후 <b>24시간 안에</b> 검증을 시작해야 합니다. 넘기면 본사 개입 목록에 오릅니다.</li><li>오거나이저 신원 정보 열람은 모두 기록되며 견적 성사 목적 외 사용은 계약 위반입니다.</li><li>호텔 대신 견적을 입력하면 호텔에 확인 링크가 가고, 호텔이 확인해야 비교표에 실립니다(72시간).</li><li>커미션은 본사가 승인한 뒤 수금·송금하고, 송금 시 환율과 증빙 링크를 남깁니다.</li><li>위험 표시(무료 메일·도메인 불일치 등)가 있는 호텔은 본사만 승인합니다.</li></ul></section></div>';
+      '<section class="card"><h2>운영 규칙 요약</h2><ul style="padding-left:18px;line-height:1.7"><li>담당 지역의 요청은 접수 후 <b>24시간 안에</b> 요건 확인을 시작해야 합니다. 넘기면 본사 개입 목록에 오릅니다.</li><li>요청자 신원 정보 열람은 모두 기록되며 견적 성사 목적 외 사용은 계약 위반입니다.</li><li>호텔 대신 견적을 입력하면 호텔에 확인 링크가 가고, 호텔이 확인해야 비교표에 실립니다(72시간).</li><li>커미션은 본사가 승인한 뒤 수금·송금하고, 송금 시 환율과 증빙 링크를 남깁니다.</li><li>위험 표시(무료 메일·도메인 불일치 등)가 있는 호텔은 본사만 승인합니다.</li></ul></section></div>';
   }
   A.onChange=render;
   main.addEventListener('click',function(e){

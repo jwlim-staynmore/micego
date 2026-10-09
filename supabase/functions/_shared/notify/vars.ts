@@ -58,7 +58,7 @@ export async function buildVars(db: DbClient, base: string, log: Record<string, 
       if (!("LOST_REASON" in vars)) vars.LOST_REASON = r.close_reason ?? "";
       if (!("CHANGE_SUMMARY" in vars)) vars.CHANGE_SUMMARY = r.change_summary ?? "";
       vars.CANCELLED_AT = fmtKstDateTime(r.closed_at as string);
-      // 지역 운영 파트너 고지(결정 2026-09-27): 위임 건이면 오거나이저 메일에 REGIONAL_PARTNER 블록을 켠다
+      // 지역 운영 파트너 고지(결정 2026-09-27): 위임 건이면 요청자 메일에 REGIONAL_PARTNER 블록을 켠다
       if (r.partner_org_id && r.delegation === "delegated") {
         const po = await db.query<{ public_name: string }>(`select public_name from partner_org where id=$1`, [r.partner_org_id]);
         if (po.length) { vars.PARTNER_PUBLIC_NAME = po[0].public_name; vars.__block_REGIONAL_PARTNER = true; }
@@ -80,7 +80,7 @@ export async function buildVars(db: DbClient, base: string, log: Record<string, 
       vars.HOTEL_CONTACT_EMAIL = i.hotel_contact_email ?? "";
       vars.SELECTED_HOTEL = i.hotel_name ?? "";
       vars.PROPERTY_NAME = i.hotel_name ?? "";
-      // 호텔 합의 요율 고지(설계 D8): 초대 시점 스냅샷이 있을 때만. 오거나이저 메일에는 넣지 않는다.
+      // 호텔 합의 요율 고지(설계 D8): 초대 시점 스냅샷이 있을 때만. 요청자 메일에는 넣지 않는다.
       if (i.commission_rate_pct != null && !vars.COMMISSION_NOTE) vars.COMMISSION_NOTE = `Your agreed commission: ${Number(i.commission_rate_pct)}% of net booking value.`;
       if (i.deadline) vars.DEADLINE_KST = fmtKstDateTime(i.deadline as string);
     }

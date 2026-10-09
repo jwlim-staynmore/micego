@@ -51,7 +51,7 @@ SITE = [
   ('admin/settings.html', '설정', '공휴일·규칙·알림·계정·시스템 상태·전제 조건 6탭', 'ops', 'robots 차단', '—', 'DB(설정값)'),
  ]),
  ('내부 문서 (docs/, emails/)', [
-  ('docs/state-transitions.html', '상태전이표 v1.9', 'RFP·초대(대리 입력)·파트너·커미션 합의·회원·공유 링크·피드백·위임·정산 상태 머신과 알림 ID', 'int', 'noindex', '—', '—'),
+  ('docs/state-transitions.html', '상태전이표 v2.0', 'RFP·초대(대리 입력)·파트너·커미션 합의·회원·공유 링크·피드백·위임·정산 상태 머신과 알림 ID', 'int', 'noindex', '—', '—'),
   ('docs/notification-library.html', '알림 라이브러리', '이메일 29종·알림톡 9종·SMS 2종·운영자 수동 문안, JSON·CSV 동봉', 'int', 'noindex', '—', '—'),
   ('docs/sitemap.html', '사이트맵 · 오픈 전 점검(이 문서)', '전체 페이지 목록과 미구현 항목', 'int', 'noindex', '—', '—'),
   ('docs/launch-checklist.html', '오픈 당일 체크리스트', 'D-7 · D-1 · D-day · 오픈 직후 1시간 · D+1 · 첫 주 확인 항목과 오픈 중단 기준', 'int', 'noindex', '—', '—'),

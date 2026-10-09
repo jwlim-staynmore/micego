@@ -124,7 +124,7 @@ ol.steps b{color:var(--navy)}
 <h2><span class="n">1</span>심각도 정의</h2>
 <p class="lead">심각도는 발생 직후 최초 대응자가 판단합니다. 애매하면 한 단계 높여서 대응하고, 진행하며 낮춥니다.</p>
 <div class="tw"><table><thead><tr><th>등급</th><th>정의</th><th>예</th><th>목표 대응 시간</th></tr></thead><tbody>
-<tr><td class="nw"><span class="tag hot">S1</span></td><td>핵심 흐름(요청 제출·초대·견적 제출·제안 선택)이 전면 불가하거나 개인정보가 노출됨</td><td>견적 요청 제출이 전부 실패, 오거나이저 정보가 다른 회원에게 보임</td><td class="nw">즉시 착수 · 15분 안에 완화 조치</td></tr>
+<tr><td class="nw"><span class="tag hot">S1</span></td><td>핵심 흐름(요청 제출·초대·견적 제출·제안 선택)이 전면 불가하거나 개인정보가 노출됨</td><td>견적 요청 제출이 전부 실패, 요청자 정보가 다른 회원에게 보임</td><td class="nw">즉시 착수 · 15분 안에 완화 조치</td></tr>
 <tr><td class="nw"><span class="tag sys">S2</span></td><td>일부 기능이나 특정 요청·특정 채널에서만 지연·오류가 생김</td><td>특정 통신사에서만 인증번호 문자 지연, 알림톡만 실패하고 이메일은 정상</td><td class="nw">1영업시간 안에 착수</td></tr>
 <tr><td class="nw"><span class="tag org">S3</span></td><td>기능은 정상이지만 표시·문구 오류, 사소한 UI 문제</td><td>비교표 통화 표시 오타, 대시보드 카드 정렬 오류</td><td class="nw">다음 배포 주기에 반영</td></tr>
 </tbody></table></div>
@@ -135,13 +135,13 @@ ol.steps b{color:var(--navy)}
 <p class="lead">발견자가 누구든 아래 순서로 진행합니다. 순서를 지키는 이유는 &quot;완화&quot;가 &quot;원인 조사&quot;보다 먼저이기 때문입니다 — 원인을 다 알아야 멈출 수 있는 건 아닙니다.</p>
 <ol class="steps">
 <li><b>확인 (0~5분)</b> — 증상을 재현하거나 로그로 확증합니다. <code>admin/dashboard.html</code> 발송 실패 카드, 브라우저 콘솔, <code>supabase functions logs &lt;함수명&gt;</code>, DB의 <code>notification_deliveries</code>·<code>feedback</code> 테이블 중 관련된 곳을 봅니다. 이 시점에 <a href="#sev">심각도</a>를 잠정 판정합니다.</li>
-<li><b>공지 (5~8분)</b> — S1·S2는 <a href="#escalation">에스컬레이션 표</a>에 따라 대표·개발 담당에게 바로 알립니다. 오거나이저·호텔에게 영향이 있다고 판단되면(비딩중 요청이 여러 건 걸려 있는 등) 선제 안내 여부를 이 시점에 정합니다.</li>
+<li><b>공지 (5~8분)</b> — S1·S2는 <a href="#escalation">에스컬레이션 표</a>에 따라 대표·개발 담당에게 바로 알립니다. 요청자·호텔에게 영향이 있다고 판단되면(견적 받는 중 요청이 여러 건 걸려 있는 등) 선제 안내 여부를 이 시점에 정합니다.</li>
 <li><b>완화 (8~15분)</b> — 근본 원인을 다 몰라도 피해를 멈추는 조치부터 합니다. 예: <code>NOTIFY_MODE=log</code>로 되돌리기(오발송), 특정 RPC·Edge Function 프런트 진입점을 안내 문구로 막기, 문제 있는 초대·요청 1건만 콘솔에서 수동 취소. 시나리오별 &quot;완화&quot; 칸을 참고합니다.</li>
 <li><b>기록 시작</b> — 발견 시각, 증상, 완화 조치를 <a href="#postmortem">사후 기록 템플릿</a>에 바로 적기 시작합니다. 나중에 재구성하지 않습니다.</li>
 </ol>
 <div class="warnbox">완화와 근본 조치를 헷갈리지 않습니다. <code>NOTIFY_MODE=log</code>로 되돌리는 것은 완화(발송을 멈춤)이지, 원인(왜 오발송이 났는지)을 고친 것이 아닙니다. 완화 후에도 근본 조치 칸의 작업이 남아 있습니다.</div>
 </section>
-<section id="scenarios"><h2><span class="n">3</span>시나리오별 대응</h2><p class="lead">발생 빈도·영향 순서가 아니라 사용자 흐름(오거나이저→호텔→인증→운영자→플랫폼) 순서로 정리했습니다.</p><div class="card-inc">
+<section id="scenarios"><h2><span class="n">3</span>시나리오별 대응</h2><p class="lead">발생 빈도·영향 순서가 아니라 사용자 흐름(요청자→호텔→인증→운영자→플랫폼) 순서로 정리했습니다.</p><div class="card-inc">
 <h3><span class="num">#1</span> 견적 요청 제출 실패 <span class="tag hot">S1</span></h3>
 <dl class="kv2">
 <dt>증상</dt><dd><code>ko/index.html</code>의 견적 요청 폼(#register)을 제출해도 접수 완료 화면이 안 뜨거나 REF·추적 링크가 안 나옵니다.</dd>
@@ -156,9 +156,9 @@ ol.steps b{color:var(--navy)}
 <div class="card-inc">
 <h3><span class="num">#2</span> 추적 링크가 안 열림 <span class="tag sys">S2</span></h3>
 <dl class="kv2">
-<dt>증상</dt><dd>오거나이저가 받은 <code>ko/track.html?t=…</code> 링크를 열면 <code>invalid</code>(링크 오류) 화면이 뜨거나 백지입니다.</dd>
+<dt>증상</dt><dd>요청자가 받은 <code>ko/track.html?t=…</code> 링크를 열면 <code>invalid</code>(링크 오류) 화면이 뜨거나 백지입니다.</dd>
 <dt>확인</dt><dd>토큰 형식·만료 여부 확인(<code>get_track</code> 응답 코드) → 요청이 실제로 존재하는지 <code>admin/rfp.html?id=…</code>로 대조 → 공유 링크(<code>?s=</code>)라면 <code>revoked</code>/<code>expired</code> 상태인지 확인합니다.</dd>
-<dt>완화</dt><dd>토큰 자체가 잘못된 경우 콘솔에서 요청번호로 찾아 링크를 다시 발급해 오거나이저에게 개별 전달합니다. 대량으로 발생하면 <code>get_track</code> Edge Function 로그부터 봅니다.</dd>
+<dt>완화</dt><dd>토큰 자체가 잘못된 경우 콘솔에서 요청번호로 찾아 링크를 다시 발급해 요청자에게 개별 전달합니다. 대량으로 발생하면 <code>get_track</code> Edge Function 로그부터 봅니다.</dd>
 <dt>근본 조치</dt><dd>만료·폐기 로직(공유 링크 30일, 종료 후 만료)이 의도보다 일찍 도는지 <code>system_tick</code> 크론 로직 점검. 토큰 발급 로직 버그면 <code>create_share_link</code>/발급 경로 점검.</dd>
 <dt>사용자 안내(한)</dt><dd>&quot;안내해 드린 링크에 문제가 있어 새 링크를 다시 보내 드렸습니다. 불편을 드려 죄송합니다.&quot;</dd>
 <dt>User notice (EN)</dt><dd>&quot;There was an issue with your tracking link — we've just sent you a new one. Sorry for the inconvenience.&quot;</dd>
@@ -192,7 +192,7 @@ ol.steps b{color:var(--navy)}
 <div class="card-inc">
 <h3><span class="num">#5</span> 이메일 미발송 <span class="tag hot">S1</span></h3>
 <dl class="kv2">
-<dt>증상</dt><dd>특정 알림(예: <code>ORG_DELIVERED</code>)이 전혀 안 감. 오거나이저·호텔 양쪽 다 이메일을 못 받았다는 문의가 들어옵니다.</dd>
+<dt>증상</dt><dd>특정 알림(예: <code>ORG_DELIVERED</code>)이 전혀 안 감. 요청자·호텔 양쪽 다 이메일을 못 받았다는 문의가 들어옵니다.</dd>
 <dt>확인</dt><dd><code>settings.html#notify</code> 발송 로그에서 해당 건이 <code>failed</code>인지 아예 큐에 없는지 확인 → <code>RESEND_API_KEY</code> 유효성, 발신 도메인 SPF/DKIM 인증 상태 확인 → <b><code>NOTIFY_MODE</code>가 아직 <code>log</code>로 남아있지 않은지</b> 가장 먼저 확인합니다(가장 흔한 원인).</dd>
 <dt>완화</dt><dd><code>NOTIFY_MODE=log</code>가 원인이면 <a href="launch-checklist.html#notify-mode">전환 절차</a>대로 <code>live</code>로 전환. Resend 키 문제면 새 키 발급 후 즉시 교체. 발송 자체가 안 되는 동안은 <code>failed</code> 건을 목록화해 운영자가 수동 발송합니다.</dd>
 <dt>근본 조치</dt><dd>발신 도메인 인증 만료·변경 여부 점검, Resend 대시보드에서 발송 거부(bounce) 사유 확인.</dd>
@@ -204,7 +204,7 @@ ol.steps b{color:var(--navy)}
 <div class="card-inc">
 <h3><span class="num">#6</span> 알림톡 대체발송(LMS) 폭주 <span class="tag sys">S2</span></h3>
 <dl class="kv2">
-<dt>증상</dt><dd>오거나이저 알림이 알림톡 대신 LMS 문자로 대량 전환되어 나갑니다(비용·수신 경험 저하).</dd>
+<dt>증상</dt><dd>요청자 알림이 알림톡 대신 LMS 문자로 대량 전환되어 나갑니다(비용·수신 경험 저하).</dd>
 <dt>확인</dt><dd><code>settings.html#notify</code> 발송 로그에서 알림톡 실패율 확인 → Solapi 콘솔에서 카카오톡 채널·템플릿 상태(정지·심사 반려 여부) 확인.</dd>
 <dt>완화</dt><dd>템플릿이 반려·정지된 경우 임시로 해당 알림만 이메일 중심으로 안내하고, LMS 대체발송 자체는 막지 않습니다(사용자에게 정보가 안 가는 것보다 낫습니다).</dd>
 <dt>근본 조치</dt><dd>카카오 비즈니스 콘솔에서 채널·템플릿 재승인 절차 진행. 반복되면 발송 대행사와 원인 확인.</dd>
@@ -232,7 +232,7 @@ ol.steps b{color:var(--navy)}
 <dt>확인</dt><dd><code>kr_holiday</code> 테이블에 해당 연도 공휴일이 입력돼 있는지 확인(<code>settings.html#holidays</code> 또는 DB 조회). 비어 있으면 주말만 빼고 계산되어 기한이 짧게 잡힙니다(상태전이표 §8).</dd>
 <dt>완화</dt><dd>누락된 공휴일을 즉시 입력합니다. 이미 짧게 계산되어 SLA 위반으로 잘못 표시된 건이 있으면 개별 확인 후 담당자에게 오표시였음을 안내합니다.</dd>
 <dt>근본 조치</dt><dd>내년도 공휴일을 미리 입력하는 절차를 <a href="launch-checklist.html#d7">오픈 체크리스트 D-7</a>과 연간 루틴에 고정.</dd>
-<dt>사용자 안내(한)</dt><dd>(내부 지표 오류 — 오거나이저에게 실제 처리 지연이 없었다면 공지하지 않음.)</dd>
+<dt>사용자 안내(한)</dt><dd>(내부 지표 오류 — 요청자에게 실제 처리 지연이 없었다면 공지하지 않음.)</dd>
 <dt>User notice (EN)</dt><dd>(Internal metric issue — no external notice unless it caused an actual processing delay.)</dd>
 </dl>
 
@@ -240,7 +240,7 @@ ol.steps b{color:var(--navy)}
 <div class="card-inc">
 <h3><span class="num">#9</span> 크론 정지 <span class="tag hot">S1</span></h3>
 <dl class="kv2">
-<dt>증상</dt><dd>상태 전이가 자동으로 안 넘어가거나(비딩중→취합중 정체), 알림이 전혀 안 나가거나, 피드백 메일 재시도가 안 됩니다.</dd>
+<dt>증상</dt><dd>상태 전이가 자동으로 안 넘어가거나(견적 받는 중→견적 정리 중 정체), 알림이 전혀 안 나가거나, 피드백 메일 재시도가 안 됩니다.</dd>
 <dt>확인</dt><dd>Supabase 대시보드 <code>Database → Extensions</code>에서 <code>pg_cron</code>·<code>pg_net</code> 활성 여부 확인 → <code>select * from cron.job</code>로 6개 작업(알림 발송·<code>mg-system-tick</code>·<code>mgfb-mail-retry</code>·레이트리밋 정리·데모 정리·익명화)이 등록돼 있는지 확인 → <code>cron.job_run_details</code>에서 최근 실행 여부 확인.</dd>
 <dt>완화</dt><dd>꺼진 확장을 다시 켜거나, 등록이 빠진 작업이 있으면 해당 마이그레이션(<code>0007_cron.sql</code>, <code>0009_feedback_cron.sql</code>)을 재적용합니다. 급하면 <code>mg-system-tick</code>이 하던 마감 전이를 콘솔에서 수동으로 처리합니다.</dd>
 <dt>근본 조치</dt><dd>확장이 왜 꺼졌는지(플랜 변경, 수동 조작) 원인 확인 후 재발 방지. 크론 헬스체크를 대시보드 카드로 추가하는 것을 검토(현재는 설정 화면의 &quot;마지막 실행&quot; 예시 값뿐).</dd>
@@ -278,7 +278,7 @@ ol.steps b{color:var(--navy)}
 <dl class="kv2">
 <dt>증상</dt><dd>운영자 실수로 잘못된 상태 버튼을 누르거나 잘못된 호텔을 선정 처리했습니다.</dd>
 <dt>확인</dt><dd><code>admin/rfp.html?id=…</code> 이력(history) 탭에서 전이 시각·주체·사유를 확인합니다.</dd>
-<dt>완화</dt><dd><b>상태전이표의 전이표(§3)에 없는 역방향 전이는 콘솔에 버튼 자체가 없습니다.</b> 종료 상태(반려됨·성사·미성사·취소)에서 나가는 전이도 없습니다 — 즉 대부분의 실수는 &quot;되돌리기&quot;가 아니라 뒤이은 상태에서 사유를 남기고 다시 처리하는 방식으로 수습합니다(예: 잘못 성사 처리했다면 선정 호텔·오거나이저 양쪽에 사정을 설명하고 이관·환불 등 사람이 개입).</dd>
+<dt>완화</dt><dd><b>상태전이표의 전이표(§3)에 없는 역방향 전이는 콘솔에 버튼 자체가 없습니다.</b> 종료 상태(반려·성사·미성사·취소)에서 나가는 전이도 없습니다 — 즉 대부분의 실수는 &quot;되돌리기&quot;가 아니라 뒤이은 상태에서 사유를 남기고 다시 처리하는 방식으로 수습합니다(예: 잘못 성사 처리했다면 선정 호텔·요청자 양쪽에 사정을 설명하고 이관·환불 등 사람이 개입).</dd>
 <dt>근본 조치</dt><dd><b>상태를 SQL로 직접 바꾸는 것은 하지 않습니다</b>(상태전이표 §3 마지막 문장) — 이력과 알림이 빠지고 원본 사실관계가 사라집니다. 재발 방지를 위해 콘솔의 확인 창(confirm) 문구를 강화하는 방향으로 근본 조치를 잡습니다.</dd>
 <dt>사용자 안내(한)</dt><dd>&quot;저희 측 처리 오류로 안내가 잘못 나갔습니다. 바로 잡아 드리겠습니다 — 담당자가 곧 연락드리겠습니다.&quot;</dd>
 <dt>User notice (EN)</dt><dd>&quot;We made a processing error on our end and are correcting it now — a team member will reach out shortly.&quot;</dd>

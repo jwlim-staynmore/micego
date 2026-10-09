@@ -78,7 +78,7 @@ A.boot('members','회원 상세',function(main){
       var idc=x.live?'<a class="mono rowlink" href="rfp.html?id='+x.id+'">'+x.id+'</a>':'<span class="mono">'+x.id+'</span> <span class="badge">과거</span>';
       return '<tr><td>'+idc+'</td><td>'+esc(x.title)+'</td><td>'+A.refChip(x.state)+(x.round>=2&&x.live?' <span class="badge teal">R'+x.round+'</span>':'')+(A.MBLOCK.indexOf(x.state)>=0?' <span class="badge amber">탈퇴 차단</span>':'')+'</td><td>'+A.fmtD(x.createdAt)+'</td></tr>';
     }).join('');
-    return '<section class="card" aria-labelledby="h-rq"><h2 id="h-rq">견적 요청 <span class="badge">'+l.length+'건</span></h2>'+(l.length?'<div class="tbl-wrap"><table id="rfpTable"><thead><tr><th>요청</th><th>목적지 · 유형</th><th>상태</th><th>접수일</th></tr></thead><tbody>'+rows+'</tbody></table></div><p class="small muted" style="margin-top:8px">비딩중·재요청·취합중·전달됨 요청이 있으면 탈퇴 처리할 수 없습니다. "과거" 표시는 이 콘솔에 상세가 없는 이전 요청입니다.</p>':'<p class="muted small">아직 견적 요청이 없습니다.</p>')+'</section>';
+    return '<section class="card" aria-labelledby="h-rq"><h2 id="h-rq">견적 요청 <span class="badge">'+l.length+'건</span></h2>'+(l.length?'<div class="tbl-wrap"><table id="rfpTable"><thead><tr><th>요청</th><th>목적지 · 유형</th><th>상태</th><th>접수일</th></tr></thead><tbody>'+rows+'</tbody></table></div><p class="small muted" style="margin-top:8px">견적 받는 중·재요청·견적 정리 중·비교표 전달됨 요청이 있으면 탈퇴 처리할 수 없습니다. "과거" 표시는 이 콘솔에 상세가 없는 이전 요청입니다.</p>':'<p class="muted small">아직 견적 요청이 없습니다.</p>')+'</section>';
   }
   function shareCard(){
     var ls=A.data().shareLinks.filter(function(l){return l.memberId===m.id;});

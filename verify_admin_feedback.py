@@ -115,7 +115,7 @@ with sync_playwright() as p:
     ctx,pg=newpage(); login(pg); pg.goto(BASE+'feedback-detail.html?id=fb5'); pg.wait_for_timeout(150)
     pg.click('[data-to="on_hold"]'); pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(80)
     ok('hold needs note','적어 주세요' in pg.inner_text('.dlg-err'),pg.inner_text('.dlg-err'))
-    pg.fill('#dlgTxt','오거나이저 회신 대기'); pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(120)
+    pg.fill('#dlgTxt','요청자 회신 대기'); pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(120)
     ok('fb5 on_hold now','보류' in pg.inner_text('.dh .chip'))
     ctx.close()
 
@@ -144,7 +144,7 @@ with sync_playwright() as p:
     ok('fb10 done actions = reopen only',pg.eval_on_selector_all('#tbtns [data-to]','e=>e.map(x=>x.dataset.to)')==['in_progress'])
     pg.click('[data-to="in_progress"]'); pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(80)
     ok('reopen needs note','적어 주세요' in pg.inner_text('.dlg-err'),pg.inner_text('.dlg-err'))
-    pg.fill('#dlgTxt','오거나이저가 추가 문의를 다시 보냄'); pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(120)
+    pg.fill('#dlgTxt','요청자가 추가 문의를 다시 보냄'); pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(120)
     ok('fb10 reopened to in_progress','처리 중' in pg.inner_text('.dh .chip'))
     ctx.close()
 

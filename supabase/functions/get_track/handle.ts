@@ -1,4 +1,4 @@
-// POST /get_track — anon. {token} (오거나이저 본인용, 전체 조회) 또는 {share} (보기 전용 공유 링크).
+// POST /get_track — anon. {token} (요청자 본인용, 전체 조회) 또는 {share} (보기 전용 공유 링크).
 // SPEC_LAUNCH.md §3 "Track view model" 을 그대로 만든다.
 import type { Deps } from "../_shared/deps.ts";
 import { MGError } from "../_shared/errors.ts";
@@ -78,7 +78,7 @@ export async function handle(req: Request, deps: Deps): Promise<unknown> {
   };
 
   if (["rejected", "lost", "cancelled"].includes(stateRaw) && r.close_reason) view.reason = { text: r.close_reason };
-  // 지역 운영 파트너 고지(결정 2026-09-27): 파트너가 위임받아 진행 중이면 오거나이저에게 파트너 이름을 보여 준다
+  // 지역 운영 파트너 고지(결정 2026-09-27): 파트너가 위임받아 진행 중이면 요청자에게 파트너 이름을 보여 준다
   if (r.partner_org_id && r.delegation === "delegated") {
     const po = await deps.db.query<{ public_name: string; country_code: string }>(`select public_name, country_code from partner_org where id=$1`, [r.partner_org_id]);
     if (po.length) view.regional_partner = { name: po[0].public_name, country: po[0].country_code };
@@ -93,7 +93,7 @@ export async function handle(req: Request, deps: Deps): Promise<unknown> {
   // 호텔에 아무것도 보내기 전까지만 직접 취소 가능(D-47). 판정 기준은 private.rfp_organizer_cancel 과 같다.
   view.can_cancel = !isShare && (["received", "verifying"].includes(stateRaw) || (stateRaw === "open" && view.hotels_invited === 0));
 
-  // 제안 비교표 (전달됨/성사 상태에서만 의미 있음, delivered 이후 라벨이 매겨짐)
+  // 제안 비교표 (비교표 전달됨/성사 상태에서만 의미 있음, delivered 이후 라벨이 매겨짐)
   const won = stateRaw === "won";
   const qrows = await deps.db.query<Record<string, unknown>>(
     `select q.*, i.result, p.name as hotel_name, p.profile as hotel_profile

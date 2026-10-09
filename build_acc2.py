@@ -68,6 +68,9 @@ MY_JS = r'''
       render(isOnUrl(box));
     }
     function isOnUrl(box){var u=box.getAttribute('data-init-url');return u||'';}
+    /* 상태 배지: 진행 상황 화면(ko/track.html)의 BADGE와 같은 라벨. next_step(SQL 문구)은 '다음 일정' 칸에만 쓴다 */
+    var BADGE={received:['badge-wait','접수됨'],verifying:['badge-wait','요건 확인 중'],rejected:['badge-closed','진행 불가'],bidding:['badge-open','호텔 제안 받는 중'],rebid:['badge-open','새 조건으로 재요청'],collecting:['badge-wait','제안 정리 중'],delivered:['badge-open','비교표 도착'],won:['badge-done','연결 완료'],lost:['badge-closed','종료'],cancelled:['badge-closed','취소됨']};
+    function badgeOf(slug){return BADGE[slug]||['badge-open',''];}
     function buildRow(r,i){
       var li=document.createElement('li');li.className='rfp'+(r.needs_action?' is-hot':'');li.setAttribute('data-grp',r.group||'active');li.setAttribute('data-ref',r.ref||'');
       var trackHref=(window.MG&&MG.url&&r.track_token)?MG.url.track(r.track_token):'#';
@@ -76,7 +79,7 @@ MY_JS = r'''
         +'<div class="rfp-cell"><span class="sr-only">요청 번호 </span><span class="ref">'+esc(r.ref)+'</span></div>'
         +'<div class="rfp-cell"><span class="sr-only">행사명 </span><span class="ttl">'+esc(r.title)+'</span>'+(r.needs_action?'<span class="rfp-hot">'+esc(r.needs_action)+'</span>':'')+(r.linked_from_guest?'<span class="rfp-tag">연결된 이전 요청 · 비회원 접수</span>':'')+'</div>'
         +'<div class="rfp-cell"><span class="lbl">목적지·일정</span>'+esc(r.region)+'<br>'+esc(r.start_date)+' – '+esc(r.end_date)+'</div>'
-        +'<div class="rfp-cell"><span class="lbl">상태</span><span class="badge badge-open">'+esc(r.next_step||r.track_state||'')+'</span></div>'
+        +'<div class="rfp-cell"><span class="lbl">상태</span><span class="badge '+badgeOf(r.track_state)[0]+'">'+esc(badgeOf(r.track_state)[1]||r.next_step||'')+'</span></div>'
         +'<div class="rfp-cell"><span class="lbl">다음 일정</span>'+esc(r.next_step||'')+'</div>'
         +'<div class="rfp-act"><a class="btn btn-accent btn-sm" href="'+trackHref+'" aria-label="열기">열기</a><button type="button" class="btn btn-ghost btn-sm" data-share-toggle aria-expanded="false" aria-controls="rs-'+i+'">공유 링크</button></div>'
         +'</div><div class="rfp-share" id="rs-'+i+'" hidden>'

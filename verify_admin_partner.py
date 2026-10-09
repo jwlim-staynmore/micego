@@ -45,7 +45,7 @@ with sync_playwright() as p:
     pg.click('.seg button[data-v=list]'); href = pg.get_attribute('table a.rowlink', 'href'); pg.goto(BASE + href); pg.wait_for_timeout(200)
     ok('rfp detail assign card', pg.locator('#h-asg').count() == 1 and '파트너 위임' in pg.text_content('#h-asg ~ dl, section[aria-labelledby=h-asg]'))
     ok('rfp detail HQ buttons', pg.locator('[data-ptr=hold]').count() == 1 and pg.locator('[data-ptr=takeover]').count() == 1)
-    pg.click('[data-ptr=takeover]'); pg.wait_for_selector('.dlg', timeout=3000); pg.fill('.dlg #dlgWhy', '오거나이저 VOC · 본사 직접 처리'); pg.click('.dlg .btn.primary'); pg.wait_for_timeout(300)
+    pg.click('[data-ptr=takeover]'); pg.wait_for_selector('.dlg', timeout=3000); pg.fill('.dlg #dlgWhy', '요청자 VOC · 본사 직접 처리'); pg.click('.dlg .btn.primary'); pg.wait_for_timeout(300)
     ok('rfp takeover → 본사 인계 chip', '본사 인계' in pg.text_content('section[aria-labelledby=h-asg]'))
     ok('rfp takeover shows release', pg.locator('[data-ptr=release]').count() == 1)
     pg.click('[data-ptr=release]'); pg.wait_for_selector('.dlg', timeout=3000); pg.click('.dlg .btn.primary'); pg.wait_for_timeout(300)

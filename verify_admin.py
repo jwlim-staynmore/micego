@@ -82,19 +82,19 @@ with sync_playwright() as p:
     pg.goto(BASE+'rfp.html?id=MG-2610-020'); pg.screenshot(path=os.path.join(SHOTS,'rfp_020.png'),full_page=True)
     ok('020 flags shown',pg.locator('#flagBox li').count()>=4,pg.locator('#flagBox li').count())
     pg.click('[data-to=open]'); pg.wait_for_timeout(100); ok('open guard toast','익명화 검토 완료 표시가 필요합니다' in pg.inner_text('#toasts'))
-    ok('still verifying','검증중' in pg.inner_text('.dh'))
+    ok('still verifying','요건 확인 중' in pg.inner_text('.dh'))
     pg.click('#markAnon'); ok('mark blocked while flags','가려야 할 내용' in pg.inner_text('#toasts'))
     pg.fill('#memoPub','발리 리조트형 숙소 선호. 70명 규모 워크숍이며 골프 가능 여부를 문의합니다.'); pg.wait_for_timeout(50)
     ok('flags cleared','발견되지 않았습니다' in pg.inner_text('#flagBox'))
     pg.click('#markAnon'); pg.wait_for_timeout(100); ok('anon done','익명화 검토 완료' in pg.inner_text('#anonState'))
-    pg.click('[data-to=open]'); pg.wait_for_timeout(100); ok('020 -> open','오픈' in pg.inner_text('.dh .chip'))
-    pg.goto(BASE+'rfps.html'); ok('020 card moved to 오픈 col', pg.locator('.kcol[aria-label=오픈] [data-id="MG-2610-020"]').count()==1)
+    pg.click('[data-to=open]'); pg.wait_for_timeout(100); ok('020 -> open','초대 준비' in pg.inner_text('.dh .chip'))
+    pg.goto(BASE+'rfps.html'); ok('020 card moved to 초대 준비 col', pg.locator('.kcol[aria-label="초대 준비"] [data-id="MG-2610-020"]').count()==1)
     # 019 reject
     pg.goto(BASE+'rfp.html?id=MG-2610-019'); pg.click('[data-to=rejected]'); pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(50)
     ok('reject requires reason','사유를 선택' in pg.inner_text('.dlg-err'))
     pg.select_option('#dlgReason','기타'); pg.click('.dlg [data-x=ok]'); ok('기타 needs note','메모를 적어' in pg.inner_text('.dlg-err'))
     pg.select_option('#dlgReason','일정 미확정'); pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(100)
-    ok('019 rejected','반려됨' in pg.inner_text('.dh .chip') and pg.locator('#tbtns').count()==0)
+    ok('019 rejected','반려' in pg.inner_text('.dh .chip') and pg.locator('#tbtns').count()==0)
     ok('history has reason','일정 미확정' in pg.inner_text('#histTable'))
     # persistence: dashboard counts changed
     pg.goto(BASE+'dashboard.html'); d={k:int(n) for k,n,h in [(e[0],e[1],e[2]) for e in pg.eval_on_selector_all('.todo li a','els=>els.map(e=>[e.dataset.key,+e.querySelector(".n").textContent,e.getAttribute("href")])')]}
@@ -110,8 +110,8 @@ with sync_playwright() as p:
     pg.click('#sendInv'); pg.wait_for_timeout(100)
     pg.click('[data-to=bidding]'); pg.wait_for_timeout(100)
     ok('confirm dialog','2곳 미만' in pg.inner_text('.dlg'))
-    pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(100); ok('017 bidding','비딩중' in pg.inner_text('.dh .chip'))
-    ok('bidding note & collecting btn','10분 안에 취합중' in pg.inner_text('#dside') and btns(pg)==['cancelled','collecting'])
+    pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(100); ok('017 bidding','견적 받는 중' in pg.inner_text('.dh .chip'))
+    ok('bidding note & collecting btn','10분 안에 견적 정리 중' in pg.inner_text('#dside') and btns(pg)==['cancelled','collecting'])
     # cancel from bidding note
     pg.click('[data-to=cancelled]'); ok('cancel note','자동 알림이 가지 않습니다' in pg.inner_text('.dlg')); pg.click('.dlg [data-x=cancel]')
     # 014
@@ -124,10 +124,10 @@ with sync_playwright() as p:
     pg.click('[data-to=delivered]'); pg.wait_for_timeout(100); ok('014 still blocked w/o date','기준일' in pg.inner_text('#toasts'))
     for i in range(3): dates.nth(i).fill('2026-10-08')
     ok('miss counter cleared','모두 입력됨' in pg.inner_text('#multiNote'))
-    pg.click('[data-to=delivered]'); pg.wait_for_timeout(100); ok('014 delivered','전달됨' in pg.inner_text('.dh .chip'))
+    pg.click('[data-to=delivered]'); pg.wait_for_timeout(100); ok('014 delivered','비교표 전달됨' in pg.inner_text('.dh .chip'))
     # rebid from delivered
     pg.click('[data-to=rebid]'); pg.fill('#dlgTxt','인원 변경'); pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(100)
-    ok('rebid -> bidding R2','비딩중' in pg.inner_text('.dh .chip') and '라운드 2' in pg.inner_text('.dh'))
+    ok('rebid -> bidding R2','견적 받는 중' in pg.inner_text('.dh .chip') and '라운드 2' in pg.inner_text('.dh'))
     ok('prev round collapsed','이전 라운드' in pg.inner_text('main') and pg.locator('details.prev').count()>=1 and pg.locator('details.prev[open]').count()==0)
     # 012
     pg.goto(BASE+'rfp.html?id=MG-2610-012'); pg.click('[data-to=won]'); pg.wait_for_timeout(100); ok('012 won blocked','정확히 1곳' in pg.inner_text('#toasts'))
@@ -141,7 +141,7 @@ with sync_playwright() as p:
     pg.fill('#dlgConsentNote','담당자와 통화로 제안 선정과 연락처 전달 동의를 확인'); pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(100)
     ok('012 won','성사' in pg.inner_text('.dh .chip'))
     ok('won: consent shown in owner card','대리 확정' in pg.inner_text('#ownerBox') and '통화' in pg.inner_text('#ownerBox'))
-    ok('won: auto confirm block','연결 메일을 자동으로 보냈습니다' in pg.inner_text('#connBox') and '오거나이저 참조' in pg.inner_text('#connBox'))
+    ok('won: auto confirm block','연결 메일을 자동으로 보냈습니다' in pg.inner_text('#connBox') and '요청자 참조' in pg.inner_text('#connBox'))
     ok('won: fallback mailto link','직접 다시 보내기' in pg.inner_text('#mailDraft') and pg.get_attribute('#mailDraft','href').startswith('mailto:groups@longbeachbay.example'))
     ok('won: no 수동 wording','수동' not in pg.inner_text('main'))
     ok('won: history memo','연결 메일 자동 발송' in pg.inner_text('#histTable'))
@@ -153,7 +153,7 @@ with sync_playwright() as p:
     ok('settings tpl 선정 연결 메일 자동',re.search(r'HTL_SELECTED_CONNECT[^\n]*\n?[^\n]*자동',tpl) is not None and '선정 후 연결 메일' not in tpl,tpl[:600])
     ok('settings: 취소·중지만 수동 note','자동으로 나가지 않습니다' not in pg.inner_text('#notify'))
     pg.goto(BASE+'settings.html#rules'); pg.wait_for_timeout(100); rl=pg.inner_text('#rules')
-    for k in ['SLA 마감 임박','오픈에 도달하면 SLA는 충족입니다. 오픈 이후에는 같은 기한을 초대 기한으로 봅니다.','호텔이 제출한 금액 그대로 환산합니다','다음 영업일 18:00 이내이거나 24시간 이내']:
+    for k in ['SLA 마감 임박','초대 준비에 도달하면 SLA는 충족입니다. 초대 준비 이후에는 같은 기한을 초대 기한으로 봅니다.','호텔이 제출한 금액 그대로 환산합니다','다음 영업일 18:00 이내이거나 24시간 이내']:
         ok('rules has '+k[:14],k in rl)
     pg.goto(BASE+'rfp.html?id=MG-2610-012')
     st=pg.evaluate("JSON.parse(sessionStorage.getItem('micego_admin_state_v1')).rfps.filter(r=>r.id=='MG-2610-012')[0].invitations.map(i=>i.sel)")
@@ -161,9 +161,9 @@ with sync_playwright() as p:
     # 013 lost path (fresh state)
     pg.click('#resetLink'); pg.wait_for_load_state(); pg.wait_for_timeout(200)
     pg.goto(BASE+'rfp.html?id=MG-2610-013'); pg.wait_for_timeout(100)
-    ok('013 collecting R2 0 quotes','취합중' in pg.inner_text('.dh .chip') and '라운드 2' in pg.inner_text('.dh'))
+    ok('013 collecting R2 0 quotes','견적 정리 중' in pg.inner_text('.dh .chip') and '라운드 2' in pg.inner_text('.dh'))
     ok('013 buttons incl lost',btns(pg)==SPEC['collecting'],btns(pg))
-    ok('013 callout R2 wording','미성사(으)로 닫고 오거나이저에게 사유를 알리세요' in pg.inner_text('#zeroBox') and '새 라운드' not in pg.inner_text('#zeroBox'))
+    ok('013 callout R2 wording','미성사로 닫고 요청자에게 사유를 알리세요' in pg.inner_text('#zeroBox') and '새 라운드' not in pg.inner_text('#zeroBox'))
     pg.click('[data-to=lost]'); pg.wait_for_timeout(100)
     ok('013 lost dialog preselected',pg.eval_on_selector('#dlgReason','e=>e.value')=='두 차례 요청에도 제안 없음')
     pg.click('.dlg [data-x=ok]'); pg.wait_for_timeout(100)
@@ -172,11 +172,11 @@ with sync_playwright() as p:
     # 014 has quotes and round 1 -> guard
     pg.goto(BASE+'rfp.html?id=MG-2610-014'); pg.click('[data-to=lost]'); pg.wait_for_timeout(100)
     ok('014 lost guard toast',"견적 없이 두 번째 라운드까지 간 경우에만 미성사로 닫습니다" in pg.inner_text('#toasts') and pg.locator('.dlg').count()==0)
-    ok('014 still collecting','취합중' in pg.inner_text('.dh .chip'))
+    ok('014 still collecting','견적 정리 중' in pg.inner_text('.dh .chip'))
     ok('014 ghint shown','먼저 \'조건 변경 → 새 라운드\'' in pg.inner_text('#dside') or '조건 변경 → 새 라운드' in pg.inner_text('#dside'))
     # round-1 zero-quote callout wording via state edit
     pg.evaluate("()=>{const S=JSON.parse(sessionStorage.getItem('micego_admin_state_v1'));const r=S.rfps.find(x=>x.id=='MG-2610-013');r.state='collecting';r.round=1;r.invitations=r.invitations.filter(i=>i.round==1);sessionStorage.setItem('micego_admin_state_v1',JSON.stringify(S));}")
-    pg.goto(BASE+'rfp.html?id=MG-2610-013'); ok('R1 zero callout new-round wording','조건 변경 → 새 라운드' in pg.inner_text('#zeroBox') and '미성사(으)로 닫고' not in pg.inner_text('#zeroBox'))
+    pg.goto(BASE+'rfp.html?id=MG-2610-013'); ok('R1 zero callout new-round wording','조건 변경 → 새 라운드' in pg.inner_text('#zeroBox') and '미성사로 닫고' not in pg.inner_text('#zeroBox'))
     pg.click('[data-to=lost]'); pg.wait_for_timeout(100); ok('R1 zero lost blocked','두 번째 라운드까지' in pg.inner_text('#toasts'))
     pg.click('#resetLink'); pg.wait_for_load_state(); pg.wait_for_timeout(200)
     # open card 017 wording
@@ -201,7 +201,7 @@ with sync_playwright() as p:
     ok('4 re-invite buttons',pg.locator('[data-reinvite]').count()==4,pg.locator('[data-reinvite]').count())
     pg.locator('[data-reinvite]').first.click(); pg.wait_for_timeout(100)
     ok('re-invite adds row',pg.locator('#invTable tbody tr').count()==5)
-    ok('old row 재초대됨 kept','재초대됨' in pg.inner_text('#invTable') and pg.locator('#invTable tr.hist-row').count()==1)
+    ok('old row 재초대로 대체됨 kept','재초대로 대체됨' in pg.inner_text('#invTable') and pg.locator('#invTable tr.hist-row').count()==1)
     ok('new row has new deadline','10/12(월) 12:00' in pg.inner_text('#invTable tbody tr:last-child'))
     ok('3 re-invite buttons left',pg.locator('[data-reinvite]').count()==3)
     ok('history logged','재초대' in pg.inner_text('#histTable'))

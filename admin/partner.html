@@ -77,7 +77,7 @@ A.boot('partners','파트너 상세',function(main){
   function histCard(){
     var rows=p.history.slice().sort(function(a,b){return a.t-b.t;}).map(function(h){
       var tr=h.to?(h.from?A.pchip(h.from)+' → ':'')+A.pchip(h.to):'<span class="muted">메모</span>';
-      return '<tr><td style="white-space:nowrap" class="mono">'+A.fmtDT(h.t)+'</td><td>'+esc(h.actor)+'</td><td style="white-space:nowrap">'+tr+'</td><td>'+esc(h.memo)+'</td></tr>';
+      return '<tr><td style="white-space:nowrap" class="mono">'+A.fmtDT(h.t)+'</td><td>'+esc(A.histText(h.actor))+'</td><td style="white-space:nowrap">'+tr+'</td><td>'+esc(A.histText(h.memo))+'</td></tr>';
     }).join('');
     return '<section class="card" aria-labelledby="h-hi"><h2 id="h-hi">이력</h2><div class="tbl-wrap"><table id="histTable"><thead><tr><th>시각</th><th>주체</th><th>상태</th><th>사유 · 메모</th></tr></thead><tbody>'+rows+'</tbody></table></div></section>';
   }

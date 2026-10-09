@@ -18,7 +18,7 @@
    "id": "ORG_RECEIVED",
    "name": "접수 확인",
    "recipient": "org",
-   "recipient_label": "오거나이저",
+   "recipient_label": "요청자",
    "mode": "auto",
    "language": "ko",
    "trigger": "#0 접수 폼 제출 → 접수됨",
@@ -106,7 +106,7 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
@@ -134,7 +134,7 @@
     {
      "key": "TRACK_URL",
      "kr_name": "추적링크",
-     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "description": "요청자 추적 링크 전체 (이메일용)",
      "sample": "https://micego.example/ko/track.html?t=demo-2610",
      "maxLen": 90
     },
@@ -165,14 +165,14 @@
    "id": "ORG_REJECTED",
    "name": "반려 안내",
    "recipient": "org",
-   "recipient_label": "오거나이저",
+   "recipient_label": "요청자",
    "mode": "auto",
    "language": "ko",
-   "trigger": "#2 검증중 → 반려됨",
+   "trigger": "#2 요건 확인 중 → 반려",
    "transitions": [
     "2"
    ],
-   "states": "검증중 → 반려됨",
+   "states": "요건 확인 중 → 반려",
    "channels": {
     "email": true,
     "alimtalk": true,
@@ -250,7 +250,7 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
@@ -300,16 +300,16 @@
   },
   {
    "id": "ORG_BIDDING",
-   "name": "비딩중 진입",
+   "name": "견적 받는 중 진입",
    "recipient": "org",
-   "recipient_label": "오거나이저",
+   "recipient_label": "요청자",
    "mode": "auto",
    "language": "ko",
-   "trigger": "#4 오픈 → 비딩중 (초대 발송 시점)",
+   "trigger": "#4 초대 준비 → 견적 받는 중 (초대 발송 시점)",
    "transitions": [
     "4"
    ],
-   "states": "오픈 → 비딩중",
+   "states": "초대 준비 → 견적 받는 중",
    "channels": {
     "email": true,
     "alimtalk": true,
@@ -388,7 +388,7 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
@@ -430,7 +430,7 @@
     {
      "key": "TRACK_URL",
      "kr_name": "추적링크",
-     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "description": "요청자 추적 링크 전체 (이메일용)",
      "sample": "https://micego.example/ko/track.html?t=demo-2610",
      "maxLen": 90
     },
@@ -461,15 +461,15 @@
    "id": "ORG_REBID",
    "name": "새 라운드 (조건 변경)",
    "recipient": "org",
-   "recipient_label": "오거나이저",
+   "recipient_label": "요청자",
    "mode": "auto",
    "language": "ko",
-   "trigger": "#7 취합중 → 비딩중 · #9 전달됨 → 비딩중 (라운드 ≥ 2)",
+   "trigger": "#7 견적 정리 중 → 견적 받는 중 · #9 비교표 전달됨 → 견적 받는 중 (라운드 ≥ 2)",
    "transitions": [
     "7",
     "9"
    ],
-   "states": "취합중·전달됨 → 비딩중 (라운드 2 이상)",
+   "states": "견적 정리 중·비교표 전달됨 → 견적 받는 중 (라운드 2 이상)",
    "channels": {
     "email": true,
     "alimtalk": true,
@@ -548,7 +548,7 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
@@ -583,7 +583,7 @@
     {
      "key": "TRACK_URL",
      "kr_name": "추적링크",
-     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "description": "요청자 추적 링크 전체 (이메일용)",
      "sample": "https://micego.example/ko/track.html?t=demo-2610",
      "maxLen": 90
     },
@@ -612,16 +612,16 @@
   },
   {
    "id": "ORG_DELIVERED",
-   "name": "견적 도착 (전달됨)",
+   "name": "견적 도착 (비교표 전달됨)",
    "recipient": "org",
-   "recipient_label": "오거나이저",
+   "recipient_label": "요청자",
    "mode": "auto",
    "language": "ko",
-   "trigger": "#6 취합중 → 전달됨",
+   "trigger": "#6 견적 정리 중 → 비교표 전달됨",
    "transitions": [
     "6"
    ],
-   "states": "취합중 → 전달됨",
+   "states": "견적 정리 중 → 비교표 전달됨",
    "channels": {
     "email": true,
     "alimtalk": true,
@@ -698,14 +698,14 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
     {
      "key": "TRACK_URL",
      "kr_name": "추적링크",
-     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "description": "요청자 추적 링크 전체 (이메일용)",
      "sample": "https://micego.example/ko/track.html?t=demo-2610",
      "maxLen": 90
     },
@@ -736,14 +736,14 @@
    "id": "ORG_WON",
    "name": "성사 (호텔 선정·연결)",
    "recipient": "org",
-   "recipient_label": "오거나이저",
+   "recipient_label": "요청자",
    "mode": "auto",
    "language": "ko",
-   "trigger": "#10 전달됨 → 성사",
+   "trigger": "#10 비교표 전달됨 → 성사",
    "transitions": [
     "10"
    ],
-   "states": "전달됨 → 성사",
+   "states": "비교표 전달됨 → 성사",
    "channels": {
     "email": true,
     "alimtalk": true,
@@ -813,14 +813,14 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
     {
      "key": "TRACK_URL",
      "kr_name": "추적링크",
-     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "description": "요청자 추적 링크 전체 (이메일용)",
      "sample": "https://micego.example/ko/track.html?t=demo-2610",
      "maxLen": 90
     },
@@ -841,7 +841,7 @@
     {
      "key": "ORG_COMPANY",
      "kr_name": "회사명",
-     "description": "오거나이저 회사명",
+     "description": "요청자 회사명",
      "sample": "한빛투어(주)",
      "maxLen": 30
     },
@@ -858,15 +858,15 @@
    "id": "ORG_LOST",
    "name": "미성사 종료",
    "recipient": "org",
-   "recipient_label": "오거나이저",
+   "recipient_label": "요청자",
    "mode": "auto",
    "language": "ko",
-   "trigger": "#11 전달됨 → 미성사 · #8 취합중 → 미성사",
+   "trigger": "#11 비교표 전달됨 → 미성사 · #8 견적 정리 중 → 미성사",
    "transitions": [
     "11",
     "8"
    ],
-   "states": "전달됨·취합중 → 미성사",
+   "states": "비교표 전달됨·견적 정리 중 → 미성사",
    "channels": {
     "email": true,
     "alimtalk": true,
@@ -945,7 +945,7 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
@@ -980,7 +980,7 @@
     {
      "key": "TRACK_URL",
      "kr_name": "추적링크",
-     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "description": "요청자 추적 링크 전체 (이메일용)",
      "sample": "https://micego.example/ko/track.html?t=demo-2610",
      "maxLen": 90
     },
@@ -1011,14 +1011,14 @@
    "id": "ORG_CANCELLED",
    "name": "취소 확인",
    "recipient": "org",
-   "recipient_label": "오거나이저",
+   "recipient_label": "요청자",
    "mode": "auto",
    "language": "ko",
    "trigger": "#12 종료 전 어느 상태 → 취소",
    "transitions": [
     "12"
    ],
-   "states": "접수됨~전달됨 → 취소",
+   "states": "접수됨~비교표 전달됨 → 취소",
    "channels": {
     "email": true,
     "alimtalk": true,
@@ -1082,7 +1082,7 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
@@ -1110,7 +1110,7 @@
     {
      "key": "TRACK_URL",
      "kr_name": "추적링크",
-     "description": "오거나이저 추적 링크 전체 (이메일용)",
+     "description": "요청자 추적 링크 전체 (이메일용)",
      "sample": "https://micego.example/ko/track.html?t=demo-2610",
      "maxLen": 90
     },
@@ -1141,12 +1141,12 @@
    "id": "ORG_PICK_OTP",
    "name": "제안 선택 인증번호 (문자)",
    "recipient": "org",
-   "recipient_label": "오거나이저",
+   "recipient_label": "요청자",
    "mode": "auto",
    "language": "ko",
    "trigger": "제안 선택 확인 (회원·비회원 모두, 요청에 등록된 휴대전화로 발송) · 공유 링크로는 발송되지 않음",
    "transitions": [],
-   "states": "전달됨 (선택 확인 단계)",
+   "states": "비교표 전달됨 (선택 확인 단계)",
    "channels": {
     "email": false,
     "alimtalk": false,
@@ -1186,7 +1186,7 @@
    "recipient_label": "호텔",
    "mode": "auto",
    "language": "en",
-   "trigger": "#4 오픈 → 비딩중 · 비딩중 추가 초대 · 재초대 (라운드 ≥ 2)",
+   "trigger": "#4 초대 준비 → 견적 받는 중 · 견적 받는 중 추가 초대 · 재초대 (라운드 ≥ 2)",
    "transitions": [
     "4",
     "7",
@@ -1343,7 +1343,7 @@
    "language": "en",
    "trigger": "마감 24시간 전 · 미제출·미거절 초대 (cron 1분)",
    "transitions": [],
-   "states": "비딩중 · 초대 invited/viewed",
+   "states": "견적 받는 중 · 초대 invited/viewed",
    "channels": {
     "email": true,
     "alimtalk": false,
@@ -1435,7 +1435,7 @@
    "language": "en",
    "trigger": "호텔 견적 제출·수정 (초대 상태 submitted, 호텔 액션)",
    "transitions": [],
-   "states": "비딩중 · 초대 submitted",
+   "states": "견적 받는 중 · 초대 submitted",
    "channels": {
     "email": true,
     "alimtalk": false,
@@ -1532,11 +1532,11 @@
    "recipient_label": "호텔",
    "mode": "auto",
    "language": "en",
-   "trigger": "#10 전달됨 → 성사 (선정 호텔 1곳, 오거나이저 참조)",
+   "trigger": "#10 비교표 전달됨 → 성사 (선정 호텔 1곳, 요청자 참조)",
    "transitions": [
     "10"
    ],
-   "states": "전달됨 → 성사 · 초대 selected",
+   "states": "비교표 전달됨 → 성사 · 초대 selected",
    "channels": {
     "email": true,
     "alimtalk": false,
@@ -1571,28 +1571,28 @@
     {
      "key": "ORG_EMAIL",
      "kr_name": "이메일",
-     "description": "오거나이저 담당자 이메일",
+     "description": "요청자 담당자 이메일",
      "sample": "jieun.kim@hanbit-tour.example",
      "maxLen": 50
     },
     {
      "key": "ORG_COMPANY",
      "kr_name": "회사명",
-     "description": "오거나이저 회사명",
+     "description": "요청자 회사명",
      "sample": "Hanbit Tour Co., Ltd.",
      "maxLen": 30
     },
     {
      "key": "ORG_CONTACT_FULL",
      "kr_name": "담당자",
-     "description": "오거나이저 담당자 (호텔에 전달)",
+     "description": "요청자 담당자 (호텔에 전달)",
      "sample": "Jieun Kim (Manager)",
      "maxLen": 30
     },
     {
      "key": "ORG_PHONE",
      "kr_name": "연락처",
-     "description": "오거나이저 담당자 전화",
+     "description": "요청자 담당자 전화",
      "sample": "010-0000-0014",
      "maxLen": 16
     },
@@ -1647,11 +1647,11 @@
    "recipient_label": "호텔",
    "mode": "auto",
    "language": "en",
-   "trigger": "#10 전달됨 → 성사 (선정되지 않은 제출 호텔)",
+   "trigger": "#10 비교표 전달됨 → 성사 (선정되지 않은 제출 호텔)",
    "transitions": [
     "10"
    ],
-   "states": "전달됨 → 성사 · 초대 not_selected",
+   "states": "비교표 전달됨 → 성사 · 초대 not_selected",
    "channels": {
     "email": true,
     "alimtalk": false,
@@ -1736,7 +1736,7 @@
    "language": "en",
    "trigger": "파트너 대리 입력(partner_quote_proxy_enter) · 재발송(partner_quote_proxy_resend)",
    "transitions": [],
-   "states": "비딩중 · 초대 proxy_entered",
+   "states": "견적 받는 중 · 초대 proxy_entered",
    "channels": {
     "email": true,
     "alimtalk": false,
@@ -3202,7 +3202,7 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
@@ -3264,7 +3264,7 @@
    "recipient_label": "운영자 수동",
    "mode": "manual",
    "language": "ko",
-   "trigger": "검증중 · 필수 정보 부족·모순 (반려 전 1회 확인)",
+   "trigger": "요건 확인 중 · 필수 정보 부족·모순 (반려 전 1회 확인)",
    "transitions": [],
    "states": "",
    "channels": {
@@ -3289,7 +3289,7 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
@@ -3323,7 +3323,7 @@
    "recipient_label": "운영자 수동",
    "mode": "manual",
    "language": "ko",
-   "trigger": "검증중 · 일정 미확정 의심 (자유 기재란의 '미정·예정·대략')",
+   "trigger": "요건 확인 중 · 일정 미확정 의심 (자유 기재란의 '미정·예정·대략')",
    "transitions": [],
    "states": "",
    "channels": {
@@ -3348,7 +3348,7 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
@@ -3377,12 +3377,12 @@
   },
   {
    "id": "OPS_ORG_NOQUOTE",
-   "name": "취합중 0건 현황 + 재요청 예정일",
+   "name": "견적 정리 중 0건 현황 + 재요청 예정일",
    "recipient": "ops",
    "recipient_label": "운영자 수동",
    "mode": "manual",
    "language": "ko",
-   "trigger": "취합중 · 제출 견적 0건",
+   "trigger": "견적 정리 중 · 제출 견적 0건",
    "transitions": [],
    "states": "",
    "channels": {
@@ -3407,7 +3407,7 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
@@ -3441,7 +3441,7 @@
    "recipient_label": "운영자 수동",
    "mode": "manual",
    "language": "ko",
-   "trigger": "전달됨 · 선택 회신 없음 / 유효기한 임박 (닫기 전 1회 확인)",
+   "trigger": "비교표 전달됨 · 선택 회신 없음 / 유효기한 임박 (닫기 전 1회 확인)",
    "transitions": [],
    "states": "",
    "channels": {
@@ -3466,7 +3466,7 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
@@ -3500,7 +3500,7 @@
    "recipient_label": "운영자 수동",
    "mode": "manual",
    "language": "ko",
-   "trigger": "오픈 → 비딩중 전환 확인 창 (초대 2곳 미만)",
+   "trigger": "초대 준비 → 견적 받는 중 전환 확인 창 (초대 2곳 미만)",
    "transitions": [],
    "states": "",
    "channels": {
@@ -3525,7 +3525,7 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
@@ -3584,7 +3584,7 @@
     {
      "key": "ORG_CONTACT_NAME",
      "kr_name": "담당자명",
-     "description": "오거나이저 담당자 이름·직함",
+     "description": "요청자 담당자 이름·직함",
      "sample": "김지은 과장",
      "maxLen": 20
     },
@@ -3625,7 +3625,7 @@
    "recipient_label": "운영자 수동",
    "mode": "manual",
    "language": "en",
-   "trigger": "비딩중 · 마감 24시간 이내 제출 0건 (자동 리마인더 이후)",
+   "trigger": "견적 받는 중 · 마감 24시간 이내 제출 0건 (자동 리마인더 이후)",
    "transitions": [],
    "states": "",
    "channels": {
@@ -3712,7 +3712,7 @@
    "recipient_label": "운영자 수동",
    "mode": "manual",
    "language": "en",
-   "trigger": "취합중 · 비교표에 빈 항목·이상치 (트윈>킹, 유효기한이 행사일 전)",
+   "trigger": "견적 정리 중 · 비교표에 빈 항목·이상치 (트윈>킹, 유효기한이 행사일 전)",
    "transitions": [],
    "states": "",
    "channels": {
@@ -3771,7 +3771,7 @@
    "recipient_label": "운영자 수동",
    "mode": "manual",
    "language": "en",
-   "trigger": "#12 비딩중 취소 — SOP상 자동 알림 없음",
+   "trigger": "#12 견적 받는 중 취소 — SOP상 자동 알림 없음",
    "transitions": [],
    "states": "",
    "channels": {
@@ -3783,7 +3783,7 @@
    "text": {
     "subject": "[MICEGO] Request cancelled · REF {{RFP_ID}}",
     "body": "Hello {{HOTEL_CONTACT_NAME}},\n\nThe organizer has cancelled request {{RFP_ID}} ({{DESTINATION}}, {{EVENT_DATES}}), so we're no longer collecting quotes. Your personal link now shows the cancellation.\n\nThank you for the time you spent on it. This doesn't affect your listing, and we'll invite you to matching requests as they open.\n\nMICEGO\n{{SUPPORT_EMAIL}}",
-    "note": "취소 사유(오거나이저 사정)는 자세히 적지 않는다."
+    "note": "취소 사유(요청자 사정)는 자세히 적지 않는다."
    },
    "variables": [
     {
@@ -4056,49 +4056,49 @@
  "console_template_map": [
   {
    "console_name": "접수 확인",
-   "recipient": "오거나이저",
+   "recipient": "요청자",
    "new_ids": "ORG_RECEIVED",
    "note": "알림톡·LMS 추가"
   },
   {
    "console_name": "반려",
-   "recipient": "오거나이저",
+   "recipient": "요청자",
    "new_ids": "ORG_REJECTED",
    "note": "사유 3종 변수화, 알림톡·LMS 추가"
   },
   {
-   "console_name": "(신규) 비딩중 진입",
-   "recipient": "오거나이저",
+   "console_name": "(신규) 견적 받는 중 진입",
+   "recipient": "요청자",
    "new_ids": "ORG_BIDDING",
    "note": "콘솔 목록에 없던 알림. 추가 필요"
   },
   {
    "console_name": "(신규) 새 라운드",
-   "recipient": "오거나이저",
+   "recipient": "요청자",
    "new_ids": "ORG_REBID",
    "note": "콘솔 목록에 없던 알림. 추가 필요"
   },
   {
    "console_name": "견적 도착",
-   "recipient": "오거나이저",
+   "recipient": "요청자",
    "new_ids": "ORG_DELIVERED",
    "note": "알림톡(강조표기)·LMS 추가"
   },
   {
    "console_name": "(신규) 성사 확인",
-   "recipient": "오거나이저",
+   "recipient": "요청자",
    "new_ids": "ORG_WON",
    "note": "연결 메일 참조 수신 + 알림톡. 콘솔 목록에 없던 알림"
   },
   {
    "console_name": "(신규) 미성사 종료",
-   "recipient": "오거나이저",
+   "recipient": "요청자",
    "new_ids": "ORG_LOST",
    "note": "콘솔 목록에 없던 알림. 추가 필요"
   },
   {
    "console_name": "(신규) 취소 확인",
-   "recipient": "오거나이저",
+   "recipient": "요청자",
    "new_ids": "ORG_CANCELLED",
    "note": "콘솔 목록에 없던 알림. 추가 필요"
   },
@@ -4128,7 +4128,7 @@
   },
   {
    "console_name": "선정 연결 메일",
-   "recipient": "선정 호텔 (오거나이저 참조)",
+   "recipient": "선정 호텔 (요청자 참조)",
    "new_ids": "HTL_SELECTED_CONNECT",
    "note": "선정 결과와 연결 메일을 한 통으로 통합"
   },
@@ -4170,7 +4170,7 @@
   },
   {
    "console_name": "(신규) 제안 선택 인증번호",
-   "recipient": "오거나이저 (회원·비회원)",
+   "recipient": "요청자 (회원·비회원)",
    "new_ids": "ORG_PICK_OTP",
    "note": "문자(SMS) 전용, 알림톡 미사용"
   },
@@ -4216,7 +4216,7 @@
   "도메인(micego.example)과 발신 주소(FROM_ADDRESS), 문의 메일(SUPPORT_EMAIL)은 미정입니다. 모든 링크·주소는 변수이며 도메인이 정해지면 BASE_URL 하나만 바꿔 다시 생성합니다.",
   "이메일 발송 도구는 Resend(SOP v2) 기준입니다. 파트너 신청번호(PARTNER_ID) 형식(PT-YYMM-NNN)과 제목의 REF 표기는 잠정안입니다.",
   "상태전이표 §7 알림 트리거표에는 아직 ORG_BIDDING, ORG_REBID, ORG_WON, ORG_LOST, ORG_CANCELLED, HTL_QUOTE_RECEIVED, PTN_APPLIED, PTN_REINSTATED 행이 없습니다. 이 표를 기준으로 갱신이 필요합니다.",
-  "HTL_SELECTED_CONNECT는 수신 호텔에 오거나이저 회사명·연락처를 담습니다(약관 제7조). 수수료 관련 문구는 넣지 않았습니다.",
+  "HTL_SELECTED_CONNECT는 수신 호텔에 요청자 회사명·연락처를 담습니다(약관 제7조). 수수료 관련 문구는 넣지 않았습니다.",
   "ORG_* 메일에 회원이면 MY_URL 링크 추가(조건부 변수) — 백엔드 템플릿 엔진 결정 후.",
   "문자(SMS) 발송: 국내 SMS 대행사와 발신번호 사전 등록이 필요하며 아직 정해지지 않았습니다(설정 > 전제 조건). 90byte를 넘으면 LMS로 분류되어 요금과 표시가 달라지므로 문구는 변수 최대 길이 기준으로 90byte 이내로 썼습니다. 통신사가 붙이는 발신 표기의 바이트 포함 여부는 대행사 확인이 필요합니다.",
   "인증번호(ORG_PICK_OTP, ACC_SMS_OTP)를 알림톡이 아닌 문자로만 보내는 결정은 검수 소요 기간과 카카오톡 미사용자 대체 발송 지연을 고려한 것입니다. 인증 문자가 정보성으로 분류되는지는 대행사 확인이 필요합니다.",

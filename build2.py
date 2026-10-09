@@ -1265,7 +1265,7 @@ TRACK_JS = TERMINAL_JS([x for x in TRACK_STATES if x != 'loading']) + r'''
       });
     });
   })();
-  // D-47: 오거나이저 자체 취소(호텔 발송 전). 확인 상자 + 사유 선택 → cancel_rfp
+  // D-47: 요청자 자체 취소(호텔 발송 전). 확인 상자 + 사유 선택 → cancel_rfp
   (function(){
     var on = false; try{ on = !!(window.MG && MG.mode==='api' && !MG.preview); }catch(e){}
     if(!on) return;

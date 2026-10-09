@@ -71,7 +71,7 @@
 
 | 테이블명 | 스키마 | 핵심 컬럼(타입) | 용도 |
 |---|---|---|---|
-| `members` | public | id(uuid pk), state(member_state), name/company/org_type/email(citext)/phone, consents(jsonb), mkt_email/mkt_sms(bool) | 회원(오거나이저) 계정. `members_email_uk`(withdrawn 제외 lower(email) 유니크), `members_phone_uk`(active 상태만 유니크) |
+| `members` | public | id(uuid pk), state(member_state), name/company/org_type/email(citext)/phone, consents(jsonb), mkt_email/mkt_sms(bool) | 회원(요청자) 계정. `members_email_uk`(withdrawn 제외 lower(email) 유니크), `members_phone_uk`(active 상태만 유니크) |
 | `member_access_log` | public | member_id, at, ip(inet), ua, ok(bool) | 회원 접근(로그인 등) 로그 |
 | `login_attempts` | public | email_norm(citext), at, ip, ok | 로그인 시도 기록(잠금 판정용) |
 | `signup_tickets` | public | ticket(pk), member_id, email, expires_at | 가입 진행 중 임시 티켓 |
@@ -115,14 +115,14 @@
 | `private.add_business_days(from_ts, n)` | from_ts 다음날부터 n번째 영업일 18:00 |
 | `private.due(start_ts, n)` | SLA 마감 계산 — 기산점이 영업일 18시 이전이면 그날을 1일째로 침 |
 | `private.next_ref(prefix)` | REF 번호 채번(prefix-yymm-nnn) |
-| `private.track_slug(state, round)` | 오거나이저 노출용 상태 라벨 (open→verifying, bidding 2라운드+→rebid) |
+| `private.track_slug(state, round)` | 요청자 노출용 상태 라벨 (open→verifying, bidding 2라운드+→rebid) |
 | `private.rl_hit(bucket, key, limit, window_s)` | 레이트리밋 히트 카운트 + 한도 체크 |
 | `private.enqueue(template_id, idem_key, target, vars, scheduled_at)` | `notification_log`에 알림 적재(idempotent) |
 | `private.allowed_actions(state)` | RFP 상태별 허용 액션 목록 |
 | `private.current_invitations(rfp_id, round)` | 해당 라운드의 현재(재초대 제외) 초대 목록 |
 | `private.rfp_vars_common(r)` | RFP 공통 알림 변수(jsonb) 조립 |
 | `private.finalize_won(...)` | 성사 처리 공통 로직 — selections insert, 낙점/미선정 초대 갱신, HTL_SELECTED_CONNECT/HTL_NOT_SELECTED/ORG_WON enqueue |
-| `private.pick_and_win(rfp_id, label, otp_id, phone_masked)` | 오거나이저 OTP 선택 확정 → `finalize_won` 위임 |
+| `private.pick_and_win(rfp_id, label, otp_id, phone_masked)` | 요청자 OTP 선택 확정 → `finalize_won` 위임 |
 | `private.rfp_transition(rfp_id, action, actor, operator_id, reason, note, memo)` | RFP 상태머신 본체 — 가드 체크 + 상태 갱신 + 이력 + 알림 enqueue |
 | `private.system_tick()` | 주기 배치: bidding→collecting 자동전이, 마감24h전 리마인더, 공유링크30일만료, 가입미완료72h파기, 로그정리, 보관기한 경과 org_snapshot null화 |
 

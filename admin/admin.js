@@ -1,11 +1,11 @@
 /* MICEGO 운영 콘솔 공용 스크립트: 세션 가드, 상태 머신, SLA 계산, 렌더 헬퍼, 토스트
  *
  * SLA 규칙 (SOP v2 + 데모 시계 기준)
- *  - 기산점: 검증중 전이 시각. 기산일이 영업일이고 18:00 이전이면 그날이 1일째, 아니면 다음 영업일이 1일째.
+ *  - 기산점: 요건 확인 중 전이 시각. 기산일이 영업일이고 18:00 이전이면 그날이 1일째, 아니면 다음 영업일이 1일째.
  *    기한 = 3번째 영업일 18:00 KST. 영업일 = 주말·한국 공휴일 제외.
  *  - 적색: 기한 경과(초과). 황색: 기한이 "다음 영업일 18:00 이내"(1영업일 이내) 또는 24시간 이내.
  *    (데모 시각 10/08(목) 19:30 은 다음 날이 공휴일+주말이라 24시간 기준만으로는 황색이 나올 수 없어서 영업일 기준을 함께 씁니다.)
- *  - 표시 대상: 검증중, 오픈. SLA는 오픈에 도달하면 충족입니다(지표는 그대로). 오픈에서는 같은 기한을 "초대 기한"으로 부르며 배지에 SLA라는 말을 쓰지 않습니다.
+ *  - 표시 대상: 요건 확인 중, 초대 준비. SLA는 초대 준비에 도달하면 충족입니다(지표는 그대로). 초대 준비에서는 같은 기한을 "초대 기한"으로 부르며 배지에 SLA라는 말을 쓰지 않습니다.
  */
 (function () {
   'use strict';
@@ -39,16 +39,18 @@
   function num(n) { return (n == null || n === '') ? '—' : Number(n).toLocaleString('en-US'); }
   function hoursText(h) { h = Math.abs(h); return h >= 48 ? Math.floor(h / 24) + '일' : (Math.round(h * 10) / 10) + '시간'; }
   A.fmtDT = fmtDT; A.fmtD = fmtD; A.fmtDay = fmtDay; A.toInput = toInput; A.fromInput = fromInput; A.esc = esc; A.num = num; A.hoursText = hoursText; A.parts = parts;
+  /* DB에 저장된 이력 문구(행위자·메모)의 옛 용어 '오거나이저'를 표시할 때 '요청자'로 바꾼다 */
+  A.histText = function (x) { return String(x == null ? '' : x).replace(/오거나이저/g, '요청자'); };
 
   /* ---------- 상태 정의 ---------- */
   var STATES = A.STATES = {
-    received: '접수됨', verifying: '검증중', rejected: '반려됨', open: '오픈', bidding: '비딩중', collecting: '취합중',
-    delivered: '전달됨', won: '성사', lost: '미성사', cancelled: '취소'
+    received: '접수됨', verifying: '요건 확인 중', rejected: '반려', open: '초대 준비', bidding: '견적 받는 중', collecting: '견적 정리 중',
+    delivered: '비교표 전달됨', won: '성사', lost: '미성사', cancelled: '취소됨'
   };
   A.PIPELINE = ['received', 'verifying', 'open', 'bidding', 'collecting', 'delivered'];
   A.TERMINAL = ['won', 'lost', 'rejected', 'cancelled'];
-  A.INV = { invited: '초대', viewed: '열람', submitted: '제출', declined: '거절', expired: '마감', reinvited: '재초대됨', proxy_entered: '대리 입력·확인 대기', hotel_confirmed: '호텔 확인', proxy_disputed: '호텔 이의', proxy_expired: '확인 기한 경과' };
-  /* 허용 전이 (action 이름 → 결과 상태). rebid 는 비딩중으로 가며 라운드+1 */
+  A.INV = { invited: '초대됨', viewed: '열람함', submitted: '견적 제출', declined: '견적 거절', expired: '기한 지남', reinvited: '재초대로 대체됨', proxy_entered: '대리 입력·호텔 확인 대기', hotel_confirmed: '호텔 확인 완료', proxy_disputed: '호텔 이의', proxy_expired: '호텔 확인 기한 지남' };
+  /* 허용 전이 (action 이름 → 결과 상태). rebid 는 견적 받는 중으로 가며 라운드+1 */
   var ALLOWED = A.ALLOWED = {
     received: ['verifying', 'cancelled'],
     verifying: ['rejected', 'open', 'cancelled'],
@@ -59,16 +61,16 @@
     won: [], lost: [], rejected: [], cancelled: []
   };
   var BTN = {
-    verifying: '검증중(으)로', rejected: '반려됨(으)로', open: '오픈(으)로', bidding: '비딩중(으)로', collecting: '취합중(으)로',
-    delivered: '전달됨(으)로', won: '성사(으)로', lost: '미성사(으)로', rebid: '조건 변경 → 새 라운드', cancelled: '취소'
+    verifying: '요건 확인 시작', rejected: '반려', open: '초대 준비로', bidding: '견적 받기 시작', collecting: '견적 정리 시작',
+    delivered: '비교표 전달', won: '성사로 닫기', lost: '미성사로 닫기', rebid: '조건 변경 → 새 라운드', cancelled: '요청 취소'
   };
   var HINTS = {
-    received: '받은 당일 검증중으로 넘깁니다. 이 버튼이 SLA 기산점이므로 내용을 보기 전에 먼저 누르세요.',
-    verifying: '확인할 것: 해외 행사인지 · 시작일 확정 · 필수 정보(유형·목적지·인원·객실 수·볼룸) · 인원/객실 모순. 그다음 익명화를 검토하고 오픈합니다. 국내 행사는 반려(정책 2).',
-    open: '마감일시를 정하고 승인 파트너 3–5곳을 초대한 뒤 비딩중으로 넘깁니다. 2곳 미만이면 오거나이저에게 먼저 알립니다.',
+    received: '받은 당일 요건 확인 중으로 넘깁니다. 이 버튼이 SLA 기산점이므로 내용을 보기 전에 먼저 누르세요.',
+    verifying: '확인할 것: 해외 행사인지 · 시작일 확정 · 필수 정보(유형·목적지·인원·객실 수·볼룸) · 인원/객실 모순. 그다음 익명화를 검토하고 초대 준비로 넘깁니다. 국내 행사는 반려(정책 2).',
+    open: '마감일시를 정하고 승인 파트너 3–5곳을 초대한 뒤 견적 받는 중으로 넘깁니다. 2곳 미만이면 요청자에게 먼저 알립니다.',
     bidding: '초대 메일과 마감 24시간 전 리마인더는 시스템이 보냅니다. 마감 24시간 이내인데 제출이 0건이면 미응답 호텔에 팔로업 메일을 보내세요.',
     collecting: '비교표에서 금액·통화·유효기한·취소규정을 확인합니다. 통화가 섞여 있으면 USD 참고(트윈)와 기준일을 먼저 입력하고 당일 전달합니다. 제출이 0건이고 두 번째 라운드까지 왔다면 미성사로 닫습니다.',
-    delivered: '오거나이저가 이메일로 선택을 알려오면 호텔에 선정/미선정을 표시합니다. 선정 호텔을 정확히 1곳 표시하고 성사로 닫으면 연결 메일이 자동으로 나갑니다.',
+    delivered: '요청자가 이메일로 선택을 알려오면 호텔에 선정/미선정을 표시합니다. 선정 호텔을 정확히 1곳 표시하고 성사로 닫으면 연결 메일이 자동으로 나갑니다.',
     won: '종료된 요청입니다. 더 이상 바꿀 수 있는 상태가 없습니다.',
     lost: '종료된 요청입니다. 더 이상 바꿀 수 있는 상태가 없습니다.',
     rejected: '반려된 요청입니다. 일정이 확정되면 새 요청으로 다시 받습니다.',
@@ -188,7 +190,7 @@
   A.sla = function (r) {
     if ((r.state !== 'verifying' && r.state !== 'open') || !r.verifyingAt) return null;
     var due = slaDeadline(r.verifyingAt), rem = due - NOW, inv = r.state === 'open';
-    /* 오픈에 도달하면 SLA는 충족. 오픈에서는 같은 기한을 초대 기한으로 표시한다 */
+    /* 초대 준비에 도달하면 SLA는 충족. 초대 준비에서는 같은 기한을 초대 기한으로 표시한다 */
     var nm = inv ? '초대 기한' : 'SLA';
     if (rem <= 0) return { level: 'red', due: due, text: nm + ' 초과 ' + hoursText(rem / HOUR), okText: nm + ' ' + fmtDT(due) };
     if (due <= addBusinessDays(NOW, 1) || rem <= 24 * HOUR) return { level: 'amber', due: due, text: (inv ? '초대 기한 임박' : 'SLA 마감 임박') + ' · ' + fmtDT(due), okText: nm + ' ' + fmtDT(due) };
@@ -395,7 +397,7 @@
    * 운영자 조치는 모두 사유가 필요하고 감사 로그(memberAudit)와 발송 기록(memberLog)에 남습니다. */
   var MSTATES = A.MSTATES = { pending_email: '이메일 인증 대기', pending_phone: '휴대전화 인증 대기', active: '정상', locked: '잠김', suspended: '이용 정지', withdrawn: '탈퇴' };
   A.MFLOW = { pending_email: ['pending_phone'], pending_phone: ['active'], active: ['locked', 'suspended', 'withdrawn'], locked: ['active'], suspended: ['active'], withdrawn: [] };
-  /* 탈퇴를 막는 요청 상태 (rebid 는 콘솔 상태 값이 아니라 비딩중 라운드 2 이상을 뜻하는 과거 요청 요약 값) */
+  /* 탈퇴를 막는 요청 상태 (rebid 는 콘솔 상태 값이 아니라 견적 받는 중 라운드 2 이상을 뜻하는 과거 요청 요약 값) */
   var MBLOCK = A.MBLOCK = ['bidding', 'rebid', 'collecting', 'delivered'];
   var MAUTOCANCEL = A.MAUTOCANCEL = ['received', 'verifying', 'open'];
   var PURGE_MS = 72 * HOUR;
@@ -517,7 +519,7 @@
     if (action === 'withdraw') {
       var auto = A.memberAutoCancel(m);
       var body = '<p class="note-box">회원이 고객센터로 직접 요청한 경우에만 처리합니다. 처리하면 이메일·휴대전화는 즉시 파기되고 추적·공유 링크는 모두 중지됩니다. 이미 선정 호텔에 전달된 정보는 회수되지 않습니다.</p>' +
-        (auto.length ? '<p class="small">접수·검증·오픈 상태의 요청 ' + auto.length + '건(' + esc(auto.map(function (x) { return x.id; }).join(', ')) + ')은 자동으로 취소됩니다.</p>' : '') +
+        (auto.length ? '<p class="small">접수됨·요건 확인 중·초대 준비 상태의 요청 ' + auto.length + '건(' + esc(auto.map(function (x) { return x.id; }).join(', ')) + ')은 자동으로 취소됩니다.</p>' : '') +
         '<label class="lbl" for="dlgReason">사유</label><select id="dlgReason" class="inp"><option value="">사유를 선택하세요</option>' + def.reasons.map(function (x) { return '<option>' + esc(x) + '</option>'; }).join('') + '</select>' +
         '<label class="lbl" for="dlgNote">메모 (선택, 기타는 필수)</label><textarea id="dlgNote" class="inp" rows="2"></textarea>' +
         '<label class="chk-row"><input type="checkbox" id="dlgOwn"> 본인 요청 확인 (회원 본인임을 확인했습니다)</label>';
@@ -620,7 +622,7 @@
       var miss = [];
       if (!r.deadline) miss.push('마감일시를 설정');
       if (A.curInv(r).length < 1) miss.push('호텔을 1곳 이상 초대');
-      if (miss.length) return '비딩중으로 넘기려면 ' + miss.join('하고 ') + '해야 합니다';
+      if (miss.length) return '견적 받는 중으로 넘기려면 ' + miss.join('하고 ') + '해야 합니다';
     }
     if (action === 'delivered') {
       if (A.submittedCount(r) < 1) return '제출된 견적이 없어 전달할 수 없습니다';
@@ -638,7 +640,7 @@
 
   var REJECT = ['국내 행사(정책 2)', '일정 미확정', '필수 정보 부족', '기타'];
   var LOST = ['선택하지 않음', '유효기한 경과(회신 없음)', '두 차례 요청에도 제안 없음'];
-  var CANCEL = ['오거나이저 요청', '기타'];
+  var CANCEL = ['요청자 취소 요청', '기타'];
 
   function target(action) { return action === 'rebid' ? 'bidding' : action; }
   function mail(r, template, to, at, cc) {
@@ -677,7 +679,7 @@
     if (action === 'rejected' || action === 'lost' || action === 'cancelled') {
       var opts = action === 'rejected' ? REJECT : action === 'lost' ? LOST : CANCEL;
       var title = action === 'rejected' ? '반려 사유' : action === 'lost' ? '미성사 사유' : '취소 사유';
-      var extra = (action === 'cancelled' && r.state === 'bidding') ? '<p class="note-box">초대 호텔에는 자동 알림이 가지 않습니다. 이메일로 직접 알려 주세요(OPS_HTL_CANCELLED). 오거나이저에게는 ORG_CANCELLED 알림이 자동으로 나갑니다.</p>' : '';
+      var extra = (action === 'cancelled' && r.state === 'bidding') ? '<p class="note-box">초대 호텔에는 자동 알림이 가지 않습니다. 이메일로 직접 알려 주세요(OPS_HTL_CANCELLED). 요청자에게는 ORG_CANCELLED 알림이 자동으로 나갑니다.</p>' : '';
       var pre = (action === 'lost' && r.state === 'collecting') ? '두 차례 요청에도 제안 없음' : '';
       var res = await A.reasonDialog(title, opts, extra, pre);
       if (!res) return false;
@@ -685,7 +687,7 @@
       reasonVal = res.reason; noteVal = res.note;
     } else if (action === 'bidding' && r.state === 'open') {
       if (A.curInv(r).length < 2) {
-        var ok = await A.confirm('초대한 호텔이 2곳 미만입니다. 오거나이저에게 미리 알리셨나요?', '알렸습니다, 넘깁니다');
+        var ok = await A.confirm('초대한 호텔이 2곳 미만입니다. 요청자에게 미리 알리셨나요?', '알렸습니다, 넘깁니다');
         if (!ok) return false;
       }
       memo = '초대 ' + A.curInv(r).length + '곳 · 마감 ' + fmtDT(r.deadline);
@@ -699,7 +701,7 @@
       var sel = A.curInv(r).filter(function (i) { return i.sel === 'selected'; })[0];
       consent = await A.consentDialog(r, sel);
       if (!consent) return false;
-      memo = sel.hotel + ' 선정 · 연결 메일 자동 발송(오거나이저 참조) · 미선정 안내·성사 알림 자동 발송 · 동의 확인: ' + A.CONSENT_METHODS[consent.method] + ' ' + A.toInput(Date.parse(consent.confirmed_at)).replace('T', ' ');
+      memo = sel.hotel + ' 선정 · 연결 메일 자동 발송(요청자 참조) · 미선정 안내·성사 알림 자동 발송 · 동의 확인: ' + A.CONSENT_METHODS[consent.method] + ' ' + A.toInput(Date.parse(consent.confirmed_at)).replace('T', ' ');
     }
     var args = { p_ref: id, p_action: action, p_reason: reasonVal, p_note: noteVal, p_memo: memo };
     if (consent) args.p_consent = consent;
@@ -732,7 +734,7 @@
     return A.persist('admin_invite', { p_ref: r.id, p_partner_codes: hotelIds }, localFn);
   };
 
-  /* 재초대: 새 마감으로 새 초대 행을 만들고 이전 행은 재초대됨으로 이력에 남긴다 */
+  /* 재초대: 새 마감으로 새 초대 행을 만들고 이전 행은 재초대로 대체됨으로 이력에 남긴다 */
   A.reinvite = function (r, invId) {
     var old = r.invitations.filter(function (i) { return i.id === invId; })[0];
     if (!old || !r.deadline) return Promise.resolve(false);
@@ -795,8 +797,8 @@
     var radios = Object.keys(A.CONSENT_METHODS).map(function (k) { return '<label class="chk"><input type="radio" name="dlgConsentMethod" value="' + k + '"> ' + esc(A.CONSENT_METHODS[k]) + '</label>'; }).join(' ');
     return dialog({
       title: '성사로 닫기 · 동의 확인 기록', ok: '기록하고 성사로 닫기',
-      body: '<p>' + esc(sel.hotel) + '을(를) 선정 호텔로 확정합니다. 나머지 호텔은 미선정 처리됩니다. 이 시점에 선정 호텔에 연결 메일(HTL_SELECTED_CONNECT, 오거나이저 참조), 제출한 나머지 호텔에 미선정 안내(HTL_NOT_SELECTED), 오거나이저에게 성사 알림톡(ORG_WON)이 자동으로 나갑니다.</p>' +
-        '<p class="muted small">오거나이저가 휴대전화 인증으로 고른 건이 아니므로, 선정 의사와 정보 제공(회사명·담당자·이메일·연락처를 선정 호텔에 전달) 동의를 어떻게 확인했는지 남겨 주세요. 이용약관 제7조 ⑧에 따라 기록하며, 성사 기록과 함께 3년 보관 후 파기합니다.</p>' +
+      body: '<p>' + esc(sel.hotel) + '을(를) 선정 호텔로 확정합니다. 나머지 호텔은 미선정 처리됩니다. 이 시점에 선정 호텔에 연결 메일(HTL_SELECTED_CONNECT, 요청자 참조), 제출한 나머지 호텔에 미선정 안내(HTL_NOT_SELECTED), 요청자에게 성사 알림톡(ORG_WON)이 자동으로 나갑니다.</p>' +
+        '<p class="muted small">요청자가 휴대전화 인증으로 고른 건이 아니므로, 선정 의사와 정보 제공(회사명·담당자·이메일·연락처를 선정 호텔에 전달) 동의를 어떻게 확인했는지 남겨 주세요. 이용약관 제7조 ⑧에 따라 기록하며, 성사 기록과 함께 3년 보관 후 파기합니다.</p>' +
         '<fieldset class="fs"><legend class="lbl">확인 방법</legend><div id="dlgConsentMethod">' + radios + '</div></fieldset>' +
         '<label class="lbl" for="dlgConsentAt">확인 일시 (KST)</label><input id="dlgConsentAt" class="inp" type="datetime-local" value="' + toInput(MGA.now()) + '">' +
         '<label class="lbl" for="dlgConsentNote">근거</label><textarea id="dlgConsentNote" class="inp" rows="3" maxlength="1000" placeholder="예: 10/07 14:20 ' + esc((r.organizer && r.organizer.name) || '담당자') + '님과 통화. 제안 ' + esc(sel.label || '') + ' 선정과 연락처 전달 동의 확인. \'확인함\'만 쓰지 말고 누구와 어떻게 확인했는지 적어 주세요."></textarea>',
@@ -902,18 +904,18 @@
   A.FILTERS = {
     'sla-red': { label: 'SLA·초대 기한 초과', fn: function (r) { var s = A.sla(r); return s && s.level === 'red'; } },
     'sla-amber': { label: 'SLA·초대 기한 임박(1영업일 이내)', fn: function (r) { var s = A.sla(r); return s && s.level === 'amber'; } },
-    'new': { label: '새 접수 · 오늘 검증중으로', fn: function (r) { return A.unchecked(r); } },
+    'new': { label: '새 접수 · 오늘 요건 확인 중으로', fn: function (r) { return A.unchecked(r); } },
     'zero24': { label: '마감 24시간 이내 · 제출 0건', fn: function (r) { return A.followup(r); } },
-    'collecting': { label: '취합중 검토', fn: function (r) { return r.state === 'collecting'; } }
+    'collecting': { label: '견적 정리 중 검토', fn: function (r) { return r.state === 'collecting'; } }
   };
   A.todo = function () {
     var rf = S.rfps, c = function (k) { return rf.filter(A.FILTERS[k].fn).length; };
     return [
-      { key: 'sla-red', title: 'SLA·초대 기한 초과', n: c('sla-red'), act: '오늘 안에 오거나이저에게 진행 상황을 회신하세요.', href: 'rfps.html?filter=sla-red' },
-      { key: 'sla-amber', title: 'SLA·초대 기한 임박 (1영업일 이내)', n: c('sla-amber'), act: '검증중(SLA)이면 오늘 오픈까지, 오픈(초대 기한)이면 오늘 초대까지 끝내세요.', href: 'rfps.html?filter=sla-amber' },
-      { key: 'new', title: '새 접수', n: c('new'), act: '받은 당일 검증중으로 넘기세요. SLA 기산점입니다.', href: 'rfps.html?filter=new' },
+      { key: 'sla-red', title: 'SLA·초대 기한 초과', n: c('sla-red'), act: '오늘 안에 요청자에게 진행 상황을 회신하세요.', href: 'rfps.html?filter=sla-red' },
+      { key: 'sla-amber', title: 'SLA·초대 기한 임박 (1영업일 이내)', n: c('sla-amber'), act: '요건 확인 중(SLA)이면 오늘 초대 준비까지, 초대 준비(초대 기한)이면 오늘 초대까지 끝내세요.', href: 'rfps.html?filter=sla-amber' },
+      { key: 'new', title: '새 접수', n: c('new'), act: '받은 당일 요건 확인 중으로 넘기세요. SLA 기산점입니다.', href: 'rfps.html?filter=new' },
       { key: 'zero24', title: '마감 24시간 이내 · 제출 0건', n: c('zero24'), act: '미응답 호텔에 전화나 개인 메일로 팔로업하세요.', href: 'rfps.html?filter=zero24' },
-      { key: 'collecting', title: '취합중 검토', n: c('collecting'), act: '비교표를 확인하고 당일 전달하세요. 통화가 섞였으면 USD 참고환산부터.', href: 'rfps.html?filter=collecting' },
+      { key: 'collecting', title: '견적 정리 중 검토', n: c('collecting'), act: '비교표를 확인하고 당일 전달하세요. 통화가 섞였으면 USD 참고환산부터.', href: 'rfps.html?filter=collecting' },
       { key: 'partner', title: '파트너 심사 지연', n: A.partnerDelayed().length, act: '5영업일이 지난 신청을 오늘 심사하세요.', href: 'partners.html?filter=delayed' },
       { key: 'failed', title: '발송 실패', n: A.failedCount(), act: '수신 주소를 확인하고 직접 메일로 대신 보내세요.', href: 'dashboard.html#failures' }
     ];

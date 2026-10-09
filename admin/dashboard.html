@@ -53,7 +53,7 @@ A.boot('dashboard','대시보드',function(main){
     hist.sort(function(a,b){return b.h.t-a.h.t;});
     var histH=hist.slice(0,8).map(function(x){
       var h=x.h,tr=h.to?(h.from?A.chip(h.from)+' → ':'')+A.chip(h.to):'<span class="muted">메모</span>';
-      return '<tr><td class="mono" style="white-space:nowrap">'+A.fmtDT(h.t)+'</td><td><a class="mono rowlink" href="rfp.html?id='+x.r.id+'">'+x.r.id+'</a></td><td>'+A.esc(h.actor)+'</td><td style="white-space:nowrap">'+tr+'</td><td>'+A.esc(h.memo)+'</td></tr>';
+      return '<tr><td class="mono" style="white-space:nowrap">'+A.fmtDT(h.t)+'</td><td><a class="mono rowlink" href="rfp.html?id='+x.r.id+'">'+x.r.id+'</a></td><td>'+A.esc(A.histText(h.actor))+'</td><td style="white-space:nowrap">'+tr+'</td><td>'+A.esc(A.histText(h.memo))+'</td></tr>';
     }).join('');
     var lp=A.linkPending().length,lk=A.lockedCount();
     var accH='<a href="members.html?filter=link" data-key="linkreq" class="'+(lp?'':'zero')+'"><span class="n">'+lp+'</span><span class="t">연결 요청 대기 '+lp+'건</span></a><a href="members.html?state=locked" data-key="locked" class="'+(lk?'':'zero')+'"><span class="n">'+lk+'</span><span class="t">잠긴 계정 '+lk+'건</span></a>';
@@ -62,7 +62,7 @@ A.boot('dashboard','대시보드',function(main){
         MICEGO_PTR.partnerSummary()+
         '<div style="margin-top:16px">'+MICEGO_PTR.interventionWidget()+'</div>'+
         '<div class="grid2" style="margin-top:16px"><section class="card" aria-labelledby="h-todo"><h2 id="h-todo">오늘 할 일</h2><p class="sub">숫자를 누르면 해당 견적만 모아 봅니다.</p><ul class="todo">'+todoH+'</ul></section>'+
-        '<section class="card" aria-labelledby="h-dist"><h2 id="h-dist">진행 중 상태 분포</h2><p class="sub">접수됨부터 전달됨까지 '+total+'건</p><div class="dist" role="img" aria-label="상태 분포">'+dist+'</div><div class="legend">'+legend+'</div></section></div>'+
+        '<section class="card" aria-labelledby="h-dist"><h2 id="h-dist">진행 중 상태 분포</h2><p class="sub">접수됨부터 비교표 전달됨까지 '+total+'건</p><div class="dist" role="img" aria-label="상태 분포">'+dist+'</div><div class="legend">'+legend+'</div></section></div>'+
         '<section class="card" style="margin-top:16px" aria-labelledby="h-h"><h2 id="h-h">최근 이력</h2><div class="tbl-wrap"><table><thead><tr><th>시각</th><th>견적</th><th>주체</th><th>상태</th><th>메모</th></tr></thead><tbody>'+histH+'</tbody></table></div></section>';
       return;
     }
@@ -70,7 +70,7 @@ A.boot('dashboard','대시보드',function(main){
       '<div class="page-h"><h1>대시보드</h1><span class="muted small sp">기준 시각 '+A.fmtDT(A.NOW)+' KST</span></div>'+
       '<div style="margin-bottom:16px">'+MICEGO_PTR.interventionWidget()+'</div>'+
       '<div class="grid2"><section class="card" aria-labelledby="h-todo"><h2 id="h-todo">오늘 할 일</h2><p class="sub">SOP 일일 루틴 순서입니다. 숫자를 누르면 해당 견적만 모아 봅니다.</p><ul class="todo">'+todoH+'</ul></section>'+
-      '<section class="card" aria-labelledby="h-dist"><h2 id="h-dist">진행 중 상태 분포</h2><p class="sub">접수됨부터 전달됨까지 '+total+'건</p><div class="dist" role="img" aria-label="상태 분포">'+dist+'</div><div class="legend">'+legend+'</div></section></div>'+
+      '<section class="card" aria-labelledby="h-dist"><h2 id="h-dist">진행 중 상태 분포</h2><p class="sub">접수됨부터 비교표 전달됨까지 '+total+'건</p><div class="dist" role="img" aria-label="상태 분포">'+dist+'</div><div class="legend">'+legend+'</div></section></div>'+
       '<section class="card" style="margin-top:16px" aria-labelledby="h-ac"><h2 id="h-ac">회원 계정</h2><p class="sub">여행사·기업 담당자 계정 현황입니다. 숫자를 누르면 해당 회원만 모아 봅니다.</p><div class="acc-sum" id="accSum">'+accH+'</div></section>'+
       '<section class="card" style="margin-top:16px" aria-labelledby="h-m"><h2 id="h-m">지난달 지표 · '+m.month+' · 예시 데이터</h2><p class="sub">접수 '+m.base+'건 기준입니다. 색만이 아니라 글자로도 충족/미달을 표시합니다.</p><div class="metrics">'+metricH+'</div></section>'+
       '<section class="card" style="margin-top:16px" id="failures" aria-labelledby="h-f"><h2 id="h-f">발송 실패 <span class="badge red">'+A.failedCount()+'건 미처리</span></h2><p class="sub">notification.failed 목록입니다. 주소 오타를 확인하고 직접 메일을 보낸 뒤 표시하세요.</p><p class="small" style="margin:-6px 0 12px"><a href="settings.html#notify" id="allLog">전체 발송 로그 →</a></p><div class="tbl-wrap"><table><thead><tr><th>수신 주소</th><th>템플릿</th><th>시각</th><th>처리</th></tr></thead><tbody>'+failH+'</tbody></table></div></section>'+

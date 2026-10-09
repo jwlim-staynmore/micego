@@ -34,7 +34,7 @@ window.MICEGO_PTR = (function () {
   P.HOLD = { pending: '배정 대기', region_unmapped: '지역 미매핑', multi_region: '복수 국가', no_partner: '파트너 없음', partner_ineligible: '파트너 배정 불가', partner_declined: '파트너 반려', auto_assign_off: '자동 배정 꺼짐', manual: '수동 보류', legacy: '기존 건' };
   P.ST = { pending_commission: '커미션 입력 대기', commission_submitted: '커미션 승인 대기', commission_confirmed: '커미션 확정', collected: '수금 완료', remitted: '송금 완료', completed: '완료', disputed: '분쟁', voided: '무효' };
   P.stChip = function (s) { var cls = s === 'completed' ? 'teal' : s === 'disputed' ? 'red' : s === 'voided' ? '' : 'amber'; return '<span class="badge ' + cls + '">' + (P.ST[s] || s) + '</span>'; };
-  P.INT = { unassigned_stale: '미배정 방치', partner_idle: '파트너 미착수', sla_breach: 'SLA 초과', partner_inactive: '파트너 조직 정지', proxy_disputed: '호텔 이의(대리 입력)', organizer_voc: '오거나이저 VOC', settlement_overdue: '정산 기한 초과', hotel_unreviewed_won: '미검토 호텔 선정' };
+  P.INT = { unassigned_stale: '미배정 방치', partner_idle: '파트너 미착수', sla_breach: 'SLA 초과', partner_inactive: '파트너 조직 정지', proxy_disputed: '호텔 이의(대리 입력)', organizer_voc: '요청자 VOC', settlement_overdue: '정산 기한 초과', hotel_unreviewed_won: '미검토 호텔 선정' };
   P.fmtMoney = function (n, ccy) { if (n == null || n === '') return '—'; var d = (ccy === 'KRW' || ccy === 'VND' || ccy === 'JPY' || ccy === 'IDR') ? 0 : 2; return (ccy ? ccy + ' ' : '') + Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); };
   P.org = function (code) { return (A.data().partnerOrgs || []).filter(function (o) { return o.code === code; })[0] || null; };
 
@@ -129,12 +129,12 @@ window.MICEGO_PTR = (function () {
     return '<section class="card" aria-labelledby="h-asg"><h2 id="h-asg">지역 파트너 · 위임</h2>' + lines + (btns ? '<div class="memo-add" style="gap:6px;flex-wrap:wrap">' + btns + '</div>' : '') + (hist ? '<ul style="margin:8px 0 0;padding-left:16px">' + hist + '</ul>' : '') + '</section>';
   };
 
-  /* 파트너용 오거나이저 카드: 마스킹 + 열람 버튼(로그) */
+  /* 파트너용 요청자 카드: 마스킹 + 열람 버튼(로그) */
   P.identityCard = function (r) {
     var o = r.organizer, shown = r._identity;
     if (!o || !o.masked) return null;
-    if (shown) return '<section class="card" aria-labelledby="h-org"><h2 id="h-org">오거나이저 정보 <span class="badge red">호텔에 보이지 않음</span> <span class="badge amber">열람 기록됨</span></h2><dl class="kv"><dt>회사명</dt><dd>' + esc(shown.company) + '</dd><dt>담당자</dt><dd>' + esc(shown.contact) + '</dd><dt>이메일</dt><dd>' + esc(shown.email) + '</dd><dt>전화</dt><dd>' + esc(shown.phone) + (shown.phoneFull ? '' : ' <button type="button" class="btn sm" data-ptr="reveal-phone">번호 전체 보기</button>') + '</dd><dt>예산</dt><dd>' + esc(shown.budget) + '</dd><dt>원문 메모</dt><dd>' + esc(r.rawMemo) + '</dd></dl></section>';
-    return '<section class="card" aria-labelledby="h-org"><h2 id="h-org">오거나이저 정보 <span class="badge red">호텔에 보이지 않음</span></h2><p class="sub">배정된 파트너는 요건 확인·연결을 위해 오거나이저 정보를 볼 수 있습니다. 열람은 기록되며 견적 성사 목적 외 사용은 계약으로 금지됩니다.</p><dl class="kv"><dt>회사명</dt><dd>' + esc(o.company || '—') + '</dd><dt>예산</dt><dd>' + esc(o.budget) + '</dd></dl><div class="memo-add"><button type="button" class="btn primary" data-ptr="reveal">오거나이저 정보 보기</button></div></section>';
+    if (shown) return '<section class="card" aria-labelledby="h-org"><h2 id="h-org">요청자 정보 <span class="badge red">호텔에 보이지 않음</span> <span class="badge amber">열람 기록됨</span></h2><dl class="kv"><dt>회사명</dt><dd>' + esc(shown.company) + '</dd><dt>담당자</dt><dd>' + esc(shown.contact) + '</dd><dt>이메일</dt><dd>' + esc(shown.email) + '</dd><dt>전화</dt><dd>' + esc(shown.phone) + (shown.phoneFull ? '' : ' <button type="button" class="btn sm" data-ptr="reveal-phone">번호 전체 보기</button>') + '</dd><dt>예산</dt><dd>' + esc(shown.budget) + '</dd><dt>원문 메모</dt><dd>' + esc(r.rawMemo) + '</dd></dl></section>';
+    return '<section class="card" aria-labelledby="h-org"><h2 id="h-org">요청자 정보 <span class="badge red">호텔에 보이지 않음</span></h2><p class="sub">배정된 파트너는 요건 확인·연결을 위해 요청자 정보를 볼 수 있습니다. 열람은 기록되며 견적 성사 목적 외 사용은 계약으로 금지됩니다.</p><dl class="kv"><dt>회사명</dt><dd>' + esc(o.company || '—') + '</dd><dt>예산</dt><dd>' + esc(o.budget) + '</dd></dl><div class="memo-add"><button type="button" class="btn primary" data-ptr="reveal">요청자 정보 보기</button></div></section>';
   };
 
   /* 초대 행에 붙는 대리 입력 버튼/상태 */
@@ -335,7 +335,7 @@ window.MICEGO_PTR = (function () {
   P.partnerSummary = function () {
     var S = A.data(), me = A.me || {}, rf = S.rfps, act = rf.filter(function (r) { return A.TERMINAL.indexOf(r.state) < 0; });
     var st = (S.settlements || []).filter(function (s) { return ['pending_commission', 'commission_confirmed', 'collected'].indexOf(s.status) >= 0; });
-    return '<section class="card"><h2>' + esc(me.partnerName || '내 조직') + ' · 담당 지역 ' + esc((me.regions || []).join(', ')) + '</h2><dl class="kv"><dt>진행 중 요청</dt><dd>' + act.length + '건 (접수 ' + act.filter(function (r) { return r.state === 'received'; }).length + ' · 검증 ' + act.filter(function (r) { return r.state === 'verifying' || r.state === 'open'; }).length + ' · 비딩 ' + act.filter(function (r) { return r.state === 'bidding' || r.state === 'collecting'; }).length + ' · 전달 ' + act.filter(function (r) { return r.state === 'delivered'; }).length + ')</dd><dt>본사 인계</dt><dd>' + rf.filter(function (r) { return r.delegation === 'taken_over'; }).length + '건</dd><dt>정산 처리 필요</dt><dd>' + st.length + '건 <a href="settlements.html">정산으로</a></dd><dt>배분율</dt><dd>파트너 ' + (me.sharePct || 70) + ' : MICEGO ' + (100 - (me.sharePct || 70)) + '</dd></dl></section>';
+    return '<section class="card"><h2>' + esc(me.partnerName || '내 조직') + ' · 담당 지역 ' + esc((me.regions || []).join(', ')) + '</h2><dl class="kv"><dt>진행 중 요청</dt><dd>' + act.length + '건 (접수 ' + act.filter(function (r) { return r.state === 'received'; }).length + ' · 요건 확인·초대 준비 ' + act.filter(function (r) { return r.state === 'verifying' || r.state === 'open'; }).length + ' · 견적 받는·정리 중 ' + act.filter(function (r) { return r.state === 'bidding' || r.state === 'collecting'; }).length + ' · 비교표 전달됨 ' + act.filter(function (r) { return r.state === 'delivered'; }).length + ')</dd><dt>본사 인계</dt><dd>' + rf.filter(function (r) { return r.delegation === 'taken_over'; }).length + '건</dd><dt>정산 처리 필요</dt><dd>' + st.length + '건 <a href="settlements.html">정산으로</a></dd><dt>배분율</dt><dd>파트너 ' + (me.sharePct || 70) + ' : MICEGO ' + (100 - (me.sharePct || 70)) + '</dd></dl></section>';
   };
 
   /* ---------- 호텔 파트너: 지역 파트너의 호텔 등록 + 본사 사후 검토 ---------- */

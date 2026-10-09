@@ -43,7 +43,7 @@ export async function handle(req: Request, deps: Deps): Promise<unknown> {
       [r.id, proposal, otpId, phoneMasked, deps.now().toISOString()],
     );
     await deps.db.query(
-      `insert into rfp_history (rfp_id, at, actor, actor_label, memo) values ($1,$2,'organizer','오거나이저',$3)`,
+      `insert into rfp_history (rfp_id, at, actor, actor_label, memo) values ($1,$2,'organizer','요청자',$3)`,
       [r.id, deps.now().toISOString(), `제안 ${proposal} 선택 (휴대전화 인증, 운영자 확인 대기)`],
     );
     return { state: "delivered", pending: true };

@@ -34,8 +34,8 @@ A.boot('settings','설정',function(main){
   /* ---------- 1. 영업일 · 공휴일 ---------- */
   function ex(){
     var a=T('2027-01-04T10:00');
-    return '<ul class="rules"><li><b>오늘 접수 기준</b><span id="ex1">오늘 '+A.fmtDT(A.NOW)+'에 검증중으로 넘기면 SLA 기한은 <b>'+A.fmtDT(A.slaDeadline(A.NOW))+'</b> 입니다. (18:00 이후라 다음 영업일이 1일째)</span></li>'+
-      '<li><b>내년 예시</b><span id="ex2">2027-01-04(월) 10:00에 검증중으로 넘기면 SLA 기한은 <b>2027-'+A.fmtDT(A.slaDeadline(a)).slice(0,5).replace('/','-')+A.fmtDT(A.slaDeadline(a)).slice(5)+'</b>, 같은 날 신청받은 파트너 심사 기한은 <b>2027-'+A.fmtDT(A.partnerDue(a)).slice(0,5).replace('/','-')+A.fmtDT(A.partnerDue(a)).slice(5)+'</b> 입니다.</span></li></ul>';
+    return '<ul class="rules"><li><b>오늘 접수 기준</b><span id="ex1">오늘 '+A.fmtDT(A.NOW)+'에 요건 확인 중으로 넘기면 SLA 기한은 <b>'+A.fmtDT(A.slaDeadline(A.NOW))+'</b> 입니다. (18:00 이후라 다음 영업일이 1일째)</span></li>'+
+      '<li><b>내년 예시</b><span id="ex2">2027-01-04(월) 10:00에 요건 확인 중으로 넘기면 SLA 기한은 <b>2027-'+A.fmtDT(A.slaDeadline(a)).slice(0,5).replace('/','-')+A.fmtDT(A.slaDeadline(a)).slice(5)+'</b>, 같은 날 신청받은 파트너 심사 기한은 <b>2027-'+A.fmtDT(A.partnerDue(a)).slice(0,5).replace('/','-')+A.fmtDT(A.partnerDue(a)).slice(5)+'</b> 입니다.</span></li></ul>';
   }
   function holPanel(){
     var hs=S.holidays.slice().sort(function(a,b){return a.date<b.date?-1:1;});
@@ -57,15 +57,15 @@ A.boot('settings','설정',function(main){
   /* ---------- 2. 기본 규칙 ---------- */
   function rulesPanel(){
     return '<section class="card" aria-labelledby="h-ru"><h2 id="h-ru">기본 규칙 <span class="badge">읽기 전용</span></h2><p class="sub">값은 DB 함수에 있습니다. 바꾸려면 마이그레이션으로 변경합니다.</p><ul class="rules">'+
-      '<li><b>SLA</b><span>검증중으로 넘긴 시각부터 3영업일, 기한은 18:00 KST. 기산일이 영업일이고 18:00 이전이면 그날이 1일째입니다.</span></li>'+
+      '<li><b>SLA</b><span>요건 확인 중으로 넘긴 시각부터 3영업일, 기한은 18:00 KST. 기산일이 영업일이고 18:00 이전이면 그날이 1일째입니다.</span></li>'+
       '<li><b>SLA 마감 임박</b><span>SLA 기한이 다음 영업일 18:00 이내이거나 24시간 이내이면 황색 "SLA 마감 임박"으로 표시합니다. 주말·공휴일 앞에서도 황색이 뜨도록 영업일 기준을 함께 씁니다.</span></li>'+
-      '<li><b>오픈 이후의 기한</b><span>오픈에 도달하면 SLA는 충족입니다. 오픈 이후에는 같은 기한을 초대 기한으로 봅니다.</span></li>'+
+      '<li><b>초대 준비 이후의 기한</b><span>초대 준비에 도달하면 SLA는 충족입니다. 초대 준비 이후에는 같은 기한을 초대 기한으로 봅니다.</span></li>'+
       '<li><b>기본 마감</b><span>초대 발송일부터 3영업일 후 18:00 KST. 200명 이상 대형 행사는 5영업일입니다.</span></li>'+
       '<li><b>초대별 마감</b><span>각 초대는 보낸 시점의 마감을 저장합니다. 요청 마감을 바꿔도 이미 보낸 초대의 마감은 그대로이며, 새 마감으로 받으려면 재초대합니다.</span></li>'+
-      '<li><b>취합중으로 넘어가는 때</b><span>진행 중인 초대의 마감이 모두 지났거나 모든 호텔이 응답하면 시스템이 넘깁니다. 마감은 초대별 마감 중 가장 늦은 것을 봅니다.</span></li>'+
-      '<li><b>취합중 → 미성사</b><span>제출 견적이 0건이고 라운드 2 이상일 때만 사유(기본값 "두 차례 요청에도 제안 없음")를 남기고 닫을 수 있습니다.</span></li>'+
+      '<li><b>견적 정리 중으로 넘어가는 때</b><span>진행 중인 초대의 마감이 모두 지났거나 모든 호텔이 응답하면 시스템이 넘깁니다. 마감은 초대별 마감 중 가장 늦은 것을 봅니다.</span></li>'+
+      '<li><b>견적 정리 중 → 미성사</b><span>제출 견적이 0건이고 라운드 2 이상일 때만 사유(기본값 "두 차례 요청에도 제안 없음")를 남기고 닫을 수 있습니다.</span></li>'+
       '<li><b>USD 참고환산</b><span>호텔이 제출한 금액 그대로 환산합니다(세금 보정 없음). 세금이 별도인 제안은 세금 열에 그대로 표시합니다.</span></li>'+
-      '<li><b>초대 호텔 수</b><span>3–5곳을 권장합니다. 2곳 미만이면 오거나이저에게 먼저 알립니다.</span></li>'+
+      '<li><b>초대 호텔 수</b><span>3–5곳을 권장합니다. 2곳 미만이면 요청자에게 먼저 알립니다.</span></li>'+
       '<li><b>리마인더</b><span>마감 24시간 전에 시스템이 호텔에 보냅니다.</span></li>'+
       '<li><b>파트너 심사</b><span>신청 후 5영업일 안에 승인 또는 거절합니다. 지나면 "지연" 배지가 붙습니다.</span></li>'+
       '<li><b>파트너 중지 기준</b><span>승인 후 초대에 3회 연속 무응답이거나 견적이 반복해서 부정확하면 중지합니다. 콘솔은 두 경우에 "중지 검토" 표시를 붙입니다.</span></li>'+
@@ -82,31 +82,31 @@ A.boot('settings','설정',function(main){
       ['접속 기록','IP·일시·브라우저를 3개월 보관합니다(통신비밀보호법).'],
       ['제안 선택 인증','제안을 선택할 때 요청에 등록된 휴대전화로 인증번호(ORG_PICK_OTP)를 보냅니다. 회원·비회원 모두 적용하고 6자리 · 3분 · 재발송 60초 · 5회 틀리면 10분 잠금. 공유 링크로는 선택할 수 없습니다.'],
       ['공유 링크','요청당 1개(보기 전용). 다시 만들면 이전 링크는 꺼집니다. 요청이 끝난 뒤 30일에 만료되고, 탈퇴하면 중지됩니다.'],
-      ['탈퇴','비딩중·재요청·취합중·전달됨 요청이 있으면 처리할 수 없습니다. 접수·검증·오픈 요청은 자동 취소합니다. 성사 연결 기록(회사명·담당자·연락처·선정 호텔·연결 일시)은 3년 보관 후 파기합니다.']];
+      ['탈퇴','견적 받는 중·재요청·견적 정리 중·비교표 전달됨 요청이 있으면 처리할 수 없습니다. 접수됨·요건 확인 중·초대 준비 요청은 자동 취소합니다. 성사 연결 기록(회사명·담당자·연락처·선정 호텔·연결 일시)은 3년 보관 후 파기합니다.']];
     return '<section class="card" aria-labelledby="h-mr"><h2 id="h-mr">회원 인증 규칙 <span class="badge">읽기 전용</span></h2><p class="sub">회원 화면과 같은 값입니다. 바꾸려면 코드와 함께 배포합니다.</p><div class="tbl-wrap"><table id="memberRules"><thead><tr><th>항목</th><th>규칙</th></tr></thead><tbody>'+R.map(function(x){return '<tr><td style="white-space:nowrap"><b>'+x[0]+'</b></td><td>'+x[1]+'</td></tr>';}).join('')+'</tbody></table></div></section>';
   }
 
   /* ---------- 3. 알림 ---------- */
   var CH1='이메일 + 알림톡 (LMS 대체)';
   var TPL=[
-    ['ORG_RECEIVED','접수 확인','오거나이저','견적 요청 접수 직후 (진행 상황 링크 포함)',CH1,'자동'],
-    ['ORG_REJECTED','반려 안내','오거나이저','검증중 → 반려됨',CH1,'자동'],
-    ['ORG_BIDDING','호텔 요청 안내','오거나이저','비딩중 전환 (라운드 1)',CH1,'자동'],
-    ['ORG_REBID','재요청 안내','오거나이저','조건 변경 → 새 라운드 (라운드 2 이상)',CH1,'자동'],
-    ['ORG_DELIVERED','견적 도착','오거나이저','취합중 → 전달됨',CH1,'자동'],
-    ['ORG_WON','성사 안내','오거나이저','전달됨 → 성사',CH1,'자동'],
-    ['ORG_LOST','미성사 안내','오거나이저','미성사로 종료',CH1,'자동'],
-    ['ORG_CANCELLED','취소 확인','오거나이저','요청 취소',CH1,'자동'],
-    ['HTL_INVITE','견적 초대','호텔','비딩중 전환 · 초대 추가','이메일','자동'],
+    ['ORG_RECEIVED','접수 확인','요청자','견적 요청 접수 직후 (진행 상황 링크 포함)',CH1,'자동'],
+    ['ORG_REJECTED','반려 안내','요청자','요건 확인 중 → 반려',CH1,'자동'],
+    ['ORG_BIDDING','호텔 요청 안내','요청자','견적 받는 중 전환 (라운드 1)',CH1,'자동'],
+    ['ORG_REBID','재요청 안내','요청자','조건 변경 → 새 라운드 (라운드 2 이상)',CH1,'자동'],
+    ['ORG_DELIVERED','견적 도착','요청자','견적 정리 중 → 비교표 전달됨',CH1,'자동'],
+    ['ORG_WON','성사 안내','요청자','비교표 전달됨 → 성사',CH1,'자동'],
+    ['ORG_LOST','미성사 안내','요청자','미성사로 종료',CH1,'자동'],
+    ['ORG_CANCELLED','취소 확인','요청자','요청 취소',CH1,'자동'],
+    ['HTL_INVITE','견적 초대','호텔','견적 받는 중 전환 · 초대 추가','이메일','자동'],
     ['HTL_REMINDER','마감 리마인더','호텔','견적 마감 24시간 전','이메일','자동'],
     ['HTL_QUOTE_RECEIVED','견적 접수 확인','호텔','호텔이 견적 제출','이메일','자동'],
-    ['HTL_SELECTED_CONNECT','선정 연결 메일','호텔 (오거나이저 참조)','전달됨 → 성사 (오거나이저 회사명·담당자·이메일·휴대전화 포함)','이메일','자동'],
-    ['HTL_NOT_SELECTED','미선정 안내','호텔','전달됨 → 성사 (제출한 나머지 호텔)','이메일','자동'],
+    ['HTL_SELECTED_CONNECT','선정 연결 메일','호텔 (요청자 참조)','비교표 전달됨 → 성사 (요청자 회사명·담당자·이메일·휴대전화 포함)','이메일','자동'],
+    ['HTL_NOT_SELECTED','미선정 안내','호텔','비교표 전달됨 → 성사 (제출한 나머지 호텔)','이메일','자동'],
     ['PTN_APPLIED','신청 접수','파트너 신청자','파트너 신청 직후','이메일','자동'],
     ['PTN_APPROVED','승인 안내','파트너 신청자','승인 · 재승인','이메일','자동'],
     ['PTN_REJECTED','거절 안내','파트너 신청자','거절','이메일','자동'],
     ['PTN_REINSTATED','재승인 안내','파트너 신청자','중지 → 재승인','이메일','자동'],
-    ['ORG_PICK_OTP','제안 선택 인증번호','오거나이저 (회원·비회원)','제안 선택 확인 (등록 휴대전화로 발송)','SMS (문자, 알림톡 미사용)','자동'],
+    ['ORG_PICK_OTP','제안 선택 인증번호','요청자 (회원·비회원)','제안 선택 확인 (등록 휴대전화로 발송)','SMS (문자, 알림톡 미사용)','자동'],
     ['ACC_EMAIL_CODE','이메일 인증번호','회원','가입 · 이메일 변경 인증','이메일','자동'],
     ['ACC_EMAIL_EXISTS','이미 가입된 이메일 안내','회원','이미 회원인 이메일로 가입 시도','이메일','자동'],
     ['ACC_SMS_OTP','휴대전화 인증번호','회원','가입 · 번호 변경 인증','SMS (문자, 알림톡 미사용)','자동'],
@@ -118,7 +118,7 @@ A.boot('settings','설정',function(main){
     ['ACC_PHONE_CHANGED','휴대전화 변경 완료','회원','휴대전화 변경 완료','이메일','자동'],
     ['ACC_LOCKED','계정 잠금 안내','회원','로그인 실패로 잠금','이메일','자동'],
     ['ACC_WITHDRAWN','탈퇴 완료 안내','회원','탈퇴 완료','이메일','자동']];
-  var OPS=[['OPS_ORG_PROGRESS','오거나이저 진행 상황 안내'],['OPS_ORG_INFO','오거나이저 추가 정보 요청'],['OPS_ORG_DATE','오거나이저 일정 확인'],['OPS_ORG_NOQUOTE','오거나이저 견적 없음 안내'],['OPS_ORG_CLOSE_CHECK','오거나이저 종료 확인'],['OPS_ORG_FEW_HOTELS','오거나이저 초대 호텔 수 안내'],['OPS_ORG_ANON_INCIDENT','오거나이저 익명화 사고 안내'],['OPS_HTL_FOLLOWUP','호텔 후속 문의'],['OPS_HTL_QUOTE_CHECK','호텔 견적 확인 요청'],['OPS_HTL_CANCELLED','호텔 요청 취소 안내'],['OPS_PTN_SUSPEND','파트너 중지 안내'],['OPS_PTN_DOMAIN_CHECK','파트너 도메인 확인'],['OPS_ACC_LINK','회원 연결 요청 확인 안내'],['OPS_RFP_TRANSFER','요청 이관 안내 (양쪽 회원)']];
+  var OPS=[['OPS_ORG_PROGRESS','요청자 진행 상황 안내'],['OPS_ORG_INFO','요청자 추가 정보 요청'],['OPS_ORG_DATE','요청자 일정 확인'],['OPS_ORG_NOQUOTE','요청자 견적 없음 안내'],['OPS_ORG_CLOSE_CHECK','요청자 종료 확인'],['OPS_ORG_FEW_HOTELS','요청자 초대 호텔 수 안내'],['OPS_ORG_ANON_INCIDENT','요청자 익명화 사고 안내'],['OPS_HTL_FOLLOWUP','호텔 후속 문의'],['OPS_HTL_QUOTE_CHECK','호텔 견적 확인 요청'],['OPS_HTL_CANCELLED','호텔 요청 취소 안내'],['OPS_PTN_SUSPEND','파트너 중지 안내'],['OPS_PTN_DOMAIN_CHECK','파트너 도메인 확인'],['OPS_ACC_LINK','회원 연결 요청 확인 안내'],['OPS_RFP_TRANSFER','요청 이관 안내 (양쪽 회원)']];
   function logRows(){
     var rows=S.sendLog.map(function(x){return {id:x.id,to:x.to,template:x.template,at:x.at,rfpId:x.rfpId,status:'sent',cc:x.cc};}).concat(S.failures.map(function(f){return {id:f.id,to:f.to,template:f.template,at:f.at,rfpId:f.rfpId,status:'failed',manual:f.manual};}));
     rows.sort(function(a,b){return b.at-a.at;});
@@ -136,8 +136,8 @@ A.boot('settings','설정',function(main){
     function tr(t,auto){return '<tr><td class="mono" style="white-space:nowrap"><b>'+t[0]+'</b></td><td>'+t[1]+'</td><td>'+t[2]+'</td><td>'+t[3]+'</td><td>'+t[4]+'</td><td><span class="'+(auto?'st-ok':'st-warn')+'">'+(auto?'자동':'수동')+'</span></td></tr>';}
     var head='<thead><tr><th>ID</th><th>이름</th><th>수신자</th><th>트리거</th><th>채널</th><th>자동/수동</th></tr></thead>';
     var rows=TPL.map(function(t){return tr([t[0],t[1],t[2],t[3],t[4]],true);}).join('');
-    var orows=OPS.map(function(o){return tr([o[0],o[1],o[0].indexOf('OPS_ORG')===0?'오거나이저':o[0].indexOf('OPS_HTL')===0?'호텔':(o[0].indexOf('OPS_ACC')===0||o[0].indexOf('OPS_RFP')===0)?'회원':'파트너','운영자 판단','이메일'],false);}).join('');
-    return '<section class="card" aria-labelledby="h-tp"><h2 id="h-tp">알림 템플릿</h2><p class="sub">자동은 시스템이 보내고, 수동(OPS_*)은 운영자가 직접 메일로 보냅니다. 오거나이저에게는 카카오 알림톡으로 먼저 보내고, 알림톡이 안 되면 LMS 문자로 대신 보냅니다. 인증번호(SMS)는 알림톡 심사 기간과 미사용자 대체 지연 때문에 알림톡으로 보내지 않고 문자로만 보냅니다. <a class="rowlink" style="text-decoration:underline" href="../docs/notification-library.html">알림 라이브러리 보기 →</a></p><div class="tbl-wrap"><table>'+head+'<tbody>'+rows+'</tbody></table></div>'+
+    var orows=OPS.map(function(o){return tr([o[0],o[1],o[0].indexOf('OPS_ORG')===0?'요청자':o[0].indexOf('OPS_HTL')===0?'호텔':(o[0].indexOf('OPS_ACC')===0||o[0].indexOf('OPS_RFP')===0)?'회원':'파트너','운영자 판단','이메일'],false);}).join('');
+    return '<section class="card" aria-labelledby="h-tp"><h2 id="h-tp">알림 템플릿</h2><p class="sub">자동은 시스템이 보내고, 수동(OPS_*)은 운영자가 직접 메일로 보냅니다. 요청자에게는 카카오 알림톡으로 먼저 보내고, 알림톡이 안 되면 LMS 문자로 대신 보냅니다. 인증번호(SMS)는 알림톡 심사 기간과 미사용자 대체 지연 때문에 알림톡으로 보내지 않고 문자로만 보냅니다. <a class="rowlink" style="text-decoration:underline" href="../docs/notification-library.html">알림 라이브러리 보기 →</a></p><div class="tbl-wrap"><table>'+head+'<tbody>'+rows+'</tbody></table></div>'+
       '<h3 style="margin:18px 0 8px;font-size:15px">수동 발송 (OPS_*)</h3><div class="tbl-wrap"><table>'+head+'<tbody>'+orows+'</tbody></table></div><p class="note-box" style="margin-top:12px">호텔 요청 취소 안내(OPS_HTL_CANCELLED)와 파트너 중지 안내(OPS_PTN_SUSPEND)를 비롯한 OPS_* 메일은 운영자가 직접 보냅니다.</p></section>'+
       '<section class="card" aria-labelledby="h-lg"><h2 id="h-lg">발송 로그 <span class="badge red" id="failN">실패 '+A.failedCount()+'건 미처리</span></h2><p class="sub">실패 항목은 대시보드의 발송 실패 목록과 같은 기록입니다. 직접 보냈다면 표시하세요.</p>'+
       '<div class="filters"><div class="f"><label for="lf">보기</label><select class="inp" id="lf"><option value="all">전체</option><option value="sent">발송됨</option><option value="failed">실패</option><option value="manual">직접 보냄</option></select></div></div><div id="logBox">'+logHtml()+'</div></section>';
@@ -150,12 +150,12 @@ A.boot('settings','설정',function(main){
 
   /* ---------- 5. 시스템 상태 ---------- */
   function sysPanel(){
-    var cron=[['10분마다','마감 지난 초대 마감 처리 · 취합중 전환',T('2026-10-08T19:30')],['1분마다','알림 발송 · 리마인더 정리',T('2026-10-08T19:29')]];
+    var cron=[['10분마다','마감 지난 초대 마감 처리 · 견적 정리 중 전환',T('2026-10-08T19:30')],['1분마다','알림 발송 · 리마인더 정리',T('2026-10-08T19:29')]];
     var sec=['RESEND_API_KEY','WORKER_SECRET','FROM_EMAIL','HOTEL_BID_URL','ORGANIZER_TRACK_URL'];
     return '<section class="card" aria-labelledby="h-cr"><h2 id="h-cr">정기 작업 (cron)</h2><div class="tbl-wrap"><table><thead><tr><th>주기</th><th>하는 일</th><th>마지막 실행</th></tr></thead><tbody>'+cron.map(function(c){return '<tr><td style="white-space:nowrap">'+c[0]+'</td><td>'+c[1]+'</td><td class="mono" style="white-space:nowrap">'+A.fmtDT(c[2])+'</td></tr>';}).join('')+'</tbody></table></div><p class="small muted" style="margin-top:8px">예시 값입니다. 실제 서비스에서는 pg_cron 실행 기록을 보여 줍니다.</p></section>'+
       '<section class="card" aria-labelledby="h-sec"><h2 id="h-sec">Edge Function 시크릿</h2><p class="sub">값은 보여 주지 않고 설정 여부만 표시합니다.</p><div class="tbl-wrap"><table><thead><tr><th>이름</th><th>상태</th></tr></thead><tbody>'+sec.map(function(k){return '<tr><td class="mono">'+k+'</td><td><span class="st-no">미설정</span></td></tr>';}).join('')+'</tbody></table></div><p class="small muted" style="margin-top:8px">Supabase 프로젝트를 만들기 전이라 모두 미설정입니다.</p></section>'+
       '<section class="card" aria-labelledby="h-ac"><h2 id="h-ac">app_config</h2><div class="tbl-wrap"><table><thead><tr><th>행</th><th>용도</th><th>상태</th></tr></thead><tbody><tr><td class="mono">worker_url</td><td>워커 주소</td><td><span class="st-no">미설정</span></td></tr><tr><td class="mono">worker_secret</td><td>워커 호출 인증</td><td><span class="st-no">미설정</span></td></tr></tbody></table></div><p class="small muted" style="margin-top:8px">두 행 모두 예시 이름입니다. 실제 키는 마이그레이션 파일을 따릅니다.</p></section>'+
-      '<section class="card" aria-labelledby="h-dc"><h2 id="h-dc">문서</h2><ul class="rules"><li><b>상태전이표</b><span><a href="../docs/state-transitions.html">상태전이표 v1.9 열기</a></span></li><li><b>운영 SOP</b><span>MICEGO 운영 SOP v2 (상태전이 시스템 기준) · 별도 문서로 관리합니다.</span></li></ul></section>';
+      '<section class="card" aria-labelledby="h-dc"><h2 id="h-dc">문서</h2><ul class="rules"><li><b>상태전이표</b><span><a href="../docs/state-transitions.html">상태전이표 v2.0 열기</a></span></li><li><b>운영 SOP</b><span>MICEGO 운영 SOP v2 (상태전이 시스템 기준) · 별도 문서로 관리합니다.</span></li></ul></section>';
   }
 
   /* ---------- 6. 전제 조건 ---------- */
@@ -166,8 +166,8 @@ A.boot('settings','설정',function(main){
       ['Edge Function 배포와 시크릿, app_config 두 행','no','미완','시스템 상태 탭에서 시크릿 5개가 모두 미설정입니다.'],
       ['Resend 발신 도메인 인증','no','미완','FROM_EMAIL 도메인 인증 전입니다.'],
       ['운영자 계정에 app_metadata.role = operator 부여','no','미완','Supabase 계정이 생기면 부여합니다.'],
-      ['오거나이저 랜딩 · 호텔 파트너 랜딩 · 호텔 비딩 페이지를 mailto에서 RPC로 교체','no','미완','호텔 비딩, 추적, 랜딩 폼 모두 아직 mailto로 동작합니다.'],
-      ['오거나이저 추적 페이지 제작','warn','화면 제작됨','ko/track.html 화면은 만들었습니다. 토큰 발급과 DB 연동 전이라 접수 확인 메일의 링크는 아직 연결되지 않습니다.'],
+      ['요청자 랜딩 · 호텔 파트너 랜딩 · 호텔 비딩 페이지를 mailto에서 RPC로 교체','no','미완','호텔 비딩, 추적, 랜딩 폼 모두 아직 mailto로 동작합니다.'],
+      ['요청자 추적 페이지 제작','warn','화면 제작됨','ko/track.html 화면은 만들었습니다. 토큰 발급과 DB 연동 전이라 접수 확인 메일의 링크는 아직 연결되지 않습니다.'],
       ['약관 · 개인정보처리방침 빈칸 확정과 법률 검토, 폼 동의 문구 갱신','no','미완','법률 검토 전입니다.'],
       ['국내 SMS 대행사 계약과 발신번호 사전 등록','no','미완','Supabase Auth의 휴대전화 OTP는 국내 SMS 발신 업체를 지원하지 않습니다. 자체 OTP 테이블과 Edge Function으로 인증번호를 만들고 대행사 API로 보냅니다. 발신번호는 사전 등록이 필요합니다.'],
       ['비밀번호 유출 목록 검사','no','미완','가입·변경·재설정 때 알려진 유출 비밀번호와 대조합니다. 검사 방식(외부 API 또는 자체 목록)을 정해야 합니다.'],

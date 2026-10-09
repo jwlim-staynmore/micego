@@ -6,7 +6,7 @@
       "blockers": [
         {
           "ref": "MG-TEST-014",
-          "track_state": "비딩중",
+          "track_state": "bidding",
           "token": "trk_test_014"
         }
       ]

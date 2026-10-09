@@ -29,7 +29,7 @@ export async function handle(req: Request, deps: Deps): Promise<unknown> {
 
   const nowIso = deps.now().toISOString();
 
-  // 진행 중이 아닌(받음/검증중/오픈) 요청은 자동 취소 — ORG_CANCELLED 는 보내지 않는다 (rfp_transition 이 reason='회원 탈퇴' 로 억제).
+  // 진행 중이 아닌(접수됨/요건 확인 중/초대 준비) 요청은 자동 취소 — ORG_CANCELLED 는 보내지 않는다 (rfp_transition 이 reason='회원 탈퇴' 로 억제).
   for (const r of owned) {
     if (AUTO_CANCEL_STATES.includes(r.state)) {
       await deps.db.query(`select private.rfp_transition($1,'cancelled','system',null,'회원 탈퇴',null,null)`, [r.id]).catch((e) => console.error("withdraw auto-cancel failed:", r.ref, e));

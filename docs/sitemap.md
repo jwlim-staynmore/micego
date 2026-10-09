@@ -60,7 +60,7 @@ v1.3 · 2026-09-27 · 페이지 42개 · 미구현 항목 47개 (A 오픈 차단
 
 | 경로 | 페이지 | 접근 | 색인 | 상태/변형 | 백엔드 연동 |
 |---|---|---|---|---|---|
-| `docs/state-transitions.html` | 상태전이표 v1.9 — RFP·초대(대리 입력)·파트너·커미션 합의·회원·공유 링크·피드백·위임·정산 상태 머신과 알림 ID | 내부 문서 | noindex | — | — |
+| `docs/state-transitions.html` | 상태전이표 v2.0 — RFP·초대(대리 입력)·파트너·커미션 합의·회원·공유 링크·피드백·위임·정산 상태 머신과 알림 ID | 내부 문서 | noindex | — | — |
 | `docs/notification-library.html` | 알림 라이브러리 — 이메일 29종·알림톡 9종·SMS 2종·운영자 수동 문안, JSON·CSV 동봉 | 내부 문서 | noindex | — | — |
 | `docs/sitemap.html` | 사이트맵 · 오픈 전 점검(이 문서) — 전체 페이지 목록과 미구현 항목 | 내부 문서 | noindex | — | — |
 | `docs/launch-checklist.html` | 오픈 당일 체크리스트 — D-7 · D-1 · D-day · 오픈 직후 1시간 · D+1 · 첫 주 확인 항목과 오픈 중단 기준 | 내부 문서 | noindex | — | — |
