@@ -1,0 +1,1050 @@
+{
+ "labels": {
+  "47:2696": {
+   "section": "F1",
+   "main": "여행사 모드 선택 → 요청 화면 이동",
+   "dev": "HUB-01 → ORG-01 · 서버 호출 없음"
+  },
+  "47:2699": {
+   "section": "F1",
+   "main": "요청서 제출 → 같은 화면에 접수 안내",
+   "dev": "ORG-01 done · submit_rfp(+Turnstile) · ORG_RECEIVED"
+  },
+  "47:2702": {
+   "section": "F1",
+   "main": "진행 상황 보기 → 화면 이동",
+   "dev": "ORG-02(track_url) · get_track"
+  },
+  "47:2705": {
+   "section": "F1",
+   "main": "접수 확인 메일·알림톡 발송",
+   "dev": "ORG_RECEIVED"
+  },
+  "47:2708": {
+   "section": "F1",
+   "main": "알림 버튼 → 진행 상황 화면 열림",
+   "dev": "메일·알림톡 → ORG-02 ?t= · get_track"
+  },
+  "47:2711": {
+   "section": "F1",
+   "main": "운영자가 요건 확인 시작 · 알림 없음",
+   "dev": "#1 verifying · 알림 없음"
+  },
+  "47:2714": {
+   "section": "F1",
+   "main": "운영자가 호텔 초대 → 요청자에게 알림",
+   "dev": "#3 open → #4 bidding · ORG_BIDDING"
+  },
+  "47:2718": {
+   "section": "F1",
+   "main": "마감 시각이 지나면 자동으로 넘어감",
+   "dev": "#5 collecting · 10분 cron 또는 운영자"
+  },
+  "47:2721": {
+   "section": "F1",
+   "main": "운영자가 비교표 전달 → 요청자에게 알림",
+   "dev": "#6 delivered · ORG_DELIVERED"
+  },
+  "47:2725": {
+   "section": "F1",
+   "main": "제안 A를 고름 → 인증번호 문자",
+   "dev": "[패널] P1 · pick_send_otp · ORG_PICK_OTP(문자)"
+  },
+  "47:2728": {
+   "section": "F1",
+   "main": "인증번호 입력 → 선택 확정·성사",
+   "dev": "P3 · pick_verify → pick_and_win(#10) · ORG_WON"
+  },
+  "47:2732": {
+   "section": "F1",
+   "main": "새로고침하면 성사 화면 (자동 갱신 없음)",
+   "dev": "ORG-02 won · E-32"
+  },
+  "47:2735": {
+   "section": "F1",
+   "main": "MVP: 문자 인증 없이 메일로 진행",
+   "dev": "빌드 스위치 pick.otpEnabled=false"
+  },
+  "47:2738": {
+   "section": "F1",
+   "main": "제안 A를 고름 → 메일 앱에 회신 초안",
+   "dev": "[앱] 메일 초안 · 서버 호출 없음"
+  },
+  "47:2741": {
+   "section": "F1",
+   "main": "운영자가 회신 메일 보고 선정 표시",
+   "dev": "ADM-03 「선정」 · admin_mark_selection"
+  },
+  "47:2744": {
+   "section": "F1",
+   "main": "성사로 닫기 → 동의 확인 창",
+   "dev": "[모달] 동의 확인 기록(이메일 회신)"
+  },
+  "47:2747": {
+   "section": "F1",
+   "main": "성사 처리 → 요청자·호텔에 결과 메일",
+   "dev": "admin_transition(won,p_consent) · ORG_WON · HTL_*"
+  },
+  "47:7391": {
+   "section": "F2",
+   "main": "요청 취소 → 같은 화면에서 펼침",
+   "dev": "[패널] received-cancel · 서버 호출 없음"
+  },
+  "47:7394": {
+   "section": "F2",
+   "main": "취소 확정 → 취소 완료 알림",
+   "dev": "[패널] cancel_rfp · ORG_CANCELLED"
+  },
+  "47:7427": {
+   "section": "F2",
+   "main": "운영자가 요청 취소 (사유 선택)",
+   "dev": "#12 cancelled · 사유 2종"
+  },
+  "47:7431": {
+   "section": "F2",
+   "main": "호텔엔 자동 알림 없음 → 운영자가 연락",
+   "dev": "호텔 알림 없음 · E-45"
+  },
+  "47:7465": {
+   "section": "F2",
+   "main": "운영자가 반려 → 요청자에게 알림",
+   "dev": "#2 rejected · 사유 4종 · ORG_REJECTED"
+  },
+  "47:7469": {
+   "section": "F2",
+   "main": "새로 요청하기 → 요청서 화면 이동",
+   "dev": "ORG-01 #register · 서버 호출 없음"
+  },
+  "47:7503": {
+   "section": "F2",
+   "main": "변경 내용 전달 · 진행 단계는 그대로",
+   "dev": "[패널] request_change · 상태 변화 없음"
+  },
+  "47:7506": {
+   "section": "F2",
+   "main": "운영자가 조건 변경 → 새 조건으로 재요청",
+   "dev": "#7·#9 rebid · 새 라운드"
+  },
+  "47:7541": {
+   "section": "F2",
+   "main": "운영자가 미성사로 닫음 (견적 0건 포함)",
+   "dev": "#11 lost · 사유 3종 / #8 제출 0건 종료"
+  },
+  "47:7545": {
+   "section": "F2",
+   "main": "새로 요청하기 → 요청서 화면 이동",
+   "dev": "ORG-01"
+  },
+  "47:7572": {
+   "section": "F2",
+   "main": "인증번호 5번 틀림 → 10분 잠김",
+   "dev": "P2 · OTP_LOCKED (10분)"
+  },
+  "47:7575": {
+   "section": "F2",
+   "main": "다른 제안 보기 → 같은 화면에서 펼침",
+   "dev": "[패널] P0"
+  },
+  "47:7602": {
+   "section": "F2",
+   "main": "질문 보내기 → 입력 칸 펼침",
+   "dev": "[패널] 서버 호출 없음"
+  },
+  "47:7605": {
+   "section": "F2",
+   "main": "보내기 → 운영자에게 질문 전달",
+   "dev": "ask_question · 요청당 하루 10회 합산"
+  },
+  "47:7640": {
+   "section": "F2",
+   "main": "링크를 못 찾음 → 오류 안내",
+   "dev": "조회 실패 · 형식 오류"
+  },
+  "47:7643": {
+   "section": "F2",
+   "main": "문의하기 → 문의 화면 이동",
+   "dev": "ORG-09"
+  },
+  "47:7646": {
+   "section": "F2",
+   "main": "이메일 보내기 → 메일 앱 열림",
+   "dev": "[앱] mailto"
+  },
+  "47:7805": {
+   "section": "F3",
+   "main": "이 이메일로 가입 → 가입 화면 이동",
+   "dev": "signup.html?email= · 서버 호출 없음"
+  },
+  "47:7808": {
+   "section": "F3",
+   "main": "인증 메일 받기 → 이메일로 인증번호",
+   "dev": "signup_start(+Turnstile) · ACC_EMAIL_CODE"
+  },
+  "47:7811": {
+   "section": "F3",
+   "main": "메일 인증번호 입력 → 이메일 확인",
+   "dev": "verify_email"
+  },
+  "47:7814": {
+   "section": "F3",
+   "main": "인증번호 받기 → 휴대전화로 문자",
+   "dev": "send_phone_otp · ACC_SMS_OTP(문자)"
+  },
+  "47:7817": {
+   "section": "F3",
+   "main": "문자 인증 → 가입 완료·환영 메일",
+   "dev": "verify_phone_otp→login · ACC_WELCOME(+ACC_LINKED)"
+  },
+  "47:7820": {
+   "section": "F3",
+   "main": "내 견적 요청 보기 → 목록 화면 이동",
+   "dev": "my_profile · my_rfps"
+  },
+  "47:7823": {
+   "section": "F3",
+   "main": "공유 링크 → 같은 화면에서 링크 만들기",
+   "dev": "[패널] create_share_link"
+  },
+  "47:7826": {
+   "section": "F3",
+   "main": "동료가 링크 열면 보기 전용 화면",
+   "dev": "track.html?s= · get_track({share})"
+  },
+  "47:7829": {
+   "section": "F3",
+   "main": "링크 끄기·새 링크·탈퇴하면 링크 무효",
+   "dev": "revoke_share_link / 종료 30일 / 탈퇴 · E-79"
+  },
+  "47:7832": {
+   "section": "F3",
+   "main": "예전 요청 연결 신청 → 같은 화면에서 펼침",
+   "dev": "[패널] link_request"
+  },
+  "47:7835": {
+   "section": "F3",
+   "main": "운영자가 승인 → 연결 완료 알림",
+   "dev": "[모달] admin_link_decide · ACC_LINKED"
+  },
+  "47:7838": {
+   "section": "F3",
+   "main": "연결 승인 → 내 목록에 요청이 보임",
+   "dev": "ORG-06 linked"
+  },
+  "49:3892": {
+   "section": "F4",
+   "main": "비밀번호 1~4번 틀림 → 오류 안내",
+   "dev": "LOGIN_FAILED"
+  },
+  "49:3895": {
+   "section": "F4",
+   "main": "5번 틀리면 15분 동안 로그인 대기",
+   "dev": "LOGIN_COOLDOWN (15분)"
+  },
+  "49:3898": {
+   "section": "F4",
+   "main": "1시간에 10번 틀리면 계정 잠김·메일",
+   "dev": "ACCOUNT_LOCKED · ACC_LOCKED"
+  },
+  "49:3902": {
+   "section": "F4",
+   "main": "비밀번호 재설정 → 재설정 화면 이동",
+   "dev": "ORG-05 (cooldown·locked에서)"
+  },
+  "49:3905": {
+   "section": "F4",
+   "main": "재설정 메일 받기 → 메일 발송",
+   "dev": "password_reset_request · ACC_PW_RESET"
+  },
+  "49:3908": {
+   "section": "F4",
+   "main": "메일 링크 → 새 비밀번호 화면 (30분)",
+   "dev": "reset.html?k= · 30분·1회용"
+  },
+  "49:3911": {
+   "section": "F4",
+   "main": "비밀번호 변경 → 잠김 풀림·전체 로그아웃",
+   "dev": "password_reset_complete · ACC_PW_CHANGED"
+  },
+  "49:3914": {
+   "section": "F4",
+   "main": "만료됐거나 이미 쓴 링크 → 오류 안내",
+   "dev": "만료·재사용 링크"
+  },
+  "49:3917": {
+   "section": "F4",
+   "main": "재설정 메일 다시 받기",
+   "dev": "[패널] password_reset_request"
+  },
+  "49:3920": {
+   "section": "F4",
+   "main": "로그인 → 내 요청 화면 이동",
+   "dev": "login · next(기본 my.html)"
+  },
+  "49:3923": {
+   "section": "F4",
+   "main": "계정 설정 → 화면 이동",
+   "dev": "ORG-07"
+  },
+  "49:3926": {
+   "section": "F4",
+   "main": "이메일 변경 → 필요하면 비밀번호 재확인",
+   "dev": "REAUTH_REQUIRED (로그인 10분 경과 시)"
+  },
+  "49:3929": {
+   "section": "F4",
+   "main": "확인 → 새 이메일로 인증번호",
+   "dev": "ACC_EMAIL_CODE"
+  },
+  "49:3932": {
+   "section": "F4",
+   "main": "인증 → 변경 완료·이전 주소로 알림",
+   "dev": "ACC_EMAIL_CHANGED (이전 주소로)"
+  },
+  "49:3935": {
+   "section": "F4",
+   "main": "비밀번호 바꾸기 → 변경 완료 메일",
+   "dev": "ACC_PW_CHANGED · E-76·E-77"
+  },
+  "49:3938": {
+   "section": "F4",
+   "main": "휴대전화 변경 → 새 번호로 인증 문자",
+   "dev": "ACC_SMS_OTP(문자)"
+  },
+  "49:3941": {
+   "section": "F4",
+   "main": "인증 완료 → 번호 변경 알림",
+   "dev": "ACC_PHONE_CHANGED"
+  },
+  "49:3944": {
+   "section": "F4",
+   "main": "회원 탈퇴 → 탈퇴 안내 화면 이동",
+   "dev": "ORG-08"
+  },
+  "49:3947": {
+   "section": "F4",
+   "main": "탈퇴하기 → 최종 확인 펼침",
+   "dev": "[패널] 서버 호출 없음"
+  },
+  "49:3950": {
+   "section": "F4",
+   "main": "탈퇴 확정 → 탈퇴 완료 메일",
+   "dev": "withdraw · ACC_WITHDRAWN"
+  },
+  "49:3953": {
+   "section": "F4",
+   "main": "탈퇴할 수 없는 상태 → 막힘 안내",
+   "dev": "WITHDRAW_BLOCKED · E-78"
+  },
+  "49:4109": {
+   "section": "F5",
+   "main": "호텔이 등록 신청 → 접수 메일",
+   "dev": "register_partner(+Turnstile) · PTN_APPLIED"
+  },
+  "49:4113": {
+   "section": "F5",
+   "main": "메일 없음 · 운영자가 콘솔에서 확인",
+   "dev": "대시보드 「파트너 심사 지연」 · ?filter=delayed"
+  },
+  "49:4116": {
+   "section": "F5",
+   "main": "호텔 이름 → 호텔 상세 화면 이동",
+   "dev": "partner.html?id="
+  },
+  "49:4119": {
+   "section": "F5",
+   "main": "운영자가 심사 시작",
+   "dev": "admin_partner_transition(reviewing)"
+  },
+  "49:4122": {
+   "section": "F5",
+   "main": "운영자 승인(요율 10%) → 합의 링크 메일",
+   "dev": "[모달] admin_partner_transition · PTN_APPROVED · 168h"
+  },
+  "49:4126": {
+   "section": "F5",
+   "main": "메일 버튼 → 요율 합의 화면 열림",
+   "dev": "commission.html?t= · partner_commission_accept(lookup)"
+  },
+  "49:4129": {
+   "section": "F5",
+   "main": "호텔이 요율에 동의 → 본사에 알림",
+   "dev": "partner_commission_accept · HQ_HOTEL_TERMS_ACCEPTED"
+  },
+  "49:4132": {
+   "section": "F5",
+   "main": "합의 완료 → 콘솔에 합의 표시",
+   "dev": "ADM-05 approved-agreed"
+  },
+  "49:4135": {
+   "section": "F5",
+   "main": "합의 완료 → 이제 초대할 수 있음",
+   "dev": "COMMISSION_NOT_AGREED 해제"
+  },
+  "49:4138": {
+   "section": "F5",
+   "main": "운영자가 거절(사유 선택) → 결과 메일",
+   "dev": "[모달] pending·reviewing · 사유 5종 · PTN_REJECTED"
+  },
+  "49:4141": {
+   "section": "F5",
+   "main": "운영자가 호텔 중지 → 안내는 직접",
+   "dev": "[모달] 사유 3종 · OPS_PTN_SUSPEND(수동)"
+  },
+  "49:4144": {
+   "section": "F5",
+   "main": "운영자가 재승인 → 재개 알림",
+   "dev": "[모달] 답신 내용 · PTN_REINSTATED"
+  },
+  "49:4147": {
+   "section": "F5",
+   "main": "이미 동의한 호텔 → 완료 안내",
+   "dev": "이미 동의"
+  },
+  "49:4150": {
+   "section": "F5",
+   "main": "잘못된 링크 → 오류 안내",
+   "dev": "토큰 오류 · 새 링크로 대체 · E-48"
+  },
+  "49:4153": {
+   "section": "F5",
+   "main": "7일 안에 동의 안 하면 링크 만료",
+   "dev": "168시간 → approved-expired"
+  },
+  "49:4156": {
+   "section": "F5",
+   "main": "운영자가 동의 링크 다시 보냄 (최대 5회)",
+   "dev": "partner_commission_resend · PTN_COMMISSION_TERMS"
+  },
+  "49:4287": {
+   "section": "F6",
+   "main": "운영자가 초대 → 호텔에 초대 메일",
+   "dev": "admin_invite · HTL_INVITE · 초대 준비에서도 즉시(E-55)"
+  },
+  "49:4290": {
+   "section": "F6",
+   "main": "메일 버튼 → 견적 페이지 열림 (열람 기록)",
+   "dev": "bid.html?t= · get_bid · 첫 열람 → viewed"
+  },
+  "49:4293": {
+   "section": "F6",
+   "main": "호텔이 견적 제출 → 접수 확인 메일",
+   "dev": "[패널] submit_quote · HTL_QUOTE_RECEIVED"
+  },
+  "49:4296": {
+   "section": "F6",
+   "main": "견적 수정 → 같은 화면에서 펼침",
+   "dev": "[패널] 서버 호출 없음"
+  },
+  "49:4299": {
+   "section": "F6",
+   "main": "수정본 다시 제출 → 접수 확인 메일",
+   "dev": "submit_quote(수정 +1) · HTL_QUOTE_RECEIVED · E-7·E-40"
+  },
+  "49:4302": {
+   "section": "F6",
+   "main": "마감 하루 전 자동 독촉 메일",
+   "dev": "cron · HTL_REMINDER (수신 거부 뒤에도, E-47)"
+  },
+  "49:4305": {
+   "section": "F6",
+   "main": "호텔이 견적 거절 → 같은 화면에서 확인",
+   "dev": "[패널] decline_bid"
+  },
+  "49:4308": {
+   "section": "F6",
+   "main": "마감이 지나면 자동으로 기한 지남",
+   "dev": "#5 cron → expired / 운영자 재초대로 대체(E-44)"
+  },
+  "49:4311": {
+   "section": "F6",
+   "main": "요청이 취소됨 · 호텔엔 알림 없음",
+   "dev": "자체 취소·운영자 취소 · E-45"
+  },
+  "49:4314": {
+   "section": "F6",
+   "main": "이 호텔 선정 → 요청자 연락처 담은 메일",
+   "dev": "#10 · HTL_SELECTED_CONNECT (요청자 참조)"
+  },
+  "49:4317": {
+   "section": "F6",
+   "main": "다른 호텔 선정 → 미선정 안내 메일",
+   "dev": "HTL_NOT_SELECTED"
+  },
+  "49:4320": {
+   "section": "F6",
+   "main": "미성사여도 화면은 「견적 받음」 그대로",
+   "dev": "#8·#11 · Quote received 유지 · E-27"
+  },
+  "49:4323": {
+   "section": "F6",
+   "main": "메일 아래 수신 거부 → 확인 화면 이동",
+   "dev": "unsubscribe(check)"
+  },
+  "49:4326": {
+   "section": "F6",
+   "main": "수신 거부 확정",
+   "dev": "[패널] unsubscribe(confirm)"
+  },
+  "51:1265": {
+   "section": "F7",
+   "main": "대리 입력 → 견적 입력 창",
+   "dev": "[모달] 통화·요금·조식·세금·볼룸·유효기한·취소·증빙"
+  },
+  "51:1268": {
+   "section": "F7",
+   "main": "저장 → 호텔에 확인 요청 메일 (72시간)",
+   "dev": "partner_quote_proxy_enter · HTL_CONFIRM(72h·1회용)"
+  },
+  "51:1271": {
+   "section": "F7",
+   "main": "초대 상태가 「호텔 확인 대기」로",
+   "dev": "invited → proxy_entered"
+  },
+  "51:1274": {
+   "section": "F7",
+   "main": "메일 버튼 → 견적 확인 화면 열림",
+   "dev": "confirm.html?t= · quote_confirm(lookup)"
+  },
+  "51:1277": {
+   "section": "F7",
+   "main": "호텔이 맞다고 확인 → 파트너에 알림",
+   "dev": "quote_confirm(confirm) · PTR_HOTEL_CONFIRMED"
+  },
+  "51:1280": {
+   "section": "F7",
+   "main": "확인된 견적이 비교표에 실림",
+   "dev": "proxy_entered → submitted"
+  },
+  "51:1283": {
+   "section": "F7",
+   "main": "호텔이 이의 제기 → 파트너·본사에 알림",
+   "dev": "quote_confirm(dispute) · PTR_/HQ_PROXY_DISPUTED"
+  },
+  "51:1286": {
+   "section": "F7",
+   "main": "직접 견적 내기 → 원래 견적 페이지 이동",
+   "dev": "원래 초대 링크(bid.html?t=)"
+  },
+  "51:1289": {
+   "section": "F7",
+   "main": "72시간 지나면 확인 기한 지남",
+   "dev": "proxy_expired (72h)"
+  },
+  "51:1292": {
+   "section": "F7",
+   "main": "파트너가 다시 보내거나 다시 대리 입력",
+   "dev": "partner_quote_proxy_resend(3회) / 대리 입력"
+  },
+  "51:1295": {
+   "section": "F7",
+   "main": "정리 시작 뒤엔 「이미 처리됨」 안내",
+   "dev": "collecting 이후 stale · Already handled · E-80"
+  },
+  "51:1448": {
+   "section": "F8",
+   "main": "운영자 로그인 → 대시보드 화면 이동",
+   "dev": "signInWithPassword + admin_snapshot()"
+  },
+  "51:1451": {
+   "section": "F8",
+   "main": "새 접수 카드 → 목록 화면 이동",
+   "dev": "rfps.html?filter=new"
+  },
+  "51:1454": {
+   "section": "F8",
+   "main": "요청 카드 → 상세 화면 이동",
+   "dev": "rfp.html?id=MG-2610-014"
+  },
+  "51:1457": {
+   "section": "F8",
+   "main": "요건 확인 시작 → 회신 기한 계산 시작",
+   "dev": "admin_transition(verifying) · SLA 기산"
+  },
+  "51:1460": {
+   "section": "F8",
+   "main": "메모 저장·익명화 검토 완료 표시",
+   "dev": "[패널] admin_rfp_update"
+  },
+  "51:1463": {
+   "section": "F8",
+   "main": "초대 준비로 (익명화 검토가 끝나야 함)",
+   "dev": "admin_transition(open) · GUARD_ANON"
+  },
+  "51:1466": {
+   "section": "F8",
+   "main": "견적 마감 시각 저장",
+   "dev": "admin_rfp_update({deadline})"
+  },
+  "51:1469": {
+   "section": "F8",
+   "main": "견적 받기 시작 → 요청자에게 알림",
+   "dev": "admin_transition(bidding) · ORG_BIDDING · 2곳 미만 모달"
+  },
+  "51:1472": {
+   "section": "F8",
+   "main": "초대 보내기 → 호텔에 초대 메일",
+   "dev": "admin_invite · HTL_INVITE"
+  },
+  "51:1476": {
+   "section": "F8",
+   "main": "미제출 호텔에 독촉 메일 또는 재초대",
+   "dev": "OPS_HTL_FOLLOWUP(메일 앱) / admin_reinvite · HTL_INVITE"
+  },
+  "51:1480": {
+   "section": "F8",
+   "main": "마감 뒤 자동(10분마다) 또는 직접 정리 시작",
+   "dev": "10분 cron 또는 수동 · admin_transition(collecting)"
+  },
+  "51:1483": {
+   "section": "F8",
+   "main": "달러 환산 기준 입력 → 자동 저장",
+   "dev": "admin_quote_update (500ms)"
+  },
+  "51:1486": {
+   "section": "F8",
+   "main": "비교표 전달 → 요청자에게 알림",
+   "dev": "admin_transition(delivered) · ORG_DELIVERED"
+  },
+  "51:1648": {
+   "section": "F9",
+   "main": "요청자가 인증하고 선택 → 3곳에 결과 메일",
+   "dev": "pick_verify→pick_and_win(#10) · ORG_WON · HTL_*"
+  },
+  "51:1652": {
+   "section": "F9",
+   "main": "성사로 닫기 → 확인 창 → 선정 표시",
+   "dev": "modal-consent · admin_mark_selection"
+  },
+  "51:1655": {
+   "section": "F9",
+   "main": "운영자가 성사 처리 → 3곳에 결과 메일",
+   "dev": "admin_transition(won,p_consent) · ORG_WON · HTL_*"
+  },
+  "51:1658": {
+   "section": "F9",
+   "main": "성사되면 정산 1건 자동 생성",
+   "dev": "정산 생성(수금 기한=행사 종료+30일) · PTR_WON"
+  },
+  "51:1661": {
+   "section": "F9",
+   "main": "미성사로 닫기 → 확인 창 → 요청자 알림",
+   "dev": "[모달] modal-lost · ORG_LOST"
+  },
+  "51:1665": {
+   "section": "F9",
+   "main": "요청 취소 → 확인 창 → 요청자 알림",
+   "dev": "[모달] modal-cancel · ORG_CANCELLED"
+  },
+  "51:1669": {
+   "section": "F9",
+   "main": "조건 변경 → 확인 창 → 새 라운드 시작",
+   "dev": "[모달] modal-rebid · ORG_REBID (라운드 +1)"
+  },
+  "51:7248": {
+   "section": "F10",
+   "main": "심사 지연 카드 → 호텔 목록 화면 이동",
+   "dev": "ADM-04 ?filter=delayed"
+  },
+  "51:7251": {
+   "section": "F10",
+   "main": "호텔 이름 → 호텔 상세 화면 이동",
+   "dev": "partner.html?id="
+  },
+  "51:7254": {
+   "section": "F10",
+   "main": "승인 또는 거절 → 확인 창",
+   "dev": "[모달]"
+  },
+  "51:7257": {
+   "section": "F10",
+   "main": "호텔에 승인·거절 결과 메일",
+   "dev": "PTN_APPROVED / PTN_REJECTED (→ F5)"
+  },
+  "51:7260": {
+   "section": "F10",
+   "main": "연결 요청 대기 → 회원 목록 화면 이동",
+   "dev": "ADM-06 filter-link"
+  },
+  "51:7263": {
+   "section": "F10",
+   "main": "회원 행 → 회원 상세 화면 이동",
+   "dev": "ADM-07 active"
+  },
+  "51:7266": {
+   "section": "F10",
+   "main": "연결 승인 → 확인 창",
+   "dev": "[모달] admin_link_decide"
+  },
+  "51:7269": {
+   "section": "F10",
+   "main": "회원에게 연결 완료 메일",
+   "dev": "ACC_LINKED"
+  },
+  "51:7272": {
+   "section": "F10",
+   "main": "잠긴 계정 → 회원 목록 화면 이동",
+   "dev": "ADM-06 ?state=locked"
+  },
+  "51:7275": {
+   "section": "F10",
+   "main": "회원 행 → 회원 상세 화면 이동",
+   "dev": "ADM-07 locked"
+  },
+  "51:7278": {
+   "section": "F10",
+   "main": "잠금 해제 → 확인 창",
+   "dev": "[모달] admin_member_action"
+  },
+  "51:7281": {
+   "section": "F10",
+   "main": "정지·이관·탈퇴 → 확인 창 (안내는 직접)",
+   "dev": "[모달] admin_member_action · 안내 수동"
+  },
+  "51:7284": {
+   "section": "F10",
+   "main": "요청 이관 안내 메일 (운영자가 직접)",
+   "dev": "OPS_RFP_TRANSFER · E-84·E-91"
+  },
+  "51:7287": {
+   "section": "F10",
+   "main": "피드백 보내기 → 운영자에게 접수",
+   "dev": "feedback-submit"
+  },
+  "51:7290": {
+   "section": "F10",
+   "main": "피드백 배지 → 피드백 목록 화면 이동",
+   "dev": "ADM-08"
+  },
+  "51:7293": {
+   "section": "F10",
+   "main": "피드백 행 → 상세 화면 이동",
+   "dev": "ADM-09 new"
+  },
+  "51:7296": {
+   "section": "F10",
+   "main": "분류 고르기 → 분류 완료",
+   "dev": "[패널] 분류 → 「분류 완료」"
+  },
+  "51:7299": {
+   "section": "F10",
+   "main": "처리 시작 → 같은 화면에서 펼침",
+   "dev": "[패널] 「처리 시작」"
+  },
+  "51:7302": {
+   "section": "F10",
+   "main": "완료 → 확인 창에서 결과 고르기",
+   "dev": "[모달] 결과 6종"
+  },
+  "51:7305": {
+   "section": "F10",
+   "main": "처리 완료",
+   "dev": "done"
+  },
+  "51:7308": {
+   "section": "F10",
+   "main": "보낸 사람에게 메일 앱으로 회신",
+   "dev": "[앱] 메일"
+  },
+  "51:7311": {
+   "section": "F10",
+   "main": "잠시 보류",
+   "dev": "「보류」"
+  },
+  "51:7314": {
+   "section": "F10",
+   "main": "다시 열어 처리 재개",
+   "dev": "「다시 열기」"
+  },
+  "51:7426": {
+   "section": "F11",
+   "main": "성사되면 정산 자동 생성 (70:30 배분)",
+   "dev": "합의 요율 스냅샷(없으면 플래그) · 본사 단독 0:100"
+  },
+  "51:7429": {
+   "section": "F11",
+   "main": "정산 목록 → 커미션 입력 대기 건",
+   "dev": "상태 pending_commission"
+  },
+  "51:7432": {
+   "section": "F11",
+   "main": "파트너가 커미션 입력 → 본사에 알림",
+   "dev": "submit_commission · 순액×5~20% · HQ_COMMISSION_SUBMITTED"
+  },
+  "51:7435": {
+   "section": "F11",
+   "main": "다른 운영자가 승인 → 파트너에 알림",
+   "dev": "입력자≠승인자 · E-87 · PTR_COMMISSION_APPROVED"
+  },
+  "51:7438": {
+   "section": "F11",
+   "main": "운영자가 반려 → 사유와 함께 알림",
+   "dev": "[모달] 사유 · PTR_COMMISSION_REJECTED"
+  },
+  "51:7441": {
+   "section": "F11",
+   "main": "수금 기록 (기한: 행사 끝나고 30일)",
+   "dev": "[모달] 수금=행사 종료+30일 · 송금=수금+14일"
+  },
+  "51:7444": {
+   "section": "F11",
+   "main": "송금 기록 → 본사에 알림",
+   "dev": "[모달] 환율·참조번호 · HQ_REMITTED"
+  },
+  "51:7447": {
+   "section": "F11",
+   "main": "입금 확인 → 정산 완료 알림",
+   "dev": "[모달] PTR_SETTLEMENT_COMPLETED"
+  },
+  "51:7450": {
+   "section": "F11",
+   "main": "진행 중인 정산을 운영자가 무효 처리",
+   "dev": "「무효 처리」"
+  },
+  "51:7453": {
+   "section": "F11",
+   "main": "분쟁 제기 → 본사에 알림",
+   "dev": "운영자·관리자 · HQ_SETTLEMENT_DISPUTE"
+  },
+  "51:7456": {
+   "section": "F11",
+   "main": "분쟁 해결 → 원래 단계로 돌아감",
+   "dev": "PTR_SETTLEMENT_RESOLVED"
+  },
+  "51:7459": {
+   "section": "F11",
+   "main": "기한을 넘기면 자동으로 「초과」 표시",
+   "dev": "cron · 개입 「정산 기한 초과」"
+  },
+  "51:7632": {
+   "section": "F12",
+   "main": "지역 파트너 등록 → 입력 창",
+   "dev": "[모달] partner_org_upsert · 온보딩"
+  },
+  "51:7635": {
+   "section": "F12",
+   "main": "담당 지역 지정 (주 담당 1곳)",
+   "dev": "[모달] partner_region_set"
+  },
+  "51:7638": {
+   "section": "F12",
+   "main": "활성화 → 그 지역 새 요청 자동 배정",
+   "dev": "[모달 확인] partner_org_upsert"
+  },
+  "51:7641": {
+   "section": "F12",
+   "main": "계정 초대 → 초대 메일 발송",
+   "dev": "[모달] partner_invite · Supabase 초대 메일"
+  },
+  "51:7645": {
+   "section": "F12",
+   "main": "메일 링크 → 비밀번호 정하고 시작",
+   "dev": "accept.html · console_accept()"
+  },
+  "51:7648": {
+   "section": "F12",
+   "main": "파트너 대시보드로 화면 이동",
+   "dev": "dashboard.html"
+  },
+  "51:7651": {
+   "section": "F12",
+   "main": "새 요청이 들어오면 자동 배정 → 알림",
+   "dev": "PTR_ASSIGNED / 실패 → 본사 보유(이유 9)"
+  },
+  "51:7655": {
+   "section": "F12",
+   "main": "요청 카드 → 상세 화면 이동",
+   "dev": "PTR-03"
+  },
+  "51:7658": {
+   "section": "F12",
+   "main": "요청자 정보 보기 → 펼침 (열람 기록)",
+   "dev": "[패널] rfp_get_identity (열람 로그)"
+  },
+  "51:7661": {
+   "section": "F12",
+   "main": "운영자와 같은 버튼으로 진행·대리 입력",
+   "dev": "상태 전이 · 대리 입력(→ F7)"
+  },
+  "51:7664": {
+   "section": "F12",
+   "main": "견적 정리 → 비교표 전달 (F8과 같음)",
+   "dev": "collecting → delivered"
+  },
+  "51:7667": {
+   "section": "F12",
+   "main": "관리자가 성사 처리 → 동의 기록·알림",
+   "dev": "[모달] HQ_PROXY_CONSENT_RECORDED · PTR_WON"
+  },
+  "51:7670": {
+   "section": "F12",
+   "main": "관리자가 배정 반려 → 본사가 맡음",
+   "dev": "rfp_decline_assignment · HQ_PARTNER_DECLINED"
+  },
+  "51:7673": {
+   "section": "F12",
+   "main": "운영자가 본사 인계 → 파트너는 보기만",
+   "dev": "PTR_TAKEN_OVER · 안내 없음 · E-89"
+  },
+  "51:7676": {
+   "section": "F12",
+   "main": "운영자가 파트너 정지 → 보기만 가능",
+   "dev": "PARTNER_SUSPENDED · 개입 표시 · PTR-08만 안내"
+  },
+  "51:7679": {
+   "section": "F12",
+   "main": "담당자는 반려·취소·성사 처리 불가",
+   "dev": "FORBIDDEN / 성사 → 토스트 · E-57·E-88"
+  },
+  "54:463": {
+   "section": "SW",
+   "main": "운영자가 요건 확인 시작 · 알림 없음",
+   "dev": "#1 verifying"
+  },
+  "54:466": {
+   "section": "SW",
+   "main": "호텔 초대 시작 → 요청자에게 알림",
+   "dev": "#3·#4 · ORG_BIDDING"
+  },
+  "54:469": {
+   "section": "SW",
+   "main": "마감 시각이 지나면 자동으로 넘어감",
+   "dev": "#5 · 마감 cron"
+  },
+  "54:472": {
+   "section": "SW",
+   "main": "비교표 전달 → 요청자에게 알림",
+   "dev": "#6 · ORG_DELIVERED"
+  },
+  "54:475": {
+   "section": "SW",
+   "main": "요청자가 제안 A를 고름",
+   "dev": "「제안 A 선택」"
+  },
+  "54:478": {
+   "section": "SW",
+   "main": "성사 → 요청자에게 결과 알림",
+   "dev": "#10 · ORG_WON"
+  },
+  "54:481": {
+   "section": "SW",
+   "main": "익명화 검토 완료 표시",
+   "dev": "익명화 검토 완료"
+  },
+  "54:484": {
+   "section": "SW",
+   "main": "마감 시각 저장 → 호텔 초대",
+   "dev": "마감 저장 · 초대"
+  },
+  "54:487": {
+   "section": "SW",
+   "main": "마감 뒤 자동으로 견적 정리 단계로",
+   "dev": "시스템 cron → collecting"
+  },
+  "54:490": {
+   "section": "SW",
+   "main": "선정 표시 → 성사로 닫기",
+   "dev": "선정 · 성사로 닫기"
+  },
+  "54:495": {
+   "section": "SW",
+   "main": "호텔 B가 견적 제출",
+   "dev": "Review & send quote · submit_quote"
+  },
+  "54:499": {
+   "section": "SW",
+   "main": "호텔이 견적 거절",
+   "dev": "Review & decline · decline_bid"
+  },
+  "54:503": {
+   "section": "SW",
+   "main": "요청서 제출 → 접수 확인 알림",
+   "dev": "submit_rfp · ORG_RECEIVED"
+  },
+  "54:506": {
+   "section": "SW",
+   "main": "진행 상황 화면 열기",
+   "dev": "ORG-02"
+  },
+  "54:509": {
+   "section": "SW",
+   "main": "견적 받기 시작 → 요청자 알림 발송",
+   "dev": "「견적 받기 시작」 · ORG_BIDDING"
+  },
+  "54:512": {
+   "section": "SW",
+   "main": "요청자에게 「견적 받는 중」 알림",
+   "dev": "ORG_BIDDING"
+  },
+  "54:515": {
+   "section": "SW",
+   "main": "호텔 5곳에 초대 메일",
+   "dev": "「초대 보내기」 · HTL_INVITE ×5"
+  },
+  "54:518": {
+   "section": "SW",
+   "main": "호텔 A가 초대 메일을 열어 봄",
+   "dev": "메일 열람 → viewed"
+  },
+  "54:523": {
+   "section": "SW",
+   "main": "호텔 A가 견적 제출 → 접수 확인 메일",
+   "dev": "submit_quote · HTL_QUOTE_RECEIVED"
+  },
+  "54:526": {
+   "section": "SW",
+   "main": "마감 하루 전 미제출 호텔에 독촉 메일",
+   "dev": "cron · HTL_REMINDER · E-47"
+  },
+  "54:529": {
+   "section": "SW",
+   "main": "마감이 지나 호텔 D는 기한 지남",
+   "dev": "cron · 마감 → expired"
+  },
+  "54:532": {
+   "section": "SW",
+   "main": "마감 뒤 자동으로 견적 정리 단계로",
+   "dev": "cron → collecting"
+  },
+  "54:535": {
+   "section": "SW",
+   "main": "운영자가 비교표 전달",
+   "dev": "「비교표 전달」 · #6"
+  },
+  "54:538": {
+   "section": "SW",
+   "main": "요청자에게 비교표 도착 알림",
+   "dev": "ORG_DELIVERED"
+  },
+  "54:541": {
+   "section": "SW",
+   "main": "(본 기획) 인증번호 문자 발송",
+   "dev": "ORG_PICK_OTP"
+  },
+  "54:544": {
+   "section": "SW",
+   "main": "(MVP) 메일 회신 → 운영자가 선정 표시",
+   "dev": "메일 회신 → 「선정」 · admin_mark_selection"
+  },
+  "54:547": {
+   "section": "SW",
+   "main": "성사 처리",
+   "dev": "#10 won"
+  },
+  "54:550": {
+   "section": "SW",
+   "main": "요청자에게 성사 알림",
+   "dev": "ORG_WON"
+  },
+  "54:553": {
+   "section": "SW",
+   "main": "선정 호텔에 요청자 연락처 담은 메일",
+   "dev": "HTL_SELECTED_CONNECT"
+  },
+  "54:556": {
+   "section": "SW",
+   "main": "나머지 호텔에 미선정 안내 메일",
+   "dev": "HTL_NOT_SELECTED"
+  }
+ },
+ "count": 209
+}
